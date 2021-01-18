@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/arkaplan1"
+    android:gravity="center"
+    android:padding="20dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".HesapOlusturma">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="20dp">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/mrl"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Girmiş olduğunuz E-Posta adresine doğrulama bağlantısı gidecektir."
+                android:padding="15dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_horizontal" />
+
+            <EditText
+                android:id="@+id/edt_kullaniciAdi"
+                android:background="@drawable/bg1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Kullanıcı Adı"
+                android:inputType="text"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/edt_eposta"
+                android:background="@drawable/bg1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="E-Posta"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/edt_parola1"
+                android:background="@drawable/bg1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Parola"
+                android:inputType="textPassword"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/edt_parola2"
+                android:background="@drawable/bg1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Parola Tekrar"
+                android:inputType="textPassword"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:onClick="btn_hesabiOlustur"
+                android:background="@drawable/bg2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Hesabı Oluştur"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+</LinearLayout>

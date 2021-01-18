@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/arkaplan1"
+    android:gravity="center"
+    android:padding="20dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".ParolaSifirlama">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Parola sıfırlama işlemi için geçerli olan E-Posta adresinizi yazın. Sıfırlama bağlantısı oraya gelecektir."
+        android:padding="15dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal" />
+
+    <EditText
+        android:id="@+id/edt_epostaParolaSıfırlama"
+        android:background="@drawable/bg1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:layout_marginBottom="10dp"
+        android:hint="E-Posta"/>
+
+    <Button
+        android:onClick="istegiGonder"
+        android:background="@drawable/bg2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_marginBottom="10dp"
+        android:text="isteği gönder"/>
+
+</LinearLayout>

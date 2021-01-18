@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/ana_sayfa"
+        android:title="Ana Sayfa"
+        android:icon="@drawable/ic_baseline_home_24"/>
+
+    <item
+        android:id="@+id/ara"
+        android:title="Ara"
+        android:icon="@drawable/ic_baseline_search_24"/>
+
+    <item
+        android:id="@+id/paylas"
+        android:title="Paylaş"
+        android:icon="@drawable/ic_baseline_add_box_24"/>
+
+    <item
+        android:id="@+id/hesabim"
+        android:title="Hesabım"
+        android:icon="@drawable/ic_baseline_person_24"/>
+
+</menu>

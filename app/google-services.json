@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "62467121242",
+    "project_id": "mobilgezirehberim-7aca5",
+    "storage_bucket": "mobilgezirehberim-7aca5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62467121242:android:2a14f5eab0c075b582f863",
+        "android_client_info": {
+          "package_name": "com.mrcaracal.mobilgezirehberim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62467121242-akek5lc24niok1eahk8iiltn7ajlf5hh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDytE9WCzZ8vsJkY6O4hygf0JJQsZItiPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62467121242-akek5lc24niok1eahk8iiltn7ajlf5hh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

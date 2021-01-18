@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/arkaplan1"
+    android:gravity="center"
+    android:padding="20dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".Giris">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/mrl"/>
+
+    <EditText
+        android:id="@+id/edt_epostaGiris"
+        android:background="@drawable/bg1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:hint="E-Posta"/>
+
+    <EditText
+        android:id="@+id/edt_parolaGiris"
+        android:background="@drawable/bg1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:layout_marginBottom="10dp"
+        android:hint="Parola"/>
+
+    <CheckBox
+        android:id="@+id/chb_giris_bilgileri_hatirla"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Beni Hatırla"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:onClick="girisYap"
+        android:background="@drawable/bg2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_marginBottom="10dp"
+        android:text="giriş yap"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:onClick="txt_parolamıUnuttum"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Parolamı Unuttum!"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:onClick="txt_hesapOlustur"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hesap Oluştur!"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

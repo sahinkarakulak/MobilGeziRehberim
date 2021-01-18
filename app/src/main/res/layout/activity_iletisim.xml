@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
+    tools:context=".Iletisim">
+
+    <EditText
+        android:background="@drawable/bg1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Konu" />
+
+    <EditText
+        android:background="@drawable/bg1"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="top"
+        android:padding="15dp"
+        android:hint="Mesaj"/>
+
+    <TextView
+        android:background="@drawable/bg1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_marginTop="10dp"
+        android:text="Dosya vb şeyler de göndermek için GÖNDER butonuna tıklayın. Varsayılan olarak açılan uygulamada belge de gönderebilirsiniz."/>
+
+    <Button
+        android:background="@drawable/bg1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="GÖNDER"/>
+
+
+
+</LinearLayout>
