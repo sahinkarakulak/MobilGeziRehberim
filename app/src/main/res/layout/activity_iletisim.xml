@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context=".Iletisim">
+    tools:context=".A_Iletisim">
 
     <EditText
         android:background="@drawable/bg1"

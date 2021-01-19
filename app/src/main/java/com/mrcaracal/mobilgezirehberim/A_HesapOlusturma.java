@@ -16,9 +16,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class HesapOlusturma extends AppCompatActivity {
+public class A_HesapOlusturma extends AppCompatActivity {
 
-    KullaniciBilgileri kullaniciBilgileri;
+    M_KullaniciBilgileri MKullaniciBilgileri;
 
     EditText edt_kullaniciAdi, edt_eposta, edt_parola1, edt_parola2;
     String kullaniciAdi, eposta, parola1, parola2;
@@ -70,9 +70,9 @@ public class HesapOlusturma extends AppCompatActivity {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Toast.makeText(HesapOlusturma.this, "Doğrulama bağlantısı E-Posta adresinize gönderildi.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(A_HesapOlusturma.this, "Doğrulama bağlantısı E-Posta adresinize gönderildi.", Toast.LENGTH_SHORT).show();
 
-                                                kullaniciBilgileri = new KullaniciBilgileri(kullaniciAdi, eposta, parola1, "MGR'i Seviyorum", "https://firebasestorage.googleapis.com/v0/b/mobilgezirehberim-7aca5.appspot.com/o/Resimler%2Fdefaultpp.png?alt=media&token=97fe9138-0aad-4ea9-af78-536c637b3be4");
+                                                MKullaniciBilgileri = new M_KullaniciBilgileri(kullaniciAdi, eposta, parola1, "MGR'i Seviyorum", "https://firebasestorage.googleapis.com/v0/b/mobilgezirehberim-7aca5.appspot.com/o/Resimler%2Fdefaultpp.png?alt=media&token=97fe9138-0aad-4ea9-af78-536c637b3be4");
 
                                                 DocumentReference documentReference = firebaseFirestore
                                                         .collection("Kullanicilar")
@@ -81,11 +81,11 @@ public class HesapOlusturma extends AppCompatActivity {
                                                         .document(eposta);
 
                                                 documentReference
-                                                        .set(kullaniciBilgileri)
+                                                        .set(MKullaniciBilgileri)
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
-                                                                Intent intent = new Intent(HesapOlusturma.this, Giris.class);
+                                                                Intent intent = new Intent(A_HesapOlusturma.this, A_Giris.class);
                                                                 startActivity(intent);
                                                                 finish();
                                                                 firebaseAuth.signOut();
@@ -94,7 +94,7 @@ public class HesapOlusturma extends AppCompatActivity {
                                                         .addOnFailureListener(new OnFailureListener() {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(HesapOlusturma.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(A_HesapOlusturma.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                             }
                                                         });
 
@@ -104,7 +104,7 @@ public class HesapOlusturma extends AppCompatActivity {
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(HesapOlusturma.this, "Beklenmedik bir hata gerçekleşti\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(A_HesapOlusturma.this, "Beklenmedik bir hata gerçekleşti\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }

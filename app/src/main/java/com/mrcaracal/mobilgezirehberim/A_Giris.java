@@ -20,7 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class Giris extends AppCompatActivity {
+public class A_Giris extends AppCompatActivity {
 
     EditText edt_epostaGiris, edt_parolaGiris;
     CheckBox chb_giris_bilgileri_hatirla;
@@ -71,7 +71,7 @@ public class Giris extends AppCompatActivity {
         // Kullanıcı daha önceden giriş yapmış ise otomatik olarak giriş yapıp Ana sayfaya yönelendirilecektir.
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            Intent intent = new Intent(Giris.this, AnaSayfa.class);
+            Intent intent = new Intent(A_Giris.this, A_AnaSayfa.class);
             startActivity(intent);
             finish();
         }
@@ -80,7 +80,7 @@ public class Giris extends AppCompatActivity {
 
     // Kullanıcı hesap oluşturma sayfasına yönlendirilecektir.
     public void txt_hesapOlustur(View view) {
-        Intent intent = new Intent(Giris.this, HesapOlusturma.class);
+        Intent intent = new Intent(A_Giris.this, A_HesapOlusturma.class);
         startActivity(intent);
 
     }
@@ -100,21 +100,21 @@ public class Giris extends AppCompatActivity {
                         public void onSuccess(AuthResult authResult) {
                             if (firebaseAuth.getCurrentUser().isEmailVerified()) {
 
-                                ProgressDialog progressDialog = new ProgressDialog(Giris.this);
+                                ProgressDialog progressDialog = new ProgressDialog(A_Giris.this);
                                 progressDialog.setMessage("Giriş Yapılıyor");
                                 progressDialog.show();
 
-                                Intent intent = new Intent(Giris.this, AnaSayfa.class);
+                                Intent intent = new Intent(A_Giris.this, A_AnaSayfa.class);
                                 startActivity(intent);
                                 finish();
                             } else {
-                                Toast.makeText(Giris.this, "E-Postanızı kontrol ediniz.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(A_Giris.this, "E-Postanızı kontrol ediniz.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(Giris.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(A_Giris.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -123,7 +123,7 @@ public class Giris extends AppCompatActivity {
 
     // Kullanıcı parola sıfırlama sayfasına yönlendirilecektir.
     public void txt_parolamıUnuttum(View view) {
-        Intent intent = new Intent(Giris.this, ParolaSifirlama.class);
+        Intent intent = new Intent(A_Giris.this, A_ParolaSifirlama.class);
         startActivity(intent);
     }
 

@@ -15,7 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class AnaSayfa extends AppCompatActivity {
+public class A_AnaSayfa extends AppCompatActivity {
 
     boolean doubleBackToExitPressedOnce = false;
 
@@ -89,12 +89,12 @@ public class AnaSayfa extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.iletisim:
-                Intent iletisim = new Intent(AnaSayfa.this, Iletisim.class);
+                Intent iletisim = new Intent(A_AnaSayfa.this, A_Iletisim.class);
                 startActivity(iletisim);
                 break;
 
             case R.id.cikis:
-                Intent cikis = new Intent(AnaSayfa.this, Giris.class);
+                Intent cikis = new Intent(A_AnaSayfa.this, A_Giris.class);
                 startActivity(cikis);
                 finish();
                 firebaseAuth.signOut();

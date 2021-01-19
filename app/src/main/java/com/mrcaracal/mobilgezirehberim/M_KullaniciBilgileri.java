@@ -1,6 +1,6 @@
 package com.mrcaracal.mobilgezirehberim;
 
-public class KullaniciBilgileri {
+public class M_KullaniciBilgileri {
 
     private String kullaniciAdi;
     private String kullaniciEposta;
@@ -8,11 +8,11 @@ public class KullaniciBilgileri {
     private String bio;
     private String kullaniciResmi;
 
-    public KullaniciBilgileri() {
+    public M_KullaniciBilgileri() {
 
     }
 
-    public KullaniciBilgileri(String kullaniciAdi, String kullaniciEposta, String kulaniciParola, String bio, String kullaniciResmi) {
+    public M_KullaniciBilgileri(String kullaniciAdi, String kullaniciEposta, String kulaniciParola, String bio, String kullaniciResmi) {
         this.kullaniciAdi = kullaniciAdi;
         this.kullaniciEposta = kullaniciEposta;
         this.kulaniciParola = kulaniciParola;
@@ -20,7 +20,7 @@ public class KullaniciBilgileri {
         this.kullaniciResmi = kullaniciResmi;
     }
 
-    public KullaniciBilgileri(String kullaniciAdi, String kullaniciEposta, String bio, String kullaniciResmi) {
+    public M_KullaniciBilgileri(String kullaniciAdi, String kullaniciEposta, String bio, String kullaniciResmi) {
         this.kullaniciAdi = kullaniciAdi;
         this.kullaniciEposta = kullaniciEposta;
         this.bio = bio;

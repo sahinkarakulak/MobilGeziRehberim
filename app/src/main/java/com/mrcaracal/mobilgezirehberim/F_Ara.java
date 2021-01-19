@@ -23,7 +23,7 @@ public class F_Ara extends Fragment {
         /*img_konuma_gore_bul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MapsActivity.class));
+                startActivity(new Intent(getActivity(), A_Maps.class));
             }
         });*/
 

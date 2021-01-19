@@ -177,7 +177,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                             Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
                         } else {
 
-                            Gonderiler gonderiler = new Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
+                            M_Gonderiler MGonderiler = new M_Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
 
                             DocumentReference documentReference = firebaseFirestore
                                     .collection("Kullanicilar")
@@ -186,7 +186,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                                     .document(gonderiIDleriFB.get(position));
 
                             documentReference
-                                    .set(gonderiler)
+                                    .set(MGonderiler)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".AnaSayfa">
+    tools:context=".A_AnaSayfa">
 
     <FrameLayout
         android:id="@+id/frame_layout"

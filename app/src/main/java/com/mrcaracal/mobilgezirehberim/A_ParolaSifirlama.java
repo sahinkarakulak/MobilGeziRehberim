@@ -13,7 +13,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class ParolaSifirlama extends AppCompatActivity {
+public class A_ParolaSifirlama extends AppCompatActivity {
 
     EditText edt_epostaParolaSıfırlama;
 
@@ -49,15 +49,15 @@ public class ParolaSifirlama extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(ParolaSifirlama.this, "E-Postanızı kontorl ediniz", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(ParolaSifirlama.this, Giris.class);
+                            Toast.makeText(A_ParolaSifirlama.this, "E-Postanızı kontorl ediniz", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(A_ParolaSifirlama.this, A_Giris.class);
                             startActivity(intent);
                             finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(ParolaSifirlama.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(A_ParolaSifirlama.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -10,7 +10,7 @@
     android:padding="20dp"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context=".HesapOlusturma">
+    tools:context=".A_HesapOlusturma">
 
     <ScrollView
         android:layout_width="match_parent"

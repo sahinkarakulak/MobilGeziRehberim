@@ -98,7 +98,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         btn_profili_duzenle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent profili_duzenle = new Intent(getActivity(), ProfilDuzenle.class);
+                Intent profili_duzenle = new Intent(getActivity(), A_ProfilDuzenle.class);
                 startActivity(profili_duzenle);
             }
         });

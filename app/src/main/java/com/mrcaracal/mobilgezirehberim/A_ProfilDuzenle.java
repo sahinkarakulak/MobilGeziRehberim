@@ -36,7 +36,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfilDuzenle extends AppCompatActivity {
+public class A_ProfilDuzenle extends AppCompatActivity {
 
     FirebaseUser firebaseUser;
     StorageReference storageReference;
@@ -100,7 +100,7 @@ public class ProfilDuzenle extends AppCompatActivity {
                 CropImage.activity()
                         .setAspectRatio(1, 1)
                         .setCropShape(CropImageView.CropShape.OVAL)
-                        .start(ProfilDuzenle.this);
+                        .start(A_ProfilDuzenle.this);
             }
         });
 
@@ -111,7 +111,7 @@ public class ProfilDuzenle extends AppCompatActivity {
                         .activity()
                         .setAspectRatio(1, 1)
                         .setCropShape(CropImageView.CropShape.OVAL)
-                        .start(ProfilDuzenle.this);
+                        .start(A_ProfilDuzenle.this);
             }
         });
 
@@ -141,7 +141,7 @@ public class ProfilDuzenle extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
 
-                        startActivity(new Intent(ProfilDuzenle.this, AnaSayfa.class));
+                        startActivity(new Intent(A_ProfilDuzenle.this, A_AnaSayfa.class));
                     }
                 });
     }
@@ -206,13 +206,13 @@ public class ProfilDuzenle extends AppCompatActivity {
                                     }
                                 });
                     } else {
-                        Toast.makeText(ProfilDuzenle.this, "Bir hata gerçekleşti", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(A_ProfilDuzenle.this, "Bir hata gerçekleşti", Toast.LENGTH_SHORT).show();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(ProfilDuzenle.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(A_ProfilDuzenle.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         } else {

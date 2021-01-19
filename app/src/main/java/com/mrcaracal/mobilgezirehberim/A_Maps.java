@@ -6,7 +6,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -22,7 +21,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class A_Maps extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     LocationManager locationManager;
@@ -53,7 +52,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 enlem = location.getLatitude();
                 boylam = location.getLongitude();
 
-                Toast.makeText(MapsActivity.this, "Enlem: "+enlem+"\nBoylam: "+boylam, Toast.LENGTH_SHORT).show();
+                Toast.makeText(A_Maps.this, "Enlem: "+enlem+"\nBoylam: "+boylam, Toast.LENGTH_SHORT).show();
                 konumaGit();
             }
         };

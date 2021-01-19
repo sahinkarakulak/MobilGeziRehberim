@@ -43,7 +43,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class F_Paylas extends Fragment {
 
-    Gonderiler gonderiler;
+    M_Gonderiler MGonderiler;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firebaseFirestore;
@@ -163,7 +163,7 @@ public class F_Paylas extends Fragment {
                                                 UUID uuid1 = UUID.randomUUID();
                                                 String gonderiID = "" + uuid1;
 
-                                                gonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, yorum, FieldValue.serverTimestamp());
+                                                MGonderiler = new M_Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, yorum, FieldValue.serverTimestamp());
 
                                                 DocumentReference documentReference1 = firebaseFirestore
                                                         .collection("Kullanicilar")
@@ -172,7 +172,7 @@ public class F_Paylas extends Fragment {
                                                         .document();
 
                                                 documentReference1
-                                                        .set(gonderiler)
+                                                        .set(MGonderiler)
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
@@ -182,11 +182,11 @@ public class F_Paylas extends Fragment {
                                                                         .document(gonderiID);
 
                                                                 documentReference2
-                                                                        .set(gonderiler)
+                                                                        .set(MGonderiler)
                                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                             @Override
                                                                             public void onSuccess(Void aVoid) {
-                                                                                Intent intent = new Intent(getActivity(), AnaSayfa.class);
+                                                                                Intent intent = new Intent(getActivity(), A_AnaSayfa.class);
                                                                                 // Tüm aktiviteleri kapat
                                                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                                                 startActivity(intent);

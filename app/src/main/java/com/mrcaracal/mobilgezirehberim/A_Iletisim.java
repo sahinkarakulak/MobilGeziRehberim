@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Iletisim extends AppCompatActivity {
+public class A_Iletisim extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
