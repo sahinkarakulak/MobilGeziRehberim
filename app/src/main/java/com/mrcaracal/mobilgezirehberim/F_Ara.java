@@ -20,12 +20,12 @@ public class F_Ara extends Fragment {
 
         img_konuma_gore_bul = viewGroup.findViewById(R.id.img_konuma_gore_bul);
 
-        /*img_konuma_gore_bul.setOnClickListener(new View.OnClickListener() {
+        img_konuma_gore_bul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), A_Maps.class));
+                startActivity(new Intent(getActivity(), A_Harita.class));
             }
-        });*/
+        });
 
         return viewGroup;
     }
