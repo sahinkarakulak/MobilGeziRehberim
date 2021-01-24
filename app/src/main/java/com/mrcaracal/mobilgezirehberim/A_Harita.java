@@ -72,6 +72,20 @@ public class A_Harita extends FragmentActivity implements OnMapReadyCallback {
                 konumuBul();
 
             }
+
+            // Bazı cihazlarda çökmeler yaşandığından aşağıdaki 2 metodu da kullanmak gerekti.
+
+            @Override
+            public void onProviderDisabled(@NonNull String provider) {
+                String str_provider = provider;
+                Toast.makeText(A_Harita.this, str_provider+" Kapalı", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onProviderEnabled(@NonNull String provider) {
+                String str_provider = provider;
+                Toast.makeText(A_Harita.this, str_provider+" Açık", Toast.LENGTH_SHORT).show();
+            }
         };
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
