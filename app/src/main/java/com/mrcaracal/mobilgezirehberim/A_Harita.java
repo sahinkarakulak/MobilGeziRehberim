@@ -2,46 +2,33 @@ package com.mrcaracal.mobilgezirehberim;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
-public class A_Harita extends FragmentActivity implements OnMapReadyCallback {
+public class A_Harita extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     LocationManager locationManager;
     LocationListener locationListener;
     double enlem, boylam;
     private GoogleMap mMap;
+    private Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +39,7 @@ public class A_Harita extends FragmentActivity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
     }
-
 
 
     @Override
@@ -63,6 +48,8 @@ public class A_Harita extends FragmentActivity implements OnMapReadyCallback {
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
+            // Kullanıcının konumu anlık olarak alınsın ve paylaş ekranında konum kısmında konum bilgileri yazdırılsın.
+            // Adres bilgileri de alınsın ve yazdırılsın
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 enlem = location.getLatitude();
@@ -74,17 +61,16 @@ public class A_Harita extends FragmentActivity implements OnMapReadyCallback {
             }
 
             // Bazı cihazlarda çökmeler yaşandığından aşağıdaki 2 metodu da kullanmak gerekti.
-
             @Override
             public void onProviderDisabled(@NonNull String provider) {
                 String str_provider = provider;
-                Toast.makeText(A_Harita.this, str_provider+" Kapalı", Toast.LENGTH_SHORT).show();
+                Toast.makeText(A_Harita.this, str_provider + " Kapalı", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onProviderEnabled(@NonNull String provider) {
                 String str_provider = provider;
-                Toast.makeText(A_Harita.this, str_provider+" Açık", Toast.LENGTH_SHORT).show();
+                Toast.makeText(A_Harita.this, str_provider + " Açık", Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -99,8 +85,10 @@ public class A_Harita extends FragmentActivity implements OnMapReadyCallback {
 
     private void konumuBul() {
         LatLng konum = new LatLng(enlem, boylam);
-        mMap.addMarker(new MarkerOptions().position(konum).title("KONUM"));
+        mMap.addMarker(new MarkerOptions().position(konum).title("Konumum"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(konum, 15));
+
+        mMap.setOnMapClickListener(this);
     }
 
     @Override
@@ -115,5 +103,22 @@ public class A_Harita extends FragmentActivity implements OnMapReadyCallback {
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    // Kullanıcı yeni konum seçer ise Paylaş ekranında konum kısmına konum bilgileri yazdırılsın.
+    // Adres bilgileri de alınsın ve yazdırılsın
+    @Override
+    public void onMapClick(LatLng latLng) {
+        Toast.makeText(this, "Enlem: "+latLng.latitude+"\nBoylam: "+latLng.longitude, Toast.LENGTH_SHORT).show();
+
+        if (marker != null){
+            marker.remove();
+        }
+        marker = mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title("Seçilen Yeni Konum")
+                .draggable(true)
+                .visible(true)
+        );
     }
 }
