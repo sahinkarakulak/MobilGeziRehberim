@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,7 +55,7 @@ public class F_Paylas extends Fragment {
     Uri resimYolu;
     ImageView img_paylasResimSec;
     EditText edt_paylasYerIsmi, edt_paylasYorum, edt_konum;
-    Button btn_paylasGonder;
+    Button btn_paylasGonder, konum_sec, konumumu_al;
     ScrollView sv_paylas;
     DocumentReference documentReference;
     String kullaniciAdi;
@@ -77,6 +82,8 @@ public class F_Paylas extends Fragment {
         edt_paylasYerIsmi = viewGroup.findViewById(R.id.edt_paylasYerIsmi);
         edt_konum = viewGroup.findViewById(R.id.edt_konum);
         edt_paylasYorum = viewGroup.findViewById(R.id.edt_paylasYorum);
+        konum_sec = viewGroup.findViewById(R.id.konum_sec);
+        konumumu_al = viewGroup.findViewById(R.id.konumumu_al);
         btn_paylasGonder = viewGroup.findViewById(R.id.btn_paylasGonder);
         sv_paylas = viewGroup.findViewById(R.id.sv_paylas);
 
@@ -95,6 +102,13 @@ public class F_Paylas extends Fragment {
             }
         });
 
+        konumumu_al.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentLocation();
+            }
+        });
+
         // Paylaş butonuna tıklandığında yapılacaklar
         btn_paylasGonder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +119,48 @@ public class F_Paylas extends Fragment {
         });
 
         return viewGroup;
+    }
+
+    private void getCurrentLocation() {
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(3000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationServices.getFusedLocationProviderClient(getActivity())
+                .requestLocationUpdates(locationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        super.onLocationResult(locationResult);
+                        LocationServices.getFusedLocationProviderClient(getActivity())
+                                .removeLocationUpdates(this);
+                        if (locationResult != null && locationResult.getLocations().size() > 0){
+                            int latestLocationIndex = locationResult.getLocations().size() - 1;
+                            double latitude = locationResult.getLocations().get(latestLocationIndex).getLatitude();
+                            double longitude = locationResult.getLocations().get(latestLocationIndex).getLongitude();
+
+                            edt_konum.setText(
+                                    String.format(
+                                            "Enlem: %s\nBoylam: %s",
+                                            latitude,longitude
+                                    )
+                            );
+                        }
+                    }
+                }, Looper.getMainLooper());
     }
 
     public void paylasGonder() {

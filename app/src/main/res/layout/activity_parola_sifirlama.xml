@@ -31,7 +31,7 @@
 
     <Button
         android:onClick="istegiGonder"
-        android:background="@drawable/bg2"
+        android:background="@drawable/bg3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"

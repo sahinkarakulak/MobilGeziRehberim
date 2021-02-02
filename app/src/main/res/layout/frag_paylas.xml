@@ -46,6 +46,33 @@
                 android:maxLength="140"
                 android:maxLines="1" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/konum_sec"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:padding="20dp"
+                    android:text="Konum Seç"
+                    android:background="@drawable/bg4"/>
+
+                <Button
+                    android:id="@+id/konumumu_al"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Konumumu Al"
+                    android:background="@drawable/bg4"/>
+
+            </LinearLayout>
+
             <EditText
                 android:id="@+id/edt_paylasYorum"
                 android:background="@drawable/bg1"
@@ -61,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/bg1"
+                android:background="@drawable/bg4"
                 android:onClick="btn_paylasGonder"
                 android:text="gönder" />
         </LinearLayout>
