@@ -20,6 +20,7 @@
                 android:id="@+id/img_paylasResimSec"
                 android:layout_width="match_parent"
                 android:layout_height="230dp"
+                android:padding="40dp"
                 android:layout_marginBottom="20dp"
                 android:onClick="img_paylasResimSec"
                 android:src="@drawable/ic_photo_select" />

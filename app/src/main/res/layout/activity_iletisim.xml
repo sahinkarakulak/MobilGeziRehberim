@@ -8,12 +8,14 @@
     tools:context=".A_Iletisim">
 
     <EditText
+        android:id="@+id/edt_iletisim_konu_baslik"
         android:background="@drawable/bg1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Konu" />
 
     <EditText
+        android:id="@+id/edt_iletisim_mesaj_icerik"
         android:background="@drawable/bg1"
         android:layout_weight="1"
         android:layout_width="match_parent"
@@ -24,7 +26,7 @@
         android:hint="Mesaj"/>
 
     <TextView
-        android:background="@drawable/bg1"
+        android:background="@drawable/bg4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
@@ -32,7 +34,8 @@
         android:text="Dosya vb şeyler de göndermek için GÖNDER butonuna tıklayın. Varsayılan olarak açılan uygulamada belge de gönderebilirsiniz."/>
 
     <Button
-        android:background="@drawable/bg1"
+        android:id="@+id/btn_iletisim_gonder"
+        android:background="@drawable/bg4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
