@@ -52,7 +52,7 @@ public class A_Giris extends AppCompatActivity {
 
         setTitle("Giriş");
 
-        int[] sdfsd = {12,12,12};
+        int[] sdfsd = {12, 12, 12};
 
         // Beni hatırla işlemi
         boolean bilgihatirla = GET.getBoolean("boolean_key", false);

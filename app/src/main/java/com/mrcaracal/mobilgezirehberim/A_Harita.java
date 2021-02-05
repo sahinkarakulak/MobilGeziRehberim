@@ -108,9 +108,9 @@ public class A_Harita extends FragmentActivity implements OnMapReadyCallback, Go
     // Adres bilgileri de alınsın ve yazdırılsın
     @Override
     public void onMapClick(LatLng latLng) {
-        Toast.makeText(this, "Enlem: "+latLng.latitude+"\nBoylam: "+latLng.longitude, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Enlem: " + latLng.latitude + "\nBoylam: " + latLng.longitude, Toast.LENGTH_SHORT).show();
 
-        if (marker != null){
+        if (marker != null) {
             marker.remove();
         }
         marker = mMap.addMarker(new MarkerOptions()

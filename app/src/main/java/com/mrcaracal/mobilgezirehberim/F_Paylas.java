@@ -147,7 +147,7 @@ public class F_Paylas extends Fragment {
                         super.onLocationResult(locationResult);
                         LocationServices.getFusedLocationProviderClient(getActivity())
                                 .removeLocationUpdates(this);
-                        if (locationResult != null && locationResult.getLocations().size() > 0){
+                        if (locationResult != null && locationResult.getLocations().size() > 0) {
                             int latestLocationIndex = locationResult.getLocations().size() - 1;
                             double latitude = locationResult.getLocations().get(latestLocationIndex).getLatitude();
                             double longitude = locationResult.getLocations().get(latestLocationIndex).getLongitude();
@@ -155,7 +155,7 @@ public class F_Paylas extends Fragment {
                             edt_konum.setText(
                                     String.format(
                                             "Enlem: %s\nBoylam: %s",
-                                            latitude,longitude
+                                            latitude, longitude
                                     )
                             );
                         }
