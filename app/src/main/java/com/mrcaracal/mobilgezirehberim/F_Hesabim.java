@@ -254,7 +254,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     // AlertDialog yerine Expandable Recycler View kullanılabilir
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(getActivity(), "tek tıklama", Toast.LENGTH_SHORT).show();
+        //
 
     }
 

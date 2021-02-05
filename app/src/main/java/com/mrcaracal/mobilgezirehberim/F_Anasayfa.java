@@ -80,30 +80,6 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         return viewGroup;
     }
 
-    private void testMetodu() {
-
-        CollectionReference cr2 = FirebaseFirestore.getInstance()
-                .collection("Kullanicilar")
-                .document(firebaseUser.getEmail())
-                .collection("Kaydettikleri");
-
-        cr2.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            QuerySnapshot querySnapshot = task.getResult();
-                            for (DocumentSnapshot documentSnapshot : querySnapshot){
-                                String x = documentSnapshot.getString("yerIsmi");
-                                String y = documentSnapshot.getString("konum");
-
-                                Log.i("testM", "Yer İsmi: "+x+"\tKonum: "+y);
-                            }
-                        }
-                    }
-                });
-    }
-
     public void yenidenEskiyeCek() {
         CollectionReference collectionReference = firebaseFirestore
                 .collection("TumGonderiler");

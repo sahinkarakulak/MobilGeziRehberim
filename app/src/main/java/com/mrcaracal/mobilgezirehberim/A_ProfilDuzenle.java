@@ -97,7 +97,8 @@ public class A_ProfilDuzenle extends AppCompatActivity {
         tv_kullaniciResmiDegistir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CropImage.activity()
+                CropImage
+                        .activity()
                         .setAspectRatio(1, 1)
                         .setCropShape(CropImageView.CropShape.OVAL)
                         .start(A_ProfilDuzenle.this);

@@ -108,7 +108,7 @@ public class A_Giris extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                             } else {
-                                Toast.makeText(A_Giris.this, "E-Postanızı kontrol ediniz.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(A_Giris.this, "E-Postanıza gelen bağlantıdan hesabınızı onaylayın", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
