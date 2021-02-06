@@ -135,10 +135,12 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
     @Override
     public void onLongItemClick(int position) {
 
+        String gonderi_detay_goster = "Paylaşan: "+kullaniciEpostalariFB.get(position)+"\n\n"+yorumlarFB.get(position);
+
         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert
                 .setTitle(yerIsimleriFB.get(position))
-                .setMessage(yorumlarFB.get(position))
+                .setMessage(gonderi_detay_goster)
                 .setNegativeButton("iptal", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

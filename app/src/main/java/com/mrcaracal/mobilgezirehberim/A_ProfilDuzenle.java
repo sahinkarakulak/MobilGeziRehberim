@@ -233,7 +233,7 @@ public class A_ProfilDuzenle extends AppCompatActivity {
 
             Toast.makeText(this, "Profil resmi güncellendi", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Bir şeyler ters gitti", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vaz mı geçtin?", Toast.LENGTH_SHORT).show();
         }
 
     }

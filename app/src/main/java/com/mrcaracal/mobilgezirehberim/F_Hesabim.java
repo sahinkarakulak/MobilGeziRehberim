@@ -264,10 +264,12 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         // Uzun tıklama işleminde yapılacaklar...
         // Toast.makeText(getActivity(), yorumlarFB.get(position), Toast.LENGTH_SHORT).show();
 
+        String gonderi_detay_goster = "Paylaşan: "+kullaniciEpostalariFB.get(position)+"\n\n"+yorumlarFB.get(position);
+
         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert
                 .setTitle(yerIsimleriFB.get(position))
-                .setMessage(yorumlarFB.get(position))
+                .setMessage(gonderi_detay_goster)
                 .setPositiveButton("TAMAM", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

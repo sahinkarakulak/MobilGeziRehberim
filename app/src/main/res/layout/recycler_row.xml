@@ -12,12 +12,22 @@
         android:padding="5dp"
         android:orientation="vertical">
 
-        <TextView
+        <!--<TextView
             android:id="@+id/row_epostasi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Kullanıcı E-Postası"
+            android:textStyle="bold"/>-->
+
+        <TextView
+            android:id="@+id/row_yerIsmi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Yer Ismi"
+            android:gravity="center"
+            android:padding="2dp"
             android:textStyle="bold"/>
 
         <ImageView
@@ -31,14 +41,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/row_yerIsmi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Yer Ismi"
-                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/row_YorumBilgisi"

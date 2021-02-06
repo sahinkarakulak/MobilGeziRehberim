@@ -51,7 +51,7 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
     public void onBindViewHolder(@NonNull GonderiHolder holder, int position) {
 
         // Kullanıcıya gösterilen kısım
-        holder.row_epostasi.setText(kullaniciEpostalariListesi.get(position));
+        /*holder.row_epostasi.setText(kullaniciEpostalariListesi.get(position));*/
         holder.row_yerIsmi.setText(yerIsimleriListesi.get(position));
         holder.row_YorumBilgisi.setText(yorumlarListesi.get(position));
         Picasso.get()
@@ -78,7 +78,7 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
         public GonderiHolder(@NonNull View itemView) {
             super(itemView);
 
-            row_epostasi = itemView.findViewById(R.id.row_epostasi);
+            /*row_epostasi = itemView.findViewById(R.id.row_epostasi);*/
             row_resimAdresi = itemView.findViewById(R.id.row_resimAdresi);
             row_yerIsmi = itemView.findViewById(R.id.row_yerIsmi);
             row_YorumBilgisi = itemView.findViewById(R.id.row_YorumBilgisi);
