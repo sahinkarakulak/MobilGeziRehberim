@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.Timestamp;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,11 +23,11 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
     private final ArrayList<String> yerIsimleriListesi;
     private final ArrayList<String> konumlariListesi;
     private final ArrayList<String> yorumlarListesi;
-    private final ArrayList<String> zamanlarListesi;
+    private final ArrayList<com.google.firebase.Timestamp> zamanlarListesi;
 
     private final RecyclerViewClickInterface recyclerViewClickInterface;
 
-    public RecyclerAdapterYapim(ArrayList<String> gonderiIDleriListesi, ArrayList<String> kullaniciEpostalariListesi, ArrayList<String> resimAdresleriListesi, ArrayList<String> yerIsimleriListesi, ArrayList<String> konumlariListesi, ArrayList<String> yorumlarListesi, ArrayList<String> zamanlarListesi, RecyclerViewClickInterface recyclerViewClickInterface) {
+    public RecyclerAdapterYapim(ArrayList<String> gonderiIDleriListesi, ArrayList<String> kullaniciEpostalariListesi, ArrayList<String> resimAdresleriListesi, ArrayList<String> yerIsimleriListesi, ArrayList<String> konumlariListesi, ArrayList<String> yorumlarListesi, ArrayList<Timestamp> zamanlarListesi, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.gonderiIDleriListesi = gonderiIDleriListesi;
         this.kullaniciEpostalariListesi = kullaniciEpostalariListesi;
         this.resimAdresleriListesi = resimAdresleriListesi;

@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -28,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -43,13 +45,13 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
     ArrayList<String> yerIsimleriFB;
     ArrayList<String> konumlariFB;
     ArrayList<String> yorumlarFB;
-    ArrayList<String> zamanlarFB;
+    ArrayList<Timestamp> zamanlarFB;
 
     RecyclerView recyclerView;
 
     RecyclerAdapterYapim recyclerAdapterYapim;
 
-    public void init() {
+    private void init() {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -104,6 +106,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                                 String resimAdresi = (String) verilerKumesi.get("resimAdresi");
                                 String konum = (String) verilerKumesi.get("konum");
                                 String yorum = (String) verilerKumesi.get("yorum");
+                                Timestamp zaman = (Timestamp) verilerKumesi.get("zaman");
 
                                 gonderiIDleriFB.add(gonderiID);
                                 kullaniciEpostalariFB.add(kullaniciEposta);
@@ -111,6 +114,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                                 yerIsimleriFB.add(yerIsmi);
                                 konumlariFB.add(konum);
                                 yorumlarFB.add(yorum);
+                                zamanlarFB.add(zaman);
 
                                 recyclerAdapterYapim.notifyDataSetChanged();
 
@@ -135,7 +139,14 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
     @Override
     public void onLongItemClick(int position) {
 
-        String gonderi_detay_goster = "Paylaşan: "+kullaniciEpostalariFB.get(position)+"\n\n"+yorumlarFB.get(position);
+        String tarih_ve_saat = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
+        String tarih = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
+        String gonderi_detay_goster = "Paylaşan: " + kullaniciEpostalariFB.get(position) + "\nTarih: " + tarih_ve_saat + "\n\n" + yorumlarFB.get(position);
+
+
+/*
+        String gonderi_detay_goster = "Paylaşan: " + kullaniciEpostalariFB.get(position) + "\n\n" + yorumlarFB.get(position);
+*/
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert

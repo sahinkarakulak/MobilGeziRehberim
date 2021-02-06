@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -32,6 +33,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -49,7 +51,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     ArrayList<String> yerIsimleriFB;
     ArrayList<String> konumlariFB;
     ArrayList<String> yorumlarFB;
-    ArrayList<String> zamanlarFB;
+    ArrayList<Timestamp> zamanlarFB;
 
     RecyclerView recyclerViewHesabim;
 
@@ -135,20 +137,26 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                 switch (item.getItemId()) {
                     case R.id.paylasilanlar:
 
+                        gonderiIDleriFB.clear();
                         kullaniciEpostalariFB.clear();
                         resimAdresleriFB.clear();
                         yerIsimleriFB.clear();
+                        konumlariFB.clear();
                         yorumlarFB.clear();
+                        zamanlarFB.clear();
 
                         paylasilanlariCek();
                         recyclerViewHesabim.scrollToPosition(0);
                         break;
                     case R.id.kaydedilenler:
 
+                        gonderiIDleriFB.clear();
                         kullaniciEpostalariFB.clear();
                         resimAdresleriFB.clear();
                         yerIsimleriFB.clear();
+                        konumlariFB.clear();
                         yorumlarFB.clear();
+                        zamanlarFB.clear();
 
                         kaydedilenleriCek();
                         recyclerViewHesabim.scrollToPosition(0);
@@ -186,11 +194,13 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 String yerIsmi = (String) verilerKumesiHesaim.get("yerIsmi");
                                 String resimAdresi = (String) verilerKumesiHesaim.get("resimAdresi");
                                 String yorum = (String) verilerKumesiHesaim.get("yorum");
+                                Timestamp zaman = (Timestamp) verilerKumesiHesaim.get("zaman");
 
                                 kullaniciEpostalariFB.add(kullaniciEposta);
                                 resimAdresleriFB.add(resimAdresi);
                                 yerIsimleriFB.add(yerIsmi);
                                 yorumlarFB.add(yorum);
+                                zamanlarFB.add(zaman);
 
                                 recyclerAdapterYapim.notifyDataSetChanged();
                             }
@@ -230,11 +240,13 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 String yerIsmi = (String) verilerKumesiHesaim.get("yerIsmi");
                                 String resimAdresi = (String) verilerKumesiHesaim.get("resimAdresi");
                                 String yorum = (String) verilerKumesiHesaim.get("yorum");
+                                Timestamp zaman = (Timestamp) verilerKumesiHesaim.get("zaman");
 
                                 kullaniciEpostalariFB.add(kullaniciEposta);
                                 resimAdresleriFB.add(resimAdresi);
                                 yerIsimleriFB.add(yerIsmi);
                                 yorumlarFB.add(yorum);
+                                zamanlarFB.add(zaman);
 
                                 recyclerAdapterYapim.notifyDataSetChanged();
                             }
@@ -264,7 +276,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         // Uzun tıklama işleminde yapılacaklar...
         // Toast.makeText(getActivity(), yorumlarFB.get(position), Toast.LENGTH_SHORT).show();
 
-        String gonderi_detay_goster = "Paylaşan: "+kullaniciEpostalariFB.get(position)+"\n\n"+yorumlarFB.get(position);
+        String tarih_ve_saat = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
+        String tarih = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
+        String gonderi_detay_goster = "Paylaşan: " + kullaniciEpostalariFB.get(position) + "\nTarih: " + tarih_ve_saat + "\n\n" + yorumlarFB.get(position);
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert
