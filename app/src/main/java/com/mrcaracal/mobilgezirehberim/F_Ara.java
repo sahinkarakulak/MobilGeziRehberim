@@ -91,9 +91,10 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             @Override
             public void onClick(View v) {
                 String anahtar_kelime = edt_anahtar_kelime_arat.getText().toString();
-
-                    aramYap(anahtar_kelime);
-
+                String[] ilgiliAlan = {"kullaniciEposta", "yerIsmi", "konum"};
+                for (int i = 0; i < ilgiliAlan.length; i++) {
+                    aramaYap(ilgiliAlan[i], anahtar_kelime);
+                }
             }
         });
 
@@ -105,7 +106,8 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         return viewGroup;
     }
 
-    public void aramYap(String anahtar_kelime) {
+
+    public void aramaYap(String iligiliAlan, String anahtar_kelime) {
 
         gonderiIDleriFB.clear();
         kullaniciEpostalariFB.clear();
@@ -122,7 +124,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
         // VT'ye kaydedilme zamanına göre verileri çek
         collectionReference
-                .whereEqualTo("kullaniciEposta", anahtar_kelime)
+                .whereEqualTo(iligiliAlan, anahtar_kelime)
                 .orderBy("zaman", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
