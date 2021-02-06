@@ -1,50 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
-    android:background="@drawable/bg_row"
-    android:orientation="vertical"
-    android:padding="10dp">
-
-    <TextView
-        android:id="@+id/row_epostasi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Kullanıcı E-Postası"
-        android:textStyle="bold"/>
-
-    <ImageView
-        android:id="@+id/row_resimAdresi"
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="230dp"/>
+    app:cardCornerRadius="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:padding="5dp"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/row_yerIsmi"
+            android:id="@+id/row_epostasi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Yer Ismi"
+            android:text="Kullanıcı E-Postası"
             android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/row_YorumBilgisi"
+        <ImageView
+            android:id="@+id/row_resimAdresi"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:text="Yorum"
-            android:textStyle="italic"/>
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/row_yerIsmi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Yer Ismi"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/row_YorumBilgisi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="Yorum"
+                android:textStyle="italic"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

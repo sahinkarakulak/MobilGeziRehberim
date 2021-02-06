@@ -5,4 +5,5 @@
     <string name="title_activity_harita">Map</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_a__harita">Map</string>
+    <string name="IletisimBilgilendirmeMetni">Dosya vb şeyler de göndermek için GÖNDER butonuna tıklayın. Varsayılan olarak açılan uygulamada belge de gönderebilirsiniz.</string>
 </resources>

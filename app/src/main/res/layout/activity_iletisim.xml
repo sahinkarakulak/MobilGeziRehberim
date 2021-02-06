@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:padding="15dp"
         android:layout_marginTop="10dp"
-        android:text="Dosya vb şeyler de göndermek için GÖNDER butonuna tıklayın. Varsayılan olarak açılan uygulamada belge de gönderebilirsiniz."/>
+        android:text="@string/IletisimBilgilendirmeMetni"/>
 
     <Button
         android:id="@+id/btn_iletisim_gonder"
@@ -40,7 +40,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="GÖNDER"/>
-
-
 
 </LinearLayout>
