@@ -22,7 +22,7 @@
 
     <EditText
         android:id="@+id/edt_epostaParolaSıfırlama"
-        android:background="@drawable/bg2"
+        android:background="@drawable/bg_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
@@ -31,7 +31,7 @@
 
     <Button
         android:onClick="istegiGonder"
-        android:background="@drawable/bg4"
+        android:background="@drawable/bg_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
