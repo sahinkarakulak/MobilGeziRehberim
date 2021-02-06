@@ -65,6 +65,7 @@
         android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground"
         android:padding="2dp"
+        android:layout_marginBottom="4dp"
         app:itemIconTint="@drawable/tab_color"
         app:itemTextColor="@drawable/tab_color"
         app:menu="@menu/hesabim_menu" />

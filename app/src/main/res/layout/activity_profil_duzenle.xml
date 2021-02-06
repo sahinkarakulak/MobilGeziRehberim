@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/bg1"
+        android:background="@drawable/bg2"
         android:hint="Kullanıcı Adı"/>
 
 
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/bg1"
+        android:background="@drawable/bg2"
         android:maxLines="3"
         android:hint="Biyografi"/>
 
