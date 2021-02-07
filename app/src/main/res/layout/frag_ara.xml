@@ -25,19 +25,10 @@
             android:id="@+id/edt_anahtar_kelime_arat"
             android:layout_weight="1"
             android:layout_width="match_parent"
+            android:inputType="text"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_edit_text"
             android:hint="Anahtar Kelime Giriniz"/>
-
-        <ImageView
-            android:id="@+id/img_arama_yap"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/bg_edit_text"
-            android:src="@drawable/ic_baseline_search_24" />
 
     </LinearLayout>
 

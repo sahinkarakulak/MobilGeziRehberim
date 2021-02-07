@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +56,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
     RecyclerAdapterYapim recyclerAdapterYapim;
 
-    ImageView img_konuma_gore_bul, img_arama_yap;
+    ImageView img_konuma_gore_bul;
     EditText edt_anahtar_kelime_arat;
 
     private void init() {
@@ -86,15 +88,24 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         });
 
         edt_anahtar_kelime_arat = viewGroup.findViewById(R.id.edt_anahtar_kelime_arat);
-        img_arama_yap = viewGroup.findViewById(R.id.img_arama_yap);
-        img_arama_yap.setOnClickListener(new View.OnClickListener() {
+        edt_anahtar_kelime_arat.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                String anahtar_kelime = edt_anahtar_kelime_arat.getText().toString();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
                 String[] ilgiliAlan = {"kullaniciEposta", "yerIsmi", "konum"};
                 for (int i = 0; i < ilgiliAlan.length; i++) {
-                    aramaYap(ilgiliAlan[i], anahtar_kelime);
+                    aramaYap(ilgiliAlan[i], s.toString());
                 }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -106,8 +117,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         return viewGroup;
     }
 
-
-    public void aramaYap(String iligiliAlan, String anahtar_kelime) {
+    public void aramaYap(String ilgiliAlan, String anahtar_kelime) {
 
         gonderiIDleriFB.clear();
         kullaniciEpostalariFB.clear();
@@ -122,10 +132,10 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         CollectionReference collectionReference = firebaseFirestore
                 .collection("TumGonderiler");
 
-        // VT'ye kaydedilme zamanına göre verileri çek
         collectionReference
-                .whereEqualTo(iligiliAlan, anahtar_kelime)
+                .whereEqualTo(ilgiliAlan, anahtar_kelime)
                 .orderBy("zaman", Query.Direction.DESCENDING)
+                .startAt(anahtar_kelime)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -135,7 +145,6 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
                             for (DocumentSnapshot snapshot : querySnapshot) {
 
-                                // Çekilen her veriyi Map dizinine at ve daha sonra çekip kullan
                                 Map<String, Object> verilerKumesi = snapshot.getData();
 
                                 String gonderiID = (String) verilerKumesi.get("gonderiID");
