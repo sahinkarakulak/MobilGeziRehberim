@@ -105,14 +105,20 @@ public class F_Paylas extends Fragment {
             }
         });
 
-        konumumu_al.setOnClickListener(new View.OnClickListener() {
+        konum_sec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCurrentLocation();
+
             }
         });
 
-        // Paylaş butonuna tıklandığında yapılacaklar
+        konumumu_al.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         btn_paylasGonder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,81 +129,15 @@ public class F_Paylas extends Fragment {
         return viewGroup;
     }
 
-    private void getCurrentLocation() {
-        Log.d(TAG, "getCurrentLocation: ...");
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(3000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        LocationServices.getFusedLocationProviderClient(getActivity())
-                .requestLocationUpdates(locationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        super.onLocationResult(locationResult);
-                        LocationServices.getFusedLocationProviderClient(getActivity())
-                                .removeLocationUpdates(this);
-                        if (locationResult != null && locationResult.getLocations().size() > 0) {
-                            int latestLocationIndex = locationResult.getLocations().size() - 1;
-                            double latitude = locationResult.getLocations().get(latestLocationIndex).getLatitude();
-                            double longitude = locationResult.getLocations().get(latestLocationIndex).getLongitude();
-
-                            edt_konum.setText(
-                                    String.format(
-                                            "Enlem: %s\nBoylam: %s",
-                                            latitude, longitude
-                                    )
-                            );
-                        }
-                    }
-                }, Looper.getMainLooper());
-    }
-
     public void paylasGonder() {
         Log.d(TAG, "paylasGonder: ...");
         String yerIsmiKontrol = edt_paylasYerIsmi.getText().toString();
         String yorumKontrol = edt_paylasYorum.getText().toString();
         String konumKontrol = edt_konum.getText().toString();
 
-        Log.d(TAG, "paylasGonder: Burdan,");
-        documentReference = FirebaseFirestore.getInstance()
-                .collection("Kullanicilar")
-                .document(firebaseUser.getEmail())
-                .collection("Bilgileri")
-                .document(firebaseUser.getEmail());
-
-        documentReference
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            if (documentSnapshot.exists()) {
-                                kullaniciAdi = documentSnapshot.getString("kullaniciAdi");
-                                Log.d(TAG, "onComplete: "+kullaniciAdi);
-                            }
-                        }
-                    }
-                });
-        Log.d(TAG, "paylasGonder: Buraya kadarki kısım gereksiz gibi");
-
         if (!yerIsmiKontrol.equals("") || !konumKontrol.equals("") || !yorumKontrol.equals("")) {
             UUID uuid = UUID.randomUUID();
-            String resimIsmi = firebaseUser.getEmail() + "--RESIM--" + uuid;
+            String resimIsmi = firebaseUser.getEmail() + "--" + yerIsmiKontrol + "--" + uuid;
             try {
                 storageReference
                         .child("Resimler")

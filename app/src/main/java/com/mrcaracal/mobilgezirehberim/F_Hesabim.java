@@ -92,8 +92,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB, resimAdresleriFB, yerIsimleriFB, konumlariFB, yorumlarFB, zamanlarFB, this);
         recyclerViewHesabim.setAdapter(recyclerAdapterYapim);
 
-
-        // Kullanıcı Hesabım sayfasını açtığı gibi profil bilgileri çekilsin ve gösterilsin
         img_profil_resmi = viewGroup.findViewById(R.id.img_profil_resmi);
         tv_kullaniciAdi = viewGroup.findViewById(R.id.tv_kullaniciAdi);
         tv_kullaniciBio = viewGroup.findViewById(R.id.tv_kullaniciBio);
@@ -128,7 +126,13 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 tv_kullaniciAdi.setText(documentSnapshot.getString("kullaniciAdi"));
                                 tv_kullaniciBio.setText(documentSnapshot.getString("bio"));
                                 Picasso.get().load(documentSnapshot.getString("kullaniciResmi")).into(img_profil_resmi);
-                                Log.d(TAG, "onComplete: Çekilen veriler kullanıldı");
+                                Log.d(TAG, "onComplete: Çekilen veriler kullanıldı\n"+documentSnapshot.getString("kullaniciResmi"));
+
+                                if (documentSnapshot.getString("kullaniciResmi")==null){
+                                    Picasso.get().load(R.drawable.defaultpp).into(img_profil_resmi);
+                                    Log.d(TAG, "onComplete: Default resim kullanıldı");
+                                }
+
                             }
                         }
                     }

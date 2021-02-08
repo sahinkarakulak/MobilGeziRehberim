@@ -161,7 +161,7 @@ public class A_ProfilDuzenle extends AppCompatActivity {
 
         if (mImageUri != null) {
             Log.d(TAG, "uploadImage: Koşul sağlandı");
-            StorageReference storageReference2 = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
+            StorageReference storageReference2 = storageReference.child(firebaseUser.getEmail()).child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
 
             uploadTask = storageReference2.putFile(mImageUri);
             Log.d(TAG, "uploadImage: Resim yolu alındı");
