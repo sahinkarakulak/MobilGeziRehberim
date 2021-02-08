@@ -2,6 +2,7 @@ package com.mrcaracal.mobilgezirehberim;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class A_Iletisim extends AppCompatActivity {
+
+    private static final String TAG = "A_Iletisim";
 
     EditText edt_iletisim_konu_baslik, edt_iletisim_mesaj_icerik;
     Button btn_iletisim_gonder;
@@ -36,6 +39,7 @@ public class A_Iletisim extends AppCompatActivity {
 
                 if (str_konu_baslik.equals("") || str_mesaj_icerik.equals("")){
                     Toast.makeText(A_Iletisim.this, "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onClick: EditText'en boş veriler alındı");
                 }else {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.putExtra(Intent.EXTRA_EMAIL, admin_e_postalari);
@@ -43,6 +47,7 @@ public class A_Iletisim extends AppCompatActivity {
                     intent.putExtra(Intent.EXTRA_TEXT, str_mesaj_icerik);
                     intent.setType("plain/text");
                     startActivity(intent.createChooser(intent, "Ne ile göndermek istersiniz?"));
+                    Log.d(TAG, "onClick: E-Mail gönderildi");
                 }
             }
         });

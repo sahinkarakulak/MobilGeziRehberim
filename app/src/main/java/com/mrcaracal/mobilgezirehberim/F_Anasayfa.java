@@ -3,6 +3,7 @@ package com.mrcaracal.mobilgezirehberim;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
+
+    private static final String TAG = "F_Anasayfa";
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
@@ -78,6 +81,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB, resimAdresleriFB, yerIsimleriFB, konumlariFB, yorumlarFB, zamanlarFB, this);
         recyclerView.setAdapter(recyclerAdapterYapim);
+        Log.d(TAG, "onCreateView: RecyclerView tanımlama ve Adapter'a gerekli paremetrelerin gönderilmesi tamamlandı");
 
         return viewGroup;
     }
@@ -94,7 +98,6 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             QuerySnapshot querySnapshot = task.getResult();
-
                             for (DocumentSnapshot snapshot : querySnapshot) {
 
                                 // Çekilen her veriyi Map dizinine at ve daha sonra çekip kullan
@@ -117,6 +120,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                                 zamanlarFB.add(zaman);
 
                                 recyclerAdapterYapim.notifyDataSetChanged();
+                                Log.d(TAG, "onComplete: VT'den veriler çekildi, ArrayListlere aktarılıp RecyclerAdapterYapim'a aktarıldı");
 
                             }
                         }
@@ -131,22 +135,18 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
     // AlertDialog yerine Expandable Recycler View kullanılabilir
     @Override
     public void onItemClick(int position) {
-
-
+        Log.d(TAG, "onItemClick: Tek tık");
     }
 
     // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
     @Override
     public void onLongItemClick(int position) {
-
+        Log.d(TAG, "onLongItemClick: Uzun tık");
+        
         String tarih_ve_saat = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
         String tarih = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
         String gonderi_detay_goster = "Paylaşan: " + kullaniciEpostalariFB.get(position) + "\nTarih: " + tarih_ve_saat + "\n\n" + yorumlarFB.get(position);
-
-
-/*
-        String gonderi_detay_goster = "Paylaşan: " + kullaniciEpostalariFB.get(position) + "\n\n" + yorumlarFB.get(position);
-*/
+        //String gonderi_detay_goster = "Paylaşan: " + kullaniciEpostalariFB.get(position) + "\n\n" + yorumlarFB.get(position);
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert
@@ -155,15 +155,17 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                 .setNegativeButton("iptal", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //
+                        Log.d(TAG, "onClick: İPTAL");
                     }
                 })
                 .setPositiveButton("Kaydet", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Log.d(TAG, "onClick: KAYDET");
 
                         if (kullaniciEpostalariFB.get(position).equals(firebaseUser.getEmail())) {
                             Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onClick: Bu gönderiyi zaten bu kullanıcı paylaşmıştı");
                         } else {
 
                             M_Gonderiler MGonderiler = new M_Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
@@ -188,6 +190,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
+                            Log.d(TAG, "onClick: Gönderi kaydedildi");
                         }
 
 

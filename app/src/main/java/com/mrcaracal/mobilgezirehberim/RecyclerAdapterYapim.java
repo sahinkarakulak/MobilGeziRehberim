@@ -17,6 +17,8 @@ import java.util.ArrayList;
 
 public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYapim.GonderiHolder> {
 
+    private static final String TAG = "RecyclerAdapterYapim";
+
     private final ArrayList<String> gonderiIDleriListesi;
     private final ArrayList<String> kullaniciEpostalariListesi;
     private final ArrayList<String> resimAdresleriListesi;
@@ -60,7 +62,7 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
                 .fit()
                 .into(holder.row_resimAdresi);
 
-        Log.d("MGR_LOG", "onBindViewHolder: " + "Veriler çekildi ve işlendi");
+        Log.d(TAG, "onBindViewHolder: " + "Veriler çekildi ve işlendi");
     }
 
     // kaç tane row olduğunu ayarlar - listemizde

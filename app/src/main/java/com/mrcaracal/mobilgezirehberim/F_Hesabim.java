@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,8 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
+
+    private static final String TAG = "F_Hesabim";
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
@@ -102,6 +105,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
             public void onClick(View v) {
                 Intent profili_duzenle = new Intent(getActivity(), A_ProfilDuzenle.class);
                 startActivity(profili_duzenle);
+                Log.d(TAG, "onClick: Kullanıcı A_ProfiliDuzenle'e yönlendirildi");
             }
         });
 
@@ -117,12 +121,14 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        Log.d(TAG, "onComplete: Veriler çekildi");
                         if (task.isSuccessful()) {
                             DocumentSnapshot documentSnapshot = task.getResult();
                             if (documentSnapshot.exists()) {
                                 tv_kullaniciAdi.setText(documentSnapshot.getString("kullaniciAdi"));
                                 tv_kullaniciBio.setText(documentSnapshot.getString("bio"));
                                 Picasso.get().load(documentSnapshot.getString("kullaniciResmi")).into(img_profil_resmi);
+                                Log.d(TAG, "onComplete: Çekilen veriler kullanıldı");
                             }
                         }
                     }
@@ -133,9 +139,10 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                // Hangi menüye tıklanmışsa onu tespit ediyoruz.
+                // Hangi TAB'a tıklanmışsa onu tespit ediyoruz.
                 switch (item.getItemId()) {
                     case R.id.paylasilanlar:
+                        Log.d(TAG, "onNavigationItemSelected: Paylaşılanlar TAB'ı");
 
                         gonderiIDleriFB.clear();
                         kullaniciEpostalariFB.clear();
@@ -146,9 +153,11 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                         zamanlarFB.clear();
 
                         paylasilanlariCek();
+                        Log.d(TAG, "onNavigationItemSelected: paylasilanlariCek() çağrıldı");
                         recyclerViewHesabim.scrollToPosition(0);
                         break;
                     case R.id.kaydedilenler:
+                        Log.d(TAG, "onNavigationItemSelected: Kaydedilenler TAB'ı");
 
                         gonderiIDleriFB.clear();
                         kullaniciEpostalariFB.clear();
@@ -159,10 +168,10 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                         zamanlarFB.clear();
 
                         kaydedilenleriCek();
+                        Log.d(TAG, "onNavigationItemSelected: kaydedilenleriCek() çağrıldı");
                         recyclerViewHesabim.scrollToPosition(0);
                         break;
                 }
-
                 return true;
             }
         });
@@ -171,6 +180,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     }
 
     public void paylasilanlariCek() {
+        Log.d(TAG, "paylasilanlariCek: ...");
         CollectionReference collectionReference = firebaseFirestore
                 .collection("Kullanicilar")
                 .document(firebaseUser.getEmail())
@@ -182,12 +192,10 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d(TAG, "onComplete: ");
                         if (task.isSuccessful()) {
-
                             QuerySnapshot querySnapshot = task.getResult();
-
                             for (DocumentSnapshot documentSnapshot : querySnapshot) {
-
                                 final Map<String, Object> verilerKumesiHesaim = documentSnapshot.getData();
 
                                 String kullaniciEposta = (String) verilerKumesiHesaim.get("kullaniciEposta");
@@ -203,6 +211,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 zamanlarFB.add(zaman);
 
                                 recyclerAdapterYapim.notifyDataSetChanged();
+                                Log.d(TAG, "onComplete: Çekilen veriler RecyclerAdapterYapim'a gönderildi");
                             }
                         }
                     }
@@ -211,11 +220,13 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onFailure: "+e.getMessage());
                     }
                 });
     }
 
     public void kaydedilenleriCek() {
+        Log.d(TAG, "kaydedilenleriCek: ...");
 
         CollectionReference collectionReference = firebaseFirestore
                 .collection("Kullanicilar")
@@ -228,12 +239,10 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d(TAG, "onComplete: Veriler filtrelenmiş olarak çekildi");
                         if (task.isSuccessful()) {
-
                             QuerySnapshot querySnapshot = task.getResult();
-
                             for (DocumentSnapshot documentSnapshot : querySnapshot) {
-
                                 final Map<String, Object> verilerKumesiHesaim = documentSnapshot.getData();
 
                                 String kullaniciEposta = (String) verilerKumesiHesaim.get("kullaniciEposta");
@@ -249,6 +258,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 zamanlarFB.add(zaman);
 
                                 recyclerAdapterYapim.notifyDataSetChanged();
+                                Log.d(TAG, "onComplete: Çekilen veriler RecyclerAdapterYapim'a gönderildi");
                             }
                         }
                     }
@@ -257,6 +267,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onFailure: "+e.getMessage());
                     }
                 });
     }
@@ -266,15 +277,13 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     // AlertDialog yerine Expandable Recycler View kullanılabilir
     @Override
     public void onItemClick(int position) {
-        //
-
+        Log.d(TAG, "onItemClick: Tek tık");
     }
 
     // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
     @Override
     public void onLongItemClick(int position) {
-        // Uzun tıklama işleminde yapılacaklar...
-        // Toast.makeText(getActivity(), yorumlarFB.get(position), Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "onLongItemClick: Uzun tık");
 
         String tarih_ve_saat = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
         String tarih = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
@@ -287,7 +296,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                 .setPositiveButton("TAMAM", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //
+                        Log.d(TAG, "onClick: TAMAM");
                     }
                 })
                 .show();

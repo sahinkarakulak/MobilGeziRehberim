@@ -3,6 +3,7 @@ package com.mrcaracal.mobilgezirehberim;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,6 +17,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class A_AnaSayfa extends AppCompatActivity {
+
+    private static final String TAG = "A_AnaSayfa";
 
     boolean doubleBackToExitPressedOnce = false;
 
@@ -37,8 +40,8 @@ public class A_AnaSayfa extends AppCompatActivity {
 
         setTitle("Mobil Gezi Rehberim");
 
-        // Uygulama açıldığı gibi ana_sayfa fragment'in çalışması için aşağıdaki kod satırını kullandık.
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new F_Anasayfa()).commit();
+        Log.d(TAG, "onCreate: F_Anasayfa Fragment'i açıldı");
 
         // BottomNavigation
         // Nesnesini oluşturup tıklanma işlemlerinde neler yapılacağını belirttik.
@@ -53,23 +56,28 @@ public class A_AnaSayfa extends AppCompatActivity {
                     case R.id.ana_sayfa:
                         seciliFragment = new F_Anasayfa();
                         setTitle("Mobil Gezi Rehberim");
+                        Log.d(TAG, "onNavigationItemSelected: F_Anasayfa fragment'i seçildi");
                         break;
                     case R.id.ara:
                         seciliFragment = new F_Ara();
                         setTitle("Ara");
+                        Log.d(TAG, "onNavigationItemSelected: F_Ara fragment'i seçildi");
                         break;
                     case R.id.paylas:
                         seciliFragment = new F_Paylas();
                         setTitle("Paylaş");
+                        Log.d(TAG, "onNavigationItemSelected: F_Paylas fragment'i seçildi");
                         break;
                     case R.id.hesabim:
                         seciliFragment = new F_Hesabim();
                         setTitle("Hesabım");
+                        Log.d(TAG, "onNavigationItemSelected: F_Hesabim fragment'i seçildi");
                         break;
                 }
                 // Tespit ettiğimiz fragment'i yayınlıyoruz.
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, seciliFragment).commit();
 
+                // Seçili fragmentin kullanıcının anlaması için true yaptık
                 return true;
             }
         });
@@ -91,6 +99,7 @@ public class A_AnaSayfa extends AppCompatActivity {
             case R.id.iletisim:
                 Intent iletisim = new Intent(A_AnaSayfa.this, A_Iletisim.class);
                 startActivity(iletisim);
+                Log.d(TAG, "onOptionsItemSelected: İletişim menüsü seçildi");
                 break;
 
             case R.id.cikis:
@@ -98,6 +107,7 @@ public class A_AnaSayfa extends AppCompatActivity {
                 startActivity(cikis);
                 finish();
                 firebaseAuth.signOut();
+                Log.d(TAG, "onOptionsItemSelected: Çıkış menüsü seçildi");
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,8 @@ import java.util.UUID;
 import static android.app.Activity.RESULT_OK;
 
 public class F_Paylas extends Fragment {
+
+    private static final String TAG = "F_Paylas";
 
     M_Gonderiler MGonderiler;
     FirebaseAuth firebaseAuth;
@@ -91,13 +94,13 @@ public class F_Paylas extends Fragment {
         img_paylasResimSec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // İzin verilmemişse izin iste
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                    Log.d(TAG, "onClick: Daha önceden izin verilmediğinden izin istendi");
                 } else {
-                    // İzin daha önceden verilmiş ise galeriye gidilsin
                     Intent intentGaleri = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intentGaleri, 2);
+                    Log.d(TAG, "onClick: Daha önceden izin verildiğinden kullanıcı Galeriye yönlendirildi");
                 }
             }
         });
@@ -113,7 +116,6 @@ public class F_Paylas extends Fragment {
         btn_paylasGonder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 paylasGonder();
             }
         });
@@ -122,6 +124,7 @@ public class F_Paylas extends Fragment {
     }
 
     private void getCurrentLocation() {
+        Log.d(TAG, "getCurrentLocation: ...");
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(3000);
@@ -164,11 +167,12 @@ public class F_Paylas extends Fragment {
     }
 
     public void paylasGonder() {
-
+        Log.d(TAG, "paylasGonder: ...");
         String yerIsmiKontrol = edt_paylasYerIsmi.getText().toString();
         String yorumKontrol = edt_paylasYorum.getText().toString();
         String konumKontrol = edt_konum.getText().toString();
 
+        Log.d(TAG, "paylasGonder: Burdan,");
         documentReference = FirebaseFirestore.getInstance()
                 .collection("Kullanicilar")
                 .document(firebaseUser.getEmail())
@@ -184,16 +188,16 @@ public class F_Paylas extends Fragment {
                             DocumentSnapshot documentSnapshot = task.getResult();
                             if (documentSnapshot.exists()) {
                                 kullaniciAdi = documentSnapshot.getString("kullaniciAdi");
+                                Log.d(TAG, "onComplete: "+kullaniciAdi);
                             }
                         }
                     }
                 });
+        Log.d(TAG, "paylasGonder: Buraya kadarki kısım gereksiz gibi");
 
         if (!yerIsmiKontrol.equals("") || !konumKontrol.equals("") || !yorumKontrol.equals("")) {
-
             UUID uuid = UUID.randomUUID();
             String resimIsmi = firebaseUser.getEmail() + "--RESIM--" + uuid;
-
             try {
                 storageReference
                         .child("Resimler")
@@ -250,19 +254,18 @@ public class F_Paylas extends Fragment {
                                                                         }).addOnFailureListener(new OnFailureListener() {
                                                                     @Override
                                                                     public void onFailure(@NonNull Exception e) {
-
+                                                                        Log.d(TAG, "onFailure: "+e.getMessage());
                                                                     }
                                                                 });
-
                                                             }
                                                         })
                                                         .addOnFailureListener(new OnFailureListener() {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
                                                                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                Log.d(TAG, "onFailure: "+e.getMessage());
                                                             }
                                                         });
-
                                             }
                                         });
                                 final Toast benimToast = Toast.makeText(getActivity(), "Gönderildi", Toast.LENGTH_SHORT);
@@ -281,12 +284,13 @@ public class F_Paylas extends Fragment {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "onFailure: "+e.getMessage());
                             }
                         });
             } catch (Exception e) {
                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "paylasGonder: "+e.getMessage());
             }
-
         } else
             Toast.makeText(getActivity(), "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
     }
@@ -294,14 +298,12 @@ public class F_Paylas extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent intentGaleri = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intentGaleri, 2);
             }
         }
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
@@ -309,18 +311,13 @@ public class F_Paylas extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
-
             resimYolu = data.getData();
-
             Picasso.get()
                     .load(resimYolu)
                     .resize(img_paylasResimSec.getWidth(), img_paylasResimSec.getHeight())
                     .centerCrop()
                     .into(img_paylasResimSec);
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-
 }

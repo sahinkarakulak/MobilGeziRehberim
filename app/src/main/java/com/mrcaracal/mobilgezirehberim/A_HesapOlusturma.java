@@ -2,6 +2,7 @@ package com.mrcaracal.mobilgezirehberim;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,6 +18,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class A_HesapOlusturma extends AppCompatActivity {
+
+    private static final String TAG = "A_HesapOlusturma";
 
     M_KullaniciBilgileri MKullaniciBilgileri;
 
@@ -57,6 +60,7 @@ public class A_HesapOlusturma extends AppCompatActivity {
 
         if (kullaniciAdi.equals("") || eposta.equals("") || parola1.equals("") || parola2.equals("")) {
             Toast.makeText(this, "Gerekli alanları doldurunuz...", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "btn_hesabiOlustur: EditText'en boşveriler çekildi");
         } else {
             if (parola1.equals(parola2)) {
                 firebaseAuth
@@ -71,7 +75,7 @@ public class A_HesapOlusturma extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(A_HesapOlusturma.this, "Doğrulama bağlantısı E-Posta adresinize gönderildi.", Toast.LENGTH_SHORT).show();
-
+                                                Log.d(TAG, "onSuccess: Doğrulama baplantııs E-Posta adresine gönderildi");
                                                 MKullaniciBilgileri = new M_KullaniciBilgileri(kullaniciAdi, eposta, parola1, "MGR'i Seviyorum", "https://firebasestorage.googleapis.com/v0/b/mobilgezirehberim-7aca5.appspot.com/o/Resimler%2Fdefaultpp.png?alt=media&token=97fe9138-0aad-4ea9-af78-536c637b3be4");
 
                                                 DocumentReference documentReference = firebaseFirestore
@@ -89,12 +93,14 @@ public class A_HesapOlusturma extends AppCompatActivity {
                                                                 startActivity(intent);
                                                                 finish();
                                                                 firebaseAuth.signOut();
+                                                                Log.d(TAG, "onSuccess: Kayıttan sonra kullanıcı A_Giris'e gönderildi");
                                                             }
                                                         })
                                                         .addOnFailureListener(new OnFailureListener() {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
                                                                 Toast.makeText(A_HesapOlusturma.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                Log.d(TAG, "onFailure: "+e.getMessage());
                                                             }
                                                         });
 
@@ -105,6 +111,7 @@ public class A_HesapOlusturma extends AppCompatActivity {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 Toast.makeText(A_HesapOlusturma.this, "Beklenmedik bir hata gerçekleşti\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Log.d(TAG, "onFailure: "+e.getMessage());
                                             }
                                         });
                             }

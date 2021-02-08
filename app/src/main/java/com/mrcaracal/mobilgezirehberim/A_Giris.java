@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -21,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class A_Giris extends AppCompatActivity {
+
+    private static final String TAG = "A_Giris";
 
     EditText edt_epostaGiris, edt_parolaGiris;
     CheckBox chb_giris_bilgileri_hatirla;
@@ -52,8 +55,6 @@ public class A_Giris extends AppCompatActivity {
 
         setTitle("Giriş");
 
-        int[] sdfsd = {12, 12, 12};
-
         // Beni hatırla işlemi
         boolean bilgihatirla = GET.getBoolean("boolean_key", false);
         if (bilgihatirla == true) {
@@ -61,11 +62,13 @@ public class A_Giris extends AppCompatActivity {
 
             edt_epostaGiris.setText(GET.getString("keyPosta", ""));
             edt_parolaGiris.setText(GET.getString("keyParola", ""));
+            Log.d(TAG, "onCreate: Kullanıcının girdiği bilgiler alındı");
         } else {
             chb_giris_bilgileri_hatirla.setChecked(false);
 
             edt_epostaGiris.setText("");
             edt_parolaGiris.setText("");
+            Log.d(TAG, "onCreate: Kullanıcının girdiği bilgiler serbest bırakıldı");
         }
 
         // Kullanıcı daha önceden giriş yapmış ise otomatik olarak giriş yapıp Ana sayfaya yönelendirilecektir.
@@ -74,6 +77,7 @@ public class A_Giris extends AppCompatActivity {
             Intent intent = new Intent(A_Giris.this, A_AnaSayfa.class);
             startActivity(intent);
             finish();
+            Log.d(TAG, "onCreate: Kullanıcı doğrudan uygulama içine yönlendirildi");
         }
 
     }
@@ -82,7 +86,7 @@ public class A_Giris extends AppCompatActivity {
     public void txt_hesapOlustur(View view) {
         Intent intent = new Intent(A_Giris.this, A_HesapOlusturma.class);
         startActivity(intent);
-
+        Log.d(TAG, "txt_hesapOlustur: Kullanıcı A_HesapOlusturma'a geçti");
     }
 
     // Kullanıcının girdiği bilgiler doğrultusunda giriş yapma işlemleri...
@@ -93,6 +97,7 @@ public class A_Giris extends AppCompatActivity {
 
         if (eposta.equals("") || parola.equals("")) {
             Toast.makeText(this, "Lütfen gerekli alanları doldrunuz", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "girisYap: EditText içerisinden boş veri çekildi");
         } else {
             firebaseAuth.signInWithEmailAndPassword(eposta, parola)
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -107,14 +112,18 @@ public class A_Giris extends AppCompatActivity {
                                 Intent intent = new Intent(A_Giris.this, A_AnaSayfa.class);
                                 startActivity(intent);
                                 finish();
+                                Log.d(TAG, "onSuccess: Kullanıcı A_Giris'e geçti");
+                                progressDialog.dismiss();
                             } else {
                                 Toast.makeText(A_Giris.this, "E-Postanıza gelen bağlantıdan hesabınızı onaylayın", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "onSuccess: Kullanıcıya hesap doğrulama bağlantısı gönderildi");
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(A_Giris.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onFailure: "+e.getMessage());
                 }
             });
         }
@@ -125,6 +134,7 @@ public class A_Giris extends AppCompatActivity {
     public void txt_parolamıUnuttum(View view) {
         Intent intent = new Intent(A_Giris.this, A_ParolaSifirlama.class);
         startActivity(intent);
+        Log.d(TAG, "txt_parolamıUnuttum: Kullanıcı A_ParolaSifirlama'a geçti");
     }
 
     // Beni hatırla işlemi - onResume durumunda yapılacaklar
@@ -143,13 +153,14 @@ public class A_Giris extends AppCompatActivity {
                     SET.putString("keyPosta", edt_epostaGiris.getText().toString());
                     SET.putString("keyParola", edt_parolaGiris.getText().toString());
                     SET.commit();
+                    Log.d(TAG, "onClick: Kullanıcının girdiği bilgiler çekildi ve EditText'e yazdırıldı");
 
                 } else {
                     SET.putBoolean("boolean_key", false);
                     SET.putString("keyPosta", "");
                     SET.putString("keyParola", "");
                     SET.commit();
-
+                    Log.d(TAG, "onClick: herhangi bir şey yazdırılmadı");
                 }
 
             }

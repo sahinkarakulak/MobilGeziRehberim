@@ -2,6 +2,7 @@ package com.mrcaracal.mobilgezirehberim;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,6 +15,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class A_ParolaSifirlama extends AppCompatActivity {
+
+    private static final String TAG = "A_ParolaSifirlama";
 
     EditText edt_epostaParolaSıfırlama;
 
@@ -42,9 +45,8 @@ public class A_ParolaSifirlama extends AppCompatActivity {
 
         if (eposta.equals("")) {
             Toast.makeText(this, "Gerekli alanı doldurunuz", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "istegiGonder: EditText'en boş veriler alındı");
         } else {
-
-
             firebaseAuth.sendPasswordResetEmail(eposta)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -53,6 +55,7 @@ public class A_ParolaSifirlama extends AppCompatActivity {
                             Intent intent = new Intent(A_ParolaSifirlama.this, A_Giris.class);
                             startActivity(intent);
                             finish();
+                            Log.d(TAG, "onSuccess: Sıfırlama isteği gönderildi ve kullanıcı A_Giris'e yönlendirilidi");
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override

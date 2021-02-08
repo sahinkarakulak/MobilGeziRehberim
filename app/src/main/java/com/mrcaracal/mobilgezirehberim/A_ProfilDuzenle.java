@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -38,6 +39,8 @@ import java.util.Map;
 
 public class A_ProfilDuzenle extends AppCompatActivity {
 
+    private static final String TAG = "A_ProfilDuzenle";
+
     FirebaseUser firebaseUser;
     StorageReference storageReference;
     ImageView img_kullaniciResmi;
@@ -52,7 +55,6 @@ public class A_ProfilDuzenle extends AppCompatActivity {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         storageReference = FirebaseStorage.getInstance().getReference("Resimler");
-
 
         img_kullaniciResmi = findViewById(R.id.img_kullaniciResmi);
         tv_kullaniciResmiDegistir = findViewById(R.id.tv_kullaniciResmiDegistir);
@@ -87,7 +89,7 @@ public class A_ProfilDuzenle extends AppCompatActivity {
                                 et_kullaniciAdiAl.setText(documentSnapshot.getString("kullaniciAdi"));
                                 et_biyografiAl.setText(documentSnapshot.getString("bio"));
                                 Picasso.get().load(documentSnapshot.getString("kullaniciResmi")).into(img_kullaniciResmi);
-
+                                Log.d(TAG, "onComplete: VT'den kullanıcı bilgileri alındı ve gösterildi");
                             }
 
                         }
@@ -120,6 +122,7 @@ public class A_ProfilDuzenle extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 profiliGuncelle(et_kullaniciAdiAl.getText().toString(), et_biyografiAl.getText().toString());
+                Log.d(TAG, "onClick: EditText'en alınan veriler parametre olarak gönderildi");
             }
         });
 
@@ -141,8 +144,9 @@ public class A_ProfilDuzenle extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-
+                        Log.d(TAG, "onSuccess: Sadece istenen veriler güncellendi");
                         startActivity(new Intent(A_ProfilDuzenle.this, A_AnaSayfa.class));
+                        Log.d(TAG, "onSuccess: Kullanıcı A_Anasayfaya yönlendirildi");
                     }
                 });
     }
@@ -156,9 +160,11 @@ public class A_ProfilDuzenle extends AppCompatActivity {
     private void uploadImage() {
 
         if (mImageUri != null) {
+            Log.d(TAG, "uploadImage: Koşul sağlandı");
             StorageReference storageReference2 = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
 
             uploadTask = storageReference2.putFile(mImageUri);
+            Log.d(TAG, "uploadImage: Resim yolu alındı");
             uploadTask.continueWithTask(new Continuation() {
                 @Override
                 public Object then(@NonNull Task task) throws Exception {
@@ -189,17 +195,19 @@ public class A_ProfilDuzenle extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void aVoid) {
 
+                                        Log.d(TAG, "onSuccess: VT'de resim yolu değiştirildi");
+                                        
                                         documentReference
                                                 .get()
                                                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                         if (task.isSuccessful()) {
-
                                                             DocumentSnapshot documentSnapshot = task.getResult();
                                                             if (documentSnapshot.exists()) {
 
                                                                 Picasso.get().load(documentSnapshot.getString("kullaniciResmi")).into(img_kullaniciResmi);
+                                                                Log.d(TAG, "onComplete: Resim yolu çekilip Picasso ile yayınlandı");
                                                             }
                                                         }
                                                     }
@@ -214,6 +222,7 @@ public class A_ProfilDuzenle extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(A_ProfilDuzenle.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onFailure: "+e.getMessage());
                 }
             });
         } else {
@@ -229,11 +238,12 @@ public class A_ProfilDuzenle extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             mImageUri = result.getUri();
             uploadImage();
-
-
+            
             Toast.makeText(this, "Profil resmi güncellendi", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "onActivityResult: Profil resmi güncellendi");
         } else {
             Toast.makeText(this, "Vaz mı geçtin?", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "onActivityResult: İşlemden vazgeçildi");
         }
 
     }
