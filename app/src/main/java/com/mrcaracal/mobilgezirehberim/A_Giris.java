@@ -25,6 +25,8 @@ public class A_Giris extends AppCompatActivity {
 
     private static final String TAG = "A_Giris";
 
+    ProgressDialog progressDialog;
+
     EditText edt_epostaGiris, edt_parolaGiris;
     CheckBox chb_giris_bilgileri_hatirla;
     SharedPreferences GET;
@@ -105,7 +107,7 @@ public class A_Giris extends AppCompatActivity {
                         public void onSuccess(AuthResult authResult) {
                             if (firebaseAuth.getCurrentUser().isEmailVerified()) {
 
-                                ProgressDialog progressDialog = new ProgressDialog(A_Giris.this);
+                                progressDialog = new ProgressDialog(A_Giris.this);
                                 progressDialog.setMessage("Giriş Yapılıyor");
                                 progressDialog.show();
 
@@ -113,11 +115,12 @@ public class A_Giris extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                                 Log.d(TAG, "onSuccess: Kullanıcı A_Giris'e geçti");
-                                progressDialog.dismiss();
+
                             } else {
                                 Toast.makeText(A_Giris.this, "E-Postanıza gelen bağlantıdan hesabınızı onaylayın", Toast.LENGTH_SHORT).show();
                                 Log.d(TAG, "onSuccess: Kullanıcıya hesap doğrulama bağlantısı gönderildi");
                             }
+                            progressDialog.dismiss();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -126,6 +129,8 @@ public class A_Giris extends AppCompatActivity {
                     Log.d(TAG, "onFailure: "+e.getMessage());
                 }
             });
+
+
         }
 
     }

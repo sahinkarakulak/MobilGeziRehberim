@@ -123,6 +123,7 @@ public class F_Paylas extends Fragment {
             @Override
             public void onClick(View v) {
                 paylasGonder();
+
             }
         });
 

@@ -145,13 +145,13 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
     public void aramaYap(String ilgiliAlan, String anahtarKelime) {
         Log.d(TAG, "aramaYap: ");
 
-        /*gonderiIDleriFB.clear();
+        gonderiIDleriFB.clear();
         kullaniciEpostalariFB.clear();
         resimAdresleriFB.clear();
         yerIsimleriFB.clear();
         konumlariFB.clear();
         yorumlarFB.clear();
-        zamanlarFB.clear();*/
+        zamanlarFB.clear();
 
         //recycler_view_ara.scrollToPosition(0);
 
@@ -191,6 +191,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                                     recyclerAdapterYapim.notifyDataSetChanged();
                                     Log.d(TAG, "onComplete: Sonu...");
 
+                                    // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
                             }
                         }
 
