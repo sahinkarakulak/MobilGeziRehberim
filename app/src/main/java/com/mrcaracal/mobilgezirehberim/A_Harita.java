@@ -2,6 +2,7 @@ package com.mrcaracal.mobilgezirehberim;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -143,7 +144,7 @@ public class A_Harita extends AppCompatActivity implements OnMapReadyCallback, G
     // Adres bilgileri de alınsın ve yazdırılsın
     @Override
     public void onMapClick(LatLng latLng) {
-        Toast.makeText(this, "Enlem: " + latLng.latitude + "\nBoylam: " + latLng.longitude, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + latLng.latitude + "\nBoylam: " + latLng.longitude, Toast.LENGTH_SHORT).show();
 
         if (marker != null) {
             marker.remove();
@@ -154,5 +155,14 @@ public class A_Harita extends AppCompatActivity implements OnMapReadyCallback, G
                 .draggable(true)
                 .visible(true)
         );
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // Geri gidildiği zaman seçilen koordinat bilgileri fragment'e taşınsın!
+        // Enlem - Boylam - Adres
+
     }
 }

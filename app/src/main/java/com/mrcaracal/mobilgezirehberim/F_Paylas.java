@@ -60,8 +60,6 @@ public class F_Paylas extends Fragment {
     EditText edt_paylasYerIsmi, edt_paylasYorum, edt_konum;
     Button btn_paylasGonder, konum_sec, konumumu_al;
     ScrollView sv_paylas;
-    DocumentReference documentReference;
-    String kullaniciAdi;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
 
@@ -108,7 +106,8 @@ public class F_Paylas extends Fragment {
         konum_sec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getActivity(), A_Harita.class));
+                Log.d(TAG, "onClick: Kullanıcı A_Harita'a yönlendirildi");
             }
         });
 
