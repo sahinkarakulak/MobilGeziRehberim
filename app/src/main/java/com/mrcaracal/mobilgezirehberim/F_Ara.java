@@ -86,8 +86,9 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         img_konuma_gore_bul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), A_Harita.class));
-                Log.d(TAG, "onClick: Kullanıcı A_Harita'a yönlendirildi");
+                //startActivity(new Intent(getActivity(), A_Harita.class));
+                // Bu konuma yakın yerlerin listelenmesini sağla
+                Toast.makeText(getActivity(), "Yakın yerler listeleniyor", Toast.LENGTH_SHORT).show();
             }
         });
 
