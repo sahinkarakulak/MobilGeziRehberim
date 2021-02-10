@@ -20,7 +20,6 @@
                 android:id="@+id/img_paylasResimSec"
                 android:layout_width="match_parent"
                 android:layout_height="230dp"
-                android:padding="40dp"
                 android:layout_marginBottom="20dp"
                 android:onClick="img_paylasResimSec"
                 android:src="@drawable/ic_photo_select" />
@@ -35,17 +34,7 @@
                 android:inputType="text"
                 android:maxLines="1" />
 
-            <EditText
-                android:id="@+id/edt_konum"
-                android:background="@drawable/bg_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:hint="Konum"
-                android:inputType="text"
-                android:maxLength="140"
-                android:maxLines="1" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,23 +42,45 @@
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/konum_sec"
+                <LinearLayout
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:padding="20dp"
-                    android:text="Konum Seç"
-                    android:background="@drawable/bg_button"/>
+                    android:layout_marginRight="8dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/edt_konum"
+                        android:background="@drawable/bg_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:hint="Konum / X Y Koordinatları"
+                        android:inputType="text"
+                        android:maxLength="140"
+                        android:maxLines="1" />
+
+                    <EditText
+                        android:id="@+id/edt_adres"
+                        android:background="@drawable/bg_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Adres / Adres bilgisi"
+                        android:inputType="text"
+                        android:maxLength="140"
+                        android:maxLines="1" />
+
+                </LinearLayout>
 
                 <Button
-                    android:id="@+id/konumumu_al"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="Konumumu Al"
+                    android:id="@+id/konum_sec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:padding="20dp"
+                    android:text="Konum ve\nAdres Al"
                     android:background="@drawable/bg_button"/>
 
             </LinearLayout>
@@ -79,10 +90,12 @@
                 android:background="@drawable/bg_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="top"
                 android:layout_marginBottom="10dp"
                 android:hint="Yorum"
                 android:maxLength="140"
-                android:maxLines="5" />
+                android:maxLines="5"
+                android:lines="5"/>
 
             <Button
                 android:id="@+id/btn_paylasGonder"

@@ -58,7 +58,7 @@ public class F_Paylas extends Fragment {
     Uri resimYolu;
     ImageView img_paylasResimSec;
     EditText edt_paylasYerIsmi, edt_paylasYorum, edt_konum;
-    Button btn_paylasGonder, konum_sec, konumumu_al;
+    Button btn_paylasGonder, konum_sec;
     ScrollView sv_paylas;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
@@ -84,7 +84,6 @@ public class F_Paylas extends Fragment {
         edt_konum = viewGroup.findViewById(R.id.edt_konum);
         edt_paylasYorum = viewGroup.findViewById(R.id.edt_paylasYorum);
         konum_sec = viewGroup.findViewById(R.id.konum_sec);
-        konumumu_al = viewGroup.findViewById(R.id.konumumu_al);
         btn_paylasGonder = viewGroup.findViewById(R.id.btn_paylasGonder);
         sv_paylas = viewGroup.findViewById(R.id.sv_paylas);
 
@@ -108,13 +107,6 @@ public class F_Paylas extends Fragment {
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), A_Harita.class));
                 Log.d(TAG, "onClick: Kullanıcı A_Harita'a yönlendirildi");
-            }
-        });
-
-        konumumu_al.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
 

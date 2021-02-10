@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:gravity="center"
-                android:text="~~ Şahin Karakulak ~~" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/tv_kullaniciBio"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:gravity="center_horizontal"
-                android:text="~~ mrcaracal.com ~~" />
+                android:text="" />
 
         </LinearLayout>
 
