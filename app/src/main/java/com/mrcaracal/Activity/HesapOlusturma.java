@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mrcaracal.Modul.KullaniciBilgileri;
-import com.mrcaracal.mobilgezirehberim.A_Giris;
+import com.mrcaracal.mobilgezirehberim.Giris;
 import com.mrcaracal.mobilgezirehberim.R;
 
 public class HesapOlusturma extends AppCompatActivity {
@@ -92,11 +92,11 @@ public class HesapOlusturma extends AppCompatActivity {
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
-                                                                Intent intent = new Intent(HesapOlusturma.this, A_Giris.class);
+                                                                Intent intent = new Intent(HesapOlusturma.this, Giris.class);
                                                                 startActivity(intent);
                                                                 finish();
                                                                 firebaseAuth.signOut();
-                                                                Log.d(TAG, "onSuccess: Kayıttan sonra kullanıcı A_Giris'e gönderildi");
+                                                                Log.d(TAG, "onSuccess: Kayıttan sonra kullanıcı Giris'e gönderildi");
                                                             }
                                                         })
                                                         .addOnFailureListener(new OnFailureListener() {

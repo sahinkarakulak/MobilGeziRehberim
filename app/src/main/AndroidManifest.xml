@@ -47,7 +47,7 @@
         <activity android:name="com.mrcaracal.Activity.AnaSayfa" />
         <activity android:name="com.mrcaracal.Activity.ParolaSifirlama" />
         <activity android:name="com.mrcaracal.Activity.HesapOlusturma" />
-        <activity android:name=".A_Giris">
+        <activity android:name=".Giris">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

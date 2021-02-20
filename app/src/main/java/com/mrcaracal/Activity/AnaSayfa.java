@@ -19,7 +19,7 @@ import com.mrcaracal.Fragment.F_Anasayfa;
 import com.mrcaracal.Fragment.F_Ara;
 import com.mrcaracal.Fragment.F_Hesabim;
 import com.mrcaracal.Fragment.F_Paylas;
-import com.mrcaracal.mobilgezirehberim.A_Giris;
+import com.mrcaracal.mobilgezirehberim.Giris;
 import com.mrcaracal.mobilgezirehberim.R;
 
 public class AnaSayfa extends AppCompatActivity {
@@ -109,7 +109,7 @@ public class AnaSayfa extends AppCompatActivity {
                 break;
 
             case R.id.cikis:
-                Intent cikis = new Intent(AnaSayfa.this, A_Giris.class);
+                Intent cikis = new Intent(AnaSayfa.this, Giris.class);
                 startActivity(cikis);
                 finish();
                 firebaseAuth.signOut();

@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.mrcaracal.mobilgezirehberim.A_Giris;
+import com.mrcaracal.mobilgezirehberim.Giris;
 import com.mrcaracal.mobilgezirehberim.R;
 
 public class ParolaSifirlama extends AppCompatActivity {
@@ -54,10 +54,10 @@ public class ParolaSifirlama extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Toast.makeText(ParolaSifirlama.this, "E-Postanızı kontorl ediniz", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(ParolaSifirlama.this, A_Giris.class);
+                            Intent intent = new Intent(ParolaSifirlama.this, Giris.class);
                             startActivity(intent);
                             finish();
-                            Log.d(TAG, "onSuccess: Sıfırlama isteği gönderildi ve kullanıcı A_Giris'e yönlendirilidi");
+                            Log.d(TAG, "onSuccess: Sıfırlama isteği gönderildi ve kullanıcı Giris'e yönlendirilidi");
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override

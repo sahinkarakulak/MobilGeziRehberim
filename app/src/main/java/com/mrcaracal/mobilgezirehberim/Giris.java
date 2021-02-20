@@ -24,9 +24,9 @@ import com.mrcaracal.Activity.AnaSayfa;
 import com.mrcaracal.Activity.HesapOlusturma;
 import com.mrcaracal.Activity.ParolaSifirlama;
 
-public class A_Giris extends AppCompatActivity {
+public class Giris extends AppCompatActivity {
 
-    private static final String TAG = "A_Giris";
+    private static final String TAG = "Giris";
 
     ProgressDialog progressDialog;
 
@@ -79,7 +79,7 @@ public class A_Giris extends AppCompatActivity {
         // Kullanıcı daha önceden giriş yapmış ise otomatik olarak giriş yapıp Ana sayfaya yönelendirilecektir.
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            Intent intent = new Intent(A_Giris.this, AnaSayfa.class);
+            Intent intent = new Intent(Giris.this, AnaSayfa.class);
             startActivity(intent);
             finish();
             Log.d(TAG, "onCreate: Kullanıcı doğrudan uygulama içine yönlendirildi");
@@ -89,7 +89,7 @@ public class A_Giris extends AppCompatActivity {
 
     // Kullanıcı hesap oluşturma sayfasına yönlendirilecektir.
     public void txt_hesapOlustur(View view) {
-        Intent intent = new Intent(A_Giris.this, HesapOlusturma.class);
+        Intent intent = new Intent(Giris.this, HesapOlusturma.class);
         startActivity(intent);
         Log.d(TAG, "txt_hesapOlustur: Kullanıcı HesapOlusturma'a geçti");
     }
@@ -110,17 +110,17 @@ public class A_Giris extends AppCompatActivity {
                         public void onSuccess(AuthResult authResult) {
                             if (firebaseAuth.getCurrentUser().isEmailVerified()) {
 
-                                progressDialog = new ProgressDialog(A_Giris.this);
+                                progressDialog = new ProgressDialog(Giris.this);
                                 progressDialog.setMessage("Giriş Yapılıyor");
                                 progressDialog.show();
 
-                                Intent intent = new Intent(A_Giris.this, AnaSayfa.class);
+                                Intent intent = new Intent(Giris.this, AnaSayfa.class);
                                 startActivity(intent);
                                 finish();
-                                Log.d(TAG, "onSuccess: Kullanıcı A_Giris'e geçti");
+                                Log.d(TAG, "onSuccess: Kullanıcı Giris'e geçti");
 
                             } else {
-                                Toast.makeText(A_Giris.this, "E-Postanıza gelen bağlantıdan hesabınızı onaylayın", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Giris.this, "E-Postanıza gelen bağlantıdan hesabınızı onaylayın", Toast.LENGTH_SHORT).show();
                                 Log.d(TAG, "onSuccess: Kullanıcıya hesap doğrulama bağlantısı gönderildi");
                             }
                             progressDialog.dismiss();
@@ -128,7 +128,7 @@ public class A_Giris extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(A_Giris.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Giris.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onFailure: "+e.getMessage());
                 }
             });
@@ -140,7 +140,7 @@ public class A_Giris extends AppCompatActivity {
 
     // Kullanıcı parola sıfırlama sayfasına yönlendirilecektir.
     public void txt_parolamıUnuttum(View view) {
-        Intent intent = new Intent(A_Giris.this, ParolaSifirlama.class);
+        Intent intent = new Intent(Giris.this, ParolaSifirlama.class);
         startActivity(intent);
         Log.d(TAG, "txt_parolamıUnuttum: Kullanıcı ParolaSifirlama'a geçti");
     }
