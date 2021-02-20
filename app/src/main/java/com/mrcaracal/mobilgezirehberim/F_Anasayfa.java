@@ -1,6 +1,7 @@
 package com.mrcaracal.mobilgezirehberim;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +38,8 @@ import java.util.Map;
 public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
 
     private static final String TAG = "F_Anasayfa";
+
+//    ProgressDialog progressDialog;
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
@@ -87,6 +90,11 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
     }
 
     public void yenidenEskiyeCek() {
+
+//        progressDialog = new ProgressDialog(getActivity());
+//        progressDialog.setMessage("Yükleniyor");
+//        progressDialog.show();
+
         CollectionReference collectionReference = firebaseFirestore
                 .collection("TumGonderiler");
         // VT'ye kaydedilme zamanına göre verileri çek
@@ -121,7 +129,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
 
                                 recyclerAdapterYapim.notifyDataSetChanged();
                                 Log.d(TAG, "onComplete: VT'den veriler çekildi, ArrayListlere aktarılıp RecyclerAdapterYapim'a aktarıldı");
-
+//                                progressDialog.dismiss();
                             }
                         }
 

@@ -2,12 +2,12 @@ package com.mrcaracal.mobilgezirehberim;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,7 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,6 +29,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class A_Harita extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
+
+    private static final String TAG = "A_Harita";
 
     LocationManager locationManager;
     LocationListener locationListener;
@@ -144,6 +147,7 @@ public class A_Harita extends AppCompatActivity implements OnMapReadyCallback, G
     // Adres bilgileri de alınsın ve yazdırılsın
     @Override
     public void onMapClick(LatLng latLng) {
+        Log.d(TAG, "onMapClick: Çalıştı");
         Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + latLng.latitude + "\nBoylam: " + latLng.longitude, Toast.LENGTH_SHORT).show();
 
         if (marker != null) {
@@ -157,12 +161,4 @@ public class A_Harita extends AppCompatActivity implements OnMapReadyCallback, G
         );
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        // Geri gidildiği zaman seçilen koordinat bilgileri fragment'e taşınsın!
-        // Enlem - Boylam - Adres
-
-    }
 }

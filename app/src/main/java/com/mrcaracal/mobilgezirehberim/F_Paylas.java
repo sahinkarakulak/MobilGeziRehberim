@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,18 +23,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -186,7 +178,7 @@ public class F_Paylas extends Fragment {
                                                                         }).addOnFailureListener(new OnFailureListener() {
                                                                     @Override
                                                                     public void onFailure(@NonNull Exception e) {
-                                                                        Log.d(TAG, "onFailure: "+e.getMessage());
+                                                                        Log.d(TAG, "onFailure: " + e.getMessage());
                                                                     }
                                                                 });
                                                             }
@@ -195,7 +187,7 @@ public class F_Paylas extends Fragment {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
                                                                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                Log.d(TAG, "onFailure: "+e.getMessage());
+                                                                Log.d(TAG, "onFailure: " + e.getMessage());
                                                             }
                                                         });
                                             }
@@ -216,17 +208,23 @@ public class F_Paylas extends Fragment {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, "onFailure: "+e.getMessage());
+                                Log.d(TAG, "onFailure: " + e.getMessage());
                             }
                         });
             } catch (Exception e) {
                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "paylasGonder: "+e.getMessage());
+                Log.d(TAG, "paylasGonder: " + e.getMessage());
             }
         } else
             Toast.makeText(getActivity(), "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: Çalıştı");
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
