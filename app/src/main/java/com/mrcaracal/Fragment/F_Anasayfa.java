@@ -1,7 +1,6 @@
-package com.mrcaracal.mobilgezirehberim;
+package com.mrcaracal.Fragment;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +29,10 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mrcaracal.Modul.Gonderiler;
+import com.mrcaracal.mobilgezirehberim.R;
+import com.mrcaracal.Adapter.RecyclerAdapterYapim;
+import com.mrcaracal.Interface.RecyclerViewClickInterface;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -150,7 +153,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
     @Override
     public void onLongItemClick(int position) {
         Log.d(TAG, "onLongItemClick: Uzun tık");
-        
+
         String tarih_ve_saat = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
         String tarih = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
         String gonderi_detay_goster = "Paylaşan: " + kullaniciEpostalariFB.get(position) + "\nTarih: " + tarih_ve_saat + "\n\n" + yorumlarFB.get(position);
@@ -176,7 +179,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                             Log.d(TAG, "onClick: Bu gönderiyi zaten bu kullanıcı paylaşmıştı");
                         } else {
 
-                            M_Gonderiler MGonderiler = new M_Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
+                            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
 
                             DocumentReference documentReference = firebaseFirestore
                                     .collection("Kullanicilar")

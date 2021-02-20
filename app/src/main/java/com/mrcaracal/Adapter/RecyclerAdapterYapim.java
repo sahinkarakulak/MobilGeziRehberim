@@ -1,4 +1,4 @@
-package com.mrcaracal.mobilgezirehberim;
+package com.mrcaracal.Adapter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.Timestamp;
+import com.mrcaracal.mobilgezirehberim.R;
+import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

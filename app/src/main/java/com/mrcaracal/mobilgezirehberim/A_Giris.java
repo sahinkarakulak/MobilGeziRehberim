@@ -20,6 +20,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.mrcaracal.Activity.AnaSayfa;
+import com.mrcaracal.Activity.HesapOlusturma;
+import com.mrcaracal.Activity.ParolaSifirlama;
 
 public class A_Giris extends AppCompatActivity {
 
@@ -76,7 +79,7 @@ public class A_Giris extends AppCompatActivity {
         // Kullanıcı daha önceden giriş yapmış ise otomatik olarak giriş yapıp Ana sayfaya yönelendirilecektir.
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            Intent intent = new Intent(A_Giris.this, A_AnaSayfa.class);
+            Intent intent = new Intent(A_Giris.this, AnaSayfa.class);
             startActivity(intent);
             finish();
             Log.d(TAG, "onCreate: Kullanıcı doğrudan uygulama içine yönlendirildi");
@@ -86,9 +89,9 @@ public class A_Giris extends AppCompatActivity {
 
     // Kullanıcı hesap oluşturma sayfasına yönlendirilecektir.
     public void txt_hesapOlustur(View view) {
-        Intent intent = new Intent(A_Giris.this, A_HesapOlusturma.class);
+        Intent intent = new Intent(A_Giris.this, HesapOlusturma.class);
         startActivity(intent);
-        Log.d(TAG, "txt_hesapOlustur: Kullanıcı A_HesapOlusturma'a geçti");
+        Log.d(TAG, "txt_hesapOlustur: Kullanıcı HesapOlusturma'a geçti");
     }
 
     // Kullanıcının girdiği bilgiler doğrultusunda giriş yapma işlemleri...
@@ -111,7 +114,7 @@ public class A_Giris extends AppCompatActivity {
                                 progressDialog.setMessage("Giriş Yapılıyor");
                                 progressDialog.show();
 
-                                Intent intent = new Intent(A_Giris.this, A_AnaSayfa.class);
+                                Intent intent = new Intent(A_Giris.this, AnaSayfa.class);
                                 startActivity(intent);
                                 finish();
                                 Log.d(TAG, "onSuccess: Kullanıcı A_Giris'e geçti");
@@ -137,9 +140,9 @@ public class A_Giris extends AppCompatActivity {
 
     // Kullanıcı parola sıfırlama sayfasına yönlendirilecektir.
     public void txt_parolamıUnuttum(View view) {
-        Intent intent = new Intent(A_Giris.this, A_ParolaSifirlama.class);
+        Intent intent = new Intent(A_Giris.this, ParolaSifirlama.class);
         startActivity(intent);
-        Log.d(TAG, "txt_parolamıUnuttum: Kullanıcı A_ParolaSifirlama'a geçti");
+        Log.d(TAG, "txt_parolamıUnuttum: Kullanıcı ParolaSifirlama'a geçti");
     }
 
     // Beni hatırla işlemi - onResume durumunda yapılacaklar

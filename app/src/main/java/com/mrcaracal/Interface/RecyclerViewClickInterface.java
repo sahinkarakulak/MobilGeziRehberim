@@ -1,4 +1,4 @@
-package com.mrcaracal.mobilgezirehberim;
+package com.mrcaracal.Interface;
 
 public interface RecyclerViewClickInterface {
     void onItemClick(int position);

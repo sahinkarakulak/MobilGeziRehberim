@@ -1,4 +1,4 @@
-package com.mrcaracal.mobilgezirehberim;
+package com.mrcaracal.Fragment;
 
 import android.Manifest;
 import android.content.Intent;
@@ -33,6 +33,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.mrcaracal.Activity.AnaSayfa;
+import com.mrcaracal.Activity.Harita;
+import com.mrcaracal.Modul.Gonderiler;
+import com.mrcaracal.mobilgezirehberim.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
@@ -43,7 +47,7 @@ public class F_Paylas extends Fragment {
 
     private static final String TAG = "F_Paylas";
 
-    M_Gonderiler MGonderiler;
+    Gonderiler MGonderiler;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firebaseFirestore;
@@ -97,8 +101,8 @@ public class F_Paylas extends Fragment {
         konum_sec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), A_Harita.class));
-                Log.d(TAG, "onClick: Kullanıcı A_Harita'a yönlendirildi");
+                startActivity(new Intent(getActivity(), Harita.class));
+                Log.d(TAG, "onClick: Kullanıcı Harita'a yönlendirildi");
             }
         });
 
@@ -147,7 +151,7 @@ public class F_Paylas extends Fragment {
                                                 UUID uuid1 = UUID.randomUUID();
                                                 String gonderiID = "" + uuid1;
 
-                                                MGonderiler = new M_Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, yorum, FieldValue.serverTimestamp());
+                                                MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, yorum, FieldValue.serverTimestamp());
 
                                                 DocumentReference documentReference1 = firebaseFirestore
                                                         .collection("Kullanicilar")
@@ -170,7 +174,7 @@ public class F_Paylas extends Fragment {
                                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                             @Override
                                                                             public void onSuccess(Void aVoid) {
-                                                                                Intent intent = new Intent(getActivity(), A_AnaSayfa.class);
+                                                                                Intent intent = new Intent(getActivity(), AnaSayfa.class);
                                                                                 // Tüm aktiviteleri kapat
                                                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                                                 startActivity(intent);

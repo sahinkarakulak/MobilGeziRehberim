@@ -1,8 +1,8 @@
-package com.mrcaracal.mobilgezirehberim;
+package com.mrcaracal.Modul;
 
 import com.google.firebase.firestore.FieldValue;
 
-public class M_Gonderiler {
+public class Gonderiler {
 
     private String gonderiID;
     private String kullaniciEposta;
@@ -12,11 +12,11 @@ public class M_Gonderiler {
     private String yorum;
     private FieldValue zaman;
 
-    public M_Gonderiler() {
+    public Gonderiler() {
 
     }
 
-    public M_Gonderiler(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi, String konum, String yorum, FieldValue zaman) {
+    public Gonderiler(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi, String konum, String yorum, FieldValue zaman) {
         this.gonderiID = gonderiID;
         this.kullaniciEposta = kullaniciEposta;
         this.resimAdresi = resimAdresi;
@@ -26,7 +26,7 @@ public class M_Gonderiler {
         this.zaman = zaman;
     }
 
-    public M_Gonderiler(String kullaniciEposta, String resimAdresi, String yerIsmi, String yorum, FieldValue zaman) {
+    public Gonderiler(String kullaniciEposta, String resimAdresi, String yerIsmi, String yorum, FieldValue zaman) {
         this.kullaniciEposta = kullaniciEposta;
         this.resimAdresi = resimAdresi;
         this.yerIsmi = yerIsmi;

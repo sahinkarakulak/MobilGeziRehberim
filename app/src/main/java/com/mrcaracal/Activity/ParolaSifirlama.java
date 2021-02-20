@@ -1,4 +1,4 @@
-package com.mrcaracal.mobilgezirehberim;
+package com.mrcaracal.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mrcaracal.mobilgezirehberim.A_Giris;
+import com.mrcaracal.mobilgezirehberim.R;
 
-public class A_ParolaSifirlama extends AppCompatActivity {
+public class ParolaSifirlama extends AppCompatActivity {
 
-    private static final String TAG = "A_ParolaSifirlama";
+    private static final String TAG = "ParolaSifirlama";
 
     EditText edt_epostaParolaSıfırlama;
 
@@ -51,8 +53,8 @@ public class A_ParolaSifirlama extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(A_ParolaSifirlama.this, "E-Postanızı kontorl ediniz", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(A_ParolaSifirlama.this, A_Giris.class);
+                            Toast.makeText(ParolaSifirlama.this, "E-Postanızı kontorl ediniz", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ParolaSifirlama.this, A_Giris.class);
                             startActivity(intent);
                             finish();
                             Log.d(TAG, "onSuccess: Sıfırlama isteği gönderildi ve kullanıcı A_Giris'e yönlendirilidi");
@@ -60,7 +62,7 @@ public class A_ParolaSifirlama extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(A_ParolaSifirlama.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ParolaSifirlama.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

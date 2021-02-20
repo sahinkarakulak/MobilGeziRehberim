@@ -1,4 +1,4 @@
-package com.mrcaracal.mobilgezirehberim;
+package com.mrcaracal.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +15,16 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.mrcaracal.Fragment.F_Anasayfa;
+import com.mrcaracal.Fragment.F_Ara;
+import com.mrcaracal.Fragment.F_Hesabim;
+import com.mrcaracal.Fragment.F_Paylas;
+import com.mrcaracal.mobilgezirehberim.A_Giris;
+import com.mrcaracal.mobilgezirehberim.R;
 
-public class A_AnaSayfa extends AppCompatActivity {
+public class AnaSayfa extends AppCompatActivity {
 
-    private static final String TAG = "A_AnaSayfa";
+    private static final String TAG = "AnaSayfa";
 
     boolean doubleBackToExitPressedOnce = false;
 
@@ -97,13 +103,13 @@ public class A_AnaSayfa extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.iletisim:
-                Intent iletisim = new Intent(A_AnaSayfa.this, A_Iletisim.class);
+                Intent iletisim = new Intent(AnaSayfa.this, Iletisim.class);
                 startActivity(iletisim);
                 Log.d(TAG, "onOptionsItemSelected: İletişim menüsü seçildi");
                 break;
 
             case R.id.cikis:
-                Intent cikis = new Intent(A_AnaSayfa.this, A_Giris.class);
+                Intent cikis = new Intent(AnaSayfa.this, A_Giris.class);
                 startActivity(cikis);
                 finish();
                 firebaseAuth.signOut();

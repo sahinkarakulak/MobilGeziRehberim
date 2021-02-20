@@ -1,10 +1,8 @@
-package com.mrcaracal.mobilgezirehberim;
+package com.mrcaracal.Fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -34,6 +32,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mrcaracal.Modul.Gonderiler;
+import com.mrcaracal.mobilgezirehberim.R;
+import com.mrcaracal.Adapter.RecyclerAdapterYapim;
+import com.mrcaracal.Interface.RecyclerViewClickInterface;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -86,7 +88,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         img_konuma_gore_bul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(getActivity(), A_Harita.class));
+                //startActivity(new Intent(getActivity(), Harita.class));
                 // Bu konuma yakın yerlerin listelenmesini sağla
                 Toast.makeText(getActivity(), "Yakın yerler listeleniyor", Toast.LENGTH_SHORT).show();
             }
@@ -244,7 +246,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                             Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
                             Log.d(TAG, "onClick: Bu gönderiyi zaten bu kullanıcı paylaşmış");
                         } else {
-                            M_Gonderiler MGonderiler = new M_Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
+                            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
 
                             DocumentReference documentReference = firebaseFirestore
                                     .collection("Kullanicilar")

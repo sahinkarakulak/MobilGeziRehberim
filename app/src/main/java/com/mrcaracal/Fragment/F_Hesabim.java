@@ -1,4 +1,4 @@
-package com.mrcaracal.mobilgezirehberim;
+package com.mrcaracal.Fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -32,6 +32,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mrcaracal.Activity.ProfilDuzenle;
+import com.mrcaracal.mobilgezirehberim.R;
+import com.mrcaracal.Adapter.RecyclerAdapterYapim;
+import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -101,7 +105,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         btn_profili_duzenle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent profili_duzenle = new Intent(getActivity(), A_ProfilDuzenle.class);
+                Intent profili_duzenle = new Intent(getActivity(), ProfilDuzenle.class);
                 startActivity(profili_duzenle);
                 Log.d(TAG, "onClick: Kullanıcı A_ProfiliDuzenle'e yönlendirildi");
             }

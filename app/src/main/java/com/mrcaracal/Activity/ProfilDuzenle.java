@@ -1,4 +1,4 @@
-package com.mrcaracal.mobilgezirehberim;
+package com.mrcaracal.Activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.mrcaracal.mobilgezirehberim.R;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -37,9 +38,9 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.util.HashMap;
 import java.util.Map;
 
-public class A_ProfilDuzenle extends AppCompatActivity {
+public class ProfilDuzenle extends AppCompatActivity {
 
-    private static final String TAG = "A_ProfilDuzenle";
+    private static final String TAG = "ProfilDuzenle";
 
     FirebaseUser firebaseUser;
     StorageReference storageReference;
@@ -103,7 +104,7 @@ public class A_ProfilDuzenle extends AppCompatActivity {
                         .activity()
                         .setAspectRatio(1, 1)
                         .setCropShape(CropImageView.CropShape.OVAL)
-                        .start(A_ProfilDuzenle.this);
+                        .start(ProfilDuzenle.this);
             }
         });
 
@@ -114,7 +115,7 @@ public class A_ProfilDuzenle extends AppCompatActivity {
                         .activity()
                         .setAspectRatio(1, 1)
                         .setCropShape(CropImageView.CropShape.OVAL)
-                        .start(A_ProfilDuzenle.this);
+                        .start(ProfilDuzenle.this);
             }
         });
 
@@ -145,7 +146,7 @@ public class A_ProfilDuzenle extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: Sadece istenen veriler güncellendi");
-                        startActivity(new Intent(A_ProfilDuzenle.this, A_AnaSayfa.class));
+                        startActivity(new Intent(ProfilDuzenle.this, AnaSayfa.class));
                         Log.d(TAG, "onSuccess: Kullanıcı A_Anasayfaya yönlendirildi");
                     }
                 });
@@ -215,13 +216,13 @@ public class A_ProfilDuzenle extends AppCompatActivity {
                                     }
                                 });
                     } else {
-                        Toast.makeText(A_ProfilDuzenle.this, "Bir hata gerçekleşti", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfilDuzenle.this, "Bir hata gerçekleşti", Toast.LENGTH_SHORT).show();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(A_ProfilDuzenle.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfilDuzenle.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onFailure: "+e.getMessage());
                 }
             });

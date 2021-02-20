@@ -1,4 +1,4 @@
-package com.mrcaracal.mobilgezirehberim;
+package com.mrcaracal.Activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -17,8 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,10 +25,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mrcaracal.mobilgezirehberim.R;
 
-public class A_Harita extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
+public class Harita extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
-    private static final String TAG = "A_Harita";
+    private static final String TAG = "Harita";
 
     LocationManager locationManager;
     LocationListener locationListener;
@@ -73,13 +72,13 @@ public class A_Harita extends AppCompatActivity implements OnMapReadyCallback, G
             @Override
             public void onProviderDisabled(@NonNull String provider) {
                 String str_provider = provider;
-                Toast.makeText(A_Harita.this, str_provider + " Kapalı", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Harita.this, str_provider + " Kapalı", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onProviderEnabled(@NonNull String provider) {
                 String str_provider = provider;
-                Toast.makeText(A_Harita.this, str_provider + " Açık", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Harita.this, str_provider + " Açık", Toast.LENGTH_SHORT).show();
             }
         };
 

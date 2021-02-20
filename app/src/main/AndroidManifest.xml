@@ -39,14 +39,14 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".A_Harita"
+            android:name="com.mrcaracal.Activity.Harita"
             android:label="@string/title_activity_a__harita"></activity>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
-        <activity android:name=".A_Iletisim" />
-        <activity android:name=".A_ProfilDuzenle" />
-        <activity android:name=".A_AnaSayfa" />
-        <activity android:name=".A_ParolaSifirlama" />
-        <activity android:name=".A_HesapOlusturma" />
+        <activity android:name="com.mrcaracal.Activity.Iletisim" />
+        <activity android:name="com.mrcaracal.Activity.ProfilDuzenle" />
+        <activity android:name="com.mrcaracal.Activity.AnaSayfa" />
+        <activity android:name="com.mrcaracal.Activity.ParolaSifirlama" />
+        <activity android:name="com.mrcaracal.Activity.HesapOlusturma" />
         <activity android:name=".A_Giris">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

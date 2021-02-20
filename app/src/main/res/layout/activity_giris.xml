@@ -49,7 +49,6 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/bg_button"
         android:onClick="girisYap"
-        android:padding="20dp"
         android:text="giriş yap" />
 
     <LinearLayout
@@ -78,6 +77,5 @@
             android:textAlignment="center" />
 
     </LinearLayout>
-
 
 </LinearLayout>
