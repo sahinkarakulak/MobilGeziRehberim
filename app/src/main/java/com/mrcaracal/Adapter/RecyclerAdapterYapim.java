@@ -61,6 +61,7 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
         holder.row_YorumBilgisi.setText(yorumlarListesi.get(position));
         Picasso.get()
                 .load(resimAdresleriListesi.get(position))
+                .centerCrop()
                 .fit()
                 .into(holder.row_resimAdresi);
 

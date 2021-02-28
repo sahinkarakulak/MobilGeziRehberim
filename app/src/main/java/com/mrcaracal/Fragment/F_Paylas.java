@@ -248,8 +248,8 @@ public class F_Paylas extends Fragment {
             resimYolu = data.getData();
             Picasso.get()
                     .load(resimYolu)
-                    .resize(img_paylasResimSec.getWidth(), img_paylasResimSec.getHeight())
                     .centerCrop()
+                    .fit()
                     .into(img_paylasResimSec);
         }
         super.onActivityResult(requestCode, resultCode, data);
