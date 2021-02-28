@@ -2,11 +2,15 @@ package com.mrcaracal.Activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +29,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mrcaracal.Fragment.F_Paylas;
 import com.mrcaracal.mobilgezirehberim.R;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public class Harita extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
@@ -33,7 +42,11 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
 
     LocationManager locationManager;
     LocationListener locationListener;
-    double enlem, boylam;
+    float enlem = (float) 0.0;
+    float boylam = (float) 0.0;
+    String adres = "";
+    SharedPreferences GET;
+    SharedPreferences.Editor SET;
     private GoogleMap mMap;
     private Marker marker;
 
@@ -48,6 +61,9 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
 
         setTitle("Harita");
 
+        GET = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SET = GET.edit();
+
     }
 
     @Override
@@ -56,14 +72,39 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
-            // Kullanıcının konumu anlık olarak alınsın ve paylaş ekranında konum kısmında konum bilgileri yazdırılsın.
-            // Adres bilgileri de alınsın ve yazdırılsın
+
+            // KULLANICININ KONUM VE ADRES BİLGİLERİ ANLIK OLARAK ALINSIN VE PAYLAŞ EKRANINDA YAZDIRILSIN
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                enlem = location.getLatitude();
-                boylam = location.getLongitude();
+                enlem = (float) location.getLatitude();
+                boylam = (float) location.getLongitude();
 
-                Toast.makeText(getApplicationContext(), "Enlem: " + enlem + "\nBoylam: " + boylam, Toast.LENGTH_SHORT).show();
+                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                adres = "";
+                try {
+                    List<Address> addressList = geocoder.getFromLocation(enlem, boylam, 1);
+                    if (addressList != null && addressList.size() > 0){
+                        if (addressList.get(0).getCountryName() != null){
+                            adres += addressList.get(0).getCountryName();
+                        }
+                        if (addressList.get(0).getThoroughfare() != null){
+                            adres += "\t"+addressList.get(0).getThoroughfare();
+                        }
+                        if (addressList.get(0).getSubThoroughfare() != null){
+                            adres += "\t"+addressList.get(0).getSubThoroughfare();
+                        }
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+
+                SET.putFloat("enlem", enlem);
+                SET.putFloat("boylam", boylam);
+                SET.putString("adres", adres);
+                SET.commit();
+
+                Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nAdres: "+adres, Toast.LENGTH_SHORT).show();
                 konumuBul();
 
             }
@@ -96,10 +137,10 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
         //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         mMap.addMarker(new MarkerOptions().position(konum).title("Konumum"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(konum, 16));
-
         mMap.setOnMapClickListener(this);
     }
 
+    // FARKLI HARİTA TÜRLERİ İÇİN MENÜLEİR LİSTELEDİK
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -107,6 +148,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
         return true;
     }
 
+    // FARKLI HARİTA TÜRLERİNE TIKLANDIĞINDA YAPILACAK İŞLEMLERİ BELİRLEDİK
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Change the map type based on the user's selection.
@@ -142,12 +184,35 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    // Kullanıcı yeni konum seçer ise Paylaş ekranında konum kısmına konum bilgileri yazdırılsın.
-    // Adres bilgileri de alınsın ve yazdırılsın
+    //  KULLANICI YENİ KONUM SEÇERSE PAYLAŞ EKRANINDA KONUM VE ADRES BİLGİLERİ YAZDIRILSIN
     @Override
     public void onMapClick(LatLng latLng) {
         Log.d(TAG, "onMapClick: Çalıştı");
-        Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + latLng.latitude + "\nBoylam: " + latLng.longitude, Toast.LENGTH_SHORT).show();
+
+        enlem = (float) latLng.latitude;
+        boylam = (float) latLng.longitude;
+
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        adres = "";
+        try {
+            List<Address> addressList = geocoder.getFromLocation(enlem, boylam, 1);
+            if (addressList != null && addressList.size() > 0){
+                if (addressList.get(0).getCountryName() != null){
+                    adres += addressList.get(0).getCountryName();
+                }
+                if (addressList.get(0).getThoroughfare() != null){
+                    adres += "\t"+addressList.get(0).getThoroughfare();
+                }
+                if (addressList.get(0).getSubThoroughfare() != null){
+                    adres += "\t"+addressList.get(0).getSubThoroughfare();
+                }
+            }
+        } catch (IOException e) {
+            Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+        Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nAdres: "+adres, Toast.LENGTH_SHORT).show();
 
         if (marker != null) {
             marker.remove();
@@ -158,6 +223,12 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                 .draggable(true)
                 .visible(true)
         );
+
+        SET.putFloat("enlem", enlem);
+        SET.putFloat("boylam", boylam);
+        SET.putString("adres", adres);
+        SET.commit();
+
     }
 
 }

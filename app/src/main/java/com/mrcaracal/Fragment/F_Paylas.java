@@ -2,10 +2,12 @@ package com.mrcaracal.Fragment;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,12 +55,18 @@ public class F_Paylas extends Fragment {
     FirebaseFirestore firebaseFirestore;
     Uri resimYolu;
     ImageView img_paylasResimSec;
-    EditText edt_paylasYerIsmi, edt_paylasYorum, edt_konum;
+    EditText edt_paylasYerIsmi, edt_paylasYorum, edt_konum, edt_adres;
     Button btn_paylasGonder, konum_sec;
     ScrollView sv_paylas;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
 
+    SharedPreferences GET;
+    SharedPreferences.Editor SET;
+
+    float enlem;
+    float boylam;
+    String adres;
     private void init() {
 
         firebaseStorage = FirebaseStorage.getInstance();
@@ -68,6 +76,13 @@ public class F_Paylas extends Fragment {
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
+        GET = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SET = GET.edit();
+
+    }
+
+    public F_Paylas(){
+        //
     }
 
 
@@ -78,6 +93,7 @@ public class F_Paylas extends Fragment {
         img_paylasResimSec = viewGroup.findViewById(R.id.img_paylasResimSec);
         edt_paylasYerIsmi = viewGroup.findViewById(R.id.edt_paylasYerIsmi);
         edt_konum = viewGroup.findViewById(R.id.edt_konum);
+        edt_adres = viewGroup.findViewById(R.id.edt_adres);
         edt_paylasYorum = viewGroup.findViewById(R.id.edt_paylasYorum);
         konum_sec = viewGroup.findViewById(R.id.konum_sec);
         btn_paylasGonder = viewGroup.findViewById(R.id.btn_paylasGonder);
@@ -113,6 +129,7 @@ public class F_Paylas extends Fragment {
 
             }
         });
+
 
         return viewGroup;
     }
@@ -227,6 +244,14 @@ public class F_Paylas extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: Çalıştı");
+        // BU ACTİVİY'E TEKRAR GELİNDİĞİNDE HARİTA SINIFINDAN GEREKLİ KOORDİNAT VE ADRES BİLGİLERİNİ BURADA ALSIN VE GEREKLİ YERLERDE YAYINLASIN
+
+        enlem = GET.getFloat("enlem",0);
+        boylam = GET.getFloat("boylam", 0);
+        adres = GET.getString("adres", "Türkiye Üsküdar");
+
+        edt_konum.setText(enlem+","+boylam);
+        edt_adres.setText(""+adres);
 
     }
 
@@ -243,6 +268,8 @@ public class F_Paylas extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        Log.d(TAG, "onActivityResult: Çalıştı");
 
         if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
             resimYolu = data.getData();

@@ -10,4 +10,6 @@
     <string name="hybrid_map">Hybrid</string>
     <string name="satellite_map">Satellite</string>
     <string name="terrain_map">Terrain</string>
+    <string name="kiz_kulesi_adres">Adres : Üsküdar/İstanbul</string>
+    <string name="yorum">Yorum : Üsküdar/İstanbul, Salacak açıklarında yer alan ve hakkında çeşitli rivayetler bulunan Kız Kulesi Üsküdar\'ın sembolü haline gelmiştir.</string>
 </resources>
