@@ -209,6 +209,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
             }
         } catch (IOException e) {
             Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "onMapClick: "+e.getMessage());
             e.printStackTrace();
         }
 
