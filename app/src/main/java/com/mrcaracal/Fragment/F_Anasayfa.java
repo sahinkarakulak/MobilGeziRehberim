@@ -29,10 +29,10 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mrcaracal.Modul.Gonderiler;
-import com.mrcaracal.mobilgezirehberim.R;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
+import com.mrcaracal.Modul.Gonderiler;
+import com.mrcaracal.mobilgezirehberim.R;
 
 import java.text.DateFormat;
 import java.util.ArrayList;

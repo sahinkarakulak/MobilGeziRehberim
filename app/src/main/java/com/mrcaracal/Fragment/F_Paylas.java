@@ -58,15 +58,18 @@ public class F_Paylas extends Fragment {
     EditText edt_paylasYerIsmi, edt_paylasYorum, edt_konum, edt_adres;
     Button btn_paylasGonder, konum_sec;
     ScrollView sv_paylas;
-    private FirebaseStorage firebaseStorage;
-    private StorageReference storageReference;
-
     SharedPreferences GET;
     SharedPreferences.Editor SET;
-
     float enlem;
     float boylam;
     String adres;
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
+
+    public F_Paylas() {
+        //
+    }
+
     private void init() {
 
         firebaseStorage = FirebaseStorage.getInstance();
@@ -80,11 +83,6 @@ public class F_Paylas extends Fragment {
         SET = GET.edit();
 
     }
-
-    public F_Paylas(){
-        //
-    }
-
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.frag_paylas, container, false);
@@ -246,12 +244,12 @@ public class F_Paylas extends Fragment {
         Log.d(TAG, "onResume: Çalıştı");
         // BU ACTİVİY'E TEKRAR GELİNDİĞİNDE HARİTA SINIFINDAN GEREKLİ KOORDİNAT VE ADRES BİLGİLERİNİ BURADA ALSIN VE GEREKLİ YERLERDE YAYINLASIN
 
-        enlem = GET.getFloat("enlem",0);
+        enlem = GET.getFloat("enlem", 0);
         boylam = GET.getFloat("boylam", 0);
         adres = GET.getString("adres", "Türkiye Üsküdar");
 
-        edt_konum.setText(enlem+","+boylam);
-        edt_adres.setText(""+adres);
+        edt_konum.setText(enlem + "," + boylam);
+        edt_adres.setText("" + adres);
 
     }
 

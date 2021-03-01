@@ -103,7 +103,7 @@ public class HesapOlusturma extends AppCompatActivity {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
                                                                 Toast.makeText(HesapOlusturma.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                Log.d(TAG, "onFailure: "+e.getMessage());
+                                                                Log.d(TAG, "onFailure: " + e.getMessage());
                                                             }
                                                         });
 
@@ -114,7 +114,7 @@ public class HesapOlusturma extends AppCompatActivity {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 Toast.makeText(HesapOlusturma.this, "Beklenmedik bir hata gerçekleşti\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                Log.d(TAG, "onFailure: "+e.getMessage());
+                                                Log.d(TAG, "onFailure: " + e.getMessage());
                                             }
                                         });
                             }

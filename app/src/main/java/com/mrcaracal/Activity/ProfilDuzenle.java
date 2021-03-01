@@ -197,7 +197,7 @@ public class ProfilDuzenle extends AppCompatActivity {
                                     public void onSuccess(Void aVoid) {
 
                                         Log.d(TAG, "onSuccess: VT'de resim yolu değiştirildi");
-                                        
+
                                         documentReference
                                                 .get()
                                                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -223,7 +223,7 @@ public class ProfilDuzenle extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(ProfilDuzenle.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onFailure: "+e.getMessage());
+                    Log.d(TAG, "onFailure: " + e.getMessage());
                 }
             });
         } else {
@@ -239,7 +239,7 @@ public class ProfilDuzenle extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             mImageUri = result.getUri();
             uploadImage();
-            
+
             Toast.makeText(this, "Profil resmi güncellendi", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "onActivityResult: Profil resmi güncellendi");
         } else {

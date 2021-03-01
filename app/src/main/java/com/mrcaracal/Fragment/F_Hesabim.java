@@ -33,9 +33,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrcaracal.Activity.ProfilDuzenle;
-import com.mrcaracal.mobilgezirehberim.R;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
+import com.mrcaracal.mobilgezirehberim.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -130,9 +130,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 tv_kullaniciAdi.setText(documentSnapshot.getString("kullaniciAdi"));
                                 tv_kullaniciBio.setText(documentSnapshot.getString("bio"));
                                 Picasso.get().load(documentSnapshot.getString("kullaniciResmi")).into(img_profil_resmi);
-                                Log.d(TAG, "onComplete: Çekilen veriler kullanıldı\n"+documentSnapshot.getString("kullaniciResmi"));
+                                Log.d(TAG, "onComplete: Çekilen veriler kullanıldı\n" + documentSnapshot.getString("kullaniciResmi"));
 
-                                if (documentSnapshot.getString("kullaniciResmi")==null){
+                                if (documentSnapshot.getString("kullaniciResmi") == null) {
                                     Picasso.get().load(R.drawable.defaultpp).into(img_profil_resmi);
                                     Log.d(TAG, "onComplete: Default resim kullanıldı");
                                 }
@@ -228,7 +228,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onFailure: "+e.getMessage());
+                        Log.d(TAG, "onFailure: " + e.getMessage());
                     }
                 });
     }
@@ -275,7 +275,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onFailure: "+e.getMessage());
+                        Log.d(TAG, "onFailure: " + e.getMessage());
                     }
                 });
     }

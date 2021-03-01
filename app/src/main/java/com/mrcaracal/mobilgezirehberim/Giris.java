@@ -129,7 +129,7 @@ public class Giris extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(Giris.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onFailure: "+e.getMessage());
+                    Log.d(TAG, "onFailure: " + e.getMessage());
                 }
             });
 

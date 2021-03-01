@@ -32,10 +32,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mrcaracal.Modul.Gonderiler;
-import com.mrcaracal.mobilgezirehberim.R;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
+import com.mrcaracal.Modul.Gonderiler;
+import com.mrcaracal.mobilgezirehberim.R;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         edt_anahtar_kelime_arat = viewGroup.findViewById(R.id.edt_anahtar_kelime_arat);
         edt_anahtar_kelime_arat.addTextChangedListener(new TextWatcher() {
 
-            boolean _ignore = false; // indicates if the change was made by the TextWatcher itself.
+            final boolean _ignore = false; // indicates if the change was made by the TextWatcher itself.
 
             // Önce
             @Override
@@ -120,10 +120,10 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                 zamanlarFB.clear();
 
                 String[] ilgiliAlan = {"kullaniciEposta", "yerIsmi"};
-                    for (int i = 0; i < ilgiliAlan.length; i++) {
-                        Log.d(TAG, "onTextChanged: "+ilgiliAlan[i]+" - alanı gönderiliyor");
-                        aramaYap(ilgiliAlan[i], s.toString());
-                    }
+                for (int i = 0; i < ilgiliAlan.length; i++) {
+                    Log.d(TAG, "onTextChanged: " + ilgiliAlan[i] + " - alanı gönderiliyor");
+                    aramaYap(ilgiliAlan[i], s.toString());
+                }
 
                 /*Log.d(TAG, "onTextChanged: yerIsmi ile kullanıcıdan alınan veri parametre olarak gönderildi");
                 aramaYap("yerIsmi", s.toString());*/
@@ -174,27 +174,27 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                             QuerySnapshot querySnapshot = task.getResult();
                             for (DocumentSnapshot snapshot : querySnapshot) {
                                 Map<String, Object> verilerKumesi = snapshot.getData();
-                                
-                                    String gonderiID = (String) verilerKumesi.get("gonderiID");
-                                    String kullaniciEposta = (String) verilerKumesi.get("kullaniciEposta");
-                                    String yerIsmi = (String) verilerKumesi.get("yerIsmi");
-                                    String resimAdresi = (String) verilerKumesi.get("resimAdresi");
-                                    String konum = (String) verilerKumesi.get("konum");
-                                    String yorum = (String) verilerKumesi.get("yorum");
-                                    Timestamp zaman = (Timestamp) verilerKumesi.get("zaman");
 
-                                    gonderiIDleriFB.add(gonderiID);
-                                    kullaniciEpostalariFB.add(kullaniciEposta);
-                                    resimAdresleriFB.add(resimAdresi);
-                                    yerIsimleriFB.add(yerIsmi);
-                                    konumlariFB.add(konum);
-                                    yorumlarFB.add(yorum);
-                                    zamanlarFB.add(zaman);
+                                String gonderiID = (String) verilerKumesi.get("gonderiID");
+                                String kullaniciEposta = (String) verilerKumesi.get("kullaniciEposta");
+                                String yerIsmi = (String) verilerKumesi.get("yerIsmi");
+                                String resimAdresi = (String) verilerKumesi.get("resimAdresi");
+                                String konum = (String) verilerKumesi.get("konum");
+                                String yorum = (String) verilerKumesi.get("yorum");
+                                Timestamp zaman = (Timestamp) verilerKumesi.get("zaman");
 
-                                    recyclerAdapterYapim.notifyDataSetChanged();
-                                    Log.d(TAG, "onComplete: Sonu...");
+                                gonderiIDleriFB.add(gonderiID);
+                                kullaniciEpostalariFB.add(kullaniciEposta);
+                                resimAdresleriFB.add(resimAdresi);
+                                yerIsimleriFB.add(yerIsmi);
+                                konumlariFB.add(konum);
+                                yorumlarFB.add(yorum);
+                                zamanlarFB.add(zaman);
 
-                                    // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
+                                recyclerAdapterYapim.notifyDataSetChanged();
+                                Log.d(TAG, "onComplete: Sonu...");
+
+                                // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
                             }
                         }
 
@@ -203,7 +203,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onFailure: "+e.getMessage());
+                Log.d(TAG, "onFailure: " + e.getMessage());
             }
         });
 
@@ -267,7 +267,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            Log.d(TAG, "onFailure: "+e.getMessage());
+                                            Log.d(TAG, "onFailure: " + e.getMessage());
                                         }
                                     });
                             Log.d(TAG, "onClick: Gönderi kayıt işlemi sonu");

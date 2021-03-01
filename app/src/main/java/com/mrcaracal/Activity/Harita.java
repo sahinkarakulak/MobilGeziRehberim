@@ -29,7 +29,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.mrcaracal.Fragment.F_Paylas;
 import com.mrcaracal.mobilgezirehberim.R;
 
 import java.io.IOException;
@@ -83,19 +82,19 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                 adres = "";
                 try {
                     List<Address> addressList = geocoder.getFromLocation(enlem, boylam, 1);
-                    if (addressList != null && addressList.size() > 0){
-                        if (addressList.get(0).getCountryName() != null){
+                    if (addressList != null && addressList.size() > 0) {
+                        if (addressList.get(0).getCountryName() != null) {
                             adres += addressList.get(0).getCountryName();
                         }
-                        if (addressList.get(0).getThoroughfare() != null){
-                            adres += "\t"+addressList.get(0).getThoroughfare();
+                        if (addressList.get(0).getThoroughfare() != null) {
+                            adres += "\t" + addressList.get(0).getThoroughfare();
                         }
-                        if (addressList.get(0).getSubThoroughfare() != null){
-                            adres += "\t"+addressList.get(0).getSubThoroughfare();
+                        if (addressList.get(0).getSubThoroughfare() != null) {
+                            adres += "\t" + addressList.get(0).getSubThoroughfare();
                         }
                     }
                 } catch (IOException e) {
-                    Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
 
@@ -104,7 +103,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                 SET.putString("adres", adres);
                 SET.commit();
 
-                Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nAdres: "+adres, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();
                 konumuBul();
 
             }
@@ -196,24 +195,24 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
         adres = "";
         try {
             List<Address> addressList = geocoder.getFromLocation(enlem, boylam, 1);
-            if (addressList != null && addressList.size() > 0){
-                if (addressList.get(0).getCountryName() != null){
+            if (addressList != null && addressList.size() > 0) {
+                if (addressList.get(0).getCountryName() != null) {
                     adres += addressList.get(0).getCountryName();
                 }
-                if (addressList.get(0).getThoroughfare() != null){
-                    adres += "\t"+addressList.get(0).getThoroughfare();
+                if (addressList.get(0).getThoroughfare() != null) {
+                    adres += "\t" + addressList.get(0).getThoroughfare();
                 }
-                if (addressList.get(0).getSubThoroughfare() != null){
-                    adres += "\t"+addressList.get(0).getSubThoroughfare();
+                if (addressList.get(0).getSubThoroughfare() != null) {
+                    adres += "\t" + addressList.get(0).getSubThoroughfare();
                 }
             }
         } catch (IOException e) {
-            Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "onMapClick: "+e.getMessage());
+            Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "onMapClick: " + e.getMessage());
             e.printStackTrace();
         }
 
-        Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nAdres: "+adres, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();
 
         if (marker != null) {
             marker.remove();
