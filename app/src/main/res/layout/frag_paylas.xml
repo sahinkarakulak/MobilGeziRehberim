@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:hint="Yer İsmi : kız Kulesi"
+                android:hint="Yer İsmi : Kız Kulesi"
                 android:inputType="text"
                 android:maxLines="1" />
 
@@ -39,10 +39,21 @@
                 android:background="@drawable/bg_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:gravity="top"
                 android:hint="@string/yorum"
                 android:maxLength="140"
                 android:maxLines="5"/>
+
+            <EditText
+                android:id="@+id/edt_paylasTag"
+                android:background="@drawable/bg_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:hint="Tag: kızkulesi,üsküdar,istanbul,kule,deniz"
+                android:inputType="text"
+                android:maxLines="1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,8 +124,6 @@
 
             </LinearLayout>
 
-
-
             <Button
                 android:id="@+id/btn_paylasGonder"
                 android:layout_width="match_parent"
@@ -123,6 +132,7 @@
                 android:background="@drawable/bg_button"
                 android:onClick="btn_paylasGonder"
                 android:text="gönder" />
+
         </LinearLayout>
 
     </ScrollView>

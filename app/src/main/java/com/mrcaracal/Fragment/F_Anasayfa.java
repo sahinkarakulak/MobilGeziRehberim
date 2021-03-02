@@ -117,7 +117,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                                 String gonderiID = verilerKumesi.get("gonderiID").toString();
                                 String kullaniciEposta = verilerKumesi.get("kullaniciEposta").toString();
                                 String yerIsmi = verilerKumesi.get("yerIsmi").toString();
-                                yerIsmi = yerIsmi.substring(0,1).toUpperCase() + yerIsmi.substring(1);
+                                yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
                                 String resimAdresi = verilerKumesi.get("resimAdresi").toString();
                                 String konum = verilerKumesi.get("konum").toString();
                                 String yorum = verilerKumesi.get("yorum").toString();

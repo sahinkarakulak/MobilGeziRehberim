@@ -208,7 +208,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
                                 String kullaniciEposta = verilerKumesiHesaim.get("kullaniciEposta").toString();
                                 String yerIsmi = verilerKumesiHesaim.get("yerIsmi").toString();
-                                yerIsmi = yerIsmi.substring(0,1).toUpperCase() + yerIsmi.substring(1);
+                                yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
                                 String resimAdresi = verilerKumesiHesaim.get("resimAdresi").toString();
                                 String yorum = verilerKumesiHesaim.get("yorum").toString();
                                 Timestamp zaman = (Timestamp) verilerKumesiHesaim.get("zaman");
@@ -256,7 +256,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
                                 String kullaniciEposta = verilerKumesiHesaim.get("kullaniciEposta").toString();
                                 String yerIsmi = verilerKumesiHesaim.get("yerIsmi").toString();
-                                yerIsmi = yerIsmi.substring(0,1).toUpperCase() + yerIsmi.substring(1);
+                                yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
                                 String resimAdresi = verilerKumesiHesaim.get("resimAdresi").toString();
                                 String yorum = verilerKumesiHesaim.get("yorum").toString();
                                 Timestamp zaman = (Timestamp) verilerKumesiHesaim.get("zaman");
