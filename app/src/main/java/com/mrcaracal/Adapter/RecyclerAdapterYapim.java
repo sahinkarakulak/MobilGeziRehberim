@@ -26,17 +26,19 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
     private final ArrayList<String> resimAdresleriListesi;
     private final ArrayList<String> yerIsimleriListesi;
     private final ArrayList<String> konumlariListesi;
+    private final ArrayList<String> adresleriListesi;
     private final ArrayList<String> yorumlarListesi;
     private final ArrayList<com.google.firebase.Timestamp> zamanlarListesi;
 
     private final RecyclerViewClickInterface recyclerViewClickInterface;
 
-    public RecyclerAdapterYapim(ArrayList<String> gonderiIDleriListesi, ArrayList<String> kullaniciEpostalariListesi, ArrayList<String> resimAdresleriListesi, ArrayList<String> yerIsimleriListesi, ArrayList<String> konumlariListesi, ArrayList<String> yorumlarListesi, ArrayList<Timestamp> zamanlarListesi, RecyclerViewClickInterface recyclerViewClickInterface) {
+    public RecyclerAdapterYapim(ArrayList<String> gonderiIDleriListesi, ArrayList<String> kullaniciEpostalariListesi, ArrayList<String> resimAdresleriListesi, ArrayList<String> yerIsimleriListesi, ArrayList<String> konumlariListesi, ArrayList<String> adresleriListesi, ArrayList<String> yorumlarListesi, ArrayList<Timestamp> zamanlarListesi, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.gonderiIDleriListesi = gonderiIDleriListesi;
         this.kullaniciEpostalariListesi = kullaniciEpostalariListesi;
         this.resimAdresleriListesi = resimAdresleriListesi;
         this.yerIsimleriListesi = yerIsimleriListesi;
         this.konumlariListesi = konumlariListesi;
+        this.adresleriListesi = adresleriListesi;
         this.yorumlarListesi = yorumlarListesi;
         this.zamanlarListesi = zamanlarListesi;
         this.recyclerViewClickInterface = recyclerViewClickInterface;

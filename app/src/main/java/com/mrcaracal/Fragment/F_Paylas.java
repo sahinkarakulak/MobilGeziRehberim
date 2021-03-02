@@ -137,8 +137,9 @@ public class F_Paylas extends Fragment {
         String yerIsmiKontrol = edt_paylasYerIsmi.getText().toString();
         String yorumKontrol = edt_paylasYorum.getText().toString();
         String konumKontrol = edt_konum.getText().toString();
+        String adresKontrol = edt_adres.getText().toString();
 
-        if (!yerIsmiKontrol.equals("") || !konumKontrol.equals("") || !yorumKontrol.equals("")) {
+        if (!yerIsmiKontrol.equals("") || !konumKontrol.equals("") || !yorumKontrol.equals("") || !adresKontrol.equals("")) {
             UUID uuid = UUID.randomUUID();
             String resimIsmi = firebaseUser.getEmail() + "--" + yerIsmiKontrol + "--" + uuid;
             try {
@@ -162,11 +163,12 @@ public class F_Paylas extends Fragment {
                                                 String yerIsmi = edt_paylasYerIsmi.getText().toString().toLowerCase();
                                                 String konum = edt_konum.getText().toString();
                                                 String yorum = edt_paylasYorum.getText().toString();
+                                                String adres = edt_adres.getText().toString();
 
                                                 UUID uuid1 = UUID.randomUUID();
                                                 String gonderiID = "" + uuid1;
 
-                                                MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, yorum, FieldValue.serverTimestamp());
+                                                MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres, yorum, FieldValue.serverTimestamp());
 
                                                 DocumentReference documentReference1 = firebaseFirestore
                                                         .collection("Kullanicilar")

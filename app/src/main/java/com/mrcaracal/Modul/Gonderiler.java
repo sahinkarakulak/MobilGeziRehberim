@@ -9,6 +9,7 @@ public class Gonderiler {
     private String resimAdresi;
     private String yerIsmi;
     private String konum;
+    private String adres;
     private String yorum;
     private FieldValue zaman;
 
@@ -16,20 +17,13 @@ public class Gonderiler {
 
     }
 
-    public Gonderiler(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi, String konum, String yorum, FieldValue zaman) {
+    public Gonderiler(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi, String konum, String adres, String yorum, FieldValue zaman) {
         this.gonderiID = gonderiID;
         this.kullaniciEposta = kullaniciEposta;
         this.resimAdresi = resimAdresi;
         this.yerIsmi = yerIsmi;
         this.konum = konum;
-        this.yorum = yorum;
-        this.zaman = zaman;
-    }
-
-    public Gonderiler(String kullaniciEposta, String resimAdresi, String yerIsmi, String yorum, FieldValue zaman) {
-        this.kullaniciEposta = kullaniciEposta;
-        this.resimAdresi = resimAdresi;
-        this.yerIsmi = yerIsmi;
+        this.adres = adres;
         this.yorum = yorum;
         this.zaman = zaman;
     }
@@ -73,6 +67,14 @@ public class Gonderiler {
 
     public void setKonum(String konum) {
         this.konum = konum;
+    }
+
+    public String getAdres() {
+        return adres;
+    }
+
+    public void setAdres(String adres) {
+        this.adres = adres;
     }
 
     public String getYorum() {
