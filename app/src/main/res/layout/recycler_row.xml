@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+
         android:orientation="vertical">
 
         <!--<TextView
@@ -20,15 +20,31 @@
             android:text="Kullanıcı E-Postası"
             android:textStyle="bold"/>-->
 
-        <TextView
-            android:id="@+id/row_yerIsmi"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Yer Ismi"
             android:gravity="center"
-            android:padding="2dp"
-            android:textStyle="bold"/>
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/row_yerIsmi"
+                android:textFontWeight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Yer Ismi"
+                android:gravity="center"
+                android:padding="2dp"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_baseline_more_horiz_24"/>
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/row_resimAdresi"
@@ -40,7 +56,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:orientation="vertical">
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/row_YorumBilgisi"
@@ -50,6 +70,12 @@
                 android:maxLines="1"
                 android:text="Yorum"
                 android:textStyle="italic"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="27dp"
+                android:src="@drawable/ic_baseline_bookmark_border_24"/>
+
 
         </LinearLayout>
 
