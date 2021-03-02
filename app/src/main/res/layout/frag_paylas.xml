@@ -30,9 +30,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:hint="Yer İsmi : Kız Kulesi"
+                android:hint="Yer İsmi : kız Kulesi"
                 android:inputType="text"
                 android:maxLines="1" />
+
+            <EditText
+                android:id="@+id/edt_paylasYorum"
+                android:background="@drawable/bg_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:hint="@string/yorum"
+                android:maxLength="140"
+                android:maxLines="5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bilinen son konum ve adres bilgisi aşağıdadır."
+                    android:text="Bilinen son koordinat ve adres bilgisi aşağıdadır."
                     android:padding="5dp"/>
 
             </LinearLayout>
@@ -103,16 +113,7 @@
 
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/edt_paylasYorum"
-                android:background="@drawable/bg_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/yorum"
-                android:maxLength="140"
-                android:maxLines="5"/>
+
 
             <Button
                 android:id="@+id/btn_paylasGonder"

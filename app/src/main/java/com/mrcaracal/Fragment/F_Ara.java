@@ -122,7 +122,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                 String[] ilgiliAlan = {"kullaniciEposta", "yerIsmi"};
                 for (int i = 0; i < ilgiliAlan.length; i++) {
                     Log.d(TAG, "onTextChanged: " + ilgiliAlan[i] + " - alanı gönderiliyor");
-                    aramaYap(ilgiliAlan[i], s.toString());
+                    aramaYap(ilgiliAlan[i], s.toString().toLowerCase());
                 }
 
                 /*Log.d(TAG, "onTextChanged: yerIsmi ile kullanıcıdan alınan veri parametre olarak gönderildi");
@@ -175,12 +175,13 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                             for (DocumentSnapshot snapshot : querySnapshot) {
                                 Map<String, Object> verilerKumesi = snapshot.getData();
 
-                                String gonderiID = (String) verilerKumesi.get("gonderiID");
-                                String kullaniciEposta = (String) verilerKumesi.get("kullaniciEposta");
-                                String yerIsmi = (String) verilerKumesi.get("yerIsmi");
-                                String resimAdresi = (String) verilerKumesi.get("resimAdresi");
-                                String konum = (String) verilerKumesi.get("konum");
-                                String yorum = (String) verilerKumesi.get("yorum");
+                                String gonderiID = verilerKumesi.get("gonderiID").toString();
+                                String kullaniciEposta = verilerKumesi.get("kullaniciEposta").toString();
+                                String yerIsmi = verilerKumesi.get("yerIsmi").toString();
+                                yerIsmi = yerIsmi.substring(0,1).toUpperCase() + yerIsmi.substring(1);
+                                String resimAdresi = verilerKumesi.get("resimAdresi").toString();
+                                String konum = verilerKumesi.get("konum").toString();
+                                String yorum = verilerKumesi.get("yorum").toString();
                                 Timestamp zaman = (Timestamp) verilerKumesi.get("zaman");
 
                                 gonderiIDleriFB.add(gonderiID);

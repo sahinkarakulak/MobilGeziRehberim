@@ -114,12 +114,13 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                                 // Çekilen her veriyi Map dizinine at ve daha sonra çekip kullan
                                 Map<String, Object> verilerKumesi = snapshot.getData();
 
-                                String gonderiID = (String) verilerKumesi.get("gonderiID");
-                                String kullaniciEposta = (String) verilerKumesi.get("kullaniciEposta");
-                                String yerIsmi = (String) verilerKumesi.get("yerIsmi");
-                                String resimAdresi = (String) verilerKumesi.get("resimAdresi");
-                                String konum = (String) verilerKumesi.get("konum");
-                                String yorum = (String) verilerKumesi.get("yorum");
+                                String gonderiID = verilerKumesi.get("gonderiID").toString();
+                                String kullaniciEposta = verilerKumesi.get("kullaniciEposta").toString();
+                                String yerIsmi = verilerKumesi.get("yerIsmi").toString();
+                                yerIsmi = yerIsmi.substring(0,1).toUpperCase() + yerIsmi.substring(1);
+                                String resimAdresi = verilerKumesi.get("resimAdresi").toString();
+                                String konum = verilerKumesi.get("konum").toString();
+                                String yorum = verilerKumesi.get("yorum").toString();
                                 Timestamp zaman = (Timestamp) verilerKumesi.get("zaman");
 
                                 gonderiIDleriFB.add(gonderiID);

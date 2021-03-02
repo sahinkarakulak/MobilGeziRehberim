@@ -159,7 +159,7 @@ public class F_Paylas extends Fragment {
                                                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                                                 String kullaniciEposta = firebaseUser.getEmail();
                                                 String resimAdresi = uri.toString();
-                                                String yerIsmi = edt_paylasYerIsmi.getText().toString();
+                                                String yerIsmi = edt_paylasYerIsmi.getText().toString().toLowerCase();
                                                 String konum = edt_konum.getText().toString();
                                                 String yorum = edt_paylasYorum.getText().toString();
 
