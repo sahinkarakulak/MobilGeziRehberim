@@ -36,7 +36,7 @@ public class ParolaSifirlama extends AppCompatActivity {
         setContentView(R.layout.activity_parola_sifirlama);
         init();
 
-        setTitle("Parola Sıfırlama");
+        setTitle("Parola Sıfırla");
     }
 
     // Kullanıcının girdiği E-Posta adresine parola sıfırlama bağlantısı gönderilecektir.

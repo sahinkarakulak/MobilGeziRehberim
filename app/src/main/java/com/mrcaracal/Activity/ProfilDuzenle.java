@@ -70,6 +70,8 @@ public class ProfilDuzenle extends AppCompatActivity {
         setContentView(R.layout.activity_profil_duzenle);
         initialize();
 
+        setTitle("Profili Düzenle");
+
         documentReference = FirebaseFirestore
                 .getInstance()
                 .collection("Kullanicilar")
