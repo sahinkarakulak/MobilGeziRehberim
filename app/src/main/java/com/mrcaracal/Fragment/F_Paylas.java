@@ -253,6 +253,7 @@ public class F_Paylas extends Fragment {
         edt_konum.setText(enlem + "," + boylam);
         edt_adres.setText("" + adres);
 
+
     }
 
     @Override

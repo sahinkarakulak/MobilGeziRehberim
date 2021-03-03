@@ -2,6 +2,7 @@ package com.mrcaracal.Activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -131,6 +132,8 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
         }
     }
 
+    
+
     private void konumuBul() {
         LatLng konum = new LatLng(enlem, boylam);
         //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -231,4 +234,10 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
 
     }
 
+    // Geri tuşuna basıldığında elimizdeki koordinat ve adres bilgilerini gönderelim
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
 }
