@@ -83,8 +83,6 @@ public class HesapOlusturma extends AppCompatActivity {
 
                                                 DocumentReference documentReference = firebaseFirestore
                                                         .collection("Kullanicilar")
-                                                        .document(eposta)
-                                                        .collection("Bilgileri")
                                                         .document(eposta);
 
                                                 documentReference

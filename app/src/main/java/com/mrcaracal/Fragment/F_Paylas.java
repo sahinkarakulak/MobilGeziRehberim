@@ -171,7 +171,7 @@ public class F_Paylas extends Fragment {
                                                 MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres, yorum, FieldValue.serverTimestamp());
 
                                                 DocumentReference documentReference1 = firebaseFirestore
-                                                        .collection("Kullanicilar")
+                                                        .collection("Paylasilanlar")
                                                         .document(firebaseUser.getEmail())
                                                         .collection("Paylastiklari")
                                                         .document();
@@ -183,7 +183,7 @@ public class F_Paylas extends Fragment {
                                                             public void onSuccess(Void aVoid) {
 
                                                                 DocumentReference documentReference2 = firebaseFirestore
-                                                                        .collection("TumGonderiler")
+                                                                        .collection("Gonderiler")
                                                                         .document(gonderiID);
 
                                                                 documentReference2

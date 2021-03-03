@@ -39,6 +39,7 @@ import com.mrcaracal.mobilgezirehberim.R;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class F_Ara extends Fragment implements RecyclerViewClickInterface {
@@ -160,7 +161,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         //recycler_view_ara.scrollToPosition(0);
 
         CollectionReference collectionReference = firebaseFirestore
-                .collection("TumGonderiler");
+                .collection("Gonderiler");
 
         collectionReference
                 .orderBy(ilgiliAlan)
@@ -253,9 +254,9 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                             Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), adresleriFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
 
                             DocumentReference documentReference = firebaseFirestore
-                                    .collection("Kullanicilar")
+                                    .collection("Kaydedenler")
                                     .document(firebaseUser.getEmail())
-                                    .collection("Kaydettikleri")
+                                    .collection("Kaydedilenler")
                                     .document(gonderiIDleriFB.get(position));
 
                             documentReference
@@ -274,6 +275,27 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                                             Log.d(TAG, "onFailure: " + e.getMessage());
                                         }
                                     });
+
+                            Map<String, Object> map = new HashMap();
+                            map.put("gonderiID", true);
+                            map.put("kaydeden", firebaseUser.getEmail());
+                            map.put("IDsi",gonderiIDleriFB.get(position));
+
+                            DocumentReference documentReference1 = firebaseFirestore
+                                    .collection("Kaydedilenler")
+                                    .document(gonderiIDleriFB.get(position))
+                                    .collection("Kaydedenler")
+                                    .document(firebaseUser.getEmail());
+
+                            documentReference1
+                                    .set(map)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(@NonNull Void aVoid) {
+                                            // İşlem Başarılı
+                                        }
+                                    });
+
                             Log.d(TAG, "onClick: Gönderi kayıt işlemi sonu");
                         }
 

@@ -36,6 +36,7 @@ import com.mrcaracal.mobilgezirehberim.R;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
@@ -101,7 +102,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
 //        progressDialog.show();
 
         CollectionReference collectionReference = firebaseFirestore
-                .collection("TumGonderiler");
+                .collection("Gonderiler");
         // VT'ye kaydedilme zamanına göre verileri çek
         collectionReference
                 .orderBy("zaman", Query.Direction.DESCENDING)
@@ -186,9 +187,9 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                             Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), adresleriFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
 
                             DocumentReference documentReference = firebaseFirestore
-                                    .collection("Kullanicilar")
+                                    .collection("Kaydedenler")
                                     .document(firebaseUser.getEmail())
-                                    .collection("Kaydettikleri")
+                                    .collection("Kaydedilenler")
                                     .document(gonderiIDleriFB.get(position));
 
                             documentReference
@@ -196,7 +197,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Toast.makeText(getActivity(), "Kaydedildi", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), "Kaydedilenler'e Kaydedildi", Toast.LENGTH_SHORT).show();
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -205,6 +206,27 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
+
+                            Map<String, Object> map = new HashMap();
+                            map.put("gonderiID", true);
+                            map.put("kaydeden", firebaseUser.getEmail());
+                            map.put("IDsi",gonderiIDleriFB.get(position));
+
+                            DocumentReference documentReference1 = firebaseFirestore
+                                    .collection("Kaydedilenler")
+                                    .document(gonderiIDleriFB.get(position))
+                                    .collection("Kaydedenler")
+                                    .document(firebaseUser.getEmail());
+
+                            documentReference1
+                                    .set(map)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(@NonNull Void aVoid) {
+                                            // İşlem Başarılı
+                                        }
+                                    });
+
                             Log.d(TAG, "onClick: Gönderi kaydedildi");
                         }
 

@@ -116,8 +116,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         DocumentReference documentReference = FirebaseFirestore
                 .getInstance()
                 .collection("Kullanicilar")
-                .document(firebaseUser.getEmail())
-                .collection("Bilgileri")
                 .document(firebaseUser.getEmail());
 
         documentReference
@@ -194,7 +192,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     public void paylasilanlariCek() {
         Log.d(TAG, "paylasilanlariCek: ...");
         CollectionReference collectionReference = firebaseFirestore
-                .collection("Kullanicilar")
+                .collection("Paylasilanlar")
                 .document(firebaseUser.getEmail())
                 .collection("Paylastiklari");
 
@@ -244,9 +242,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         Log.d(TAG, "kaydedilenleriCek: ...");
 
         CollectionReference collectionReference = firebaseFirestore
-                .collection("Kullanicilar")
+                .collection("Kaydedenler")
                 .document(firebaseUser.getEmail())
-                .collection("Kaydettikleri");
+                .collection("Kaydedilenler");
 
         collectionReference
                 .orderBy("zaman", Query.Direction.DESCENDING)

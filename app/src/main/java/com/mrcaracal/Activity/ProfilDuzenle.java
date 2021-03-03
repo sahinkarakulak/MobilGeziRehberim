@@ -75,8 +75,6 @@ public class ProfilDuzenle extends AppCompatActivity {
         documentReference = FirebaseFirestore
                 .getInstance()
                 .collection("Kullanicilar")
-                .document(firebaseUser.getEmail())
-                .collection("Bilgileri")
                 .document(firebaseUser.getEmail());
 
         documentReference
@@ -134,8 +132,6 @@ public class ProfilDuzenle extends AppCompatActivity {
     private void profiliGuncelle(String k_adi, String k_bio) {
         DocumentReference documentReference2 = FirebaseFirestore.getInstance()
                 .collection("Kullanicilar")
-                .document(firebaseUser.getEmail())
-                .collection("Bilgileri")
                 .document(firebaseUser.getEmail());
 
         Map<String, Object> guncelVeriler = new HashMap<>();
@@ -190,8 +186,6 @@ public class ProfilDuzenle extends AppCompatActivity {
 
                         FirebaseFirestore.getInstance()
                                 .collection("Kullanicilar")
-                                .document(firebaseUser.getEmail())
-                                .collection("Bilgileri")
                                 .document(firebaseUser.getEmail())
                                 .update(hasmap)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
