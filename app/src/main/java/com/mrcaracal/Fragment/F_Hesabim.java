@@ -294,7 +294,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         Log.d(TAG, "onLongItemClick: Uzun tık");
 
         String tarih_ve_saat = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
-        String tarih = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
         String gonderi_detay_goster = yorumlarFB.get(position) + "\n\nPaylaşan: " + kullaniciEpostalariFB.get(position) + "\nTarih: " + tarih_ve_saat + "\nAdres: " + adresleriFB.get(position);
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
