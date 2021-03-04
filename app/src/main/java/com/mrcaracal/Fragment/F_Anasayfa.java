@@ -240,11 +240,6 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
     }
 
     @Override
-    public void onYorumClick(int position) {
-        Toast.makeText(getActivity(), "YORUM", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void onDigerSeceneklerClick(int position) {
         Toast.makeText(getActivity(), "DİĞER", Toast.LENGTH_SHORT).show();
     }

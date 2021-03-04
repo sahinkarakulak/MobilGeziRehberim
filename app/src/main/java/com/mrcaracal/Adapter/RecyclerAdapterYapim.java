@@ -148,13 +148,6 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
                 }
             });
 
-            row_YorumBilgisi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    recyclerViewClickInterface.onYorumClick(getAdapterPosition());
-                }
-            });
-
         }
     }
 

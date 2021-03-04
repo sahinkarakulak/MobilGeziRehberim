@@ -8,8 +8,6 @@ public interface RecyclerViewClickInterface {
 
     void onKaydetClick(int position);
 
-    void onYorumClick(int position);
-
     void onDigerSeceneklerClick(int position);
 
 }

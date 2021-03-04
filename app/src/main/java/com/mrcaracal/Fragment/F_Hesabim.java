@@ -295,7 +295,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
         String tarih_ve_saat = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
         String tarih = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
-        String gonderi_detay_goster = yorumlarFB.get(position) + "\n\nPaylaşan: " + kullaniciEpostalariFB.get(position) + "\nTarih: " + tarih_ve_saat + "\nAdres: "+adresleriFB.get(position);
+        String gonderi_detay_goster = yorumlarFB.get(position) + "\n\nPaylaşan: " + kullaniciEpostalariFB.get(position) + "\nTarih: " + tarih_ve_saat + "\nAdres: " + adresleriFB.get(position);
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert
@@ -318,11 +318,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     @Override
     public void onKaydetClick(int position) {
         Toast.makeText(getActivity(), "KAYDET", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onYorumClick(int position) {
-        Toast.makeText(getActivity(), "YORUM", Toast.LENGTH_SHORT).show();
     }
 
     @Override
