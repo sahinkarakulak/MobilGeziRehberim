@@ -67,6 +67,14 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
                 .fit()
                 .into(holder.row_resimAdresi);
 
+        holder.row_resimAdresi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
         Log.d(TAG, "onBindViewHolder: " + "Veriler çekildi ve işlendi");
     }
 
@@ -80,7 +88,7 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
     //
     class GonderiHolder extends RecyclerView.ViewHolder {
 
-        ImageView row_resimAdresi;
+        ImageView row_resimAdresi, row_gonderiKaydet, row_digerSecenekler;
         TextView row_epostasi, row_yerIsmi, row_YorumBilgisi;
 
         public GonderiHolder(@NonNull View itemView) {
@@ -90,23 +98,60 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
             row_resimAdresi = itemView.findViewById(R.id.row_resimAdresi);
             row_yerIsmi = itemView.findViewById(R.id.row_yerIsmi);
             row_YorumBilgisi = itemView.findViewById(R.id.row_YorumBilgisi);
+            row_digerSecenekler = itemView.findViewById(R.id.row_digerSecenekler);
+            row_gonderiKaydet = itemView.findViewById(R.id.row_gonderiKaydet);
 
             // position'a göre hangisine tıklandıysa position'u bunun için oluşturulan RecyclerViewClickInterface'e göndersin.
             // RecyclerViewClickInterface'i hangi sınıf impelements edecekse orada kullanılsın.
-            itemView.setOnClickListener(new View.OnClickListener() {
+            /*itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     recyclerViewClickInterface.onItemClick(getAdapterPosition());
                 }
-            });
+            });*/
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            /*itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
 
                     recyclerViewClickInterface.onLongItemClick(getAdapterPosition());
-
                     return false;
+                }
+            });*/
+
+            row_resimAdresi.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    recyclerViewClickInterface.onLongItemClick(getAdapterPosition());
+                    return false;
+                }
+            });
+
+            row_yerIsmi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recyclerViewClickInterface.onBaslikClick(getAdapterPosition());
+                }
+            });
+
+            row_digerSecenekler.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recyclerViewClickInterface.onDigerSeceneklerClick(getAdapterPosition());
+                }
+            });
+
+            row_gonderiKaydet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recyclerViewClickInterface.onKaydetClick(getAdapterPosition());
+                }
+            });
+
+            row_YorumBilgisi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recyclerViewClickInterface.onYorumClick(getAdapterPosition());
                 }
             });
 

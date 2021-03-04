@@ -1,7 +1,15 @@
 package com.mrcaracal.Interface;
 
 public interface RecyclerViewClickInterface {
-    void onItemClick(int position);
 
     void onLongItemClick(int position);
+
+    void onBaslikClick(int position);
+
+    void onKaydetClick(int position);
+
+    void onYorumClick(int position);
+
+    void onDigerSeceneklerClick(int position);
+
 }

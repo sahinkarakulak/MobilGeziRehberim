@@ -32,6 +32,7 @@
                 android:textStyle="bold"/>
 
             <ImageView
+                android:id="@+id/row_digerSecenekler"
                 android:layout_width="40dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_baseline_more_horiz_24"/>
@@ -64,6 +65,7 @@
                 android:textStyle="italic"/>
 
             <ImageView
+                android:id="@+id/row_gonderiKaydet"
                 android:layout_width="40dp"
                 android:layout_height="27dp"
                 android:src="@drawable/ic_baseline_bookmark_border_24"/>

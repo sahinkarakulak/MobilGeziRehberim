@@ -288,14 +288,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                 });
     }
 
-    // Her bir recylerRow'a tıklandığında yapılacak işlemler
-    // Detayları AlertDialog içerisinde gösterme
-    // AlertDialog yerine Expandable Recycler View kullanılabilir
-    @Override
-    public void onItemClick(int position) {
-        Log.d(TAG, "onItemClick: Tek tık");
-    }
-
     // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
     @Override
     public void onLongItemClick(int position) {
@@ -316,5 +308,25 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void onBaslikClick(int position) {
+        Toast.makeText(getActivity(), "BAŞLIK", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onKaydetClick(int position) {
+        Toast.makeText(getActivity(), "KAYDET", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onYorumClick(int position) {
+        Toast.makeText(getActivity(), "YORUM", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDigerSeceneklerClick(int position) {
+        Toast.makeText(getActivity(), "DİĞER", Toast.LENGTH_SHORT).show();
     }
 }
