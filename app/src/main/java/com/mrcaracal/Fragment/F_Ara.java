@@ -123,11 +123,14 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                 yorumlarFB.clear();
                 zamanlarFB.clear();
 
-                String[] ilgiliAlan = {"kullaniciEposta", "yerIsmi"};
+                /*String[] ilgiliAlan = {"kullaniciEposta", "yerIsmi"};
                 for (int i = 0; i < ilgiliAlan.length; i++) {
                     Log.d(TAG, "onTextChanged: " + ilgiliAlan[i] + " - alanı gönderiliyor");
                     aramaYap(ilgiliAlan[i], s.toString().toLowerCase());
-                }
+                }*/
+
+                aramaYap("yerIsmi", s.toString().toLowerCase());
+
             }
 
             // Sonra

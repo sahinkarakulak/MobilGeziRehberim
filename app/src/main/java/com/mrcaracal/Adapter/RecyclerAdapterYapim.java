@@ -10,7 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.mrcaracal.mobilgezirehberim.R;
 import com.squareup.picasso.Picasso;
@@ -20,6 +27,10 @@ import java.util.ArrayList;
 public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYapim.GonderiHolder> {
 
     private static final String TAG = "RecyclerAdapterYapim";
+
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    FirebaseFirestore firebaseFirestore;
 
     private final ArrayList<String> gonderiIDleriListesi;
     private final ArrayList<String> kullaniciEpostalariListesi;
@@ -51,6 +62,10 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.recycler_row, parent, false);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+
         return new GonderiHolder(view);
     }
 
@@ -74,7 +89,6 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
             }
         });
 
-
         Log.d(TAG, "onBindViewHolder: " + "Veriler çekildi ve işlendi");
     }
 
@@ -89,7 +103,7 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
     class GonderiHolder extends RecyclerView.ViewHolder {
 
         ImageView row_resimAdresi, row_gonderiKaydet, row_digerSecenekler;
-        TextView row_epostasi, row_yerIsmi, row_YorumBilgisi;
+        TextView row_yerIsmi, row_YorumBilgisi;
 
         public GonderiHolder(@NonNull View itemView) {
             super(itemView);
@@ -113,7 +127,6 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
             /*itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-
                     recyclerViewClickInterface.onLongItemClick(getAdapterPosition());
                     return false;
                 }
