@@ -300,10 +300,10 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         alert
                 .setTitle(yerIsimleriFB.get(position))
                 .setMessage(gonderi_detay_goster)
-                .setPositiveButton("TAMAM", new DialogInterface.OnClickListener() {
+                .setNegativeButton("TAMAM", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.d(TAG, "onClick: TAMAM");
+
                     }
                 })
                 .show();

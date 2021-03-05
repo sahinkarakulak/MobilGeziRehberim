@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -102,7 +103,7 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
     //
     class GonderiHolder extends RecyclerView.ViewHolder {
 
-        ImageView row_resimAdresi, row_gonderiKaydet, row_digerSecenekler;
+        ImageView row_resimAdresi, row_digerSecenekler;
         TextView row_yerIsmi, row_YorumBilgisi;
 
         public GonderiHolder(@NonNull View itemView) {
@@ -113,7 +114,6 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
             row_yerIsmi = itemView.findViewById(R.id.row_yerIsmi);
             row_YorumBilgisi = itemView.findViewById(R.id.row_YorumBilgisi);
             row_digerSecenekler = itemView.findViewById(R.id.row_digerSecenekler);
-            row_gonderiKaydet = itemView.findViewById(R.id.row_gonderiKaydet);
 
             // position'a göre hangisine tıklandıysa position'u bunun için oluşturulan RecyclerViewClickInterface'e göndersin.
             // RecyclerViewClickInterface'i hangi sınıf impelements edecekse orada kullanılsın.
@@ -151,13 +151,6 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
                 @Override
                 public void onClick(View v) {
                     recyclerViewClickInterface.onDigerSeceneklerClick(getAdapterPosition());
-                }
-            });
-
-            row_gonderiKaydet.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    recyclerViewClickInterface.onKaydetClick(getAdapterPosition());
                 }
             });
 
