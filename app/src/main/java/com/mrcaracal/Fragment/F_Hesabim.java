@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,25 +22,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrcaracal.Activity.ProfilDuzenle;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
+import com.mrcaracal.Modul.Gonderiler;
 import com.mrcaracal.mobilgezirehberim.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -70,6 +76,8 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
     CircleImageView img_profil_resmi;
 
+    ViewGroup viewGroup;
+
     private void init() {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -87,7 +95,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.frag_hesabim, container, false);
+        viewGroup = (ViewGroup) inflater.inflate(R.layout.frag_hesabim, container, false);
         init();
 
         paylasilanlariCek();
@@ -315,12 +323,52 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     }
 
     @Override
-    public void onKaydetClick(int position) {
-        Toast.makeText(getActivity(), "KAYDET", Toast.LENGTH_SHORT).show();
+    public void onDigerSeceneklerClick(int position) {
+        dialogPenceresiAc(position);
     }
 
-    @Override
-    public void onDigerSeceneklerClick(int position) {
-        Toast.makeText(getActivity(), "DİĞER", Toast.LENGTH_SHORT).show();
+    public void dialogPenceresiAc(int position) {
+
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
+        View bottomSheetView = LayoutInflater.from(getActivity())
+                .inflate( R.layout.layout_bottom_sheet, (LinearLayout) viewGroup.findViewById(R.id.bottomSheetContainer)  );
+
+        // Gönderiyi Kaydet
+        bottomSheetView.findViewById(R.id.bs_gonderiyi_kaydet).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Paylaştığınız veya Kaydettiğiniz gönderileri kaydetmeye gerek var mı? :)", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Hızlı Şikayet ET
+        bottomSheetView.findViewById(R.id.bs_hizli_sikayet_et).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        // Detaylı Şikayet Bildir
+        bottomSheetView.findViewById(R.id.bs_detayli_sikayet_bildir).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        // İPTAL butonu
+        bottomSheetView.findViewById(R.id.bottom_sheet_iptal_btnsi).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+
+
     }
 }

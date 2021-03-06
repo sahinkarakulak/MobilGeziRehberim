@@ -6,8 +6,8 @@ public interface RecyclerViewClickInterface {
 
     void onBaslikClick(int position);
 
-    void onKaydetClick(int position);
-
     void onDigerSeceneklerClick(int position);
+
+    void dialogPenceresiAc (int position);
 
 }

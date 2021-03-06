@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
+import com.mrcaracal.ExampleDialog;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.mrcaracal.Modul.Gonderiler;
 import com.mrcaracal.mobilgezirehberim.R;
@@ -62,6 +65,8 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
 
     RecyclerAdapterYapim recyclerAdapterYapim;
 
+    ViewGroup viewGroup;
+
     private void init() {
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -80,7 +85,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.frag_ana_sayfa, container, false);
+        viewGroup = (ViewGroup) inflater.inflate(R.layout.frag_ana_sayfa, container, false);
         init();
 
         yenidenEskiyeCek();
@@ -165,64 +170,60 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                         //
                     }
                 })
-                .setPositiveButton("KAYDET", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(TAG, "onClick: KAYDET");
-
-                        if (kullaniciEpostalariFB.get(position).equals(firebaseUser.getEmail())) {
-                            Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
-                        } else {
-
-                            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), adresleriFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
-
-                            DocumentReference documentReference = firebaseFirestore
-                                    .collection("Kaydedenler")
-                                    .document(firebaseUser.getEmail())
-                                    .collection("Kaydedilenler")
-                                    .document(gonderiIDleriFB.get(position));
-
-                            documentReference
-                                    .set(MGonderiler)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Toast.makeText(getActivity(), "Kaydedildi", Toast.LENGTH_SHORT).show();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-
-                            Map<String, Object> map = new HashMap();
-                            map.put("gonderiID", true);
-                            map.put("kaydeden", firebaseUser.getEmail());
-                            map.put("IDsi", gonderiIDleriFB.get(position));
-
-                            DocumentReference documentReference1 = firebaseFirestore
-                                    .collection("Kaydedilenler")
-                                    .document(gonderiIDleriFB.get(position))
-                                    .collection("Kaydedenler")
-                                    .document(firebaseUser.getEmail());
-
-                            documentReference1
-                                    .set(map)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(@NonNull Void aVoid) {
-                                            // İşlem Başarılı
-                                        }
-                                    });
-
-                            Log.d(TAG, "onClick: Gönderi kaydedildi");
-                        }
-                    }
-                })
                 .show();
 
+    }
+
+    public void kaydet_islemleri(int position){
+        if (kullaniciEpostalariFB.get(position).equals(firebaseUser.getEmail())) {
+            Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
+        } else {
+
+            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), adresleriFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
+
+            DocumentReference documentReference = firebaseFirestore
+                    .collection("Kaydedenler")
+                    .document(firebaseUser.getEmail())
+                    .collection("Kaydedilenler")
+                    .document(gonderiIDleriFB.get(position));
+
+            documentReference
+                    .set(MGonderiler)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getActivity(), "Kaydedildi", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+            Map<String, Object> map = new HashMap();
+            map.put("gonderiID", true);
+            map.put("kaydeden", firebaseUser.getEmail());
+            map.put("IDsi", gonderiIDleriFB.get(position));
+
+            DocumentReference documentReference1 = firebaseFirestore
+                    .collection("Kaydedilenler")
+                    .document(gonderiIDleriFB.get(position))
+                    .collection("Kaydedenler")
+                    .document(firebaseUser.getEmail());
+
+            documentReference1
+                    .set(map)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(@NonNull Void aVoid) {
+                            // İşlem Başarılı
+                        }
+                    });
+
+            Log.d(TAG, "onClick: Gönderi kaydedildi");
+        }
     }
 
     @Override
@@ -231,13 +232,54 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
     }
 
     @Override
-    public void onKaydetClick(int position) {
-
+    public void onDigerSeceneklerClick(int position) {
+        //Toast.makeText(getActivity(), "DİĞER", Toast.LENGTH_SHORT).show();
+        dialogPenceresiAc(position);
     }
 
-    @Override
-    public void onDigerSeceneklerClick(int position) {
-        Toast.makeText(getActivity(), "DİĞER", Toast.LENGTH_SHORT).show();
+    public void dialogPenceresiAc(int position) {
+
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
+        View bottomSheetView = LayoutInflater.from(getActivity())
+                .inflate( R.layout.layout_bottom_sheet, (LinearLayout) viewGroup.findViewById(R.id.bottomSheetContainer)  );
+
+        // Gönderiyi Kaydet
+        bottomSheetView.findViewById(R.id.bs_gonderiyi_kaydet).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kaydet_islemleri(position);
+            }
+        });
+
+        // Hızlı Şikayet ET
+        bottomSheetView.findViewById(R.id.bs_hizli_sikayet_et).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        // Detaylı Şikayet Bildir
+        bottomSheetView.findViewById(R.id.bs_detayli_sikayet_bildir).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        // İPTAL butonu
+        bottomSheetView.findViewById(R.id.bottom_sheet_iptal_btnsi).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+
+
     }
 
 }
