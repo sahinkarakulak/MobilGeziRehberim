@@ -298,12 +298,11 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
     @Override
     public void onBaslikClick(int position) {
-        Toast.makeText(getActivity(), "BAŞLIK", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onDigerSeceneklerClick(int position) {
-        Toast.makeText(getActivity(), "DİĞER", Toast.LENGTH_SHORT).show();
         dialogPenceresiAc(position);
     }
 
@@ -318,6 +317,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             @Override
             public void onClick(View v) {
                 kaydet_islemleri(position);
+                bottomSheetDialog.dismiss();
             }
         });
 

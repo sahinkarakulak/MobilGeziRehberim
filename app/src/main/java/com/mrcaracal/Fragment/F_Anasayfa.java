@@ -32,7 +32,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
-import com.mrcaracal.ExampleDialog;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.mrcaracal.Modul.Gonderiler;
 import com.mrcaracal.mobilgezirehberim.R;
@@ -228,7 +227,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
 
     @Override
     public void onBaslikClick(int position) {
-        Toast.makeText(getActivity(), "BAŞLIK", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -248,6 +247,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
             @Override
             public void onClick(View v) {
                 kaydet_islemleri(position);
+                bottomSheetDialog.dismiss();
             }
         });
 

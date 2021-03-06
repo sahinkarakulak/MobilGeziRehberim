@@ -7,9 +7,9 @@
     <string name="title_activity_a__harita">Map</string>
     <string name="IletisimBilgilendirmeMetni">Dosya vb şeyler de göndermek için GÖNDER butonuna tıklayın. Varsayılan olarak açılan uygulamada belge de gönderebilirsiniz.</string>
     <string name="normal_map">Normal</string>
-    <string name="hybrid_map">Hybrid</string>
-    <string name="satellite_map">Satellite</string>
-    <string name="terrain_map">Terrain</string>
+    <string name="hybrid_map">Hibrit</string>
+    <string name="satellite_map">Uydu</string>
+    <string name="terrain_map">Arazi</string>
     <string name="kiz_kulesi_adres">Adres : Üsküdar/İstanbul</string>
     <string name="yorum">Yorum : Denizin ortasında tarihi bir yapı...</string>
 </resources>

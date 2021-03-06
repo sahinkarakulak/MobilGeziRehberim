@@ -319,7 +319,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
     @Override
     public void onBaslikClick(int position) {
-        Toast.makeText(getActivity(), "BAŞLIK", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -337,7 +337,8 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         bottomSheetView.findViewById(R.id.bs_gonderiyi_kaydet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Paylaştığınız veya Kaydettiğiniz gönderileri kaydetmeye gerek var mı? :)", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Bu gönderiyi siz paylaştınız veya kaydettiniz", Toast.LENGTH_SHORT).show();
+                bottomSheetDialog.dismiss();
             }
         });
 
