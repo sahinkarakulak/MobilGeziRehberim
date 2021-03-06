@@ -342,6 +342,15 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
             }
         });
 
+        // Konuma Git
+        bottomSheetView.findViewById(R.id.bs_konuma_git).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
+                bottomSheetDialog.dismiss();
+            }
+        });
+
         // Hızlı Şikayet ET
         bottomSheetView.findViewById(R.id.bs_hizli_sikayet_et).setOnClickListener(new View.OnClickListener() {
             @Override
