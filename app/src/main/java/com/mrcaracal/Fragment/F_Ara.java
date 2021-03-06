@@ -297,11 +297,6 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
     }
 
     @Override
-    public void onBaslikClick(int position) {
-
-    }
-
-    @Override
     public void onDigerSeceneklerClick(int position) {
         dialogPenceresiAc(position);
     }

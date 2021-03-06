@@ -226,11 +226,6 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
     }
 
     @Override
-    public void onBaslikClick(int position) {
-
-    }
-
-    @Override
     public void onDigerSeceneklerClick(int position) {
         //Toast.makeText(getActivity(), "DİĞER", Toast.LENGTH_SHORT).show();
         dialogPenceresiAc(position);
@@ -261,6 +256,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         });
 
         // Hızlı Şikayet ET
+        // Bu kısımda JAVAMAİL API kullanılarak doğrudan geliştiricilere şikayet mesajı gönderilecek!
         bottomSheetView.findViewById(R.id.bs_hizli_sikayet_et).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,6 +266,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         });
 
         // Detaylı Şikayet Bildir
+        // Bu kısımda cihazdaki MAİL uygulamasının açılıp kullanıcının burada geliştiricilere istediği verileri göndermesi sağlanacak
         bottomSheetView.findViewById(R.id.bs_detayli_sikayet_bildir).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

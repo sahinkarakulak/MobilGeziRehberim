@@ -140,13 +140,6 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
                 }
             });
 
-            row_yerIsmi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    recyclerViewClickInterface.onBaslikClick(getAdapterPosition());
-                }
-            });
-
             row_digerSecenekler.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
