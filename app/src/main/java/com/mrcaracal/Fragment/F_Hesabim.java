@@ -331,16 +331,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
         View bottomSheetView = LayoutInflater.from(getActivity())
-                .inflate( R.layout.layout_bottom_sheet, (LinearLayout) viewGroup.findViewById(R.id.bottomSheetContainer)  );
-
-        // Gönderiyi Kaydet
-        bottomSheetView.findViewById(R.id.bs_gonderiyi_kaydet).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Bu gönderiyi siz paylaştınız veya kaydettiniz", Toast.LENGTH_SHORT).show();
-                bottomSheetDialog.dismiss();
-            }
-        });
+                .inflate( R.layout.layout_bottom_sheet_hesabim, (LinearLayout) viewGroup.findViewById(R.id.bottomSheetContainer_hesabim)  );
 
         // Konuma Git
         bottomSheetView.findViewById(R.id.bs_konuma_git).setOnClickListener(new View.OnClickListener() {
@@ -351,20 +342,17 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
             }
         });
 
-        // Hızlı Şikayet ET
-        bottomSheetView.findViewById(R.id.bs_hizli_sikayet_et).setOnClickListener(new View.OnClickListener() {
+        // Ö - N - E - M - L - İ
+        // ---------------------
+        // PAYLAŞILANLAR VE KAYDEDİLENLER KISMINDAN HERHANGİ BİR GÖNDERİ KALDIRILACAĞI ZAMAN,
+        // NAVİGATİONVİEW ALANINDAN HANGİSİNİN SEÇİLİ OLDUĞUNU TESPİT EDİP ONA GÖRE SİLME İŞLEMLERİ YAPILSIN.
+        // VT'DEN ÇEKİLEN VERİLER DE BUNA İSİMLENDİRİLSİN Kİ KALDIRMA İŞLEMİNDE KARIŞIKLIK ÇIKMASIN...!!!
+        // Kaldır
+        bottomSheetView.findViewById(R.id.bs_kaldir).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
                 bottomSheetDialog.dismiss();
-            }
-        });
-
-        // Detaylı Şikayet Bildir
-        bottomSheetView.findViewById(R.id.bs_detayli_sikayet_bildir).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
             }
         });
 
