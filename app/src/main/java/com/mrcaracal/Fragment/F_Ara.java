@@ -325,7 +325,8 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         bottomSheetView.findViewById(R.id.bs_hizli_sikayet_et).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
+                bottomSheetDialog.dismiss();
             }
         });
 
@@ -333,7 +334,8 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         bottomSheetView.findViewById(R.id.bs_detayli_sikayet_bildir).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
+                bottomSheetDialog.dismiss();
             }
         });
 
