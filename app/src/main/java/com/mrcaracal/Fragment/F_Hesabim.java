@@ -32,20 +32,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrcaracal.Activity.ProfilDuzenle;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
-import com.mrcaracal.Modul.Gonderiler;
 import com.mrcaracal.mobilgezirehberim.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -67,6 +64,8 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     ArrayList<String> yorumlarFB;
     ArrayList<Timestamp> zamanlarFB;
 
+    ArrayList<String> kaldirmaIslemiIcin;
+
     RecyclerView recyclerViewHesabim;
 
     RecyclerAdapterYapim recyclerAdapterYapim;
@@ -75,6 +74,10 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     Button btn_profili_duzenle;
 
     CircleImageView img_profil_resmi;
+
+    int POSITION_DEGERI;
+    String KONTOLLU_KALDIRMA = "paylasilanlar";
+    // kaydedilenler
 
     ViewGroup viewGroup;
 
@@ -91,6 +94,8 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         adresleriFB = new ArrayList<>();
         yorumlarFB = new ArrayList<>();
         zamanlarFB = new ArrayList<>();
+
+        kaldirmaIslemiIcin = new ArrayList<>();
 
     }
 
@@ -160,14 +165,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                     case R.id.paylasilanlar:
                         Log.d(TAG, "onNavigationItemSelected: Paylaşılanlar TAB'ı");
 
-                        gonderiIDleriFB.clear();
-                        kullaniciEpostalariFB.clear();
-                        resimAdresleriFB.clear();
-                        yerIsimleriFB.clear();
-                        konumlariFB.clear();
-                        adresleriFB.clear();
-                        yorumlarFB.clear();
-                        zamanlarFB.clear();
+                        KONTOLLU_KALDIRMA = "paylasilanlar";
+
+                        listeTemizleme();
 
                         paylasilanlariCek();
                         Log.d(TAG, "onNavigationItemSelected: paylasilanlariCek() çağrıldı");
@@ -176,14 +176,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                     case R.id.kaydedilenler:
                         Log.d(TAG, "onNavigationItemSelected: Kaydedilenler TAB'ı");
 
-                        gonderiIDleriFB.clear();
-                        kullaniciEpostalariFB.clear();
-                        resimAdresleriFB.clear();
-                        yerIsimleriFB.clear();
-                        konumlariFB.clear();
-                        adresleriFB.clear();
-                        yorumlarFB.clear();
-                        zamanlarFB.clear();
+                        KONTOLLU_KALDIRMA = "kaydedilenler";
+
+                        listeTemizleme();
 
                         kaydedilenleriCek();
                         Log.d(TAG, "onNavigationItemSelected: kaydedilenleriCek() çağrıldı");
@@ -195,6 +190,18 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         });
 
         return viewGroup;
+    }
+
+    public void listeTemizleme(){
+        gonderiIDleriFB.clear();
+        kullaniciEpostalariFB.clear();
+        resimAdresleriFB.clear();
+        yerIsimleriFB.clear();
+        konumlariFB.clear();
+        adresleriFB.clear();
+        yorumlarFB.clear();
+        zamanlarFB.clear();
+        kaldirmaIslemiIcin.clear();
     }
 
     public void paylasilanlariCek() {
@@ -216,6 +223,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                             for (DocumentSnapshot documentSnapshot : querySnapshot) {
                                 final Map<String, Object> verilerKumesiHesaim = documentSnapshot.getData();
 
+                                String gonderiID = verilerKumesiHesaim.get("gonderiID").toString();
                                 String kullaniciEposta = verilerKumesiHesaim.get("kullaniciEposta").toString();
                                 String yerIsmi = verilerKumesiHesaim.get("yerIsmi").toString();
                                 yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
@@ -224,6 +232,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 String adres = verilerKumesiHesaim.get("adres").toString();
                                 Timestamp zaman = (Timestamp) verilerKumesiHesaim.get("zaman");
 
+                                gonderiIDleriFB.add(gonderiID);
                                 kullaniciEpostalariFB.add(kullaniciEposta);
                                 resimAdresleriFB.add(resimAdresi);
                                 yerIsimleriFB.add(yerIsmi);
@@ -266,6 +275,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                             for (DocumentSnapshot documentSnapshot : querySnapshot) {
                                 final Map<String, Object> verilerKumesiHesaim = documentSnapshot.getData();
 
+                                String gonderiID = verilerKumesiHesaim.get("gonderiID").toString();
                                 String kullaniciEposta = verilerKumesiHesaim.get("kullaniciEposta").toString();
                                 String yerIsmi = verilerKumesiHesaim.get("yerIsmi").toString();
                                 yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
@@ -274,6 +284,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 String adres = verilerKumesiHesaim.get("adres").toString();
                                 Timestamp zaman = (Timestamp) verilerKumesiHesaim.get("zaman");
 
+                                gonderiIDleriFB.add(gonderiID);
                                 kullaniciEpostalariFB.add(kullaniciEposta);
                                 resimAdresleriFB.add(resimAdresi);
                                 yerIsimleriFB.add(yerIsmi);
@@ -294,6 +305,160 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                         Log.d(TAG, "onFailure: " + e.getMessage());
                     }
                 });
+    }
+
+    public void paylasilanlardanKaldir() {
+
+        /*
+        1. Adım
+         */
+        firebaseFirestore
+                .collection("Paylasilanlar")
+                .document(kullaniciEpostalariFB.get(POSITION_DEGERI))
+                .collection("Paylastiklari")
+                .document(gonderiIDleriFB.get(POSITION_DEGERI))
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(@NonNull Void aVoid) {
+                        //
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //
+                    }
+                });
+
+        /*
+        2. Adım
+         */
+        firebaseFirestore
+                .collection("Gonderiler")
+                .document(gonderiIDleriFB.get(POSITION_DEGERI))
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(@NonNull Void aVoid) {
+                        //
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //
+                    }
+                });
+
+        /*
+        03- Kaydedilenler > gonderiID() > Kaydedenler > document() içindeki verileri al.
+        IDsi = gonderiID
+        gonderiID = true
+        kaydeden = eposta
+        Buradaki eposta bilgisine göre aşağıda yer alan 4. adımdaki işemler yapılacak
+        */
+        firebaseFirestore
+                .collection("Kaydedilenler")
+                .document(gonderiIDleriFB.get(POSITION_DEGERI))
+                .collection("Kaydedenler")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            QuerySnapshot querySnapshot = task.getResult();
+                            for (DocumentSnapshot documentSnapshot : querySnapshot){
+                                final Map<String, Object> kaldirma_islemi_icin_gereken_bilgi = documentSnapshot.getData();
+
+                                String kaydedenin_e_postasi = kaldirma_islemi_icin_gereken_bilgi.get("kaydeden").toString();
+                                kaldirmaIslemiIcin.add(kaydedenin_e_postasi);
+                                // ID'i position'a göre alacağız
+
+                            }
+
+
+
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //
+                    }
+                });
+
+        for (String listeye_gore_kaldir : kaldirmaIslemiIcin){
+            firebaseFirestore
+                    .collection("Kaydedilenler")
+                    .document(gonderiIDleriFB.get(POSITION_DEGERI))
+                    .collection("Kaydedenler")
+                    .document(listeye_gore_kaldir)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(@NonNull Void aVoid) {
+                            //
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //
+                        }
+                    });
+        }
+
+        /*
+        04- Kaydedenler > kEposta() > Kaydedilenler > gonderiID()'i sil
+        */
+
+        for (String listeye_gore_kaldir : kaldirmaIslemiIcin){
+            firebaseFirestore
+                    .collection("Kaydedenler")
+                    .document(listeye_gore_kaldir)
+                    .collection("Kaydedilenler")
+                    .document(gonderiIDleriFB.get(POSITION_DEGERI))
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(@NonNull Void aVoid) {
+                            //
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //
+                        }
+                    });
+        }
+
+    }
+
+    public void kaydedilenlerdenKaldir() {
+        firebaseFirestore
+                .collection("Kaydedenler")
+                .document(firebaseUser.getEmail())
+                .collection("Kaydedilenler")
+                .document(gonderiIDleriFB.get(POSITION_DEGERI))
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(@NonNull Void aVoid) {
+                        Toast.makeText(getActivity(), "Kaldırıldı", Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "İşlem Başarısız", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
     }
 
     // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
@@ -319,6 +484,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
     @Override
     public void onDigerSeceneklerClick(int position) {
+        POSITION_DEGERI = position;
         dialogPenceresiAc(position);
     }
 
@@ -326,7 +492,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
         View bottomSheetView = LayoutInflater.from(getActivity())
-                .inflate( R.layout.layout_bottom_sheet_hesabim, (LinearLayout) viewGroup.findViewById(R.id.bottomSheetContainer_hesabim)  );
+                .inflate(R.layout.layout_bottom_sheet_hesabim, viewGroup.findViewById(R.id.bottomSheetContainer_hesabim));
 
         TextView baslik = bottomSheetView.findViewById(R.id.bs_baslik);
         baslik.setText(yerIsimleriFB.get(position));
@@ -349,7 +515,22 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         bottomSheetView.findViewById(R.id.bs_kaldir).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
+
+                switch (KONTOLLU_KALDIRMA) {
+                    case "paylasilanlar":
+                        paylasilanlardanKaldir();
+                        listeTemizleme();
+                        paylasilanlariCek();
+                        recyclerViewHesabim.scrollToPosition(0);
+                        break;
+                    case "kaydedilenler":
+                        kaydedilenlerdenKaldir();
+                        listeTemizleme();
+                        kaydedilenleriCek();
+                        recyclerViewHesabim.scrollToPosition(0);
+                        break;
+                }
+
                 bottomSheetDialog.dismiss();
             }
         });

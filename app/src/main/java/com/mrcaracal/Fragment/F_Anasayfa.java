@@ -261,24 +261,6 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
             }
         });
 
-        // Hızlı Şikayet ET
-        // Bu kısımda JAVAMAİL API kullanılarak doğrudan geliştiricilere şikayet mesajı gönderilecek!
-        bottomSheetView.findViewById(R.id.bs_hizli_sikayet_et).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (kullaniciEpostalariFB.get(position).equals(firebaseUser.getEmail())) {
-                    Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
-
-                }
-
-                bottomSheetDialog.dismiss();
-            }
-        });
-
         // Detaylı Şikayet Bildir
         // Bu kısımda cihazdaki MAİL uygulamasının açılıp kullanıcının burada geliştiricilere istediği verileri göndermesi sağlanacak
         bottomSheetView.findViewById(R.id.bs_detayli_sikayet_bildir).setOnClickListener(new View.OnClickListener() {
