@@ -2,6 +2,7 @@ package com.mrcaracal.Fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.mrcaracal.Modul.Gonderiler;
+import com.mrcaracal.Modul.IletisimBilgileri;
 import com.mrcaracal.mobilgezirehberim.R;
 
 import java.text.DateFormat;
@@ -173,7 +175,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
 
     }
 
-    public void kaydet_islemleri(int position){
+    public void kaydet_islemleri(int position) {
         if (kullaniciEpostalariFB.get(position).equals(firebaseUser.getEmail())) {
             Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
         } else {
@@ -235,7 +237,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
         View bottomSheetView = LayoutInflater.from(getActivity())
-                .inflate( R.layout.layout_bottom_sheet, (LinearLayout) viewGroup.findViewById(R.id.bottomSheetContainer)  );
+                .inflate(R.layout.layout_bottom_sheet, viewGroup.findViewById(R.id.bottomSheetContainer));
 
         // Gönderiyi Kaydet
         bottomSheetView.findViewById(R.id.bs_gonderiyi_kaydet).setOnClickListener(new View.OnClickListener() {
@@ -260,7 +262,15 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         bottomSheetView.findViewById(R.id.bs_hizli_sikayet_et).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
+
+                if (kullaniciEpostalariFB.get(position).equals(firebaseUser.getEmail())) {
+                    Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
+
+                }
+
                 bottomSheetDialog.dismiss();
             }
         });
@@ -270,7 +280,22 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         bottomSheetView.findViewById(R.id.bs_detayli_sikayet_bildir).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
+
+                if (kullaniciEpostalariFB.get(position).equals(firebaseUser.getEmail())) {
+                    Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    IletisimBilgileri iletisimBilgileri = new IletisimBilgileri();
+
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.putExtra(Intent.EXTRA_EMAIL, iletisimBilgileri.getAdmin_hesaplari());
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "");
+                    intent.putExtra(Intent.EXTRA_TEXT, "");
+                    intent.setType("plain/text");
+                    startActivity(Intent.createChooser(intent, "Ne ile göndermek istersiniz?"));
+
+                }
+
                 bottomSheetDialog.dismiss();
             }
         });

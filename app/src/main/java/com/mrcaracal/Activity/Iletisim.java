@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mrcaracal.Modul.IletisimBilgileri;
 import com.mrcaracal.mobilgezirehberim.R;
 
 public class Iletisim extends AppCompatActivity {
@@ -37,14 +38,15 @@ public class Iletisim extends AppCompatActivity {
             public void onClick(View v) {
                 String str_konu_baslik = edt_iletisim_konu_baslik.getText().toString();
                 String str_mesaj_icerik = edt_iletisim_mesaj_icerik.getText().toString();
-                String[] admin_e_postalari = {"turkishpower.new@gmail.com", "karakulaksahin@gmail.com"};
+
+                IletisimBilgileri iletisimBilgileri = new IletisimBilgileri();
 
                 if (str_konu_baslik.equals("") || str_mesaj_icerik.equals("")) {
                     Toast.makeText(Iletisim.this, "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onClick: EditText'en boş veriler alındı");
                 } else {
                     Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_EMAIL, admin_e_postalari);
+                    intent.putExtra(Intent.EXTRA_EMAIL, iletisimBilgileri.getAdmin_hesaplari());
                     intent.putExtra(Intent.EXTRA_SUBJECT, str_konu_baslik);
                     intent.putExtra(Intent.EXTRA_TEXT, str_mesaj_icerik);
                     intent.setType("plain/text");
