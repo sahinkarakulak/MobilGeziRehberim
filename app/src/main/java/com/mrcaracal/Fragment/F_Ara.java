@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +27,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.chip.Chip;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -104,8 +107,6 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         edt_anahtar_kelime_arat = viewGroup.findViewById(R.id.edt_anahtar_kelime_arat);
         edt_anahtar_kelime_arat.addTextChangedListener(new TextWatcher() {
 
-            final boolean _ignore = false; // indicates if the change was made by the TextWatcher itself.
-
             // Önce
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -132,7 +133,6 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                     Log.d(TAG, "onTextChanged: " + ilgiliAlan[i] + " - alanı gönderiliyor");
                     aramaYap(ilgiliAlan[i], s.toString().toLowerCase());
                 }*/
-
                 aramaYap("yerIsmi", s.toString().toLowerCase());
 
             }
@@ -144,6 +144,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
             }
         });
+
 
         recycler_view_ara = viewGroup.findViewById(R.id.recycler_view_ara);
         recycler_view_ara.setLayoutManager(new LinearLayoutManager(getActivity()));
