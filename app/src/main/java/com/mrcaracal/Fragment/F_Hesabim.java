@@ -358,7 +358,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         kaydeden = eposta
         Buradaki eposta bilgisine göre aşağıda yer alan 4. adımdaki işemler yapılacak
         */
-        firebaseFirestore
+/*        firebaseFirestore
                 .collection("Kaydedilenler")
                 .document(gonderiIDleriFB.get(POSITION_DEGERI))
                 .collection("Kaydedenler")
@@ -387,9 +387,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                     public void onFailure(@NonNull Exception e) {
                         //
                     }
-                });
+                });*/
 
-        for (String listeye_gore_kaldir : kaldirmaIslemiIcin){
+/*        for (String listeye_gore_kaldir : kaldirmaIslemiIcin){
             firebaseFirestore
                     .collection("Kaydedilenler")
                     .document(gonderiIDleriFB.get(POSITION_DEGERI))
@@ -408,13 +408,13 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                             //
                         }
                     });
-        }
+        }*/
 
         /*
         04- Kaydedenler > kEposta() > Kaydedilenler > gonderiID()'i sil
         */
 
-        for (String listeye_gore_kaldir : kaldirmaIslemiIcin){
+/*        for (String listeye_gore_kaldir : kaldirmaIslemiIcin){
             firebaseFirestore
                     .collection("Kaydedenler")
                     .document(listeye_gore_kaldir)
@@ -433,7 +433,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                             //
                         }
                     });
-        }
+        }*/
 
     }
 
