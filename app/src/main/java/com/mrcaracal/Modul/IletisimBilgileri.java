@@ -2,7 +2,11 @@ package com.mrcaracal.Modul;
 
 public class IletisimBilgileri {
 
-    String[] admin_hesaplari = {"karakulaksahin@gmail.com", "turkishpower.new@gmail.com", "hayrullahkose1@gmail.com"};
+    String[] admin_hesaplari = {
+            "karakulaksahin@gmail.com",
+            "turkishpower.new@gmail.com",
+            "hayrullahkose1@gmail.com"
+    };
 
     public IletisimBilgileri() {
 

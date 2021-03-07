@@ -32,11 +32,11 @@
                 android:textSize="15sp"
                 android:textStyle="bold"/>
 
-            <!--<ImageView
+            <ImageView
                 android:id="@+id/row_digerSecenekler"
                 android:layout_width="40dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_baseline_more_horiz_24"/>-->
+                android:src="@drawable/ic_baseline_more_horiz_24"/>
 
         </LinearLayout>
 
@@ -65,11 +65,8 @@
                 android:layout_marginTop="10dp"
                 android:textStyle="italic"/>
 
-
         </LinearLayout>
 
     </LinearLayout>
-
-
 
 </androidx.cardview.widget.CardView>

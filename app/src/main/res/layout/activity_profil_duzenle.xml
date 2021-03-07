@@ -14,7 +14,7 @@
         android:layout_height="120dp"
         android:src="@drawable/defaultpp"
         android:layout_gravity="center"
-        android:layout_margin="10dp"
+        android:layout_marginTop="20dp"
         app:civ_border_color="@android:color/holo_blue_light"
         app:civ_border_width="1dp"/>
 
@@ -22,11 +22,17 @@
         android:id="@+id/tv_kullaniciResmiDegistir"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:padding="15dp"
         android:text="Resmi Değiştir"
         android:textColor="@color/teal_200"
         android:gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:text="Kullanıcı Adı"/>
 
     <EditText
         android:id="@+id/et_kullaniciAdiAl"
@@ -36,6 +42,12 @@
         android:background="@drawable/bg_edit_text"
         android:hint="Kullanıcı Adı"/>
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:text="Biyografi"/>
 
     <EditText
         android:id="@+id/et_biyografiAl"
@@ -51,6 +63,7 @@
         android:background="@drawable/bg_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="Güncelle"/>
 
 </LinearLayout>

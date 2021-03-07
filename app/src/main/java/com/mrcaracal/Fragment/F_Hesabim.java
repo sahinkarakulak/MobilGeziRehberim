@@ -328,6 +328,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         View bottomSheetView = LayoutInflater.from(getActivity())
                 .inflate( R.layout.layout_bottom_sheet_hesabim, (LinearLayout) viewGroup.findViewById(R.id.bottomSheetContainer_hesabim)  );
 
+        TextView baslik = bottomSheetView.findViewById(R.id.bs_baslik);
+        baslik.setText(yerIsimleriFB.get(position));
+
         // Konuma Git
         bottomSheetView.findViewById(R.id.bs_konuma_git).setOnClickListener(new View.OnClickListener() {
             @Override
