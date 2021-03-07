@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -103,8 +104,9 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
     //
     class GonderiHolder extends RecyclerView.ViewHolder {
 
-        ImageView row_resimAdresi, row_digerSecenekler;
+        ImageView row_resimAdresi;
         TextView row_yerIsmi, row_YorumBilgisi;
+        LinearLayout ll_diger_secenekler;
 
         public GonderiHolder(@NonNull View itemView) {
             super(itemView);
@@ -113,7 +115,7 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
             row_resimAdresi = itemView.findViewById(R.id.row_resimAdresi);
             row_yerIsmi = itemView.findViewById(R.id.row_yerIsmi);
             row_YorumBilgisi = itemView.findViewById(R.id.row_YorumBilgisi);
-            row_digerSecenekler = itemView.findViewById(R.id.row_digerSecenekler);
+            ll_diger_secenekler = itemView.findViewById(R.id.ll_diger_secenekler);
 
             // position'a göre hangisine tıklandıysa position'u bunun için oluşturulan RecyclerViewClickInterface'e göndersin.
             // RecyclerViewClickInterface'i hangi sınıf impelements edecekse orada kullanılsın.
@@ -140,7 +142,7 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
                 }
             });
 
-            row_digerSecenekler.setOnClickListener(new View.OnClickListener() {
+            ll_diger_secenekler.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     recyclerViewClickInterface.onDigerSeceneklerClick(getAdapterPosition());

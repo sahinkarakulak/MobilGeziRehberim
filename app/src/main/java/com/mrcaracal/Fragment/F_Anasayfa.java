@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -238,6 +239,9 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
         View bottomSheetView = LayoutInflater.from(getActivity())
                 .inflate(R.layout.layout_bottom_sheet, viewGroup.findViewById(R.id.bottomSheetContainer));
+
+        TextView baslik = bottomSheetView.findViewById(R.id.bs_baslik);
+        baslik.setText(yerIsimleriFB.get(position));
 
         // Gönderiyi Kaydet
         bottomSheetView.findViewById(R.id.bs_gonderiyi_kaydet).setOnClickListener(new View.OnClickListener() {

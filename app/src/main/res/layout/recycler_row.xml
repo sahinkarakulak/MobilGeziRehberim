@@ -12,6 +12,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/ll_diger_secenekler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -27,15 +28,15 @@
                 android:layout_weight="1"
                 android:text="Yer Ismi"
                 android:gravity="center"
-                android:padding="2dp"
+                android:padding="5dp"
                 android:textSize="15sp"
                 android:textStyle="bold"/>
 
-            <ImageView
+            <!--<ImageView
                 android:id="@+id/row_digerSecenekler"
                 android:layout_width="40dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_baseline_more_horiz_24"/>
+                android:src="@drawable/ic_baseline_more_horiz_24"/>-->
 
         </LinearLayout>
 
