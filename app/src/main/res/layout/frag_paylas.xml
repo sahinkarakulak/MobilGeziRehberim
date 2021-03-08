@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -17,13 +18,21 @@
             android:gravity="center_vertical"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/img_paylasResimSec"
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="230dp"
-                android:layout_marginBottom="20dp"
-                android:onClick="img_paylasResimSec"
-                android:src="@drawable/ic_photo_select" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:id="@+id/img_paylasResimSec"
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp"
+                    android:onClick="img_paylasResimSec"
+                    android:src="@drawable/ic_photo_select" />
+
+            </androidx.cardview.widget.CardView>
 
             <EditText
                 android:id="@+id/edt_paylasYerIsmi"
@@ -82,36 +91,36 @@
                 android:layout_marginBottom="10dp"
                 android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/edt_konum"
-                        android:background="@drawable/bg_edit_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1"
-                        android:hint="Koordinat : 0.0,0.0"
-                        android:inputType="text"
-                        android:maxLength="140"
-                        android:maxLines="1" />
+                <EditText
+                    android:id="@+id/edt_konum"
+                    android:background="@drawable/bg_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:hint="Koordinat : 0.0,0.0"
+                    android:inputType="text"
+                    android:maxLength="140"
+                    android:maxLines="1" />
 
-                    <EditText
-                        android:id="@+id/edt_adres"
-                        android:background="@drawable/bg_edit_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1"
-                        android:hint="@string/kiz_kulesi_adres"
-                        android:inputType="text"
-                        android:maxLength="140"
-                        android:maxLines="1" />
+                <EditText
+                    android:id="@+id/edt_adres"
+                    android:background="@drawable/bg_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:hint="@string/kiz_kulesi_adres"
+                    android:inputType="text"
+                    android:maxLength="140"
+                    android:maxLines="1" />
 
-                    <Button
-                        android:id="@+id/konum_sec"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Yeni Konum ve Adres Al"
-                        android:background="@drawable/bg_button"/>
+                <Button
+                    android:id="@+id/konum_sec"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Yeni Konum ve Adres Al"
+                    android:background="@drawable/bg_button"/>
 
 
             </LinearLayout>

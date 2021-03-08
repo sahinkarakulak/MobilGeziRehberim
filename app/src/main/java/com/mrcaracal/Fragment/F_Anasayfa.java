@@ -204,7 +204,9 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                         }
                     });
 
-            Map<String, Object> map = new HashMap();
+
+            // Aşağıdaki işlemler gerekmiyor. Ama şimdilik burada bulunsun
+            /*Map<String, Object> map = new HashMap();
             map.put("gonderiID", true);
             map.put("kaydeden", firebaseUser.getEmail());
             map.put("IDsi", gonderiIDleriFB.get(position));
@@ -222,7 +224,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                         public void onSuccess(@NonNull Void aVoid) {
                             // İşlem Başarılı
                         }
-                    });
+                    });*/
 
             Log.d(TAG, "onClick: Gönderi kaydedildi");
         }

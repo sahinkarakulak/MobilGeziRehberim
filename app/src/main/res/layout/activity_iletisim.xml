@@ -3,34 +3,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     android:orientation="vertical"
     tools:context="com.mrcaracal.Activity.Iletisim">
 
-    <EditText
-        android:id="@+id/edt_iletisim_konu_baslik"
-        android:background="@drawable/bg_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Konu" />
 
-    <EditText
-        android:id="@+id/edt_iletisim_mesaj_icerik"
-        android:background="@drawable/bg_edit_text"
-        android:layout_weight="1"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="top"
-        android:padding="15dp"
-        android:hint="Mesaj"/>
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="10dp">
+
+        <EditText
+            android:id="@+id/edt_iletisim_konu_baslik"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="Konu" />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="1"
+        app:cardCornerRadius="10dp">
+
+        <EditText
+            android:id="@+id/edt_iletisim_mesaj_icerik"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:gravity="top"
+            android:hint="Mesaj"/>
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
-        android:background="@drawable/bg_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
-        android:layout_marginTop="10dp"
         android:text="@string/IletisimBilgilendirmeMetni"/>
 
     <Button
@@ -38,7 +53,7 @@
         android:background="@drawable/bg_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="GÖNDER"/>
 
 </LinearLayout>

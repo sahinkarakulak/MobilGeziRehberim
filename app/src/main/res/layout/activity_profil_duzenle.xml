@@ -12,58 +12,71 @@
         android:id="@+id/img_kullaniciResmi"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@drawable/defaultpp"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
+        android:src="@drawable/defaultpp"
         app:civ_border_color="@android:color/holo_blue_light"
-        app:civ_border_width="1dp"/>
+        app:civ_border_width="1dp" />
 
     <TextView
         android:id="@+id/tv_kullaniciResmiDegistir"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:gravity="center"
         android:padding="15dp"
         android:text="Resmi Değiştir"
-        android:textColor="@color/teal_200"
-        android:gravity="center"/>
+        android:textColor="@color/teal_200" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
-        android:text="Kullanıcı Adı"/>
+        android:text="Kullanıcı Adı" />
 
-    <EditText
-        android:id="@+id/et_kullaniciAdiAl"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/bg_edit_text"
-        android:hint="Kullanıcı Adı"/>
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="10dp">
 
+        <EditText
+            android:id="@+id/et_kullaniciAdiAl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="Kullanıcı Adı" />
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
-        android:text="Biyografi"/>
+        android:text="Biyografi" />
 
-    <EditText
-        android:id="@+id/et_biyografiAl"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/bg_edit_text"
-        android:maxLines="3"
-        android:hint="Biyografi"/>
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="10dp">
+
+        <EditText
+            android:id="@+id/et_biyografiAl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="Biyografi"
+            android:maxLines="3" />
+
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/btn_guncelle"
-        android:background="@drawable/bg_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="Güncelle"/>
+        android:background="@drawable/bg_button"
+        android:text="Güncelle" />
 
 </LinearLayout>
