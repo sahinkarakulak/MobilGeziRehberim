@@ -64,8 +64,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     ArrayList<String> yorumlarFB;
     ArrayList<Timestamp> zamanlarFB;
 
-    ArrayList<String> kaldirmaIslemiIcin;
-
     RecyclerView recyclerViewHesabim;
 
     RecyclerAdapterYapim recyclerAdapterYapim;
@@ -94,8 +92,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         adresleriFB = new ArrayList<>();
         yorumlarFB = new ArrayList<>();
         zamanlarFB = new ArrayList<>();
-
-        kaldirmaIslemiIcin = new ArrayList<>();
 
     }
 
@@ -164,22 +160,16 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                 switch (item.getItemId()) {
                     case R.id.paylasilanlar:
                         Log.d(TAG, "onNavigationItemSelected: Paylaşılanlar TAB'ı");
-
                         KONTOLLU_KALDIRMA = "paylasilanlar";
-
                         listeTemizleme();
-
                         paylasilanlariCek();
                         Log.d(TAG, "onNavigationItemSelected: paylasilanlariCek() çağrıldı");
                         recyclerViewHesabim.scrollToPosition(0);
                         break;
                     case R.id.kaydedilenler:
                         Log.d(TAG, "onNavigationItemSelected: Kaydedilenler TAB'ı");
-
                         KONTOLLU_KALDIRMA = "kaydedilenler";
-
                         listeTemizleme();
-
                         kaydedilenleriCek();
                         Log.d(TAG, "onNavigationItemSelected: kaydedilenleriCek() çağrıldı");
                         recyclerViewHesabim.scrollToPosition(0);
@@ -188,7 +178,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                 return true;
             }
         });
-
         return viewGroup;
     }
 
@@ -201,7 +190,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         adresleriFB.clear();
         yorumlarFB.clear();
         zamanlarFB.clear();
-        kaldirmaIslemiIcin.clear();
     }
 
     public void paylasilanlariCek() {
