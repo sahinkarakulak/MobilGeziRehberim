@@ -309,9 +309,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
     public void paylasilanlardanKaldir() {
 
-        /*
-        1. Adım
-         */
+        //1. Adım
         firebaseFirestore
                 .collection("Paylasilanlar")
                 .document(kullaniciEpostalariFB.get(POSITION_DEGERI))
@@ -331,9 +329,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                     }
                 });
 
-        /*
-        2. Adım
-         */
+        //2. Adım
         firebaseFirestore
                 .collection("Gonderiler")
                 .document(gonderiIDleriFB.get(POSITION_DEGERI))
@@ -351,93 +347,10 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                     }
                 });
 
-        /*
-        03- Kaydedilenler > gonderiID() > Kaydedenler > document() içindeki verileri al.
-        IDsi = gonderiID
-        gonderiID = true
-        kaydeden = eposta
-        Buradaki eposta bilgisine göre aşağıda yer alan 4. adımdaki işemler yapılacak
-        */
-/*        firebaseFirestore
-                .collection("Kaydedilenler")
-                .document(gonderiIDleriFB.get(POSITION_DEGERI))
-                .collection("Kaydedenler")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            QuerySnapshot querySnapshot = task.getResult();
-                            for (DocumentSnapshot documentSnapshot : querySnapshot){
-                                final Map<String, Object> kaldirma_islemi_icin_gereken_bilgi = documentSnapshot.getData();
-
-                                String kaydedenin_e_postasi = kaldirma_islemi_icin_gereken_bilgi.get("kaydeden").toString();
-                                kaldirmaIslemiIcin.add(kaydedenin_e_postasi);
-                                // ID'i position'a göre alacağız
-
-                            }
-
-
-
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //
-                    }
-                });*/
-
-/*        for (String listeye_gore_kaldir : kaldirmaIslemiIcin){
-            firebaseFirestore
-                    .collection("Kaydedilenler")
-                    .document(gonderiIDleriFB.get(POSITION_DEGERI))
-                    .collection("Kaydedenler")
-                    .document(listeye_gore_kaldir)
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(@NonNull Void aVoid) {
-                            //
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            //
-                        }
-                    });
-        }*/
-
-        /*
-        04- Kaydedenler > kEposta() > Kaydedilenler > gonderiID()'i sil
-        */
-
-/*        for (String listeye_gore_kaldir : kaldirmaIslemiIcin){
-            firebaseFirestore
-                    .collection("Kaydedenler")
-                    .document(listeye_gore_kaldir)
-                    .collection("Kaydedilenler")
-                    .document(gonderiIDleriFB.get(POSITION_DEGERI))
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(@NonNull Void aVoid) {
-                            //
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            //
-                        }
-                    });
-        }*/
-
     }
 
     public void kaydedilenlerdenKaldir() {
+
         firebaseFirestore
                 .collection("Kaydedenler")
                 .document(firebaseUser.getEmail())
@@ -458,7 +371,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                     }
                 });
 
-
     }
 
     // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
@@ -476,7 +388,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                 .setNegativeButton("TAMAM", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        //
                     }
                 })
                 .show();
@@ -506,12 +418,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
             }
         });
 
-        // Ö - N - E - M - L - İ
-        // ---------------------
-        // PAYLAŞILANLAR VE KAYDEDİLENLER KISMINDAN HERHANGİ BİR GÖNDERİ KALDIRILACAĞI ZAMAN,
-        // NAVİGATİONVİEW ALANINDAN HANGİSİNİN SEÇİLİ OLDUĞUNU TESPİT EDİP ONA GÖRE SİLME İŞLEMLERİ YAPILSIN.
-        // VT'DEN ÇEKİLEN VERİLER DE BUNA İSİMLENDİRİLSİN Kİ KALDIRMA İŞLEMİNDE KARIŞIKLIK ÇIKMASIN...!!!
-        // Kaldır
         bottomSheetView.findViewById(R.id.bs_kaldir).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
