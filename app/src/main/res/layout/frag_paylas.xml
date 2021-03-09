@@ -122,7 +122,6 @@
                     android:text="Yeni Konum ve Adres Al"
                     android:background="@drawable/bg_button"/>
 
-
             </LinearLayout>
 
             <Button
@@ -137,6 +136,5 @@
         </LinearLayout>
 
     </ScrollView>
-
 
 </LinearLayout>

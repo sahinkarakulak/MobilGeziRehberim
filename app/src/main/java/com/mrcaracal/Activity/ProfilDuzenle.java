@@ -47,6 +47,7 @@ public class ProfilDuzenle extends AppCompatActivity {
     ImageView img_kullaniciResmi;
     TextView tv_kullaniciResmiDegistir;
     EditText et_kullaniciAdiAl, et_biyografiAl;
+    TextView txt_kullanici_ePosta_adresi;
     Button btn_guncelle;
     DocumentReference documentReference;
     private Uri mImageUri;
@@ -61,6 +62,7 @@ public class ProfilDuzenle extends AppCompatActivity {
         tv_kullaniciResmiDegistir = findViewById(R.id.tv_kullaniciResmiDegistir);
         et_kullaniciAdiAl = findViewById(R.id.et_kullaniciAdiAl);
         et_biyografiAl = findViewById(R.id.et_biyografiAl);
+        txt_kullanici_ePosta_adresi = findViewById(R.id.txt_kullanici_ePosta_adresi);
         btn_guncelle = findViewById(R.id.btn_guncelle);
     }
 
@@ -71,6 +73,8 @@ public class ProfilDuzenle extends AppCompatActivity {
         initialize();
 
         setTitle("Profili Düzenle");
+
+        txt_kullanici_ePosta_adresi.setText(firebaseUser.getEmail());
 
         documentReference = FirebaseFirestore
                 .getInstance()

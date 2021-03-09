@@ -71,6 +71,28 @@
 
     </androidx.cardview.widget.CardView>
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:text="E-Posta" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="10dp">
+
+        <TextView
+            android:id="@+id/txt_kullanici_ePosta_adresi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="18dp"
+            android:text="mgr@mgr.com"/>
+
+    </androidx.cardview.widget.CardView>
+
     <Button
         android:id="@+id/btn_guncelle"
         android:layout_width="match_parent"
