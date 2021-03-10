@@ -13,6 +13,7 @@ public class IletisimBilgileri {
     }
 
     public String[] getAdmin_hesaplari() {
+        //
         return admin_hesaplari;
     }
 

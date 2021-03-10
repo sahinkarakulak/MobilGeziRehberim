@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -41,7 +45,10 @@ import com.mrcaracal.Modul.Gonderiler;
 import com.mrcaracal.mobilgezirehberim.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
@@ -57,7 +64,8 @@ public class F_Paylas extends Fragment {
     Uri resimYolu;
     ImageView img_paylasResimSec;
     EditText edt_paylasYerIsmi, edt_paylasYorum, edt_paylasTag, edt_konum, edt_adres;
-    Button btn_paylasGonder, konum_sec;
+    Button btn_paylasGonder, konum_sec, btn_tag_ekle;
+    TextView txt_taglari_yazdir;
     ScrollView sv_paylas;
     SharedPreferences GET;
     SharedPreferences.Editor SET;
@@ -67,6 +75,8 @@ public class F_Paylas extends Fragment {
     String gonderiID;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
+
+    Map<String, Object> etiketler;
 
     public F_Paylas() {
         //
@@ -98,6 +108,8 @@ public class F_Paylas extends Fragment {
         edt_paylasTag = viewGroup.findViewById(R.id.edt_paylasTag);
         konum_sec = viewGroup.findViewById(R.id.konum_sec);
         btn_paylasGonder = viewGroup.findViewById(R.id.btn_paylasGonder);
+        btn_tag_ekle = viewGroup.findViewById(R.id.btn_tag_ekle);
+        txt_taglari_yazdir = viewGroup.findViewById(R.id.txt_taglari_yazdir);
         sv_paylas = viewGroup.findViewById(R.id.sv_paylas);
 
         // Galeriden resim çekmek için yapılacaklar
@@ -113,6 +125,14 @@ public class F_Paylas extends Fragment {
                     Log.d(TAG, "onClick: Daha önceden izin verildiğinden kullanıcı Galeriye yönlendirildi");
                 }
             }
+        });
+
+        btn_tag_ekle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagOlusturma();
+
+             }
         });
 
         konum_sec.setOnClickListener(new View.OnClickListener() {
@@ -135,16 +155,35 @@ public class F_Paylas extends Fragment {
         return viewGroup;
     }
 
+    public void tagOlusturma() {
+
+        String tagler[] = edt_paylasTag.getText().toString().toLowerCase().split(" ");
+        etiketler = new HashMap<>();
+
+        int etiket_sayisi = 0;
+        String taggg = "";
+        for (String tags : tagler){
+
+            etiket_sayisi ++;
+            Log.d(TAG, "TAGLER: " + tags.trim());
+            etiketler.put("tag"+etiket_sayisi, tags.trim());
+
+            taggg += "#" + tags + "   ";
+            txt_taglari_yazdir.setText(taggg);
+
+            if (etiket_sayisi == 5)
+                break;
+        }
+
+        Log.d(TAG, "tagOlusturma: " + etiketler);
+    }
+
     public void paylasGonder() {
         Log.d(TAG, "paylasGonder: ...");
         String yerIsmiKontrol = edt_paylasYerIsmi.getText().toString();
         String yorumKontrol = edt_paylasYorum.getText().toString();
         String konumKontrol = edt_konum.getText().toString();
         String adresKontrol = edt_adres.getText().toString();
-
-        // Tag oluşturma işlemleri
-        // Mümkün ise bunun CHIP ile yapılması sağlansın. Amerikayı yeniden keşfetme demişler ne de olsa :)
-        // tagOlusturma();
 
         if (!yerIsmiKontrol.equals("") || !konumKontrol.equals("") || !yorumKontrol.equals("") || !adresKontrol.equals("")) {
             UUID uuid = UUID.randomUUID();
@@ -248,35 +287,6 @@ public class F_Paylas extends Fragment {
             }
         } else
             Toast.makeText(getActivity(), "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
-    }
-
-    // CHIP ile halledilemezse bu kısım aktifleştirilecek.
-    // Geliştirilmesi gereken birkaç kısmı da var :(
-    public void tagOlusturma() {
-        String tagKontrol = edt_paylasTag.getText().toString();
-
-        HashMap<String, Object> tagler = new HashMap<>();
-
-        int sayac = 0;
-        int sonsayac = 0;
-        int i;
-        for (i = 0; i < tagKontrol.length(); ) {
-            if (tagKontrol.charAt(i) == ',') {
-                sayac++;
-                if (sayac == 1) {
-                    tagler.put("tag" + sayac, tagKontrol.substring(sonsayac, i));
-                    sonsayac = i;
-                } else {
-                    tagler.put("tag" + sayac, tagKontrol.substring(sonsayac + 1, i));
-                    sonsayac = i;
-                }
-            }
-            i++;
-        }
-        sayac++;
-        tagler.put("tag" + sayac, tagKontrol.substring(sonsayac + 1, i));
-
-        Log.d(TAG, "TAGLERI YAZDIR: " + tagler);
     }
 
     @Override

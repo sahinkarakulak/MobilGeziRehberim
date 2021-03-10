@@ -12,6 +12,12 @@
     android:focusableInTouchMode="true"
     tools:context="com.mrcaracal.Activity.HesapOlusturma">
 
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/mrl"/>
+
     <ScrollView
         android:scrollbars="none"
         android:layout_width="match_parent"
@@ -22,12 +28,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center">
-
-            <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/mrl"/>
 
             <TextView
                 android:layout_width="match_parent"

@@ -6,6 +6,21 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="10dp">
+
+        <ImageView
+            android:id="@+id/img_paylasResimSec"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:onClick="img_paylasResimSec"
+            android:src="@drawable/ic_baseline_photo_select" />
+
+    </androidx.cardview.widget.CardView>
+
     <ScrollView
         android:id="@+id/sv_paylas"
         android:layout_width="match_parent"
@@ -17,22 +32,6 @@
             android:layout_height="0dp"
             android:gravity="center_vertical"
             android:orientation="vertical">
-
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                app:cardCornerRadius="10dp">
-
-                <ImageView
-                    android:id="@+id/img_paylasResimSec"
-                    android:layout_width="match_parent"
-                    android:layout_height="230dp"
-                    android:onClick="img_paylasResimSec"
-                    android:src="@drawable/ic_photo_select" />
-
-            </androidx.cardview.widget.CardView>
 
             <EditText
                 android:id="@+id/edt_paylasYerIsmi"
@@ -55,15 +54,59 @@
                 android:maxLength="140"
                 android:maxLines="5"/>
 
-            <EditText
-                android:id="@+id/edt_paylasTag"
-                android:background="@drawable/bg_edit_text"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_contact_support_24"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="En fazla 5 etiket hakkınız bulunmaktadır."
+                    android:padding="5dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_weight="1"
+                    android:id="@+id/edt_paylasTag"
+                    android:background="@drawable/bg_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tag: kızkulesi üsküdar istanbul kule deniz"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/btn_tag_ekle"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_button"
+                    android:text="ekle"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_taglari_yazdir"
+                android:text="#kızkulesi   #üsküdar   #istanbul   #kule   #deniz"
                 android:layout_marginBottom="5dp"
-                android:hint="Tag: kızkulesi,üsküdar,istanbul,kule,deniz"
-                android:inputType="text"
-                android:maxLines="1" />
+                android:layout_marginLeft="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,37 +132,43 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/edt_konum"
-                    android:background="@drawable/bg_edit_text"
+                <LinearLayout
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:hint="Koordinat : 0.0,0.0"
-                    android:inputType="text"
-                    android:maxLength="140"
-                    android:maxLines="1" />
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/edt_adres"
-                    android:background="@drawable/bg_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:hint="@string/kiz_kulesi_adres"
-                    android:inputType="text"
-                    android:maxLength="140"
-                    android:maxLines="1" />
+                    <EditText
+                        android:id="@+id/edt_konum"
+                        android:background="@drawable/bg_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:hint="Koordinat : 0.0,0.0"
+                        android:inputType="text"
+                        android:maxLength="140"
+                        android:maxLines="1" />
+
+                    <EditText
+                        android:id="@+id/edt_adres"
+                        android:background="@drawable/bg_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/kiz_kulesi_adres"
+                        android:inputType="text"
+                        android:maxLength="140"
+                        android:maxLines="1" />
+
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/konum_sec"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Yeni Konum ve Adres Al"
+                    android:layout_marginLeft="5dp"
+                    android:text="Konum\nSeç"
                     android:background="@drawable/bg_button"/>
 
             </LinearLayout>
