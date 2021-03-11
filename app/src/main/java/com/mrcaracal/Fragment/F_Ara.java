@@ -360,7 +360,6 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         bottomSheetView.findViewById(R.id.bs_konuma_git).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
                 konumaGitIslemleri(position);
                 bottomSheetDialog.dismiss();
             }
