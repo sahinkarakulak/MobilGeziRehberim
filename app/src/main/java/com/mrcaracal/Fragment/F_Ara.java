@@ -49,6 +49,7 @@ import com.mrcaracal.mobilgezirehberim.R;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +68,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
     ArrayList<String> konumlariFB;
     ArrayList<String> adresleriFB;
     ArrayList<String> yorumlarFB;
+    ArrayList<String> taglarFB;
     ArrayList<Timestamp> zamanlarFB;
 
     RecyclerView recycler_view_ara;
@@ -97,6 +99,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         konumlariFB = new ArrayList<>();
         adresleriFB = new ArrayList<>();
         yorumlarFB = new ArrayList<>();
+        taglarFB = new ArrayList<>();
         zamanlarFB = new ArrayList<>();
 
         GET = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -140,6 +143,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                 konumlariFB.clear();
                 adresleriFB.clear();
                 yorumlarFB.clear();
+                taglarFB.clear();
                 zamanlarFB.clear();
 
                 /*String[] ilgiliAlan = {"kullaniciEposta", "yerIsmi"};
@@ -162,7 +166,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
         recycler_view_ara = viewGroup.findViewById(R.id.recycler_view_ara);
         recycler_view_ara.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB, resimAdresleriFB, yerIsimleriFB, konumlariFB, adresleriFB, yorumlarFB, zamanlarFB, this);
+        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB, resimAdresleriFB, yerIsimleriFB, konumlariFB, adresleriFB, yorumlarFB, taglarFB, zamanlarFB, this);
         recycler_view_ara.setAdapter(recyclerAdapterYapim);
 
         return viewGroup;
@@ -178,6 +182,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         konumlariFB.clear();
         adresleriFB.clear();
         yorumlarFB.clear();
+        taglarFB.clear();
         zamanlarFB.clear();
 
         //recycler_view_ara.scrollToPosition(0);
@@ -216,6 +221,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                                 konumlariFB.add(konum);
                                 adresleriFB.add(adres);
                                 yorumlarFB.add(yorum);
+                                taglarFB.add(verilerKumesi.get("taglar").toString());
                                 zamanlarFB.add(zaman);
 
                                 recyclerAdapterYapim.notifyDataSetChanged();
@@ -242,9 +248,10 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         Log.d(TAG, "onLongItemClick: Uzun tık");
 
         String tarih_ve_saat = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
-        //String tarih = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
-        String gonderi_detay_goster = yorumlarFB.get(position) + "\n\nPaylaşan: " + kullaniciEpostalariFB.get(position) + "\nTarih: " + tarih_ve_saat + "\nAdres: " + adresleriFB.get(position);
-        //String gonderi_detay_goster = "Paylaşan: " + kullaniciEpostalariFB.get(position) + "\n\n" + yorumlarFB.get(position);
+        String gonderi_detay_goster = yorumlarFB.get(position) + "\n\nPaylaşan: " + kullaniciEpostalariFB.get(position) +
+                "\nTarih: " + tarih_ve_saat + "\nAdres: " + adresleriFB.get(position) +
+                "\n\nEtiketler: "+taglarFB.get(position);
+
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert
@@ -264,7 +271,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
         } else {
 
-            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), adresleriFB.get(position), yorumlarFB.get(position), FieldValue.serverTimestamp());
+            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), adresleriFB.get(position), yorumlarFB.get(position), Collections.singletonList(taglarFB.get(position)), FieldValue.serverTimestamp());
 
             DocumentReference documentReference = firebaseFirestore
                     .collection("Kaydedenler")

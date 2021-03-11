@@ -2,6 +2,9 @@ package com.mrcaracal.Modul;
 
 import com.google.firebase.firestore.FieldValue;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Gonderiler {
 
     private String gonderiID;
@@ -11,6 +14,7 @@ public class Gonderiler {
     private String konum;
     private String adres;
     private String yorum;
+    private List<String> taglar;
     private FieldValue zaman;
 
     public Gonderiler() {
@@ -25,6 +29,18 @@ public class Gonderiler {
         this.konum = konum;
         this.adres = adres;
         this.yorum = yorum;
+        this.zaman = zaman;
+    }
+
+    public Gonderiler(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi, String konum, String adres, String yorum, List<String> taglar, FieldValue zaman) {
+        this.gonderiID = gonderiID;
+        this.kullaniciEposta = kullaniciEposta;
+        this.resimAdresi = resimAdresi;
+        this.yerIsmi = yerIsmi;
+        this.konum = konum;
+        this.adres = adres;
+        this.yorum = yorum;
+        this.taglar = taglar;
         this.zaman = zaman;
     }
 
@@ -83,6 +99,14 @@ public class Gonderiler {
 
     public void setYorum(String yorum) {
         this.yorum = yorum;
+    }
+
+    public List<String> getTaglar(){
+        return taglar;
+    }
+
+    public void setTaglar(List<String> taglar){
+        this.taglar = taglar;
     }
 
     public FieldValue getZaman() {

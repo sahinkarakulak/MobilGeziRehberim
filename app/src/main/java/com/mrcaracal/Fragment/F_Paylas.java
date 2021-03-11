@@ -48,6 +48,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -76,7 +77,7 @@ public class F_Paylas extends Fragment {
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
 
-    Map<String, Object> etiketler;
+    List<String> taglar;
 
     public F_Paylas() {
         //
@@ -157,8 +158,7 @@ public class F_Paylas extends Fragment {
 
     public void tagOlusturma() {
 
-        String tagler[] = edt_paylasTag.getText().toString().toLowerCase().split(" ");
-        etiketler = new HashMap<>();
+        String[] tagler = edt_paylasTag.getText().toString().toLowerCase().split(" ");
 
         int etiket_sayisi = 0;
         String taggg = "";
@@ -166,7 +166,7 @@ public class F_Paylas extends Fragment {
 
             etiket_sayisi ++;
             Log.d(TAG, "TAGLER: " + tags.trim());
-            etiketler.put("tag"+etiket_sayisi, tags.trim());
+            taglar = Arrays.asList(tagler);
 
             taggg += "#" + tags + "   ";
             txt_taglari_yazdir.setText(taggg);
@@ -174,8 +174,6 @@ public class F_Paylas extends Fragment {
             if (etiket_sayisi == 5)
                 break;
         }
-
-        Log.d(TAG, "tagOlusturma: " + etiketler);
     }
 
     public void paylasGonder() {
@@ -214,7 +212,7 @@ public class F_Paylas extends Fragment {
                                                 UUID uuid1 = UUID.randomUUID();
                                                 gonderiID = "" + uuid1;
 
-                                                MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres, yorum, FieldValue.serverTimestamp());
+                                                MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres, yorum, taglar, FieldValue.serverTimestamp());
 
                                                 DocumentReference documentReference1 = firebaseFirestore
                                                         .collection("Paylasilanlar")

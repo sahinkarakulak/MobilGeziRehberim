@@ -65,6 +65,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     ArrayList<String> konumlariFB;
     ArrayList<String> adresleriFB;
     ArrayList<String> yorumlarFB;
+    ArrayList<String> taglarFB;
     ArrayList<Timestamp> zamanlarFB;
 
     RecyclerView recyclerViewHesabim;
@@ -100,6 +101,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         konumlariFB = new ArrayList<>();
         adresleriFB = new ArrayList<>();
         yorumlarFB = new ArrayList<>();
+        taglarFB = new ArrayList<>();
         zamanlarFB = new ArrayList<>();
 
         GET = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -116,7 +118,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         // RecyclerView Tanımlama İşlemi
         recyclerViewHesabim = viewGroup.findViewById(R.id.recyclerViewHesabim);
         recyclerViewHesabim.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB, resimAdresleriFB, yerIsimleriFB, konumlariFB, adresleriFB, yorumlarFB, zamanlarFB, this);
+        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB, resimAdresleriFB, yerIsimleriFB, konumlariFB, adresleriFB, yorumlarFB, taglarFB, zamanlarFB, this);
         recyclerViewHesabim.setAdapter(recyclerAdapterYapim);
 
         img_profil_resmi = viewGroup.findViewById(R.id.img_profil_resmi);
@@ -202,6 +204,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         konumlariFB.clear();
         adresleriFB.clear();
         yorumlarFB.clear();
+        taglarFB.clear();
         zamanlarFB.clear();
     }
 
@@ -240,6 +243,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 yerIsimleriFB.add(yerIsmi);
                                 konumlariFB.add(konum);
                                 yorumlarFB.add(yorum);
+                                taglarFB.add(verilerKumesiHesaim.get("taglar").toString());
                                 adresleriFB.add(adres);
                                 zamanlarFB.add(zaman);
 
@@ -294,6 +298,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 yerIsimleriFB.add(yerIsmi);
                                 konumlariFB.add(konum);
                                 yorumlarFB.add(yorum);
+                                taglarFB.add(verilerKumesiHesaim.get("taglar").toString());
                                 adresleriFB.add(adres);
                                 zamanlarFB.add(zaman);
 
@@ -313,6 +318,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     }
 
     public void paylasilanlardanKaldir() {
+
+        // ÖNEMLİ
+        // ALERTDIALOG İLE EMİN MİSİN DİYE KULLANICIYA SORULSUN. VERİLEN CEVABA GÖRE İŞLEM YAPILSIN!
 
         //1. Adım
         firebaseFirestore
@@ -355,6 +363,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     }
 
     public void kaydedilenlerdenKaldir() {
+
+        // ÖNEMLİ
+        // ALERTDIALOG İLE EMİN MİSİN DİYE KULLANICIYA SORULSUN. VERİLEN CEVABA GÖRE İŞLEM YAPILSIN!
 
         firebaseFirestore
                 .collection("Kaydedenler")
@@ -451,7 +462,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         Log.d(TAG, "onLongItemClick: Uzun tık");
 
         String tarih_ve_saat = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
-        String gonderi_detay_goster = yorumlarFB.get(position) + "\n\nPaylaşan: " + kullaniciEpostalariFB.get(position) + "\nTarih: " + tarih_ve_saat + "\nAdres: " + adresleriFB.get(position);
+        String gonderi_detay_goster = yorumlarFB.get(position) + "\n\nPaylaşan: " + kullaniciEpostalariFB.get(position) +
+                "\nTarih: " + tarih_ve_saat + "\nAdres: " + adresleriFB.get(position) +
+                "\n\nEtiketler: "+taglarFB.get(position);
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert
