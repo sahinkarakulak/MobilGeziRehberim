@@ -3,7 +3,9 @@ package com.mrcaracal.Fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -38,6 +40,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mrcaracal.Activity.HaritaKonumaGit;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.mrcaracal.Modul.Gonderiler;
@@ -73,6 +76,12 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
     ImageView img_konuma_gore_bul;
     EditText edt_anahtar_kelime_arat;
 
+    SharedPreferences GET;
+    SharedPreferences.Editor SET;
+
+    double enlem;
+    double boylam;
+
     ViewGroup viewGroup;
 
     private void init() {
@@ -89,6 +98,9 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         adresleriFB = new ArrayList<>();
         yorumlarFB = new ArrayList<>();
         zamanlarFB = new ArrayList<>();
+
+        GET = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SET = GET.edit();
 
     }
 
@@ -301,6 +313,29 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         }
     }
 
+    public void konumaGitIslemleri(int position) {
+        String[] gonderi_konumu = konumlariFB.get(position).split(",");
+
+        int belirtec = 0;
+
+        for (String konumxy : gonderi_konumu) {
+            belirtec++;
+            if (belirtec == 1)
+                enlem = Double.parseDouble(konumxy);
+            if (belirtec == 2)
+                boylam = Double.parseDouble(konumxy);
+        }
+
+        SET.putFloat("konum_git_enlem", (float) enlem);
+        SET.putFloat("konum_git_boylam", (float) boylam);
+        SET.commit();
+
+        startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
+
+        Log.d(TAG, "Enlem: "+enlem+"   \tBoylam: "+boylam);
+
+    }
+
     @Override
     public void onDigerSeceneklerClick(int position) {
         dialogPenceresiAc(position);
@@ -326,6 +361,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
+                konumaGitIslemleri(position);
                 bottomSheetDialog.dismiss();
             }
         });

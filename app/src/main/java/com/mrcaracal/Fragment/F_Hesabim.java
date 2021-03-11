@@ -3,7 +3,9 @@ package com.mrcaracal.Fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -35,6 +37,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mrcaracal.Activity.HaritaKonumaGit;
 import com.mrcaracal.Activity.ProfilDuzenle;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
@@ -77,6 +80,12 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     String KONTOLLU_KALDIRMA = "paylasilanlar";
     // kaydedilenler
 
+    SharedPreferences GET;
+    SharedPreferences.Editor SET;
+
+    double enlem;
+    double boylam;
+
     ViewGroup viewGroup;
 
     private void init() {
@@ -92,6 +101,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         adresleriFB = new ArrayList<>();
         yorumlarFB = new ArrayList<>();
         zamanlarFB = new ArrayList<>();
+
+        GET = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SET = GET.edit();
 
     }
 
@@ -158,6 +170,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
                 // Hangi TAB'a tıklanmışsa onu tespit ediyoruz.
                 switch (item.getItemId()) {
+
                     case R.id.paylasilanlar:
                         Log.d(TAG, "onNavigationItemSelected: Paylaşılanlar TAB'ı");
                         KONTOLLU_KALDIRMA = "paylasilanlar";
@@ -215,6 +228,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 String kullaniciEposta = verilerKumesiHesaim.get("kullaniciEposta").toString();
                                 String yerIsmi = verilerKumesiHesaim.get("yerIsmi").toString();
                                 yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
+                                String konum = verilerKumesiHesaim.get("konum").toString();
                                 String resimAdresi = verilerKumesiHesaim.get("resimAdresi").toString();
                                 String yorum = verilerKumesiHesaim.get("yorum").toString();
                                 String adres = verilerKumesiHesaim.get("adres").toString();
@@ -224,6 +238,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 kullaniciEpostalariFB.add(kullaniciEposta);
                                 resimAdresleriFB.add(resimAdresi);
                                 yerIsimleriFB.add(yerIsmi);
+                                konumlariFB.add(konum);
                                 yorumlarFB.add(yorum);
                                 adresleriFB.add(adres);
                                 zamanlarFB.add(zaman);
@@ -267,6 +282,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 String kullaniciEposta = verilerKumesiHesaim.get("kullaniciEposta").toString();
                                 String yerIsmi = verilerKumesiHesaim.get("yerIsmi").toString();
                                 yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
+                                String konum = verilerKumesiHesaim.get("konum").toString();
                                 String resimAdresi = verilerKumesiHesaim.get("resimAdresi").toString();
                                 String yorum = verilerKumesiHesaim.get("yorum").toString();
                                 String adres = verilerKumesiHesaim.get("adres").toString();
@@ -276,6 +292,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 kullaniciEpostalariFB.add(kullaniciEposta);
                                 resimAdresleriFB.add(resimAdresi);
                                 yerIsimleriFB.add(yerIsmi);
+                                konumlariFB.add(konum);
                                 yorumlarFB.add(yorum);
                                 adresleriFB.add(adres);
                                 zamanlarFB.add(zaman);
@@ -361,6 +378,73 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
     }
 
+    public void paylasilanlardanKonumaGit(){
+        String[] gonderi_konumu = konumlariFB.get(POSITION_DEGERI).split(",");
+
+        int belirtec = 0;
+
+        for (String konumxy : gonderi_konumu) {
+            belirtec++;
+            if (belirtec == 1)
+                enlem = Double.parseDouble(konumxy);
+            if (belirtec == 2)
+                boylam = Double.parseDouble(konumxy);
+        }
+
+        SET.putFloat("konum_git_enlem", (float) enlem);
+        SET.putFloat("konum_git_boylam", (float) boylam);
+        SET.commit();
+
+        startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
+
+        Log.d(TAG, "Enlem: "+enlem+"   \tBoylam: "+boylam);
+    }
+
+    public void kaydedilenlerdenKonumaGit(){
+        String[] gonderi_konumu = konumlariFB.get(POSITION_DEGERI).split(",");
+
+        int belirtec = 0;
+
+        for (String konumxy : gonderi_konumu) {
+            belirtec++;
+            if (belirtec == 1)
+                enlem = Double.parseDouble(konumxy);
+            if (belirtec == 2)
+                boylam = Double.parseDouble(konumxy);
+        }
+
+        SET.putFloat("konum_git_enlem", (float) enlem);
+        SET.putFloat("konum_git_boylam", (float) boylam);
+        SET.commit();
+
+        startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
+
+        Log.d(TAG, "Enlem: "+enlem+"   \tBoylam: "+boylam);
+    }
+
+    public void konumaGitIslemleri(int position) {
+        String[] gonderi_konumu = konumlariFB.get(position).split(",");
+
+        int belirtec = 0;
+
+        for (String konumxy : gonderi_konumu) {
+            belirtec++;
+            if (belirtec == 1)
+                enlem = Double.parseDouble(konumxy);
+            if (belirtec == 2)
+                boylam = Double.parseDouble(konumxy);
+        }
+
+        SET.putFloat("konum_git_enlem", (float) enlem);
+        SET.putFloat("konum_git_boylam", (float) boylam);
+        SET.commit();
+
+        startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
+
+        Log.d(TAG, "Enlem: "+enlem+"   \tBoylam: "+boylam);
+
+    }
+
     // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
     @Override
     public void onLongItemClick(int position) {
@@ -397,15 +481,24 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         TextView baslik = bottomSheetView.findViewById(R.id.bs_baslik);
         baslik.setText(yerIsimleriFB.get(position));
 
-        // Konuma Git
+        // KONUMA GİT
         bottomSheetView.findViewById(R.id.bs_konuma_git).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
+                switch (KONTOLLU_KALDIRMA){
+                    case "paylasilanlar":
+                        paylasilanlardanKonumaGit();
+                        break;
+                    case "kaydedilenler":
+                        kaydedilenlerdenKonumaGit();
+                        break;
+                }
                 bottomSheetDialog.dismiss();
             }
         });
 
+        // KALDIR
         bottomSheetView.findViewById(R.id.bs_kaldir).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
