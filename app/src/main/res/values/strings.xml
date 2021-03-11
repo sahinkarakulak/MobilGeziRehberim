@@ -12,4 +12,5 @@
     <string name="terrain_map">Arazi</string>
     <string name="kiz_kulesi_adres">Adres : Üsküdar/İstanbul</string>
     <string name="yorum">Yorum : Denizin ortasında tarihi bir yapı...</string>
+    <string name="title_activity_harita_konuma_git">Map</string>
 </resources>

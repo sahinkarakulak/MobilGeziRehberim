@@ -3,12 +3,13 @@ package com.mrcaracal.Fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mrcaracal.Activity.HaritaKonumaGit;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.mrcaracal.Modul.Gonderiler;
@@ -41,7 +43,6 @@ import com.mrcaracal.mobilgezirehberim.R;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
@@ -69,6 +70,12 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
 
     ViewGroup viewGroup;
 
+    SharedPreferences GET;
+    SharedPreferences.Editor SET;
+
+    double enlem;
+    double boylam;
+
     private void init() {
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -83,6 +90,9 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         adresleriFB = new ArrayList<>();
         yorumlarFB = new ArrayList<>();
         zamanlarFB = new ArrayList<>();
+
+        GET = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SET = GET.edit();
 
     }
 
@@ -176,7 +186,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
 
     }
 
-    public void kaydet_islemleri(int position) {
+    public void kaydetIslemleri(int position) {
         if (kullaniciEpostalariFB.get(position).equals(firebaseUser.getEmail())) {
             Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
         } else {
@@ -230,6 +240,29 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         }
     }
 
+    public void konumaGitIslemleri(int position) {
+        String[] gonderi_konumu = konumlariFB.get(position).split(",");
+
+        int belirtec = 0;
+
+        for (String konumxy : gonderi_konumu) {
+            belirtec++;
+            if (belirtec == 1)
+                enlem = Double.parseDouble(konumxy);
+            if (belirtec == 2)
+                boylam = Double.parseDouble(konumxy);
+        }
+
+        SET.putFloat("konum_git_enlem", (float) enlem);
+        SET.putFloat("konum_git_boylam", (float) boylam);
+        SET.commit();
+
+        startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
+
+        Log.d(TAG, "Enlem: "+enlem+"   \tBoylam: "+boylam);
+
+    }
+
     @Override
     public void onDigerSeceneklerClick(int position) {
         //Toast.makeText(getActivity(), "DİĞER", Toast.LENGTH_SHORT).show();
@@ -249,7 +282,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         bottomSheetView.findViewById(R.id.bs_gonderiyi_kaydet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kaydet_islemleri(position);
+                kaydetIslemleri(position);
                 bottomSheetDialog.dismiss();
             }
         });
@@ -259,11 +292,12 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Bu bölüm henüz kodlanmadı", Toast.LENGTH_SHORT).show();
+                konumaGitIslemleri(position);
                 bottomSheetDialog.dismiss();
             }
         });
 
-        // Detaylı Şikayet Bildir
+        // Detaylı Şikayet Bildir (Mail)
         // Bu kısımda cihazdaki MAİL uygulamasının açılıp kullanıcının burada geliştiricilere istediği verileri göndermesi sağlanacak
         bottomSheetView.findViewById(R.id.bs_detayli_sikayet_bildir).setOnClickListener(new View.OnClickListener() {
             @Override
