@@ -168,6 +168,22 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
 
     }
 
+    public String tagGoster(int position){
+
+        String taggg = "";
+        String al_taglar = taglarFB.get(position);
+        int tag_uzunluk = al_taglar.length();
+        String alinan_taglar = al_taglar.substring(1, tag_uzunluk-1);
+        String[] a_t = alinan_taglar.split(",");
+
+        for(String tags : a_t){
+            Log.d(TAG, "onLongItemClick: "+tags.trim());
+            taggg += "#" + tags.trim() + " ";
+        }
+
+        return taggg;
+    }
+
     // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
     @Override
     public void onLongItemClick(int position) {
@@ -176,7 +192,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         String tarih_ve_saat = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
         String gonderi_detay_goster = yorumlarFB.get(position) + "\n\nPaylaşan: " + kullaniciEpostalariFB.get(position) +
                 "\nTarih: " + tarih_ve_saat + "\nAdres: " + adresleriFB.get(position) +
-                "\n\nEtiketler: " + taglarFB.get(position);
+                "\n\nEtiketler: " + tagGoster(position);
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert
