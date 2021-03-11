@@ -300,13 +300,11 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             map.put("gonderiID", true);
             map.put("kaydeden", firebaseUser.getEmail());
             map.put("IDsi", gonderiIDleriFB.get(position));
-
             DocumentReference documentReference1 = firebaseFirestore
                     .collection("Kaydedilenler")
                     .document(gonderiIDleriFB.get(position))
                     .collection("Kaydedenler")
                     .document(firebaseUser.getEmail());
-
             documentReference1
                     .set(map)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {

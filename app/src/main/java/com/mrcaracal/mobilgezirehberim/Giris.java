@@ -6,10 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,10 +35,12 @@ public class Giris extends AppCompatActivity {
 
     EditText edt_epostaGiris, edt_parolaGiris;
     CheckBox chb_giris_bilgileri_hatirla;
+    ImageView img_parola_goster_gizle;
     SharedPreferences GET;
     SharedPreferences.Editor SET;
     boolean doubleBackToExitPressedOnce = false;
     boolean durum;
+    boolean gizle_goster = false;
     private FirebaseAuth firebaseAuth;
 
     public void init() {
@@ -44,6 +49,8 @@ public class Giris extends AppCompatActivity {
 
         edt_epostaGiris = findViewById(R.id.edt_epostaGiris);
         edt_parolaGiris = findViewById(R.id.edt_parolaGiris);
+
+        img_parola_goster_gizle = findViewById(R.id.img_parola_goster_gizle);
 
         chb_giris_bilgileri_hatirla = findViewById(R.id.chb_giris_bilgileri_hatirla);
 
@@ -133,9 +140,27 @@ public class Giris extends AppCompatActivity {
                 }
             });
 
-
         }
 
+    }
+
+    public void parolaGizleGoster(){
+        img_parola_goster_gizle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (gizle_goster == false){
+                    edt_parolaGiris.setInputType(InputType.TYPE_CLASS_TEXT);
+                    edt_parolaGiris.setTransformationMethod(null);
+                    gizle_goster = true;
+                }else {
+                    edt_parolaGiris.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    edt_parolaGiris.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    gizle_goster = false;
+                }
+
+            }
+        });
     }
 
     // Kullanıcı parola sıfırlama sayfasına yönlendirilecektir.
@@ -149,6 +174,8 @@ public class Giris extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        parolaGizleGoster();
 
         chb_giris_bilgileri_hatirla.setOnClickListener(new View.OnClickListener() {
             @Override

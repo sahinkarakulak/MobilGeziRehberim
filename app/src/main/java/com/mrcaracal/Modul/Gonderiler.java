@@ -44,7 +44,6 @@ public class Gonderiler {
         this.zaman = zaman;
     }
 
-
     public String getGonderiID() {
         return gonderiID;
     }

@@ -27,14 +27,31 @@
         android:hint="hesap@example.com"
         android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/edt_parolaGiris"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@drawable/bg_edit_text"
-        android:hint="********"
-        android:inputType="textPassword" />
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edt_parolaGiris"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="********"
+            android:background="@android:color/transparent"
+            android:inputType="textPassword" />
+
+        <ImageView
+            android:id="@+id/img_parola_goster_gizle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:src="@drawable/ic_baseline_goz_eye"/>
+
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/chb_giris_bilgileri_hatirla"
