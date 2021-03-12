@@ -459,9 +459,9 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     public String tagGoster(int position){
 
         String taggg = "";
-        String al_taglar = taglarFB.get(position);
+        String al_taglar = taglarFB.get(POSITION_DEGERI);
         int tag_uzunluk = al_taglar.length();
-        String alinan_taglar = al_taglar.substring(1, tag_uzunluk-1);
+        String alinan_taglar = al_taglar.substring(2, tag_uzunluk-2);
         String[] a_t = alinan_taglar.split(",");
 
         for(String tags : a_t){
