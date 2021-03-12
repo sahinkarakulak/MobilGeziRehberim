@@ -78,7 +78,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     CircleImageView img_profil_resmi;
 
     int POSITION_DEGERI;
-    String KONTOLLU_KALDIRMA = "paylasilanlar";
+    String TABKONTROL = "paylasilanlar";
     // kaydedilenler
 
     SharedPreferences GET;
@@ -175,7 +175,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
                     case R.id.paylasilanlar:
                         Log.d(TAG, "onNavigationItemSelected: Paylaşılanlar TAB'ı");
-                        KONTOLLU_KALDIRMA = "paylasilanlar";
+                        TABKONTROL = "paylasilanlar";
                         listeTemizleme();
                         paylasilanlariCek();
                         Log.d(TAG, "onNavigationItemSelected: paylasilanlariCek() çağrıldı");
@@ -183,7 +183,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                         break;
                     case R.id.kaydedilenler:
                         Log.d(TAG, "onNavigationItemSelected: Kaydedilenler TAB'ı");
-                        KONTOLLU_KALDIRMA = "kaydedilenler";
+                        TABKONTROL = "kaydedilenler";
                         listeTemizleme();
                         kaydedilenleriCek();
                         Log.d(TAG, "onNavigationItemSelected: kaydedilenleriCek() çağrıldı");
@@ -459,15 +459,34 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     public String tagGoster(int position){
 
         String taggg = "";
-        String al_taglar = taglarFB.get(POSITION_DEGERI);
+        String al_taglar = taglarFB.get(position);
         int tag_uzunluk = al_taglar.length();
-        String alinan_taglar = al_taglar.substring(2, tag_uzunluk-2);
-        String[] a_t = alinan_taglar.split(",");
+        String alinan_taglar;
+        String[] a_t;
 
-        for(String tags : a_t){
-            Log.d(TAG, "onLongItemClick: "+tags.trim());
-            taggg += "#" + tags.trim() + " ";
+        switch (TABKONTROL){
+            case "paylasilanlar":
+                alinan_taglar = al_taglar.substring(1, tag_uzunluk-1);
+                a_t = alinan_taglar.split(",");
+
+                for(String tags : a_t){
+                    Log.d(TAG, "onLongItemClick: "+tags.trim());
+                    taggg += "#" + tags.trim() + " ";
+                }
+                break;
+
+            case "kaydedilenler":
+                alinan_taglar = al_taglar.substring(2, tag_uzunluk-2);
+                a_t = alinan_taglar.split(",");
+
+                for(String tags : a_t){
+                    Log.d(TAG, "onLongItemClick: "+tags.trim());
+                    taggg += "#" + tags.trim() + " ";
+                }
+                break;
         }
+
+
 
         return taggg;
     }
@@ -514,7 +533,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         bottomSheetView.findViewById(R.id.bs_konuma_git).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (KONTOLLU_KALDIRMA){
+                switch (TABKONTROL){
                     case "paylasilanlar":
                         paylasilanlardanKonumaGit();
                         break;
@@ -531,7 +550,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
             @Override
             public void onClick(View v) {
 
-                switch (KONTOLLU_KALDIRMA) {
+                switch (TABKONTROL) {
                     case "paylasilanlar":
                         paylasilanlardanKaldir();
                         listeTemizleme();
