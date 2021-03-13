@@ -22,5 +22,19 @@
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="SCBSwitch" parent="Theme.AppCompat">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@android:color/holo_blue_light</item>
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#f1f1f1</item>
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#4222221F</item>
+    </style>
+
+    <style name="checkBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">@android:color/holo_blue_light</item>
+        <item name="android:textColorSecondary">@android:color/holo_blue_light</item>
+    </style>
     
 </resources>

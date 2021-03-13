@@ -44,6 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
+            android:theme="@style/SCBSwitch"
             android:text="Yer İsmi"/>
 
         <View
@@ -55,6 +56,7 @@
             android:id="@+id/sw_etiket"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:theme="@style/SCBSwitch"
             android:text="Etiket"/>
 
         <View
@@ -66,6 +68,7 @@
             android:id="@+id/sw_kullanici"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:theme="@style/SCBSwitch"
             android:text="Kullanıcı"/>
 
     </LinearLayout>
