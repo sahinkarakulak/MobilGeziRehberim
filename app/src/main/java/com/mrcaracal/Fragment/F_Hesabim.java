@@ -486,8 +486,6 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                 break;
         }
 
-
-
         return taggg;
     }
 
