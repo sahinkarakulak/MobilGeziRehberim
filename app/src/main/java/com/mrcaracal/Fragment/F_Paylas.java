@@ -183,7 +183,7 @@ public class F_Paylas extends Fragment {
         String konumKontrol = edt_konum.getText().toString();
         String adresKontrol = edt_adres.getText().toString();
 
-        if (!yerIsmiKontrol.equals("") || !konumKontrol.equals("") || !yorumKontrol.equals("") || !adresKontrol.equals("")) {
+        if (!yerIsmiKontrol.equals("") && !konumKontrol.equals("") && !yorumKontrol.equals("") && !adresKontrol.equals("")) {
             UUID uuid = UUID.randomUUID();
             String resimIsmi = firebaseUser.getEmail() + "--" + yerIsmiKontrol + "--" + uuid;
             try {
