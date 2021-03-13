@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -80,6 +81,9 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
     ImageView img_konuma_gore_bul;
     EditText edt_anahtar_kelime_arat;
+    Switch sw_yer_ismi, sw_etiket, sw_kullanici;
+
+    String anahtar_kelimemiz = "yerIsmi";
 
     SharedPreferences GET;
     SharedPreferences.Editor SET;
@@ -124,6 +128,49 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             }
         });
 
+        sw_yer_ismi = viewGroup.findViewById(R.id.sw_yer_ismi);
+        sw_etiket = viewGroup.findViewById(R.id.sw_etiket);
+        sw_kullanici = viewGroup.findViewById(R.id.sw_kullanici);
+
+        sw_yer_ismi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    sw_etiket.setChecked(false);
+                    sw_kullanici.setChecked(false);
+                    listeTemizleme();
+                    recycler_view_ara.scrollToPosition(0);
+                    anahtar_kelimemiz = "yerIsmi";
+                }
+            }
+        });
+
+        sw_etiket.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    sw_yer_ismi.setChecked(false);
+                    sw_kullanici.setChecked(false);
+                    listeTemizleme();
+                    recycler_view_ara.scrollToPosition(0);
+                    anahtar_kelimemiz = "taglar";
+                }
+            }
+        });
+
+        sw_kullanici.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    sw_yer_ismi.setChecked(false);
+                    sw_etiket.setChecked(false);
+                    listeTemizleme();
+                    recycler_view_ara.scrollToPosition(0);
+                    anahtar_kelimemiz = "kullaniciEposta";
+                }
+            }
+        });
+
         edt_anahtar_kelime_arat = viewGroup.findViewById(R.id.edt_anahtar_kelime_arat);
         edt_anahtar_kelime_arat.addTextChangedListener(new TextWatcher() {
 
@@ -131,30 +178,15 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Log.d(TAG, "beforeTextChanged: Önce");
-
+                //
             }
 
             // Esnasında
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d(TAG, "onTextChanged: Esnasında");
-
-                gonderiIDleriFB.clear();
-                kullaniciEpostalariFB.clear();
-                resimAdresleriFB.clear();
-                yerIsimleriFB.clear();
-                konumlariFB.clear();
-                adresleriFB.clear();
-                yorumlarFB.clear();
-                taglarFB.clear();
-                zamanlarFB.clear();
-
-                /*String[] ilgiliAlan = {"kullaniciEposta", "yerIsmi"};
-                for (int i = 0; i < ilgiliAlan.length; i++) {
-                    Log.d(TAG, "onTextChanged: " + ilgiliAlan[i] + " - alanı gönderiliyor");
-                    aramaYap(ilgiliAlan[i], s.toString().toLowerCase());
-                }*/
-                aramaYap("yerIsmi", s.toString().toLowerCase());
+                listeTemizleme();
+                aramaYap(anahtar_kelimemiz, s.toString().toLowerCase());
 
             }
 
@@ -162,7 +194,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             @Override
             public void afterTextChanged(Editable s) {
                 Log.d(TAG, "afterTextChanged: Sonra");
-
+                //
             }
         });
 
@@ -175,9 +207,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         return viewGroup;
     }
 
-    public void aramaYap(String ilgiliAlan, String anahtarKelime) {
-        Log.d(TAG, "aramaYap: ");
-
+    public void listeTemizleme(){
         gonderiIDleriFB.clear();
         kullaniciEpostalariFB.clear();
         resimAdresleriFB.clear();
@@ -187,6 +217,11 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         yorumlarFB.clear();
         taglarFB.clear();
         zamanlarFB.clear();
+    }
+
+    public void aramaYap(String ilgiliAlan, String anahtarKelime) {
+        Log.d(TAG, "aramaYap: ");
+        listeTemizleme();
 
         //recycler_view_ara.scrollToPosition(0);
 
