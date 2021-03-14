@@ -13,11 +13,10 @@
 
         <ImageView
             android:id="@+id/img_konuma_gore_bul"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/bg_edit_text"
             android:src="@drawable/ic_baseline_my_location_24" />
 
@@ -25,51 +24,20 @@
             android:id="@+id/edt_anahtar_kelime_arat"
             android:layout_weight="1"
             android:layout_width="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
             android:inputType="text"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_edit_text"
-            android:hint="Anahtar Kelime Giriniz"/>
+            android:hint="Ara"/>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginBottom="5dp"
-        android:orientation="horizontal">
-
-        <Switch
-            android:id="@+id/sw_yer_ismi"
+        <Spinner
+            android:id="@+id/sp_ara_neye_gore"
+            android:background="@drawable/bg_spinner"
+            android:gravity="center"
+            android:textAlignment="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:theme="@style/SCBSwitch"
-            android:text="Yer İsmi"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <Switch
-            android:id="@+id/sw_etiket"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:theme="@style/SCBSwitch"
-            android:text="Etiket"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <Switch
-            android:id="@+id/sw_kullanici"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:theme="@style/SCBSwitch"
-            android:text="Kullanıcı"/>
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 

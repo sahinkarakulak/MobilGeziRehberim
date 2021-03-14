@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -19,6 +21,7 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -81,7 +84,10 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
     ImageView img_konuma_gore_bul;
     EditText edt_anahtar_kelime_arat;
-    Switch sw_yer_ismi, sw_etiket, sw_kullanici;
+    Spinner sp_ara_neye_gore;
+
+    private String[] neye_gore = {"Yer İsmi", "Etiket", "Kullanıcı"};
+    private ArrayAdapter<String> sp_adapter;
 
     String anahtar_kelimemiz = "yerIsmi";
 
@@ -128,48 +134,43 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             }
         });
 
-        sw_yer_ismi = viewGroup.findViewById(R.id.sw_yer_ismi);
-        sw_etiket = viewGroup.findViewById(R.id.sw_etiket);
-        sw_kullanici = viewGroup.findViewById(R.id.sw_kullanici);
+        sp_ara_neye_gore = viewGroup.findViewById(R.id.sp_ara_neye_gore);
+        sp_adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, neye_gore);
+        sp_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_ara_neye_gore.setAdapter(sp_adapter);
 
-        sw_yer_ismi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        sp_ara_neye_gore.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    sw_etiket.setChecked(false);
-                    sw_kullanici.setChecked(false);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent.getSelectedItem().toString().equals(neye_gore[0])){
+                    // Yer İsmine göre işlemler yapılsın.
                     listeTemizleme();
                     recycler_view_ara.scrollToPosition(0);
                     anahtar_kelimemiz = "yerIsmi";
                 }
-            }
-        });
 
-        sw_etiket.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    sw_yer_ismi.setChecked(false);
-                    sw_kullanici.setChecked(false);
+                if (parent.getSelectedItem().toString().equals(neye_gore[1])){
+                    // Etikete göre işlemler yapılsın.
                     listeTemizleme();
                     recycler_view_ara.scrollToPosition(0);
                     anahtar_kelimemiz = "taglar";
                 }
-            }
-        });
 
-        sw_kullanici.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    sw_yer_ismi.setChecked(false);
-                    sw_etiket.setChecked(false);
+                if (parent.getSelectedItem().toString().equals(neye_gore[2])){
+                    // Kullanıcıya göre işlemler yapılsın.
                     listeTemizleme();
                     recycler_view_ara.scrollToPosition(0);
                     anahtar_kelimemiz = "kullaniciEposta";
                 }
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
+
+
 
         edt_anahtar_kelime_arat = viewGroup.findViewById(R.id.edt_anahtar_kelime_arat);
         edt_anahtar_kelime_arat.addTextChangedListener(new TextWatcher() {
