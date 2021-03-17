@@ -43,8 +43,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrcaracal.Activity.HaritaKonumaGit;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
@@ -187,7 +189,11 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d(TAG, "onTextChanged: Esnasında");
                 listeTemizleme();
-                aramaYap(anahtar_kelimemiz, s.toString().toLowerCase());
+                if (anahtar_kelimemiz.equals("taglar")){
+                    aramaYapEtiketIcin(anahtar_kelimemiz, s.toString().toLowerCase());
+                }else {
+                    aramaYap(anahtar_kelimemiz, s.toString().toLowerCase());
+                }
 
             }
 
@@ -221,7 +227,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
     }
 
     public void aramaYap(String ilgiliAlan, String anahtarKelime) {
-        Log.d(TAG, "aramaYap: ");
+        Log.d(TAG, "aramaYap: Çalıştı");
         listeTemizleme();
 
         //recycler_view_ara.scrollToPosition(0);
@@ -279,6 +285,58 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             }
         });
 
+    }
+
+    public void aramaYapEtiketIcin(String ilgiliAlan, String anahtarKelime){
+        Log.d(TAG, "aramaYapEtiketIcin: Çalıştı");
+        listeTemizleme();
+
+        CollectionReference collectionReference = firebaseFirestore
+                .collection("Gonderiler");
+
+        collectionReference
+                .whereArrayContains(ilgiliAlan, anahtarKelime)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            QuerySnapshot querySnapshot = task.getResult();
+                            for (DocumentSnapshot documentSnapshot : querySnapshot){
+                                Map<String, Object> verilerKumesi = documentSnapshot.getData();
+
+                                String gonderiID = verilerKumesi.get("gonderiID").toString();
+                                String kullaniciEposta = verilerKumesi.get("kullaniciEposta").toString();
+                                String yerIsmi = verilerKumesi.get("yerIsmi").toString();
+                                yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
+                                String resimAdresi = verilerKumesi.get("resimAdresi").toString();
+                                String konum = verilerKumesi.get("konum").toString();
+                                String adres = verilerKumesi.get("adres").toString();
+                                String yorum = verilerKumesi.get("yorum").toString();
+                                Timestamp zaman = (Timestamp) verilerKumesi.get("zaman");
+
+                                gonderiIDleriFB.add(gonderiID);
+                                kullaniciEpostalariFB.add(kullaniciEposta);
+                                resimAdresleriFB.add(resimAdresi);
+                                yerIsimleriFB.add(yerIsmi);
+                                konumlariFB.add(konum);
+                                adresleriFB.add(adres);
+                                yorumlarFB.add(yorum);
+                                taglarFB.add(verilerKumesi.get("taglar").toString());
+                                zamanlarFB.add(zaman);
+
+                                recyclerAdapterYapim.notifyDataSetChanged();
+                                Log.d(TAG, "onComplete: Sonu...");
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        
+                    }
+                });
     }
 
     public String tagGoster(int position){
