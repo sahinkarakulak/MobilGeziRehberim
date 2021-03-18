@@ -5,36 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/arkaplan1"
+    android:background="@drawable/ss_bg"
     android:gravity="center"
     android:padding="20dp"
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context="com.mrcaracal.Activity.ParolaSifirlama">
 
-    <TextView
+    <androidx.cardview.widget.CardView
+        android:backgroundTint="#E8161717"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Parola sıfırlama işlemi için geçerli olan E-Posta adresinizi yazın. Sıfırlama bağlantısı oraya gelecektir."
-        android:padding="15dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="center_horizontal" />
+        app:cardCornerRadius="15dp">
 
-    <EditText
-        android:id="@+id/edt_epostaParolaSıfırlama"
-        android:background="@drawable/bg_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:layout_marginBottom="10dp"
-        android:hint="E-Posta"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-    <Button
-        android:onClick="istegiGonder"
-        android:background="@drawable/bg_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="isteği gönder"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Parola sıfırlama işlemi için geçerli olan E-Posta adresinizi yazın. Sıfırlama bağlantısı oraya gelecektir."
+                android:padding="15dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_horizontal" />
+
+            <EditText
+                android:id="@+id/edt_epostaParolaSıfırlama"
+                android:background="@drawable/bg_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="10dp"
+                android:hint="E-Posta"/>
+
+            <Button
+                android:onClick="istegiGonder"
+                android:background="@drawable/bg_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="isteği gönder"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

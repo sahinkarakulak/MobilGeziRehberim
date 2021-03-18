@@ -3,97 +3,117 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/arkaplan1"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/ss_bg"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".Giris">
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
-        android:src="@drawable/mrl" />
-
-    <EditText
-        android:id="@+id/edt_epostaGiris"
+    <androidx.cardview.widget.CardView
+        android:backgroundTint="#E8161717"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/bg_edit_text"
-        android:hint="hesap@example.com"
-        android:inputType="textEmailAddress" />
+        app:cardCornerRadius="15dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/bg_edit_text"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/edt_parolaGiris"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="********"
-            android:background="@android:color/transparent"
-            android:inputType="textPassword" />
-
-        <ImageView
-            android:id="@+id/img_parola_goster_gizle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:src="@drawable/ic_baseline_goz_eye"/>
-
-    </LinearLayout>
-
-    <CheckBox
-        android:id="@+id/chb_giris_bilgileri_hatirla"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:theme="@style/checkBoxStyle"
-        android:text="Beni Hatırla" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/bg_button"
-        android:onClick="girisYap"
-        android:text="giriş yap" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:onClick="txt_parolamıUnuttum"
-            android:padding="5dp"
-            android:text="Parolamı Unuttum!"
-            android:textAlignment="center" />
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:onClick="txt_hesapOlustur"
-            android:padding="5dp"
-            android:text="Hesap Oluştur!"
-            android:textAlignment="center" />
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="30dp"
+                android:src="@drawable/mrl" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/edt_epostaGiris"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_edit_text"
+                android:hint="hesap@example.com"
+                android:inputType="textEmailAddress" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_edit_text"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edt_parolaGiris"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="********"
+                    android:background="@android:color/transparent"
+                    android:inputType="textPassword" />
+
+                <ImageView
+                    android:id="@+id/img_parola_goster_gizle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_baseline_goz_eye"/>
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/chb_giris_bilgileri_hatirla"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:theme="@style/checkBoxStyle"
+                android:text="Beni Hatırla" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_button"
+                android:onClick="girisYap"
+                android:text="giriş yap" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:onClick="txt_parolamıUnuttum"
+                    android:padding="5dp"
+                    android:text="Parolamı Unuttum!"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:onClick="txt_hesapOlustur"
+                    android:padding="5dp"
+                    android:text="Hesap Oluştur!"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
 
 </LinearLayout>

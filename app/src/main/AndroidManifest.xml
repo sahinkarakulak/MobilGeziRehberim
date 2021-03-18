@@ -2,14 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.mrcaracal.mobilgezirehberim">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -46,7 +44,7 @@
 
         <activity
             android:name="com.mrcaracal.Activity.HaritaKonumaGit"
-            android:label="@string/title_activity_harita_konuma_git"></activity>
+            android:label="@string/title_activity_harita_konuma_git" />
         <activity
             android:name="com.mrcaracal.Activity.Harita"
             android:label="@string/title_activity_a__harita" />
@@ -54,13 +52,26 @@
         <activity android:name="com.mrcaracal.Activity.Iletisim" />
         <activity android:name="com.mrcaracal.Activity.ProfilDuzenle" />
         <activity android:name="com.mrcaracal.Activity.AnaSayfa" />
-        <activity android:name="com.mrcaracal.Activity.ParolaSifirlama" />
-        <activity android:name="com.mrcaracal.Activity.HesapOlusturma" />
-        <activity android:name=".Giris">
+        <activity android:name="com.mrcaracal.Activity.ParolaSifirlama"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+        <activity android:name="com.mrcaracal.Activity.HesapOlusturma"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+        <activity android:name=".SplashScreen"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Giris"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity> <!-- OREO'dan bir sonraki geçişte yaşanabilecek bazı sorunlar için aşağıdaki çözüm yolu kullanılabilir -->
         <uses-library
