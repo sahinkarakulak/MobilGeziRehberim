@@ -96,6 +96,9 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                         }*/
                         adres += addressList.get(0).getAddressLine(0);
                         posta_kodu = addressList.get(0).getPostalCode();
+                        if (posta_kodu == null){
+                            posta_kodu = "?";
+                        }
                     }
                 } catch (IOException e) {
                     Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -108,7 +111,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                 SET.putString("postaKodu", posta_kodu);
                 SET.commit();
 
-                Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nPosta Kodu: "+posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();
                 konumuBul();
 
             }
@@ -212,6 +215,9 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                     adres += "\t" + addressList.get(0).getSubThoroughfare();
                 }
                 posta_kodu = addressList.get(0).getPostalCode();
+                if (posta_kodu == null){
+                    posta_kodu = "?";
+                }
             }
         } catch (IOException e) {
             Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -219,7 +225,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
             e.printStackTrace();
         }
 
-        Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nPosta Kodu: "+posta_kodu +"\nAdres: " + adres, Toast.LENGTH_SHORT).show();
 
         if (marker != null) {
             marker.remove();
