@@ -14,15 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,30 +31,26 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.chip.Chip;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrcaracal.Activity.HaritaKonumaGit;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.mrcaracal.Modul.Gonderiler;
 import com.mrcaracal.Modul.IletisimBilgileri;
+import com.mrcaracal.Modul.Sehirler;
 import com.mrcaracal.mobilgezirehberim.R;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class F_Ara extends Fragment implements RecyclerViewClickInterface {
@@ -87,20 +78,16 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
     ImageView img_konuma_gore_bul;
     EditText edt_anahtar_kelime_arat;
-    Spinner sp_ara_neye_gore;
-
-    private String[] neye_gore = {"Yer İsmi", "Etiket", "Kullanıcı"};
-    private ArrayAdapter<String> sp_adapter;
-
+    Spinner sp_ara_neye_gore, sp_sehirler;
     String anahtar_kelimemiz = "yerIsmi";
-
     SharedPreferences GET;
     SharedPreferences.Editor SET;
-
     double enlem;
     double boylam;
-
     ViewGroup viewGroup;
+    private final String[] neye_gore = {"Yer İsmi", "Etiket", "Şehir", "Kullanıcı"};
+    private ArrayAdapter<String> sp_adapter_neye_gore;
+    private ArrayAdapter<String> sp_adapter_sehirler;
 
     private void init() {
 
@@ -142,28 +129,53 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         });
 
         sp_ara_neye_gore = viewGroup.findViewById(R.id.sp_ara_neye_gore);
-        sp_adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, neye_gore);
-        sp_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sp_ara_neye_gore.setAdapter(sp_adapter);
+        sp_adapter_neye_gore = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, neye_gore);
+        sp_adapter_neye_gore.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_ara_neye_gore.setAdapter(sp_adapter_neye_gore);
 
         sp_ara_neye_gore.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent.getSelectedItem().toString().equals(neye_gore[0])){
+                if (parent.getSelectedItem().toString().equals(neye_gore[0])) {
+
+                    edt_anahtar_kelime_arat.setVisibility(View.VISIBLE);
+                    sp_sehirler.setVisibility(View.INVISIBLE);
+
                     // Yer İsmine göre işlemler yapılsın.
                     listeTemizleme();
                     recycler_view_ara.scrollToPosition(0);
                     anahtar_kelimemiz = "yerIsmi";
                 }
 
-                if (parent.getSelectedItem().toString().equals(neye_gore[1])){
+                if (parent.getSelectedItem().toString().equals(neye_gore[1])) {
+
+                    edt_anahtar_kelime_arat.setVisibility(View.VISIBLE);
+                    sp_sehirler.setVisibility(View.INVISIBLE);
+
                     // Etikete göre işlemler yapılsın.
                     listeTemizleme();
                     recycler_view_ara.scrollToPosition(0);
                     anahtar_kelimemiz = "taglar";
                 }
 
-                if (parent.getSelectedItem().toString().equals(neye_gore[2])){
+                // Bu item seçilirse Ara çubuğu spinner'a dönüşsün ve orada şehirler listelensin.
+                // Seçilen şehre göre posta kodu değeri alınsın ve VT de ona göre bir arama yapılsın.
+                if (parent.getSelectedItem().toString().equals(neye_gore[2])) {
+
+                    edt_anahtar_kelime_arat.setVisibility(View.INVISIBLE);
+                    sp_sehirler.setVisibility(View.VISIBLE);
+
+                    listeTemizleme();
+                    recycler_view_ara.scrollToPosition(0);
+                    anahtar_kelimemiz = "sehir";
+
+                }
+
+                if (parent.getSelectedItem().toString().equals(neye_gore[3])) {
+
+                    edt_anahtar_kelime_arat.setVisibility(View.VISIBLE);
+                    sp_sehirler.setVisibility(View.INVISIBLE);
+
                     // Kullanıcıya göre işlemler yapılsın.
                     listeTemizleme();
                     recycler_view_ara.scrollToPosition(0);
@@ -177,6 +189,40 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             }
         });
 
+        Sehirler sehirler_al = new Sehirler();
+        sp_sehirler = viewGroup.findViewById(R.id.sp_sehirler);
+        sp_adapter_sehirler = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, sehirler_al.sehirler);
+        sp_adapter_sehirler.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_sehirler.setAdapter(sp_adapter_sehirler);
+
+        sp_sehirler.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                listeTemizleme();
+                recycler_view_ara.scrollToPosition(0);
+
+                if (anahtar_kelimemiz.equals("sehir")) {
+                    Sehirler sehirler = new Sehirler();
+                    String secilen_sehir_kodu = sehirler.sehirler(parent.getSelectedItem().toString());
+
+                    if (secilen_sehir_kodu.equals("Şehir Seçin!")) {
+                        Toast.makeText(getActivity(), "Lütfen Şehir Seçin!", Toast.LENGTH_SHORT).show();
+                    } else{
+                        // VT'de Gonderiler bölümünde posta kodu alınan değerle başlayan tüm gonderileri çeken bir algoritma geliştir.
+
+                        aramaYapSehirIcin(secilen_sehir_kodu);
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         edt_anahtar_kelime_arat = viewGroup.findViewById(R.id.edt_anahtar_kelime_arat);
@@ -194,9 +240,9 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d(TAG, "onTextChanged: Esnasında");
                 listeTemizleme();
-                if (anahtar_kelimemiz.equals("taglar")){
+                if (anahtar_kelimemiz.equals("taglar")) {
                     aramaYapEtiketIcin(anahtar_kelimemiz, s.toString().toLowerCase());
-                }else {
+                } else {
                     aramaYap(anahtar_kelimemiz, s.toString().toLowerCase());
                 }
 
@@ -219,7 +265,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         return viewGroup;
     }
 
-    public void listeTemizleme(){
+    public void listeTemizleme() {
         gonderiIDleriFB.clear();
         kullaniciEpostalariFB.clear();
         resimAdresleriFB.clear();
@@ -295,7 +341,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
     }
 
-    public void aramaYapEtiketIcin(String ilgiliAlan, String anahtarKelime){
+    public void aramaYapEtiketIcin(String ilgiliAlan, String anahtarKelime) {
         Log.d(TAG, "aramaYapEtiketIcin: Çalıştı");
         listeTemizleme();
 
@@ -308,9 +354,9 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             QuerySnapshot querySnapshot = task.getResult();
-                            for (DocumentSnapshot documentSnapshot : querySnapshot){
+                            for (DocumentSnapshot documentSnapshot : querySnapshot) {
                                 Map<String, Object> verilerKumesi = documentSnapshot.getData();
 
                                 String gonderiID = verilerKumesi.get("gonderiID").toString();
@@ -344,21 +390,81 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        
+
                     }
                 });
     }
 
-    public String tagGoster(int position){
+    public void aramaYapSehirIcin(String postaKodu){
+        Log.d(TAG, "aramaYapSehirIcin: Çalıştı");
+
+        CollectionReference collectionReference = firebaseFirestore
+                .collection("Gonderiler");
+
+        collectionReference
+                .orderBy("postaKodu")
+                .startAt(postaKodu)
+                .endAt(postaKodu + "\uf8ff")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d(TAG, "onComplete: Veriler filtrelenmiş şekilde çekildi");
+                        if (task.isSuccessful()) {
+                            QuerySnapshot querySnapshot = task.getResult();
+                            for (DocumentSnapshot snapshot : querySnapshot) {
+                                Map<String, Object> verilerKumesi = snapshot.getData();
+
+                                String gonderiID = verilerKumesi.get("gonderiID").toString();
+                                String kullaniciEposta = verilerKumesi.get("kullaniciEposta").toString();
+                                String yerIsmi = verilerKumesi.get("yerIsmi").toString();
+                                yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
+                                String resimAdresi = verilerKumesi.get("resimAdresi").toString();
+                                String konum = verilerKumesi.get("konum").toString();
+                                String adres = verilerKumesi.get("adres").toString();
+                                String yorum = verilerKumesi.get("yorum").toString();
+                                String postaKodu = verilerKumesi.get("postaKodu").toString();
+                                Timestamp zaman = (Timestamp) verilerKumesi.get("zaman");
+
+                                gonderiIDleriFB.add(gonderiID);
+                                kullaniciEpostalariFB.add(kullaniciEposta);
+                                resimAdresleriFB.add(resimAdresi);
+                                yerIsimleriFB.add(yerIsmi);
+                                konumlariFB.add(konum);
+                                adresleriFB.add(adres);
+                                yorumlarFB.add(yorum);
+                                postaKoduFB.add(postaKodu);
+                                taglarFB.add(verilerKumesi.get("taglar").toString());
+                                zamanlarFB.add(zaman);
+
+                                recyclerAdapterYapim.notifyDataSetChanged();
+                                Log.d(TAG, "onComplete: Sonu...");
+
+                                // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
+                            }
+                        }
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onFailure: " + e.getMessage());
+            }
+        });
+
+    }
+
+    public String tagGoster(int position) {
 
         String taggg = "";
         String al_taglar = taglarFB.get(position);
         int tag_uzunluk = al_taglar.length();
-        String alinan_taglar = al_taglar.substring(1, tag_uzunluk-1);
+        String alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1);
         String[] a_t = alinan_taglar.split(",");
 
-        for(String tags : a_t){
-            Log.d(TAG, "onLongItemClick: "+tags.trim());
+        for (String tags : a_t) {
+            Log.d(TAG, "onLongItemClick: " + tags.trim());
             taggg += "#" + tags.trim() + " ";
         }
 
@@ -389,7 +495,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                 .show();
     }
 
-    public void kaydet_islemleri(int position){
+    public void kaydet_islemleri(int position) {
         if (kullaniciEpostalariFB.get(position).equals(firebaseUser.getEmail())) {
             Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
         } else {
@@ -460,7 +566,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
         startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
 
-        Log.d(TAG, "Enlem: "+enlem+"   \tBoylam: "+boylam);
+        Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
 
     }
 
@@ -473,7 +579,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
         View bottomSheetView = LayoutInflater.from(getActivity())
-                .inflate( R.layout.layout_bottom_sheet, (LinearLayout) viewGroup.findViewById(R.id.bottomSheetContainer)  );
+                .inflate(R.layout.layout_bottom_sheet, (LinearLayout) viewGroup.findViewById(R.id.bottomSheetContainer));
 
         // Gönderiyi Kaydet
         bottomSheetView.findViewById(R.id.bs_gonderiyi_kaydet).setOnClickListener(new View.OnClickListener() {
