@@ -73,6 +73,7 @@ public class F_Paylas extends Fragment {
     float enlem;
     float boylam;
     String adres;
+    String posta_kodu;
     String gonderiID;
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
@@ -212,7 +213,7 @@ public class F_Paylas extends Fragment {
                                                 UUID uuid1 = UUID.randomUUID();
                                                 gonderiID = "" + uuid1;
 
-                                                MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres, yorum, taglar, FieldValue.serverTimestamp());
+                                                MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres, yorum, posta_kodu, taglar, FieldValue.serverTimestamp());
 
                                                 DocumentReference documentReference1 = firebaseFirestore
                                                         .collection("Paylasilanlar")
@@ -296,6 +297,7 @@ public class F_Paylas extends Fragment {
         enlem = GET.getFloat("enlem", 0);
         boylam = GET.getFloat("boylam", 0);
         adres = GET.getString("adres", "Türkiye Üsküdar");
+        posta_kodu = GET.getString("postaKodu", "12000");
 
         edt_konum.setText(enlem + "," + boylam);
         edt_adres.setText("" + adres);

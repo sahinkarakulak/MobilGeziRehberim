@@ -44,6 +44,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
     float enlem = (float) 0.0;
     float boylam = (float) 0.0;
     String adres = "";
+    String posta_kodu;
     SharedPreferences GET;
     SharedPreferences.Editor SET;
     private GoogleMap mMap;
@@ -94,6 +95,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                             adres += "\t" + addressList.get(0).getSubThoroughfare();
                         }*/
                         adres += addressList.get(0).getAddressLine(0);
+                        posta_kodu = addressList.get(0).getPostalCode();
                     }
                 } catch (IOException e) {
                     Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -103,6 +105,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                 SET.putFloat("enlem", enlem);
                 SET.putFloat("boylam", boylam);
                 SET.putString("adres", adres);
+                SET.putString("postaKodu", posta_kodu);
                 SET.commit();
 
                 Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();
@@ -208,6 +211,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                 if (addressList.get(0).getSubThoroughfare() != null) {
                     adres += "\t" + addressList.get(0).getSubThoroughfare();
                 }
+                posta_kodu = addressList.get(0).getPostalCode();
             }
         } catch (IOException e) {
             Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -230,6 +234,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
         SET.putFloat("enlem", enlem);
         SET.putFloat("boylam", boylam);
         SET.putString("adres", adres);
+        SET.putString("postaKodu", posta_kodu);
         SET.commit();
 
     }

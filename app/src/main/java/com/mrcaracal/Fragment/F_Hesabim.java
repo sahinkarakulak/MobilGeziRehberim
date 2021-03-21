@@ -65,6 +65,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
     ArrayList<String> konumlariFB;
     ArrayList<String> adresleriFB;
     ArrayList<String> yorumlarFB;
+    ArrayList<String> postaKoduFB;
     ArrayList<String> taglarFB;
     ArrayList<Timestamp> zamanlarFB;
 
@@ -101,6 +102,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         konumlariFB = new ArrayList<>();
         adresleriFB = new ArrayList<>();
         yorumlarFB = new ArrayList<>();
+        postaKoduFB = new ArrayList<>();
         taglarFB = new ArrayList<>();
         zamanlarFB = new ArrayList<>();
 
@@ -118,7 +120,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         // RecyclerView Tanımlama İşlemi
         recyclerViewHesabim = viewGroup.findViewById(R.id.recyclerViewHesabim);
         recyclerViewHesabim.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB, resimAdresleriFB, yerIsimleriFB, konumlariFB, adresleriFB, yorumlarFB, taglarFB, zamanlarFB, this);
+        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB, resimAdresleriFB, yerIsimleriFB, konumlariFB, adresleriFB, yorumlarFB, postaKoduFB, taglarFB, zamanlarFB, this);
         recyclerViewHesabim.setAdapter(recyclerAdapterYapim);
 
         img_profil_resmi = viewGroup.findViewById(R.id.img_profil_resmi);
@@ -204,6 +206,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         konumlariFB.clear();
         adresleriFB.clear();
         yorumlarFB.clear();
+        postaKoduFB.clear();
         taglarFB.clear();
         zamanlarFB.clear();
     }
@@ -235,6 +238,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 String resimAdresi = verilerKumesiHesaim.get("resimAdresi").toString();
                                 String yorum = verilerKumesiHesaim.get("yorum").toString();
                                 String adres = verilerKumesiHesaim.get("adres").toString();
+                                String postaKodu = verilerKumesiHesaim.get("postaKodu").toString();
                                 Timestamp zaman = (Timestamp) verilerKumesiHesaim.get("zaman");
 
                                 gonderiIDleriFB.add(gonderiID);
@@ -243,6 +247,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 yerIsimleriFB.add(yerIsmi);
                                 konumlariFB.add(konum);
                                 yorumlarFB.add(yorum);
+                                postaKoduFB.add(postaKodu);
                                 taglarFB.add(verilerKumesiHesaim.get("taglar").toString());
                                 adresleriFB.add(adres);
                                 zamanlarFB.add(zaman);
@@ -289,6 +294,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 String konum = verilerKumesiHesaim.get("konum").toString();
                                 String resimAdresi = verilerKumesiHesaim.get("resimAdresi").toString();
                                 String yorum = verilerKumesiHesaim.get("yorum").toString();
+                                String postaKodu = verilerKumesiHesaim.get("postaKodu").toString();
                                 String adres = verilerKumesiHesaim.get("adres").toString();
                                 Timestamp zaman = (Timestamp) verilerKumesiHesaim.get("zaman");
 
@@ -298,6 +304,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
                                 yerIsimleriFB.add(yerIsmi);
                                 konumlariFB.add(konum);
                                 yorumlarFB.add(yorum);
+                                postaKoduFB.add(postaKodu);
                                 taglarFB.add(verilerKumesiHesaim.get("taglar").toString());
                                 adresleriFB.add(adres);
                                 zamanlarFB.add(zaman);
