@@ -51,7 +51,7 @@
                 android:layout_marginBottom="5dp"
                 android:gravity="top"
                 android:hint="@string/yorum"
-                android:maxLength="140"
+                android:maxLength="4000"
                 android:maxLines="5"/>
 
             <!--<LinearLayout

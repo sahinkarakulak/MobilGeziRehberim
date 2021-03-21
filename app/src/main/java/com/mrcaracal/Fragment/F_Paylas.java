@@ -185,105 +185,110 @@ public class F_Paylas extends Fragment {
         String adresKontrol = edt_adres.getText().toString();
 
         if (!yerIsmiKontrol.equals("") && !konumKontrol.equals("") && !yorumKontrol.equals("") && !adresKontrol.equals("")) {
-            UUID uuid = UUID.randomUUID();
-            String resimIsmi = firebaseUser.getEmail() + "--" + yerIsmiKontrol + "--" + uuid;
-            try {
-                storageReference
-                        .child("Resimler")
-                        .child(resimIsmi)
-                        .putFile(resimYolu)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            if (txt_taglari_yazdir.equals("")){
+                Toast.makeText(getActivity(), "Lütfen TAG ekleyin", Toast.LENGTH_SHORT).show();
+            }else {
+                UUID uuid = UUID.randomUUID();
+                String resimIsmi = firebaseUser.getEmail() + "--" + yerIsmiKontrol + "--" + uuid;
+                try {
+                    storageReference
+                            .child("Resimler")
+                            .child(resimIsmi)
+                            .putFile(resimYolu)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                StorageReference storageReference1 = FirebaseStorage.getInstance().getReference("Resimler/" + resimIsmi);
-                                storageReference1
-                                        .getDownloadUrl()
-                                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                            @Override
-                                            public void onSuccess(Uri uri) {
-                                                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                                                String kullaniciEposta = firebaseUser.getEmail();
-                                                String resimAdresi = uri.toString();
-                                                String yerIsmi = edt_paylasYerIsmi.getText().toString().toLowerCase();
-                                                String konum = edt_konum.getText().toString();
-                                                String yorum = edt_paylasYorum.getText().toString();
-                                                String adres = edt_adres.getText().toString();
+                                    StorageReference storageReference1 = FirebaseStorage.getInstance().getReference("Resimler/" + resimIsmi);
+                                    storageReference1
+                                            .getDownloadUrl()
+                                            .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                @Override
+                                                public void onSuccess(Uri uri) {
+                                                    FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                                                    String kullaniciEposta = firebaseUser.getEmail();
+                                                    String resimAdresi = uri.toString();
+                                                    String yerIsmi = edt_paylasYerIsmi.getText().toString().toLowerCase();
+                                                    String konum = edt_konum.getText().toString();
+                                                    String yorum = edt_paylasYorum.getText().toString();
+                                                    String adres = edt_adres.getText().toString();
 
-                                                UUID uuid1 = UUID.randomUUID();
-                                                gonderiID = "" + uuid1;
+                                                    UUID uuid1 = UUID.randomUUID();
+                                                    gonderiID = "" + uuid1;
 
-                                                MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres, yorum, posta_kodu, taglar, FieldValue.serverTimestamp());
+                                                    MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres, yorum, posta_kodu, taglar, FieldValue.serverTimestamp());
 
-                                                DocumentReference documentReference1 = firebaseFirestore
-                                                        .collection("Paylasilanlar")
-                                                        .document(firebaseUser.getEmail())
-                                                        .collection("Paylastiklari")
-                                                        .document(gonderiID);
+                                                    DocumentReference documentReference1 = firebaseFirestore
+                                                            .collection("Paylasilanlar")
+                                                            .document(firebaseUser.getEmail())
+                                                            .collection("Paylastiklari")
+                                                            .document(gonderiID);
 
-                                                documentReference1
-                                                        .set(MGonderiler)
-                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
+                                                    documentReference1
+                                                            .set(MGonderiler)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
 
-                                                                DocumentReference documentReference2 = firebaseFirestore
-                                                                        .collection("Gonderiler")
-                                                                        .document(gonderiID);
+                                                                    DocumentReference documentReference2 = firebaseFirestore
+                                                                            .collection("Gonderiler")
+                                                                            .document(gonderiID);
 
-                                                                documentReference2
-                                                                        .set(MGonderiler)
-                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                            @Override
-                                                                            public void onSuccess(Void aVoid) {
+                                                                    documentReference2
+                                                                            .set(MGonderiler)
+                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                @Override
+                                                                                public void onSuccess(Void aVoid) {
 
-                                                                                btn_paylasGonder.setEnabled(false);
+                                                                                    btn_paylasGonder.setEnabled(false);
 
-                                                                                Intent intent = new Intent(getActivity(), AnaSayfa.class);
-                                                                                // Tüm aktiviteleri kapat
-                                                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                                                startActivity(intent);
-                                                                            }
-                                                                        }).addOnFailureListener(new OnFailureListener() {
-                                                                    @Override
-                                                                    public void onFailure(@NonNull Exception e) {
-                                                                        Log.d(TAG, "onFailure: " + e.getMessage());
-                                                                    }
-                                                                });
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                Log.d(TAG, "onFailure: " + e.getMessage());
-                                                            }
-                                                        });
-                                            }
-                                        });
-                                final Toast benimToast = Toast.makeText(getActivity(), "Gönderildi", Toast.LENGTH_SHORT);
-                                benimToast.show();
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        benimToast.cancel();
-                                    }
-                                }, 400);
+                                                                                    Intent intent = new Intent(getActivity(), AnaSayfa.class);
+                                                                                    // Tüm aktiviteleri kapat
+                                                                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                                                    startActivity(intent);
+                                                                                }
+                                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            Log.d(TAG, "onFailure: " + e.getMessage());
+                                                                        }
+                                                                    });
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                    Log.d(TAG, "onFailure: " + e.getMessage());
+                                                                }
+                                                            });
+                                                }
+                                            });
+                                    final Toast benimToast = Toast.makeText(getActivity(), "Gönderildi", Toast.LENGTH_SHORT);
+                                    benimToast.show();
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            benimToast.cancel();
+                                        }
+                                    }, 400);
 
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, "onFailure: " + e.getMessage());
-                            }
-                        });
-            } catch (Exception e) {
-                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "paylasGonder: " + e.getMessage());
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "onFailure: " + e.getMessage());
+                                }
+                            });
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "paylasGonder: " + e.getMessage());
+                }
             }
+
         } else
             Toast.makeText(getActivity(), "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
     }
