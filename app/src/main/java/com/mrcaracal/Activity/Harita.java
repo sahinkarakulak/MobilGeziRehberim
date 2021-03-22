@@ -207,7 +207,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
         try {
             List<Address> addressList = geocoder.getFromLocation(enlem, boylam, 1);
             if (addressList != null && addressList.size() > 0) {
-                if (addressList.get(0).getCountryName() != null) {
+                /*if (addressList.get(0).getCountryName() != null) {
                     adres += addressList.get(0).getCountryName();
                 }
                 if (addressList.get(0).getThoroughfare() != null) {
@@ -215,7 +215,8 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                 }
                 if (addressList.get(0).getSubThoroughfare() != null) {
                     adres += "\t" + addressList.get(0).getSubThoroughfare();
-                }
+                }*/
+                adres += addressList.get(0).getAddressLine(0);
                 posta_kodu = addressList.get(0).getPostalCode();
 
                 if (posta_kodu == null){
