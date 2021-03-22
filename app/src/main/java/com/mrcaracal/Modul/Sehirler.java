@@ -108,4 +108,7 @@ public class Sehirler {
         return gonderilecek_sehir_bilgisi;
 
     }
+
+
+
 }

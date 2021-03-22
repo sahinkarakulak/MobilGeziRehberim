@@ -29,6 +29,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.mrcaracal.Modul.Sehirler;
 import com.mrcaracal.mobilgezirehberim.R;
 
 import java.io.IOException;
@@ -96,6 +97,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                         }*/
                         adres += addressList.get(0).getAddressLine(0);
                         posta_kodu = addressList.get(0).getPostalCode();
+
                         if (posta_kodu == null){
                             posta_kodu = "?";
                         }
@@ -215,6 +217,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                     adres += "\t" + addressList.get(0).getSubThoroughfare();
                 }
                 posta_kodu = addressList.get(0).getPostalCode();
+
                 if (posta_kodu == null){
                     posta_kodu = "?";
                 }

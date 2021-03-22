@@ -64,7 +64,7 @@ public class F_Paylas extends Fragment {
     FirebaseFirestore firebaseFirestore;
     Uri resimYolu;
     ImageView img_paylasResimSec;
-    EditText edt_paylasYerIsmi, edt_paylasYorum, edt_paylasTag, edt_konum, edt_adres;
+    EditText edt_paylasYerIsmi, edt_paylasYorum, edt_paylasTag, edt_konum, edt_adres, edt_sehir;
     Button btn_paylasGonder, konum_sec, btn_tag_ekle;
     TextView txt_taglari_yazdir;
     ScrollView sv_paylas;
@@ -106,6 +106,7 @@ public class F_Paylas extends Fragment {
         edt_paylasYerIsmi = viewGroup.findViewById(R.id.edt_paylasYerIsmi);
         edt_konum = viewGroup.findViewById(R.id.edt_konum);
         edt_adres = viewGroup.findViewById(R.id.edt_adres);
+        edt_sehir = viewGroup.findViewById(R.id.edt_sehir);
         edt_paylasYorum = viewGroup.findViewById(R.id.edt_paylasYorum);
         edt_paylasTag = viewGroup.findViewById(R.id.edt_paylasTag);
         konum_sec = viewGroup.findViewById(R.id.konum_sec);
@@ -212,11 +213,19 @@ public class F_Paylas extends Fragment {
                                                     String konum = edt_konum.getText().toString();
                                                     String yorum = edt_paylasYorum.getText().toString();
                                                     String adres = edt_adres.getText().toString();
+                                                    String sehirrr = edt_sehir.getText().toString();
+
+                                                    if (taglar == null){
+                                                        taglar = Arrays.asList("mgr", "gezi", "rehber", "seyahat", "etiketsiz");
+                                                    }
+                                                    if (sehirrr == null){
+                                                        sehirrr = null;
+                                                    }
 
                                                     UUID uuid1 = UUID.randomUUID();
                                                     gonderiID = "" + uuid1;
 
-                                                    MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres, yorum, posta_kodu, taglar, FieldValue.serverTimestamp());
+                                                    MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres, sehirrr, yorum, posta_kodu, taglar, FieldValue.serverTimestamp());
 
                                                     DocumentReference documentReference1 = firebaseFirestore
                                                             .collection("Paylasilanlar")

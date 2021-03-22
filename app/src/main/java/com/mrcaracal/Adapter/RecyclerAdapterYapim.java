@@ -40,6 +40,7 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
     private final ArrayList<String> yerIsimleriListesi;
     private final ArrayList<String> konumlariListesi;
     private final ArrayList<String> adresleriListesi;
+    private final ArrayList<String> sehirListesi;
     private final ArrayList<String> yorumlarListesi;
     private final ArrayList<String> postaKodlari;
     private final ArrayList<String> taglarListesi;
@@ -47,13 +48,14 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
 
     private final RecyclerViewClickInterface recyclerViewClickInterface;
 
-    public RecyclerAdapterYapim(ArrayList<String> gonderiIDleriListesi, ArrayList<String> kullaniciEpostalariListesi, ArrayList<String> resimAdresleriListesi, ArrayList<String> yerIsimleriListesi, ArrayList<String> konumlariListesi, ArrayList<String> adresleriListesi, ArrayList<String> yorumlarListesi, ArrayList<String> postaKodlari, ArrayList<String> taglarListesi, ArrayList<Timestamp> zamanlarListesi, RecyclerViewClickInterface recyclerViewClickInterface) {
+    public RecyclerAdapterYapim(ArrayList<String> gonderiIDleriListesi, ArrayList<String> kullaniciEpostalariListesi, ArrayList<String> resimAdresleriListesi, ArrayList<String> yerIsimleriListesi, ArrayList<String> konumlariListesi, ArrayList<String> adresleriListesi, ArrayList<String> sehirListesi, ArrayList<String> yorumlarListesi, ArrayList<String> postaKodlari, ArrayList<String> taglarListesi, ArrayList<Timestamp> zamanlarListesi, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.gonderiIDleriListesi = gonderiIDleriListesi;
         this.kullaniciEpostalariListesi = kullaniciEpostalariListesi;
         this.resimAdresleriListesi = resimAdresleriListesi;
         this.yerIsimleriListesi = yerIsimleriListesi;
         this.konumlariListesi = konumlariListesi;
         this.adresleriListesi = adresleriListesi;
+        this.sehirListesi = sehirListesi;
         this.yorumlarListesi = yorumlarListesi;
         this.postaKodlari = postaKodlari;
         this.taglarListesi = taglarListesi;

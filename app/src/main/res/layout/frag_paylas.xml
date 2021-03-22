@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:hint="Yer İsmi : Kız Kulesi"
+                android:hint="@string/paylas_yer_ismi"
                 android:inputType="text"
                 android:maxLines="1" />
 
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:gravity="top"
-                android:hint="@string/yorum"
+                android:hint="@string/paylas_yorum"
                 android:maxLength="4000"
                 android:maxLines="5"/>
 
@@ -86,7 +86,7 @@
                     android:background="@drawable/bg_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Tag: kızkulesi üsküdar istanbul kule deniz"
+                    android:hint="@string/paylas_tag"
                     android:inputType="text"
                     android:maxLines="1" />
 
@@ -96,13 +96,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_button"
-                    android:text="ekle"/>
+                    android:text="@string/paylas_ekle"/>
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/txt_taglari_yazdir"
-                android:text="#kızkulesi   #üsküdar   #istanbul   #kule   #deniz"
+                android:text="@string/paylas_taglar"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_width="match_parent"
@@ -140,23 +140,44 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/edt_konum"
-                        android:background="@drawable/bg_edit_text"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:hint="Koordinat : 0.0,0.0"
-                        android:inputType="text"
-                        android:maxLength="140"
-                        android:maxLines="1" />
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/edt_konum"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_edit_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:hint="@string/paylas_koordinat"
+                            android:inputType="text"
+                            android:maxLength="140"
+                            android:maxLines="1" />
+
+                        <EditText
+                            android:id="@+id/edt_sehir"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/bg_edit_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:hint="@string/paylas_sehir"
+                            android:inputType="text"
+                            android:maxLength="140"
+                            android:maxLines="1" />
+
+                    </LinearLayout>
 
                     <EditText
                         android:id="@+id/edt_adres"
                         android:background="@drawable/bg_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/kiz_kulesi_adres"
+                        android:hint="@string/paylas_adres"
                         android:inputType="text"
                         android:maxLength="140"
                         android:maxLines="1" />
@@ -168,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
-                    android:text="Konum\nSeç"
+                    android:text="@string/paylas_konum_sec"
                     android:background="@drawable/bg_button"/>
 
             </LinearLayout>
@@ -180,7 +201,7 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/bg_button"
                 android:onClick="btn_paylasGonder"
-                android:text="gönder" />
+                android:text="@string/paylas_gonder" />
 
         </LinearLayout>
 

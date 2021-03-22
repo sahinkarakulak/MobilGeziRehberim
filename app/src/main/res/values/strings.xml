@@ -10,7 +10,15 @@
     <string name="hybrid_map">Hibrit</string>
     <string name="satellite_map">Uydu</string>
     <string name="terrain_map">Arazi</string>
-    <string name="kiz_kulesi_adres">Adres : Üsküdar/İstanbul</string>
-    <string name="yorum">Yorum : Denizin ortasında tarihi bir yapı...</string>
+    <string name="paylas_adres">Adres*</string>
+    <string name="paylas_yorum">Yorum*</string>
     <string name="title_activity_harita_konuma_git">Map</string>
+    <string name="paylas_taglar">#mgr #gezi #rehber #seyahat #mobilgezirehberim</string>
+    <string name="paylas_yer_ismi">Yer İsmi*</string>
+    <string name="paylas_tag">mgr gezi rehber seyahat mobilgezirehberim</string>
+    <string name="paylas_koordinat">0.0,0.0*</string>
+    <string name="paylas_sehir">Şehir</string>
+    <string name="paylas_ekle">ekle</string>
+    <string name="paylas_konum_sec">Konum\nSeç</string>
+    <string name="paylas_gonder">gönder</string>
 </resources>
