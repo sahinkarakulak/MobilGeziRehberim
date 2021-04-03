@@ -249,10 +249,4 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
 
     }
 
-    // Geri tuşuna basıldığında elimizdeki koordinat ve adres bilgilerini gönderelim
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-    }
 }
