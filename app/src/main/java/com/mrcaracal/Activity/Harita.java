@@ -137,7 +137,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 4);
         } else {
             // Lokasyon işlemleri
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5, 3, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000, 3, locationListener);
         }
     }
 
@@ -186,7 +186,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
         if (grantResults.length > 0) {
             if (requestCode == 4) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5, 3, locationListener);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000, 3, locationListener);
                 }
             }
         }

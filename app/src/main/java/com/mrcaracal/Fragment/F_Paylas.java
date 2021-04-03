@@ -179,6 +179,9 @@ public class F_Paylas extends Fragment {
     }
 
     public void paylasGonder() {
+
+        btn_paylasGonder.setEnabled(false);
+
         Log.d(TAG, "paylasGonder: ...");
         String yerIsmiKontrol = edt_paylasYerIsmi.getText().toString();
         String yorumKontrol = edt_paylasYorum.getText().toString();
@@ -188,6 +191,7 @@ public class F_Paylas extends Fragment {
         if (!yerIsmiKontrol.equals("") && !konumKontrol.equals("") && !yorumKontrol.equals("") && !adresKontrol.equals("")) {
             if (txt_taglari_yazdir.equals("")){
                 Toast.makeText(getActivity(), "Lütfen TAG ekleyin", Toast.LENGTH_SHORT).show();
+                btn_paylasGonder.setEnabled(true);
             }else {
                 UUID uuid = UUID.randomUUID();
                 String resimIsmi = firebaseUser.getEmail() + "--" + yerIsmiKontrol + "--" + uuid;
@@ -249,8 +253,6 @@ public class F_Paylas extends Fragment {
                                                                                 @Override
                                                                                 public void onSuccess(Void aVoid) {
 
-                                                                                    btn_paylasGonder.setEnabled(false);
-
                                                                                     Intent intent = new Intent(getActivity(), AnaSayfa.class);
                                                                                     // Tüm aktiviteleri kapat
                                                                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -295,11 +297,14 @@ public class F_Paylas extends Fragment {
                 } catch (Exception e) {
                     Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "paylasGonder: " + e.getMessage());
+                    btn_paylasGonder.setEnabled(true);
                 }
             }
 
         } else
             Toast.makeText(getActivity(), "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
+
+        btn_paylasGonder.setEnabled(true);
     }
 
     @Override
