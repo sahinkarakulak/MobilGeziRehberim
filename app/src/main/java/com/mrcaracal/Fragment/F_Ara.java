@@ -1,10 +1,16 @@
 package com.mrcaracal.Fragment;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,10 +27,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,11 +64,16 @@ import com.mrcaracal.mobilgezirehberim.R;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
     private static final String TAG = "F_Ara";
+
+    private static final int REQUEST_CODE_LOCATION_PERMISSON = 203;
+
     private final String[] neye_gore = {"Yer İsmi", "Etiket", "Şehir", "Kullanıcı"};
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
@@ -115,12 +134,15 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         img_konuma_gore_bul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Bizim konuma yakın yerlerin listelenmesini sağlanacak
 
-                // Kullanıcının anlık konumu alınacak. konumla beraber posta kodu da alınacak.
-                // Böylelikle posta kodundaki ilk 2 haneye göre veriler çekilecek.
-                // Örnek: Posta kodu 12200 ise gönderiler arasında posta kodu 12 ile başlayan tüm gönderiler çekilecek.
-                Toast.makeText(getActivity(), "Yakın yerler listeleniyor", Toast.LENGTH_SHORT).show();
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSON);
+                } else {
+                    listeTemizleme();
+                    recycler_view_ara.scrollToPosition(0);
+                    yakinYerleriListele();
+                }
+
             }
         });
 
@@ -201,6 +223,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                 if (anahtar_kelimemiz.equals("sehir")) {
                     Sehirler sehirler = new Sehirler();
                     String secilen_sehir_kodu = sehirler.sehirler(parent.getSelectedItem().toString());
+                    Toast.makeText(getActivity(), "Seçilen şehir kodu: "+secilen_sehir_kodu, Toast.LENGTH_SHORT).show();
 
                     if (secilen_sehir_kodu.equals("Şehir Seçin!")) {
                         Toast.makeText(getActivity(), "Lütfen Şehir Seçin!", Toast.LENGTH_SHORT).show();
@@ -271,6 +294,77 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         recycler_view_ara.setAdapter(recyclerAdapterYapim);
 
         return viewGroup;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSON && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                yakinYerleriListele();
+            } else {
+                Toast.makeText(getActivity(), "İzin Verilmedi", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    }
+
+    private void yakinYerleriListele() {
+
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(3000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        try {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            LocationServices.getFusedLocationProviderClient(getActivity())
+                    .requestLocationUpdates(locationRequest, new LocationCallback() {
+                        @Override
+                        public void onLocationResult(@NonNull LocationResult locationResult) {
+                            super.onLocationResult(locationResult);
+                            LocationServices.getFusedLocationProviderClient(getActivity()).removeLocationUpdates(this);
+                            if (locationResult != null && locationResult.getLocations().size() > 0){
+                                int lastestLocationIndex = locationResult.getLocations().size() - 1;
+                                double latitude = locationResult.getLocations().get(lastestLocationIndex).getLatitude();
+                                double longitude = locationResult.getLocations().get(lastestLocationIndex).getLongitude();
+
+                                Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                                List<Address> addressList = null;
+                                try {
+                                    addressList = geocoder.getFromLocation(latitude, longitude, 1);
+                                    if (addressList != null || !addressList.isEmpty()){
+                                        String postaKodumuz = addressList.get(0).getPostalCode();
+                                        aramaYapSehirIcin(postaKodumuz.substring(0,2));
+                                    }
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        }
+
+                        @Override
+                        public void onLocationAvailability(@NonNull LocationAvailability locationAvailability) {
+                            super.onLocationAvailability(locationAvailability);
+                        }
+                    },Looper.getMainLooper());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+
     }
 
     public void listeTemizleme() {
