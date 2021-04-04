@@ -1,8 +1,5 @@
 package com.mrcaracal.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,6 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,10 +46,10 @@ public class HaritaKonumaGit extends AppCompatActivity implements OnMapReadyCall
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        double enlem = (double) GET.getFloat("konum_git_enlem", 0);
-        double boylam = (double) GET.getFloat("konum_git_boylam", 0);
+        double enlem = GET.getFloat("konum_git_enlem", 0);
+        double boylam = GET.getFloat("konum_git_boylam", 0);
 
-        Log.d(TAG, "onMapReady: "+enlem + "," + boylam);
+        Log.d(TAG, "onMapReady: " + enlem + "," + boylam);
 
         LatLng gonderi_konumu = new LatLng(enlem, boylam);
         mMap.addMarker(new MarkerOptions().position(gonderi_konumu).title("Gönderi Konumu"));

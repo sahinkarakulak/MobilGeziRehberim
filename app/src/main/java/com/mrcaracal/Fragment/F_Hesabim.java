@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -200,7 +199,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         return viewGroup;
     }
 
-    public void listeTemizleme(){
+    public void listeTemizleme() {
         gonderiIDleriFB.clear();
         kullaniciEpostalariFB.clear();
         resimAdresleriFB.clear();
@@ -403,7 +402,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
     }
 
-    public void paylasilanlardanKonumaGit(){
+    public void paylasilanlardanKonumaGit() {
         String[] gonderi_konumu = konumlariFB.get(POSITION_DEGERI).split(",");
 
         int belirtec = 0;
@@ -422,10 +421,10 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
         startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
 
-        Log.d(TAG, "Enlem: "+enlem+"   \tBoylam: "+boylam);
+        Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
     }
 
-    public void kaydedilenlerdenKonumaGit(){
+    public void kaydedilenlerdenKonumaGit() {
         String[] gonderi_konumu = konumlariFB.get(POSITION_DEGERI).split(",");
 
         int belirtec = 0;
@@ -444,7 +443,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
         startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
 
-        Log.d(TAG, "Enlem: "+enlem+"   \tBoylam: "+boylam);
+        Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
     }
 
     public void konumaGitIslemleri(int position) {
@@ -466,11 +465,11 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
 
         startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
 
-        Log.d(TAG, "Enlem: "+enlem+"   \tBoylam: "+boylam);
+        Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
 
     }
 
-    public String tagGoster(int position){
+    public String tagGoster(int position) {
 
         String taggg = "";
         String al_taglar = taglarFB.get(position);
@@ -478,23 +477,23 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         String alinan_taglar;
         String[] a_t;
 
-        switch (TABKONTROL){
+        switch (TABKONTROL) {
             case "paylasilanlar":
-                alinan_taglar = al_taglar.substring(1, tag_uzunluk-1);
+                alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1);
                 a_t = alinan_taglar.split(",");
 
-                for(String tags : a_t){
-                    Log.d(TAG, "onLongItemClick: "+tags.trim());
+                for (String tags : a_t) {
+                    Log.d(TAG, "onLongItemClick: " + tags.trim());
                     taggg += "#" + tags.trim() + " ";
                 }
                 break;
 
             case "kaydedilenler":
-                alinan_taglar = al_taglar.substring(2, tag_uzunluk-2);
+                alinan_taglar = al_taglar.substring(2, tag_uzunluk - 2);
                 a_t = alinan_taglar.split(",");
 
-                for(String tags : a_t){
-                    Log.d(TAG, "onLongItemClick: "+tags.trim());
+                for (String tags : a_t) {
+                    Log.d(TAG, "onLongItemClick: " + tags.trim());
                     taggg += "#" + tags.trim() + " ";
                 }
                 break;
@@ -545,7 +544,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         bottomSheetView.findViewById(R.id.bs_konuma_git).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (TABKONTROL){
+                switch (TABKONTROL) {
                     case "paylasilanlar":
                         paylasilanlardanKonumaGit();
                         break;

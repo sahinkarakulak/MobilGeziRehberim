@@ -1,17 +1,9 @@
 package com.mrcaracal.Fragment;
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -24,14 +16,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,7 +39,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mrcaracal.Activity.Harita;
 import com.mrcaracal.Activity.HaritaKonumaGit;
 import com.mrcaracal.Adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
@@ -59,22 +47,18 @@ import com.mrcaracal.Modul.IletisimBilgileri;
 import com.mrcaracal.Modul.Sehirler;
 import com.mrcaracal.mobilgezirehberim.R;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
     private static final String TAG = "F_Ara";
-
+    private final String[] neye_gore = {"Yer İsmi", "Etiket", "Şehir", "Kullanıcı"};
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firebaseFirestore;
-
     ArrayList<String> gonderiIDleriFB;
     ArrayList<String> kullaniciEpostalariFB;
     ArrayList<String> resimAdresleriFB;
@@ -86,11 +70,8 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
     ArrayList<String> postaKoduFB;
     ArrayList<String> taglarFB;
     ArrayList<Timestamp> zamanlarFB;
-
     RecyclerView recycler_view_ara;
-
     RecyclerAdapterYapim recyclerAdapterYapim;
-
     ImageView img_konuma_gore_bul;
     EditText edt_anahtar_kelime_arat;
     Spinner sp_ara_neye_gore, sp_sehirler;
@@ -100,7 +81,6 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
     double enlem;
     double boylam;
     ViewGroup viewGroup;
-    private final String[] neye_gore = {"Yer İsmi", "Etiket", "Şehir", "Kullanıcı"};
     private ArrayAdapter<String> sp_adapter_neye_gore;
     private ArrayAdapter<String> sp_adapter_sehirler;
 
@@ -224,7 +204,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
                     if (secilen_sehir_kodu.equals("Şehir Seçin!")) {
                         Toast.makeText(getActivity(), "Lütfen Şehir Seçin!", Toast.LENGTH_SHORT).show();
-                    } else{
+                    } else {
                         // VT'de Gonderiler bölümünde posta kodu alınan değerle başlayan tüm gonderileri çeken bir algoritma geliştir.
 
                         aramaYapSehirIcin(secilen_sehir_kodu);
@@ -416,7 +396,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                 });
     }
 
-    public void aramaYapSehirIcin(String postaKodu){
+    public void aramaYapSehirIcin(String postaKodu) {
         Log.d(TAG, "aramaYapSehirIcin: Çalıştı");
 
         CollectionReference collectionReference = firebaseFirestore
@@ -602,7 +582,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
         View bottomSheetView = LayoutInflater.from(getActivity())
-                .inflate(R.layout.layout_bottom_sheet, (LinearLayout) viewGroup.findViewById(R.id.bottomSheetContainer));
+                .inflate(R.layout.layout_bottom_sheet, viewGroup.findViewById(R.id.bottomSheetContainer));
 
         // Gönderiyi Kaydet
         bottomSheetView.findViewById(R.id.bs_gonderiyi_kaydet).setOnClickListener(new View.OnClickListener() {
