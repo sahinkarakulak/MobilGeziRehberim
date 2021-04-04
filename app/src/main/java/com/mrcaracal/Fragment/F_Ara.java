@@ -287,6 +287,34 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         zamanlarFB.clear();
     }
 
+    public void veriCagir(Map<String, Object> data){
+        Map<String, Object> verilerKumesi = data;
+
+        String gonderiID = verilerKumesi.get("gonderiID").toString();
+        String kullaniciEposta = verilerKumesi.get("kullaniciEposta").toString();
+        String yerIsmi = verilerKumesi.get("yerIsmi").toString();
+        yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
+        String resimAdresi = verilerKumesi.get("resimAdresi").toString();
+        String konum = verilerKumesi.get("konum").toString();
+        String adres = verilerKumesi.get("adres").toString();
+        String sehir = verilerKumesi.get("sehir").toString();
+        String yorum = verilerKumesi.get("yorum").toString();
+        String postaKodu = verilerKumesi.get("postaKodu").toString();
+        Timestamp zaman = (Timestamp) verilerKumesi.get("zaman");
+
+        gonderiIDleriFB.add(gonderiID);
+        kullaniciEpostalariFB.add(kullaniciEposta);
+        resimAdresleriFB.add(resimAdresi);
+        yerIsimleriFB.add(yerIsmi);
+        konumlariFB.add(konum);
+        adresleriFB.add(adres);
+        sehirFB.add(sehir);
+        yorumlarFB.add(yorum);
+        postaKoduFB.add(postaKodu);
+        taglarFB.add(verilerKumesi.get("taglar").toString());
+        zamanlarFB.add(zaman);
+    }
+
     public void aramaYap(String ilgiliAlan, String anahtarKelime) {
         Log.d(TAG, "aramaYap: Çalıştı");
         listeTemizleme();
@@ -308,31 +336,8 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                         if (task.isSuccessful()) {
                             QuerySnapshot querySnapshot = task.getResult();
                             for (DocumentSnapshot snapshot : querySnapshot) {
-                                Map<String, Object> verilerKumesi = snapshot.getData();
 
-                                String gonderiID = verilerKumesi.get("gonderiID").toString();
-                                String kullaniciEposta = verilerKumesi.get("kullaniciEposta").toString();
-                                String yerIsmi = verilerKumesi.get("yerIsmi").toString();
-                                yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
-                                String resimAdresi = verilerKumesi.get("resimAdresi").toString();
-                                String konum = verilerKumesi.get("konum").toString();
-                                String adres = verilerKumesi.get("adres").toString();
-                                String sehir = verilerKumesi.get("sehir").toString();
-                                String yorum = verilerKumesi.get("yorum").toString();
-                                String postaKodu = verilerKumesi.get("postaKodu").toString();
-                                Timestamp zaman = (Timestamp) verilerKumesi.get("zaman");
-
-                                gonderiIDleriFB.add(gonderiID);
-                                kullaniciEpostalariFB.add(kullaniciEposta);
-                                resimAdresleriFB.add(resimAdresi);
-                                yerIsimleriFB.add(yerIsmi);
-                                konumlariFB.add(konum);
-                                adresleriFB.add(adres);
-                                sehirFB.add(sehir);
-                                yorumlarFB.add(yorum);
-                                postaKoduFB.add(postaKodu);
-                                taglarFB.add(verilerKumesi.get("taglar").toString());
-                                zamanlarFB.add(zaman);
+                                veriCagir(snapshot.getData());
 
                                 recyclerAdapterYapim.notifyDataSetChanged();
                                 Log.d(TAG, "onComplete: Sonu...");
@@ -369,31 +374,8 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                         if (task.isSuccessful()) {
                             QuerySnapshot querySnapshot = task.getResult();
                             for (DocumentSnapshot documentSnapshot : querySnapshot) {
-                                Map<String, Object> verilerKumesi = documentSnapshot.getData();
 
-                                String gonderiID = verilerKumesi.get("gonderiID").toString();
-                                String kullaniciEposta = verilerKumesi.get("kullaniciEposta").toString();
-                                String yerIsmi = verilerKumesi.get("yerIsmi").toString();
-                                yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
-                                String resimAdresi = verilerKumesi.get("resimAdresi").toString();
-                                String konum = verilerKumesi.get("konum").toString();
-                                String adres = verilerKumesi.get("adres").toString();
-                                String sehir = verilerKumesi.get("sehir").toString();
-                                String yorum = verilerKumesi.get("yorum").toString();
-                                String postaKodu = verilerKumesi.get("postaKodu").toString();
-                                Timestamp zaman = (Timestamp) verilerKumesi.get("zaman");
-
-                                gonderiIDleriFB.add(gonderiID);
-                                kullaniciEpostalariFB.add(kullaniciEposta);
-                                resimAdresleriFB.add(resimAdresi);
-                                yerIsimleriFB.add(yerIsmi);
-                                konumlariFB.add(konum);
-                                adresleriFB.add(adres);
-                                sehirFB.add(sehir);
-                                yorumlarFB.add(yorum);
-                                postaKoduFB.add(postaKodu);
-                                taglarFB.add(verilerKumesi.get("taglar").toString());
-                                zamanlarFB.add(zaman);
+                                veriCagir(documentSnapshot.getData());
 
                                 recyclerAdapterYapim.notifyDataSetChanged();
                                 Log.d(TAG, "onComplete: Sonu...");
@@ -427,31 +409,8 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                         if (task.isSuccessful()) {
                             QuerySnapshot querySnapshot = task.getResult();
                             for (DocumentSnapshot snapshot : querySnapshot) {
-                                Map<String, Object> verilerKumesi = snapshot.getData();
 
-                                String gonderiID = verilerKumesi.get("gonderiID").toString();
-                                String kullaniciEposta = verilerKumesi.get("kullaniciEposta").toString();
-                                String yerIsmi = verilerKumesi.get("yerIsmi").toString();
-                                yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
-                                String resimAdresi = verilerKumesi.get("resimAdresi").toString();
-                                String konum = verilerKumesi.get("konum").toString();
-                                String adres = verilerKumesi.get("adres").toString();
-                                String sehir = verilerKumesi.get("sehir").toString();
-                                String yorum = verilerKumesi.get("yorum").toString();
-                                String postaKodu = verilerKumesi.get("postaKodu").toString();
-                                Timestamp zaman = (Timestamp) verilerKumesi.get("zaman");
-
-                                gonderiIDleriFB.add(gonderiID);
-                                kullaniciEpostalariFB.add(kullaniciEposta);
-                                resimAdresleriFB.add(resimAdresi);
-                                yerIsimleriFB.add(yerIsmi);
-                                konumlariFB.add(konum);
-                                adresleriFB.add(adres);
-                                sehirFB.add(sehir);
-                                yorumlarFB.add(yorum);
-                                postaKoduFB.add(postaKodu);
-                                taglarFB.add(verilerKumesi.get("taglar").toString());
-                                zamanlarFB.add(zaman);
+                                veriCagir(snapshot.getData());
 
                                 recyclerAdapterYapim.notifyDataSetChanged();
                                 Log.d(TAG, "onComplete: Sonu...");
