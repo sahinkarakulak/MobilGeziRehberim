@@ -38,7 +38,7 @@ public class HaritaKonumaGit extends AppCompatActivity implements OnMapReadyCall
 
         setTitle("Gönderi Konumu");
 
-        GET = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        GET = getSharedPreferences("harita", MODE_PRIVATE);
         SET = GET.edit();
     }
 

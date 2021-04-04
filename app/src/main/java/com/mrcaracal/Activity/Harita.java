@@ -61,7 +61,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
 
         setTitle("Harita");
 
-        GET = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        GET = getSharedPreferences("harita", MODE_PRIVATE);
         SET = GET.edit();
     }
 

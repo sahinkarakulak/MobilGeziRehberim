@@ -54,7 +54,7 @@ public class Giris extends AppCompatActivity {
 
         chb_giris_bilgileri_hatirla = findViewById(R.id.chb_giris_bilgileri_hatirla);
 
-        GET = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        GET = getSharedPreferences("giris", MODE_PRIVATE);
         SET = GET.edit();
 
     }

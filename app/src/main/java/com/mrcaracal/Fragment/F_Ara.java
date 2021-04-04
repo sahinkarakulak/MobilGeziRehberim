@@ -2,6 +2,7 @@ package com.mrcaracal.Fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -121,7 +122,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         taglarFB = new ArrayList<>();
         zamanlarFB = new ArrayList<>();
 
-        GET = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        GET = getActivity().getSharedPreferences("harita", Context.MODE_PRIVATE);
         SET = GET.edit();
 
     }

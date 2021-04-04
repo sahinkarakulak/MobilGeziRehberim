@@ -1,6 +1,7 @@
 package com.mrcaracal.Fragment;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -86,7 +87,7 @@ public class F_Paylas extends Fragment {
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        GET = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        GET = getActivity().getSharedPreferences("harita", Context.MODE_PRIVATE);
         SET = GET.edit();
 
     }
