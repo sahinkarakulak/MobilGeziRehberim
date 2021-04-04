@@ -223,7 +223,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                 if (anahtar_kelimemiz.equals("sehir")) {
                     Sehirler sehirler = new Sehirler();
                     String secilen_sehir_kodu = sehirler.sehirler(parent.getSelectedItem().toString());
-                    Toast.makeText(getActivity(), "Seçilen şehir kodu: "+secilen_sehir_kodu, Toast.LENGTH_SHORT).show();
+                    /*Toast.makeText(getActivity(), "Seçilen şehir kodu: "+secilen_sehir_kodu, Toast.LENGTH_SHORT).show();*/
 
                     if (secilen_sehir_kodu.equals("Şehir Seçin!")) {
                         Toast.makeText(getActivity(), "Lütfen Şehir Seçin!", Toast.LENGTH_SHORT).show();

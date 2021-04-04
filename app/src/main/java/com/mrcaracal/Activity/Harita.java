@@ -102,7 +102,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                         }
                     }
                 } catch (IOException e) {
-                    Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    /*Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();*/
                     e.printStackTrace();
                 }
 
@@ -112,8 +112,8 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                 SET.putString("postaKodu", posta_kodu);
                 SET.commit();
 
-                Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: "
-                        + boylam + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: "
+                        + boylam + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();*/
                 konumuBul();
 
             }
@@ -122,13 +122,13 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
             @Override
             public void onProviderDisabled(@NonNull String provider) {
                 String str_provider = provider;
-                Toast.makeText(Harita.this, str_provider + " Kapalı", Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(Harita.this, str_provider + " Kapalı", Toast.LENGTH_SHORT).show();*/
             }
 
             @Override
             public void onProviderEnabled(@NonNull String provider) {
                 String str_provider = provider;
-                Toast.makeText(Harita.this, str_provider + " Açık", Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(Harita.this, str_provider + " Açık", Toast.LENGTH_SHORT).show();*/
             }
         };
 
@@ -225,13 +225,13 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                 }
             }
         } catch (IOException e) {
-            Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            /*Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();*/
             Log.d(TAG, "onMapClick: " + e.getMessage());
             e.printStackTrace();
         }
 
-        Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam
-                + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();
+        /*Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam
+                + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();*/
 
         if (marker != null) {
             marker.remove();
