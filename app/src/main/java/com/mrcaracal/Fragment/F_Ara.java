@@ -255,7 +255,19 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
 
         recycler_view_ara = viewGroup.findViewById(R.id.recycler_view_ara);
         recycler_view_ara.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB, resimAdresleriFB, yerIsimleriFB, konumlariFB, adresleriFB, sehirFB, yorumlarFB, postaKoduFB, taglarFB, zamanlarFB, this);
+        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB,
+                kullaniciEpostalariFB,
+                resimAdresleriFB,
+                yerIsimleriFB,
+                konumlariFB,
+                adresleriFB,
+                sehirFB,
+                yorumlarFB,
+                postaKoduFB,
+                taglarFB,
+                zamanlarFB,
+                this);
+
         recycler_view_ara.setAdapter(recyclerAdapterYapim);
 
         return viewGroup;
@@ -325,7 +337,8 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                                 recyclerAdapterYapim.notifyDataSetChanged();
                                 Log.d(TAG, "onComplete: Sonu...");
 
-                                // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
+                                // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise
+                                // aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
                             }
                         }
 
@@ -443,7 +456,8 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                                 recyclerAdapterYapim.notifyDataSetChanged();
                                 Log.d(TAG, "onComplete: Sonu...");
 
-                                // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
+                                // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise
+                                // aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
                             }
                         }
 
@@ -503,7 +517,17 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
         } else {
 
-            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), adresleriFB.get(position), sehirFB.get(position), yorumlarFB.get(position), postaKoduFB.get(position), Collections.singletonList(taglarFB.get(position)), FieldValue.serverTimestamp());
+            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position),
+                    kullaniciEpostalariFB.get(position),
+                    resimAdresleriFB.get(position),
+                    yerIsimleriFB.get(position),
+                    konumlariFB.get(position),
+                    adresleriFB.get(position),
+                    sehirFB.get(position),
+                    yorumlarFB.get(position),
+                    postaKoduFB.get(position),
+                    Collections.singletonList(taglarFB.get(position)),
+                    FieldValue.serverTimestamp());
 
             DocumentReference documentReference = firebaseFirestore
                     .collection("Kaydedenler")

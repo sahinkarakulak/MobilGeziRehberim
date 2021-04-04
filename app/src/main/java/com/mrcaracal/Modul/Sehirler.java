@@ -50,7 +50,6 @@ public class Sehirler {
         map.put("Iğdır","76");
         map.put("Isparta","32");
         map.put("İçel (Mersin)","33");
-        //
         map.put("İstanbul","34");
         map.put("İzmir","35");
         map.put("Karabük","78");

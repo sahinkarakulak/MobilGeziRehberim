@@ -4,7 +4,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,13 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.mrcaracal.mobilgezirehberim.R;
@@ -29,11 +24,6 @@ import java.util.ArrayList;
 public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYapim.GonderiHolder> {
 
     private static final String TAG = "RecyclerAdapterYapim";
-
-    FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
-    FirebaseFirestore firebaseFirestore;
-
     private final ArrayList<String> gonderiIDleriListesi;
     private final ArrayList<String> kullaniciEpostalariListesi;
     private final ArrayList<String> resimAdresleriListesi;
@@ -45,10 +35,23 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
     private final ArrayList<String> postaKodlari;
     private final ArrayList<String> taglarListesi;
     private final ArrayList<com.google.firebase.Timestamp> zamanlarListesi;
-
     private final RecyclerViewClickInterface recyclerViewClickInterface;
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    FirebaseFirestore firebaseFirestore;
 
-    public RecyclerAdapterYapim(ArrayList<String> gonderiIDleriListesi, ArrayList<String> kullaniciEpostalariListesi, ArrayList<String> resimAdresleriListesi, ArrayList<String> yerIsimleriListesi, ArrayList<String> konumlariListesi, ArrayList<String> adresleriListesi, ArrayList<String> sehirListesi, ArrayList<String> yorumlarListesi, ArrayList<String> postaKodlari, ArrayList<String> taglarListesi, ArrayList<Timestamp> zamanlarListesi, RecyclerViewClickInterface recyclerViewClickInterface) {
+    public RecyclerAdapterYapim(ArrayList<String> gonderiIDleriListesi,
+                                ArrayList<String> kullaniciEpostalariListesi,
+                                ArrayList<String> resimAdresleriListesi,
+                                ArrayList<String> yerIsimleriListesi,
+                                ArrayList<String> konumlariListesi,
+                                ArrayList<String> adresleriListesi,
+                                ArrayList<String> sehirListesi,
+                                ArrayList<String> yorumlarListesi,
+                                ArrayList<String> postaKodlari,
+                                ArrayList<String> taglarListesi,
+                                ArrayList<Timestamp> zamanlarListesi,
+                                RecyclerViewClickInterface recyclerViewClickInterface) {
         this.gonderiIDleriListesi = gonderiIDleriListesi;
         this.kullaniciEpostalariListesi = kullaniciEpostalariListesi;
         this.resimAdresleriListesi = resimAdresleriListesi;

@@ -121,7 +121,18 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         // RecyclerView Tanımlama İşlemi
         recyclerViewHesabim = viewGroup.findViewById(R.id.recyclerViewHesabim);
         recyclerViewHesabim.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB, resimAdresleriFB, yerIsimleriFB, konumlariFB, adresleriFB, sehirFB, yorumlarFB, postaKoduFB, taglarFB, zamanlarFB, this);
+        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB,
+                kullaniciEpostalariFB,
+                resimAdresleriFB,
+                yerIsimleriFB,
+                konumlariFB,
+                adresleriFB,
+                sehirFB,
+                yorumlarFB,
+                postaKoduFB,
+                taglarFB,
+                zamanlarFB,
+                this);
         recyclerViewHesabim.setAdapter(recyclerAdapterYapim);
 
         img_profil_resmi = viewGroup.findViewById(R.id.img_profil_resmi);

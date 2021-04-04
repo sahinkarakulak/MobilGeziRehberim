@@ -210,7 +210,8 @@ public class F_Paylas extends Fragment {
                                                 UUID uuid1 = UUID.randomUUID();
                                                 gonderiID = "" + uuid1;
 
-                                                MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres, sehirrr, yorum, posta_kodu, taglar, FieldValue.serverTimestamp());
+                                                MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres,
+                                                        sehirrr, yorum, posta_kodu, taglar, FieldValue.serverTimestamp());
 
                                                 DocumentReference documentReference1 = firebaseFirestore
                                                         .collection("Paylasilanlar")

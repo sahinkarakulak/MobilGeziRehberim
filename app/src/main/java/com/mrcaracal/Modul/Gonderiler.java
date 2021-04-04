@@ -23,7 +23,8 @@ public class Gonderiler {
 
     }
 
-    public Gonderiler(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi, String konum, String adres, String yorum, FieldValue zaman) {
+    public Gonderiler(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi,
+                      String konum, String adres, String yorum, FieldValue zaman) {
         this.gonderiID = gonderiID;
         this.kullaniciEposta = kullaniciEposta;
         this.resimAdresi = resimAdresi;
@@ -34,7 +35,8 @@ public class Gonderiler {
         this.zaman = zaman;
     }
 
-    public Gonderiler(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi, String konum, String adres, String sehir, String yorum, String postaKodu, List<String> taglar, FieldValue zaman) {
+    public Gonderiler(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi,
+                      String konum, String adres, String sehir, String yorum, String postaKodu, List<String> taglar, FieldValue zaman) {
         this.gonderiID = gonderiID;
         this.kullaniciEposta = kullaniciEposta;
         this.resimAdresi = resimAdresi;

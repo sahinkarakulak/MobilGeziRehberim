@@ -97,7 +97,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                         adres += addressList.get(0).getAddressLine(0);
                         posta_kodu = addressList.get(0).getPostalCode();
 
-                        if (posta_kodu == null){
+                        if (posta_kodu == null) {
                             posta_kodu = "?";
                         }
                     }
@@ -112,7 +112,8 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                 SET.putString("postaKodu", posta_kodu);
                 SET.commit();
 
-                Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nPosta Kodu: "+posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: "
+                        + boylam + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();
                 konumuBul();
 
             }
@@ -184,7 +185,8 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
 
         if (grantResults.length > 0) {
             if (requestCode == 4) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000, 3, locationListener);
                 }
             }
@@ -218,7 +220,7 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
                 adres += addressList.get(0).getAddressLine(0);
                 posta_kodu = addressList.get(0).getPostalCode();
 
-                if (posta_kodu == null){
+                if (posta_kodu == null) {
                     posta_kodu = "?";
                 }
             }
@@ -228,7 +230,8 @@ public class Harita extends AppCompatActivity implements OnMapReadyCallback, Goo
             e.printStackTrace();
         }
 
-        Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam + "\nPosta Kodu: "+posta_kodu +"\nAdres: " + adres, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam
+                + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();
 
         if (marker != null) {
             marker.remove();

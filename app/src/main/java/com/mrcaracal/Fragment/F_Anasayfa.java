@@ -112,7 +112,9 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         // RecyclerView Tanımlama İşlemi
         recyclerView = viewGroup.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB, resimAdresleriFB, yerIsimleriFB, konumlariFB, adresleriFB, sehirFB, yorumlarFB, postaKoduFB, taglarFB, zamanlarFB, this);
+        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB, kullaniciEpostalariFB,
+                resimAdresleriFB, yerIsimleriFB, konumlariFB, adresleriFB, sehirFB, yorumlarFB,
+                postaKoduFB, taglarFB, zamanlarFB, this);
         recyclerView.setAdapter(recyclerAdapterYapim);
         Log.d(TAG, "onCreateView: RecyclerView tanımlama ve Adapter'a gerekli paremetrelerin gönderilmesi tamamlandı");
 
@@ -221,7 +223,17 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
             Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
         } else {
 
-            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position), kullaniciEpostalariFB.get(position), resimAdresleriFB.get(position), yerIsimleriFB.get(position), konumlariFB.get(position), adresleriFB.get(position), sehirFB.get(position), yorumlarFB.get(position), postaKoduFB.get(position), Collections.singletonList(taglarFB.get(position)), FieldValue.serverTimestamp());
+            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position),
+                    kullaniciEpostalariFB.get(position),
+                    resimAdresleriFB.get(position),
+                    yerIsimleriFB.get(position),
+                    konumlariFB.get(position),
+                    adresleriFB.get(position),
+                    sehirFB.get(position),
+                    yorumlarFB.get(position),
+                    postaKoduFB.get(position),
+                    Collections.singletonList(taglarFB.get(position)),
+                    FieldValue.serverTimestamp());
 
             DocumentReference documentReference = firebaseFirestore
                     .collection("Kaydedenler")
