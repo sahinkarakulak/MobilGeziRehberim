@@ -41,6 +41,7 @@
                 android:layout_marginBottom="5dp"
                 android:hint="@string/paylas_yer_ismi"
                 android:inputType="text"
+                android:textSize="15sp"
                 android:maxLines="1" />
 
             <EditText
@@ -51,6 +52,7 @@
                 android:layout_marginBottom="5dp"
                 android:gravity="top"
                 android:hint="@string/paylas_yorum"
+                android:textSize="15sp"
                 android:maxLength="4000"
                 android:maxLines="5"/>
 
@@ -88,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/paylas_tag"
                     android:inputType="text"
+                    android:textSize="15sp"
                     android:maxLines="1" />
 
                 <Button
@@ -154,6 +157,7 @@
                             android:layout_marginBottom="5dp"
                             android:hint="@string/paylas_koordinat"
                             android:inputType="text"
+                            android:textSize="15sp"
                             android:maxLength="140"
                             android:maxLines="1" />
 
@@ -166,6 +170,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
                             android:hint="@string/paylas_sehir"
+                            android:textSize="15sp"
                             android:inputType="text"
                             android:maxLength="140"
                             android:maxLines="1" />
@@ -178,6 +183,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/paylas_adres"
+                        android:textSize="15sp"
                         android:inputType="text"
                         android:maxLength="140"
                         android:maxLines="1" />

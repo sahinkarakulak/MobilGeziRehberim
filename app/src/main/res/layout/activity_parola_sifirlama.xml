@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:layout_marginBottom="10dp"
+                android:textSize="15sp"
                 android:hint="E-Posta"/>
 
             <Button

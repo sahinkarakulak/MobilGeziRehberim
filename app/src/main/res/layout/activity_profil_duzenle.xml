@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:textSize="15sp"
             android:hint="Kullanıcı Adı" />
 
     </androidx.cardview.widget.CardView>
@@ -67,6 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:hint="Biyografi"
+            android:textSize="15sp"
             android:maxLines="3" />
 
     </androidx.cardview.widget.CardView>
@@ -89,6 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="18dp"
+            android:textSize="15sp"
             android:text="mgr@mgr.com"/>
 
     </androidx.cardview.widget.CardView>
