@@ -23,7 +23,7 @@ import com.mrcaracal.mobilgezirehberim.Giris;
 import com.mrcaracal.mobilgezirehberim.R;
 
 public class AnaSayfa extends AppCompatActivity {
-
+    
     private static final String TAG = "AnaSayfa";
 
     boolean doubleBackToExitPressedOnce = false;

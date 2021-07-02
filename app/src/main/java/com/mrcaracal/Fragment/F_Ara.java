@@ -9,16 +9,16 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -36,7 +36,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
@@ -76,6 +75,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
     private static final int REQUEST_CODE_LOCATION_PERMISSON = 203;
 
     private final String[] neye_gore = {"Yer İsmi", "Etiket", "Şehir", "Kullanıcı"};
+    //private final String[] neye_gore = {"Yer İsmi", "Etiket", "Şehir", "Kullanıcı", "İnstagram"};
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firebaseFirestore;
@@ -91,6 +91,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
     ArrayList<String> taglarFB;
     ArrayList<Timestamp> zamanlarFB;
     RecyclerView recycler_view_ara;
+    WebView webView;
     RecyclerAdapterYapim recyclerAdapterYapim;
     ImageView img_konuma_gore_bul;
     EditText edt_anahtar_kelime_arat;
@@ -200,6 +201,21 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                     recycler_view_ara.scrollToPosition(0);
                     anahtar_kelimemiz = "kullaniciEposta";
                 }
+
+                /*if(parent.getSelectedItem().toString().equals(neye_gore[4])){
+
+                    recycler_view_ara.setVisibility(View.INVISIBLE);
+                    webView = viewGroup.findViewById(R.id.webview);
+                    webView.setVisibility(View.VISIBLE);
+                    webView.getSettings().setJavaScriptEnabled(true);
+                    //Zoom yapılabilinir olup olmadığını belirtiyoruz
+                    webView.getSettings().setBuiltInZoomControls(true);
+                    //Hangi adresi açacağını belirtiyoruz
+                    webView.loadUrl("https://www.instagram.com/explore/tags/kapadokya/");
+                    //Açılacak olan web adresinin uygulama içinde mi yoksa tarayıcı da mı açılacağını ayarlıyoruz
+                    webView.setWebViewClient(new WebViewClient());
+                }*/
+
             }
 
             @Override
