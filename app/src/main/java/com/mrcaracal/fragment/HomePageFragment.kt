@@ -31,6 +31,8 @@ import com.mrcaracal.modul.Posts
 import java.text.DateFormat
 import java.util.*
 
+private const val TAG = "HomePageFragment"
+
 class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
 
     //    ProgressDialog progressDialog;

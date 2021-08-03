@@ -33,6 +33,8 @@ import de.hdodenhof.circleimageview.CircleImageView
 import java.text.DateFormat
 import java.util.*
 
+private const val TAG = "MyAccountFragment"
+
 class MyAccountFragment() : Fragment(), RecyclerViewClickInterface {
 
     var firebaseAuth: FirebaseAuth? = null

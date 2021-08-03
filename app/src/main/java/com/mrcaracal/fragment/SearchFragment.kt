@@ -39,6 +39,8 @@ import com.mrcaracal.modul.Posts
 import java.text.DateFormat
 import java.util.*
 
+private const val TAG = "SearchFragment"
+
 class SearchFragment() : Fragment(), RecyclerViewClickInterface {
     private val accordingToWhat = arrayOf("Yer İsmi", "Etiket", "Şehir", "Kullanıcı")
 

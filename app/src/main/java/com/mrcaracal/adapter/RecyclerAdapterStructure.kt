@@ -18,6 +18,8 @@ import com.mrcaracal.mobilgezirehberim.R
 import com.squareup.picasso.Picasso
 import java.util.*
 
+private const val TAG = "RecyclerAdapterStructur"
+
 class RecyclerAdapterStructure(
     private val gonderiIDleriListesi: ArrayList<String>,
     private val kullaniciEpostalariListesi: ArrayList<String>,

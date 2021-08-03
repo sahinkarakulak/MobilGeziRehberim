@@ -13,7 +13,7 @@
         app:cardCornerRadius="10dp">
 
         <ImageView
-            android:id="@+id/img_paylasResimSec"
+            android:id="@+id/img_sharePictureSelected"
             android:layout_width="match_parent"
             android:layout_height="230dp"
             android:onClick="img_paylasResimSec"
@@ -22,7 +22,7 @@
     </androidx.cardview.widget.CardView>
 
     <ScrollView
-        android:id="@+id/sv_paylas"
+        android:id="@+id/sv_share"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
@@ -34,7 +34,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/edt_paylasYerIsmi"
+                android:id="@+id/edt_sharePlaceName"
                 android:background="@drawable/bg_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                 android:maxLines="1" />
 
             <EditText
-                android:id="@+id/edt_paylasYorum"
+                android:id="@+id/edt_shareComment"
                 android:background="@drawable/bg_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
 
                 <EditText
                     android:layout_weight="1"
-                    android:id="@+id/edt_paylasTag"
+                    android:id="@+id/edt_shareTag"
                     android:background="@drawable/bg_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
                     android:maxLines="1" />
 
                 <Button
-                    android:id="@+id/btn_tag_ekle"
+                    android:id="@+id/btn_addTag"
                     android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -104,7 +104,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/txt_taglari_yazdir"
+                android:id="@+id/tv_printTags"
                 android:text="@string/paylas_taglar"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="5dp"
@@ -149,7 +149,7 @@
                         android:orientation="horizontal">
 
                         <EditText
-                            android:id="@+id/edt_konum"
+                            android:id="@+id/edt_location"
                             android:layout_weight="1"
                             android:background="@drawable/bg_edit_text"
                             android:layout_width="match_parent"
@@ -162,7 +162,7 @@
                             android:maxLines="1" />
 
                         <EditText
-                            android:id="@+id/edt_sehir"
+                            android:id="@+id/edt_city"
                             android:layout_weight="1"
                             android:layout_marginLeft="5dp"
                             android:background="@drawable/bg_edit_text"
@@ -178,7 +178,7 @@
                     </LinearLayout>
 
                     <EditText
-                        android:id="@+id/edt_adres"
+                        android:id="@+id/edt_addres"
                         android:background="@drawable/bg_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -191,7 +191,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/konum_sec"
+                    android:id="@+id/selectLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
@@ -201,7 +201,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/btn_paylasGonder"
+                android:id="@+id/btn_shareSend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"

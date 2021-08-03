@@ -1,356 +1,292 @@
-package com.mrcaracal.fragment;
+package com.mrcaracal.fragment
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Bundle
+import android.os.Handler
+import android.provider.MediaStore
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.mrcaracal.activity.HomePageActivity
+import com.mrcaracal.activity.MyMapActivity
+import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.modul.Posts
+import com.squareup.picasso.Picasso
+import java.util.*
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+private const val TAG = "ShareFragment"
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.mrcaracal.activity.HomePageActivity;
-import com.mrcaracal.activity.MyMapActivity;
-import com.mrcaracal.modul.Posts;
-import com.mrcaracal.mobilgezirehberim.R;
-import com.squareup.picasso.Picasso;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
-import static android.app.Activity.RESULT_OK;
-
-public class ShareFragment extends Fragment {
-
-    private static final String TAG = "F_Paylas";
-
-    Posts MGonderiler;
-    FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
-    FirebaseFirestore firebaseFirestore;
-    Uri resimYolu;
-    ImageView img_paylasResimSec;
-    EditText edt_paylasYerIsmi, edt_paylasYorum, edt_paylasTag, edt_konum, edt_adres, edt_sehir;
-    Button btn_paylasGonder, konum_sec, btn_tag_ekle;
-    TextView txt_taglari_yazdir;
-    ScrollView sv_paylas;
-    SharedPreferences GET;
-    SharedPreferences.Editor SET;
-    float enlem;
-    float boylam;
-    String adres;
-    String posta_kodu;
-    String gonderiID;
-    List<String> taglar;
-    private FirebaseStorage firebaseStorage;
-    private StorageReference storageReference;
-
-    public ShareFragment() {
-        //
+class ShareFragment : Fragment() {
+    var MGonderiler: Posts? = null
+    var firebaseAuth: FirebaseAuth? = null
+    var firebaseUser: FirebaseUser? = null
+    var firebaseFirestore: FirebaseFirestore? = null
+    var picturePath: Uri? = null
+    private lateinit var img_sharePictureSelected: ImageView
+    var edt_sharePlaceName: EditText? = null
+    var edt_shareComment: EditText? = null
+    var edt_shareTag: EditText? = null
+    var edt_location: EditText? = null
+    var edt_addres: EditText? = null
+    var edt_city: EditText? = null
+    private lateinit var btn_shareSend: Button
+    private lateinit var selectLocation: Button
+    private lateinit var btn_addTag: Button
+    var tv_printTags: TextView? = null
+    var sv_share: ScrollView? = null
+    private lateinit var GET: SharedPreferences
+    private lateinit var SET: SharedPreferences.Editor
+    var latitude = 0f
+    var longitude = 0f
+    var addres: String? = null
+    var postCode: String? = null
+    var postID: String? = null
+    var tags: List<String>? = null
+    private var firebaseStorage: FirebaseStorage? = null
+    private var storageReference: StorageReference? = null
+    private fun init() {
+        firebaseStorage = FirebaseStorage.getInstance()
+        storageReference = firebaseStorage!!.reference
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseUser = firebaseAuth!!.currentUser
+        firebaseFirestore = FirebaseFirestore.getInstance()
+        GET = activity!!.getSharedPreferences("harita", Context.MODE_PRIVATE)
+        SET = GET.edit()
     }
 
-    private void init() {
-
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-        GET = getActivity().getSharedPreferences("harita", Context.MODE_PRIVATE);
-        SET = GET.edit();
-
-    }
-
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.frag_paylas, container, false);
-        init();
-
-        img_paylasResimSec = viewGroup.findViewById(R.id.img_paylasResimSec);
-        edt_paylasYerIsmi = viewGroup.findViewById(R.id.edt_paylasYerIsmi);
-        edt_konum = viewGroup.findViewById(R.id.edt_konum);
-        edt_adres = viewGroup.findViewById(R.id.edt_adres);
-        edt_sehir = viewGroup.findViewById(R.id.edt_sehir);
-        edt_paylasYorum = viewGroup.findViewById(R.id.edt_paylasYorum);
-        edt_paylasTag = viewGroup.findViewById(R.id.edt_paylasTag);
-        konum_sec = viewGroup.findViewById(R.id.konum_sec);
-        btn_paylasGonder = viewGroup.findViewById(R.id.btn_paylasGonder);
-        btn_tag_ekle = viewGroup.findViewById(R.id.btn_tag_ekle);
-        txt_taglari_yazdir = viewGroup.findViewById(R.id.txt_taglari_yazdir);
-        sv_paylas = viewGroup.findViewById(R.id.sv_paylas);
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val viewGroup = inflater.inflate(R.layout.frag_share, container, false) as ViewGroup
+        init()
+        img_sharePictureSelected = viewGroup.findViewById(R.id.img_sharePictureSelected)
+        edt_sharePlaceName = viewGroup.findViewById(R.id.edt_sharePlaceName)
+        edt_location = viewGroup.findViewById(R.id.edt_location)
+        edt_addres = viewGroup.findViewById(R.id.edt_addres)
+        edt_city = viewGroup.findViewById(R.id.edt_city)
+        edt_shareComment = viewGroup.findViewById(R.id.edt_shareComment)
+        edt_shareTag = viewGroup.findViewById(R.id.edt_shareTag)
+        selectLocation = viewGroup.findViewById(R.id.selectLocation)
+        btn_shareSend = viewGroup.findViewById(R.id.btn_shareSend)
+        btn_addTag = viewGroup.findViewById(R.id.btn_addTag)
+        tv_printTags = viewGroup.findViewById(R.id.tv_printTags)
+        sv_share = viewGroup.findViewById(R.id.sv_share)
 
         // Galeriden resim çekmek için yapılacaklar
-        img_paylasResimSec.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                galeridenResimSec();
-            }
-        });
-
-        btn_tag_ekle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tagOlusturma();
-            }
-        });
-
-        konum_sec.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MyMapActivity.class));
-                Log.d(TAG, "onClick: Kullanıcı Harita'a yönlendirildi");
-            }
-        });
-
-        btn_paylasGonder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                paylasGonder();
-
-            }
-        });
-
-
-        return viewGroup;
+        img_sharePictureSelected.setOnClickListener(View.OnClickListener { choosePictureFromGallery() })
+        btn_addTag.setOnClickListener(View.OnClickListener { tagOlusturma() })
+        selectLocation.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(activity, MyMapActivity::class.java))
+            Log.i(TAG, "onClick: Kullanıcı Harita'a yönlendirildi")
+        })
+        btn_shareSend.setOnClickListener(View.OnClickListener { shareSend() })
+        return viewGroup
     }
 
-    public void tagOlusturma() {
-
-        String[] tagler = edt_paylasTag.getText().toString().toLowerCase().split(" ");
-
-        int etiket_sayisi = 0;
-        String taggg = "";
-        for (String tags : tagler) {
-
-            etiket_sayisi++;
-            Log.d(TAG, "TAGLER: " + tags.trim());
-            taglar = Arrays.asList(tagler);
-
-            taggg += "#" + tags + "   ";
-            txt_taglari_yazdir.setText(taggg);
-
-            if (etiket_sayisi == 5)
-                break;
+    // Daha sonradan değişken isimlerini ingilizce olacak şekilde düzenle
+    fun tagOlusturma() {
+        val tagler = edt_shareTag!!.text.toString().toLowerCase().split(" ").toTypedArray()
+        var etiket_sayisi = 0
+        var taggg = ""
+        for (tags in tagler) {
+            etiket_sayisi++
+            Log.d(TAG, "TAGLER: " + tags.trim { it <= ' ' })
+            this.tags = Arrays.asList(*tagler)
+            taggg += "#$tags   "
+            tv_printTags!!.text = taggg
+            if (etiket_sayisi == 5) break
         }
     }
 
-    public void paylasGonder() {
-        Log.d(TAG, "ÇALIŞTI");
-        btn_paylasGonder.setEnabled(true);
-
-        String yerIsmiKontrol = edt_paylasYerIsmi.getText().toString();
-        String yorumKontrol = edt_paylasYorum.getText().toString();
-        String konumKontrol = edt_konum.getText().toString();
-        String adresKontrol = edt_adres.getText().toString();
-        Log.d(TAG, "paylasGonder: Kullanıcının girdiği veriler alındı");
-
-        if (!yerIsmiKontrol.equals("") && !konumKontrol.equals("") && !yorumKontrol.equals("") && !adresKontrol.equals("")) {
-            UUID uuid = UUID.randomUUID();
-            String resimIsmi = firebaseUser.getEmail() + "--" + yerIsmiKontrol + "--" + uuid;
+    fun shareSend() {
+        Log.d(TAG, "ÇALIŞTI")
+        btn_shareSend!!.isEnabled = true
+        val placeNameControl = edt_sharePlaceName!!.text.toString()
+        val commentControl = edt_shareComment!!.text.toString()
+        val locationControl = edt_location!!.text.toString()
+        val addresControl = edt_addres!!.text.toString()
+        Log.i(TAG, "paylasGonder: Kullanıcının girdiği veriler alındı")
+        if (placeNameControl != "" && locationControl != "" && commentControl != "" && addresControl != "") {
+            val uuid = UUID.randomUUID()
+            val placeName = firebaseUser!!.email + "--" + placeNameControl + "--" + uuid
             try {
                 storageReference
-                        .child("Resimler")
-                        .child(resimIsmi)
-                        .putFile(resimYolu)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                                StorageReference storageReference1 = FirebaseStorage.getInstance().getReference("Resimler/" + resimIsmi);
-                                storageReference1
-                                        .getDownloadUrl()
-                                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                            @Override
-                                            public void onSuccess(Uri uri) {
-                                                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                                                String kullaniciEposta = firebaseUser.getEmail();
-                                                String resimAdresi = uri.toString();
-                                                String yerIsmi = edt_paylasYerIsmi.getText().toString().toLowerCase();
-                                                String konum = edt_konum.getText().toString();
-                                                String yorum = edt_paylasYorum.getText().toString();
-                                                String adres = edt_adres.getText().toString();
-                                                String sehirrr = edt_sehir.getText().toString();
-
-                                                if (taglar == null) {
-                                                    taglar = Arrays.asList("mgr", "gezi", "rehber", "seyahat", "etiketsiz");
-                                                }
-                                                if (sehirrr == null) {
-                                                    sehirrr = null;
-                                                }
-
-                                                UUID uuid1 = UUID.randomUUID();
-                                                gonderiID = "" + uuid1;
-
-                                                MGonderiler = new Posts(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres,
-                                                        sehirrr, yorum, posta_kodu, taglar, FieldValue.serverTimestamp());
-
-                                                DocumentReference documentReference1 = firebaseFirestore
-                                                        .collection("Paylasilanlar")
-                                                        .document(firebaseUser.getEmail())
-                                                        .collection("Paylastiklari")
-                                                        .document(gonderiID);
-
-                                                documentReference1
-                                                        .set(MGonderiler)
-                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
-
-                                                                DocumentReference documentReference2 = firebaseFirestore
-                                                                        .collection("Gonderiler")
-                                                                        .document(gonderiID);
-
-                                                                documentReference2
-                                                                        .set(MGonderiler)
-                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                            @Override
-                                                                            public void onSuccess(Void aVoid) {
-
-                                                                                Intent intent = new Intent(getActivity(), HomePageActivity.class);
-                                                                                // Tüm aktiviteleri kapat
-                                                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                                                startActivity(intent);
-                                                                            }
-                                                                        }).addOnFailureListener(new OnFailureListener() {
-                                                                    @Override
-                                                                    public void onFailure(@NonNull Exception e) {
-                                                                        btn_paylasGonder.setEnabled(false);
-                                                                        Log.d(TAG, "onFailure: " + e.getMessage());
-                                                                    }
-                                                                });
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                btn_paylasGonder.setEnabled(false);
-                                                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                Log.d(TAG, "onFailure: " + e.getMessage());
-                                                            }
-                                                        });
+                    ?.child("Resimler")
+                    ?.child(placeName)
+                    ?.putFile(picturePath!!)
+                    ?.addOnSuccessListener {
+                        val storageReference1 =
+                            FirebaseStorage.getInstance().getReference("Resimler/$placeName")
+                        storageReference1
+                            .downloadUrl
+                            .addOnSuccessListener { uri ->
+                                val firebaseUser = firebaseAuth!!.currentUser
+                                val userEmail = firebaseUser!!.email
+                                val pictureLink = uri.toString()
+                                val placeName = edt_sharePlaceName!!.text.toString().toLowerCase()
+                                val location = edt_location!!.text.toString()
+                                val comment = edt_shareComment!!.text.toString()
+                                val addres = edt_addres!!.text.toString()
+                                var cityyy: String? = edt_city!!.text.toString()
+                                if (tags == null) {
+                                    tags = Arrays.asList(
+                                        "mgr",
+                                        "gezi",
+                                        "rehber",
+                                        "seyahat",
+                                        "etiketsiz"
+                                    )
+                                }
+                                if (cityyy == null) {
+                                    cityyy = null
+                                }
+                                val uuid1 = UUID.randomUUID()
+                                postID = "" + uuid1
+                                MGonderiler = Posts(
+                                    postID, userEmail, pictureLink, placeName, location, addres,
+                                    cityyy, comment, postCode, tags, FieldValue.serverTimestamp()
+                                )
+                                val documentReference1 = firebaseFirestore
+                                    ?.collection("Paylasilanlar")
+                                    ?.document(firebaseUser.email!!)
+                                    ?.collection("Paylastiklari")
+                                    ?.document(postID!!)
+                                if (documentReference1 != null) {
+                                    documentReference1
+                                        .set(MGonderiler!!)
+                                        .addOnSuccessListener {
+                                            val documentReference2 = firebaseFirestore
+                                                ?.collection("Gonderiler")
+                                                ?.document(postID!!)
+                                            if (documentReference2 != null) {
+                                                documentReference2
+                                                    .set(MGonderiler!!)
+                                                    .addOnSuccessListener {
+                                                        val intent =
+                                                            Intent(activity, HomePageActivity::class.java)
+                                                        // Tüm aktiviteleri kapat
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                                        startActivity(intent)
+                                                    }
+                                                    .addOnFailureListener { e ->
+                                                        btn_shareSend!!.isEnabled = false
+                                                        Log.i(TAG, "onFailure: " + e.message)
+                                                    }
                                             }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.d(TAG, "onFailure: " + e.getMessage());
-                                                btn_paylasGonder.setEnabled(false);
-                                            }
-                                        });
-                                final Toast benimToast = Toast.makeText(getActivity(), "Gönderildi", Toast.LENGTH_SHORT);
-                                benimToast.show();
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        benimToast.cancel();
-                                    }
-                                }, 400);
-
+                                        }
+                                        .addOnFailureListener { e ->
+                                            btn_shareSend!!.isEnabled = false
+                                            Toast.makeText(activity, e.message, Toast.LENGTH_SHORT)
+                                                .show()
+                                            Log.i(TAG, "onFailure: " + e.message)
+                                        }
+                                }
                             }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                btn_paylasGonder.setEnabled(false);
-                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, "onFailure: " + e.getMessage());
+                            .addOnFailureListener { e ->
+                                Log.i(TAG, "onFailure: " + e.message)
+                                btn_shareSend!!.isEnabled = false
                             }
-                        });
-            } catch (Exception e) {
-                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "paylasGonder: " + e.getMessage());
-                btn_paylasGonder.setEnabled(false);
+                        val myToast = Toast.makeText(activity, "Gönderildi", Toast.LENGTH_SHORT)
+                        myToast.show()
+                        val handler = Handler()
+                        handler.postDelayed({ myToast.cancel() }, 400)
+                    }
+                    ?.addOnFailureListener { e ->
+                        btn_shareSend!!.isEnabled = false
+                        Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                        Log.i(TAG, "onFailure: " + e.message)
+                    }
+            } catch (e: Exception) {
+                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                Log.i(TAG, "paylasGonder: " + e.message)
+                btn_shareSend!!.isEnabled = false
             }
-
         } else {
-            Toast.makeText(getActivity(), "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
-            btn_paylasGonder.setEnabled(false);
+            Toast.makeText(activity, "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show()
+            btn_shareSend!!.isEnabled = false
         }
-
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: Çalıştı");
+    override fun onResume() {
+        super.onResume()
+        Log.i(TAG, "onResume: Çalıştı")
         // BU ACTİVİY'E TEKRAR GELİNDİĞİNDE HARİTA SINIFINDAN GEREKLİ KOORDİNAT VE ADRES BİLGİLERİNİ BURADA ALSIN VE GEREKLİ YERLERDE YAYINLASIN
-
-        enlem = GET.getFloat("enlem", 0);
-        boylam = GET.getFloat("boylam", 0);
-        adres = GET.getString("adres", "Türkiye Üsküdar");
-        posta_kodu = GET.getString("postaKodu", "12000");
-
-        edt_konum.setText(enlem + "," + boylam);
-        edt_adres.setText("" + adres);
-
+        latitude = GET!!.getFloat("enlem", 0f)
+        longitude = GET!!.getFloat("boylam", 0f)
+        addres = GET!!.getString("adres", "Türkiye Üsküdar")
+        postCode = GET!!.getString("postaKodu", "12000")
+        edt_location!!.setText("$latitude,$longitude")
+        edt_addres!!.setText("" + addres)
     }
 
-    private void galeridenResimSec() {
-
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-            Log.d(TAG, "onClick: Daha önceden izin verilmediğinden izin istendi");
+    private fun choosePictureFromGallery() {
+        if (ContextCompat.checkSelfPermission(
+                activity!!,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                activity!!,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                1
+            )
+            Log.i(TAG, "onClick: Daha önceden izin verilmediğinden izin istendi")
         } else {
-            Intent intentGaleri = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intentGaleri, 2);
-            Log.d(TAG, "onClick: Daha önceden izin verildiğinden kullanıcı Galeriye yönlendirildi");
+            val intentGaleri =
+                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intentGaleri, 2)
+            Log.i(TAG, "onClick: Daha önceden izin verildiğinden kullanıcı Galeriye yönlendirildi")
         }
-
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intentGaleri = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intentGaleri, 2);
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val intentGallery =
+                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                startActivityForResult(intentGallery, 2)
             }
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d(TAG, "onActivityResult: Çalıştı");
-
-        if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
-            resimYolu = data.getData();
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.i(TAG, "onActivityResult: Çalıştı")
+        if (requestCode == 2 && resultCode == Activity.RESULT_OK && data != null) {
+            picturePath = data.data
             Picasso.get()
-                    .load(resimYolu)
-                    .centerCrop()
-                    .fit()
-                    .into(img_paylasResimSec);
+                .load(picturePath)
+                .centerCrop()
+                .fit()
+                .into(img_sharePictureSelected)
         }
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    companion object {
+        private const val TAG = "F_Paylas"
     }
 }
