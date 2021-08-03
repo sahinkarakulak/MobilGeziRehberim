@@ -446,7 +446,7 @@ class MyAccountFragment() : Fragment(), RecyclerViewClickInterface {
         title.text = placeNamesFirebase!!.get(position)
 
         // KONUMA GİT
-        bottomSheetView.findViewById<View>(R.id.bs_konuma_git).setOnClickListener(
+        bottomSheetView.findViewById<View>(R.id.bs_goToLocation).setOnClickListener(
             View.OnClickListener {
                 when (tabControl) {
                     "paylasilanlar" -> goToLocationFromShared()
@@ -456,7 +456,7 @@ class MyAccountFragment() : Fragment(), RecyclerViewClickInterface {
             })
 
         // KALDIR
-        bottomSheetView.findViewById<View>(R.id.bs_kaldir)
+        bottomSheetView.findViewById<View>(R.id.bs_remove)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     when (tabControl) {
@@ -478,7 +478,7 @@ class MyAccountFragment() : Fragment(), RecyclerViewClickInterface {
             })
 
         // İPTAL butonu
-        bottomSheetView.findViewById<View>(R.id.bottom_sheet_iptal_btnsi)
+        bottomSheetView.findViewById<View>(R.id.bs_cancel)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     //

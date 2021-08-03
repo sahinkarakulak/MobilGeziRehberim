@@ -39,8 +39,6 @@ import com.mrcaracal.modul.Posts
 import java.text.DateFormat
 import java.util.*
 
-private const val TAG = "SearchFragment"
-
 class SearchFragment() : Fragment(), RecyclerViewClickInterface {
     private val accordingToWhat = arrayOf("Yer İsmi", "Etiket", "Şehir", "Kullanıcı")
 
@@ -573,14 +571,14 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
             )
 
         // Gönderiyi Kaydet
-        bottomSheetView.findViewById<View>(R.id.bs_gonderiyi_kaydet).setOnClickListener(
+        bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
                 saveOperations(position)
                 bottomSheetDialog.dismiss()
             })
 
         // Konuma Git
-        bottomSheetView.findViewById<View>(R.id.bs_konuma_git)
+        bottomSheetView.findViewById<View>(R.id.bs_goToLocation)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     goToLocationOperations(position)
@@ -589,7 +587,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
             })
 
         // Detaylı Şikayet Bildir
-        bottomSheetView.findViewById<View>(R.id.bs_detayli_sikayet_bildir)
+        bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     if ((userEmailsFirebase!![position] == firebaseUser!!.email)) {
@@ -609,7 +607,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
             })
 
         // İPTAL butonu
-        bottomSheetView.findViewById<View>(R.id.bottom_sheet_iptal_btnsi)
+        bottomSheetView.findViewById<View>(R.id.bs_cancel)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     //

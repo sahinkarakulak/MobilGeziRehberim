@@ -267,14 +267,14 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
         title.text = placeNamesFirebase!!.get(position)
 
         // Gönderiyi Kaydet
-        bottomSheetView.findViewById<View>(R.id.bs_gonderiyi_kaydet).setOnClickListener(
+        bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
                 saveOperations(position)
                 bottomSheetDialog.dismiss()
             })
 
         // Konuma Git
-        bottomSheetView.findViewById<View>(R.id.bs_konuma_git)
+        bottomSheetView.findViewById<View>(R.id.bs_goToLocation)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     goToLocationOperations(position)
@@ -284,7 +284,7 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
 
         // Detaylı Şikayet Bildir (Mail)
         // Bu kısımda cihazdaki MAİL uygulamasının açılıp kullanıcının burada geliştiricilere istediği verileri göndermesi sağlanacak
-        bottomSheetView.findViewById<View>(R.id.bs_detayli_sikayet_bildir)
+        bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     if ((userEmailsFirebase!![position] == firebaseUser!!.email)) {
@@ -304,7 +304,7 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
             })
 
         // İPTAL butonu
-        bottomSheetView.findViewById<View>(R.id.bottom_sheet_iptal_btnsi)
+        bottomSheetView.findViewById<View>(R.id.bs_cancel)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     //

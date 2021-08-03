@@ -48,7 +48,7 @@ class GoToLocationOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
     // FARKLI HARİTA TÜRLERİ İÇİN MENÜLEİR LİSTELEDİK
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
-        inflater.inflate(R.menu.harita_menu, menu)
+        inflater.inflate(R.menu.map_menu, menu)
         return true
     }
 
@@ -76,7 +76,4 @@ class GoToLocationOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    companion object {
-        private const val TAG = "HaritaKonumaGit"
-    }
 }

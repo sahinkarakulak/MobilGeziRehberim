@@ -52,14 +52,14 @@ class RecyclerAdapterStructure(
 
         // Kullanıcıya gösterilen kısım
         /*holder.row_epostasi.setText(kullaniciEpostalariListesi.get(position));*/
-        holder.row_yerIsmi.text = yerIsimleriListesi[position]
-        holder.row_YorumBilgisi.text = yorumlarListesi[position]
+        holder.row_placeName.text = yerIsimleriListesi[position]
+        holder.row_comment.text = yorumlarListesi[position]
         Picasso.get()
             .load(resimAdresleriListesi[position])
             .centerCrop()
             .fit()
-            .into(holder.row_resimAdresi)
-        holder.row_resimAdresi.setOnClickListener { }
+            .into(holder.row_picturePath)
+        holder.row_picturePath.setOnClickListener { }
         Log.d(TAG, "onBindViewHolder: " + "Veriler çekildi ve işlendi")
     }
 
@@ -70,18 +70,18 @@ class RecyclerAdapterStructure(
 
     //
     inner class GonderiHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var row_resimAdresi: ImageView
-        var row_yerIsmi: TextView
-        var row_YorumBilgisi: TextView
-        var ll_diger_secenekler: LinearLayout
+        var row_picturePath: ImageView
+        var row_placeName: TextView
+        var row_comment: TextView
+        var ll_otherOperations: LinearLayout
 
         init {
 
-            /*row_epostasi = itemView.findViewById(R.id.row_epostasi);*/row_resimAdresi =
-                itemView.findViewById(R.id.row_resimAdresi)
-            row_yerIsmi = itemView.findViewById(R.id.row_yerIsmi)
-            row_YorumBilgisi = itemView.findViewById(R.id.row_YorumBilgisi)
-            ll_diger_secenekler = itemView.findViewById(R.id.ll_diger_secenekler)
+            /*row_epostasi = itemView.findViewById(R.id.row_epostasi);*/
+            row_picturePath = itemView.findViewById(R.id.row_picturePath)
+            row_placeName = itemView.findViewById(R.id.row_placeName)
+            row_comment = itemView.findViewById(R.id.row_comment)
+            ll_otherOperations = itemView.findViewById(R.id.ll_otherOperations)
 
             // position'a göre hangisine tıklandıysa position'u bunun için oluşturulan RecyclerViewClickInterface'e göndersin.
             // RecyclerViewClickInterface'i hangi sınıf impelements edecekse orada kullanılsın.
@@ -98,11 +98,11 @@ class RecyclerAdapterStructure(
                     recyclerViewClickInterface.onLongItemClick(getAdapterPosition());
                     return false;
                 }
-            });*/row_resimAdresi.setOnLongClickListener {
+            });*/row_picturePath.setOnLongClickListener {
                 recyclerViewClickInterface.onLongItemClick(adapterPosition)
                 false
             }
-            ll_diger_secenekler.setOnClickListener {
+            ll_otherOperations.setOnClickListener {
                 recyclerViewClickInterface.onOtherOperationsClick(
                     adapterPosition
                 )
@@ -110,7 +110,4 @@ class RecyclerAdapterStructure(
         }
     }
 
-    companion object {
-        private const val TAG = "RecyclerAdapterYapim"
-    }
 }

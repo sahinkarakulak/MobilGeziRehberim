@@ -33,7 +33,7 @@
             android:layout_marginBottom="10dp"/>
 
         <LinearLayout
-            android:id="@+id/bs_gonderiyi_kaydet"
+            android:id="@+id/bs_postSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -57,7 +57,7 @@
 
 
         <LinearLayout
-            android:id="@+id/bs_konuma_git"
+            android:id="@+id/bs_goToLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -85,7 +85,7 @@
 
 
         <LinearLayout
-            android:id="@+id/bs_detayli_sikayet_bildir"
+            android:id="@+id/bs_reportAComplaint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -108,7 +108,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/bottom_sheet_iptal_btnsi"
+            android:id="@+id/bs_cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_button"
@@ -118,6 +118,5 @@
             android:layout_marginBottom="10dp"/>
 
     </LinearLayout>
-
 
 </LinearLayout>

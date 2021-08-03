@@ -44,22 +44,22 @@ class HomePageActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             var selectedFragment: Fragment? = null
             when (menuItem.itemId) {
-                R.id.ana_sayfa -> {
+                R.id.homepage -> {
                     selectedFragment = HomePageFragment()
                     title = "Mobil Gezi Rehberim"
                     Log.i(TAG, "onNavigationItemSelected: F_Anasayfa fragment'i seçildi")
                 }
-                R.id.ara -> {
+                R.id.search -> {
                     selectedFragment = SearchFragment()
                     title = "Ara"
                     Log.i(TAG, "onNavigationItemSelected: F_Ara fragment'i seçildi")
                 }
-                R.id.paylas -> {
+                R.id.share -> {
                     selectedFragment = ShareFragment()
                     title = "Paylaş"
                     Log.i(TAG, "onNavigationItemSelected: F_Paylas fragment'i seçildi")
                 }
-                R.id.hesabim -> {
+                R.id.profile -> {
                     selectedFragment = MyAccountFragment()
                     title = "Hesabım"
                     Log.i(TAG, "onNavigationItemSelected: F_Hesabim fragment'i seçildi")
@@ -75,7 +75,7 @@ class HomePageActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.ust_menu, menu)
+        menuInflater.inflate(R.menu.top_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -108,7 +108,4 @@ class HomePageActivity : AppCompatActivity() {
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
-    companion object {
-        private const val TAG = "HomePage"
-    }
 }

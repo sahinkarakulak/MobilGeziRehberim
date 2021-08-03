@@ -175,8 +175,4 @@ class Login : AppCompatActivity() {
         Toast.makeText(this, "Çıkmak için tekrar basınız", Toast.LENGTH_SHORT).show()
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
-
-    companion object {
-        private const val TAG = "Login"
-    }
 }

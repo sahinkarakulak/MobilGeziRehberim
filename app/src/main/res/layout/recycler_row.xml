@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/ll_diger_secenekler"
+            android:id="@+id/ll_otherOperations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -21,7 +21,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/row_yerIsmi"
+                android:id="@+id/row_placeName"
                 android:textFontWeight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -33,7 +33,6 @@
                 android:textStyle="bold"/>
 
             <ImageView
-                android:id="@+id/row_digerSecenekler"
                 android:layout_width="40dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_baseline_more_horiz_24"/>
@@ -41,7 +40,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/row_resimAdresi"
+            android:id="@+id/row_picturePath"
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="250dp"/>
@@ -55,7 +54,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/row_YorumBilgisi"
+                android:id="@+id/row_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

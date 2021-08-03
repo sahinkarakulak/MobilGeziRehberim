@@ -68,7 +68,7 @@
         android:layout_marginBottom="4dp"
         app:itemIconTint="@drawable/tab_color"
         app:itemTextColor="@drawable/tab_color"
-        app:menu="@menu/hesabim_menu" />
+        app:menu="@menu/account_menu" />
 
 
     <androidx.recyclerview.widget.RecyclerView

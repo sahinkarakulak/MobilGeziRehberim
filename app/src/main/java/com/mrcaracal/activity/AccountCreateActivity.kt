@@ -122,7 +122,4 @@ class AccountCreateActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
-        private const val TAG = "HesapOlusturma"
-    }
 }

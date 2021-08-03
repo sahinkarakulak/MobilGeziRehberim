@@ -88,7 +88,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
         btn_update!!.setOnClickListener {
             updateUser(edt_getUserName!!.text.toString(), edt_getBiography!!.text.toString())
-            Log.d(TAG, "onClick: EditText'en alınan veriler parametre olarak gönderildi")
+            Log.i(TAG, "onClick: EditText'en alınan veriler parametre olarak gönderildi")
         }
     }
 
@@ -96,11 +96,11 @@ class EditProfileActivity : AppCompatActivity() {
         val documentReference2 = FirebaseFirestore.getInstance()
             .collection("Kullanicilar")
             .document(firebaseUser!!.email!!)
-        val guncelVeriler: MutableMap<String, Any> = HashMap()
-        guncelVeriler["kullaniciAdi"] = u_name
-        guncelVeriler["bio"] = u_bio
+        val currentDatas: MutableMap<String, Any> = HashMap()
+        currentDatas["kullaniciAdi"] = u_name
+        currentDatas["bio"] = u_bio
         documentReference2
-            .update(guncelVeriler)
+            .update(currentDatas)
             .addOnSuccessListener {
                 Log.i(TAG, "onSuccess: Sadece istenen veriler güncellendi")
                 startActivity(Intent(this@EditProfileActivity, HomePageActivity::class.java))
@@ -114,7 +114,7 @@ class EditProfileActivity : AppCompatActivity() {
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri))
     }
 
-    // Conver işlemi sonrası hatalar gerçekleşti. DÜZELTİLECEKTİR!
+    // Convert işlemi sonrası hatalar gerçekleşti. DÜZELTİLECEKTİR!
     /*private fun uploadImage() {
         if (mImageUri != null) {
             Log.d(TAG, "uploadImage: Koşul sağlandı")
@@ -191,7 +191,4 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }*/
 
-    companion object {
-        private const val TAG = "ProfilDuzenle"
-    }
 }

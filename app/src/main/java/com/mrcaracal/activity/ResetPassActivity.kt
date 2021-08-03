@@ -62,7 +62,4 @@ class ResetPassActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
-        private const val TAG = "ParolaSifirlama"
-    }
 }

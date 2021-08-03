@@ -32,7 +32,7 @@
             android:layout_marginBottom="10dp"/>
 
         <LinearLayout
-            android:id="@+id/bs_konuma_git"
+            android:id="@+id/bs_goToLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -59,7 +59,7 @@
             android:background="@android:color/holo_blue_light" />
 
         <LinearLayout
-            android:id="@+id/bs_kaldir"
+            android:id="@+id/bs_remove"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -82,7 +82,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/bottom_sheet_iptal_btnsi"
+            android:id="@+id/bs_cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_button"

@@ -26,6 +26,8 @@ import com.mrcaracal.mobilgezirehberim.R
 import java.io.IOException
 import java.util.*
 
+private const val TAG = "MyMapActivity"
+
 class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListener {
     var locationManager: LocationManager? = null
     var locationListener: LocationListener? = null
@@ -144,7 +146,7 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
     // FARKLI HARİTA TÜRLERİ İÇİN MENÜLEİR LİSTELEDİK
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
-        inflater.inflate(R.menu.harita_menu, menu)
+        inflater.inflate(R.menu.map_menu, menu)
         return true
     }
 
@@ -246,7 +248,4 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
         SET!!.commit()
     }
 
-    companion object {
-        private const val TAG = "Harita"
-    }
 }
