@@ -1,70 +1,36 @@
-package com.mrcaracal.modul;
+package com.mrcaracal.modul
 
-public class UserInfo {
+class UserInfo {
+    var kullaniciAdi: String? = null
+    var kullaniciEposta: String? = null
+    var kulaniciParola: String? = null
+    var bio: String? = null
+    var kullaniciResmi: String? = null
 
-    private String kullaniciAdi;
-    private String kullaniciEposta;
-    private String kulaniciParola;
-    private String bio;
-    private String kullaniciResmi;
-
-    public UserInfo() {
-
+    constructor() {}
+    constructor(
+        kullaniciAdi: String?,
+        kullaniciEposta: String?,
+        kulaniciParola: String?,
+        bio: String?,
+        kullaniciResmi: String?
+    ) {
+        this.kullaniciAdi = kullaniciAdi
+        this.kullaniciEposta = kullaniciEposta
+        this.kulaniciParola = kulaniciParola
+        this.bio = bio
+        this.kullaniciResmi = kullaniciResmi
     }
 
-    public UserInfo(String kullaniciAdi, String kullaniciEposta, String kulaniciParola, String bio, String kullaniciResmi) {
-        this.kullaniciAdi = kullaniciAdi;
-        this.kullaniciEposta = kullaniciEposta;
-        this.kulaniciParola = kulaniciParola;
-        this.bio = bio;
-        this.kullaniciResmi = kullaniciResmi;
-    }
-
-    public UserInfo(String kullaniciAdi, String kullaniciEposta, String bio, String kullaniciResmi) {
-        this.kullaniciAdi = kullaniciAdi;
-        this.kullaniciEposta = kullaniciEposta;
-        this.bio = bio;
-        this.kullaniciResmi = kullaniciResmi;
-    }
-
-
-    public String getKullaniciAdi() {
-        return kullaniciAdi;
-    }
-
-    public void setKullaniciAdi(String kullaniciID) {
-        this.kullaniciAdi = kullaniciID;
-    }
-
-    public String getKullaniciEposta() {
-        return kullaniciEposta;
-    }
-
-    public void setKullaniciEposta(String kullaniciEposta) {
-        this.kullaniciEposta = kullaniciEposta;
-    }
-
-    public String getKulaniciParola() {
-        return kulaniciParola;
-    }
-
-    public void setKulaniciParola(String kulaniciParola) {
-        this.kulaniciParola = kulaniciParola;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public String getKullaniciResmi() {
-        return kullaniciResmi;
-    }
-
-    public void setKullaniciResmi(String kullaniciResmi) {
-        this.kullaniciResmi = kullaniciResmi;
+    constructor(
+        kullaniciAdi: String?,
+        kullaniciEposta: String?,
+        bio: String?,
+        kullaniciResmi: String?
+    ) {
+        this.kullaniciAdi = kullaniciAdi
+        this.kullaniciEposta = kullaniciEposta
+        this.bio = bio
+        this.kullaniciResmi = kullaniciResmi
     }
 }

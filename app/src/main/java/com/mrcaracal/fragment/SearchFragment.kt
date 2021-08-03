@@ -184,7 +184,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
         val cities_al = Cities()
         sp_cities = viewGroup!!.findViewById(R.id.sp_cities)
         sp_adapterCities =
-            ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, cities_al.sehirler)
+            ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, cities_al.cities)
         sp_adapterCities!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_cities.setAdapter(sp_adapterCities)
         sp_cities.setOnItemSelectedListener(object : OnItemSelectedListener {
@@ -198,12 +198,14 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                 recycler_view_search!!.scrollToPosition(0)
                 if ((keyValue == "sehir")) {
                     val cities = Cities()
-                    val selectedCityCode = cities.sehirler(parent.selectedItem.toString())
+                    val selectedCityCode = cities.selectedCity(parent.selectedItem.toString())
                     /*Toast.makeText(getActivity(), "Seçilen şehir kodu: "+secilen_sehir_kodu, Toast.LENGTH_SHORT).show();*/if ((selectedCityCode == "Şehir Seçin!")) {
                         Toast.makeText(activity, "Lütfen Şehir Seçin!", Toast.LENGTH_SHORT).show()
                     } else {
                         // VT'de Gonderiler bölümünde posta kodu alınan değerle başlayan tüm gonderileri çeken bir algoritma geliştir.
-                        searchForCity(selectedCityCode)
+                        if (selectedCityCode != null) {
+                            searchForCity(selectedCityCode)
+                        }
                     }
                 }
             }
