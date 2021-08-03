@@ -1,72 +1,68 @@
-package com.mrcaracal.activity;
+package com.mrcaracal.activity
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.mrcaracal.mobilgezirehberim.Login
+import com.mrcaracal.mobilgezirehberim.R
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+private const val TAG = "ResetPassActivity"
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.mrcaracal.mobilgezirehberim.Login;
-import com.mrcaracal.mobilgezirehberim.R;
+class ResetPassActivity : AppCompatActivity() {
 
-public class ResetPassActivity extends AppCompatActivity {
+    var edt_resetPass: EditText? = null
+    var firebaseAuth: FirebaseAuth? = null
 
-    private static final String TAG = "ParolaSifirlama";
-
-    EditText edt_epostaParolaSıfırlama;
-
-    FirebaseAuth firebaseAuth;
-
-    private void init() {
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        edt_epostaParolaSıfırlama = findViewById(R.id.edt_epostaParolaSıfırlama);
+    private fun init() {
+        firebaseAuth = FirebaseAuth.getInstance()
+        edt_resetPass = findViewById(R.id.edt_resetPass)
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parola_sifirlama);
-        init();
-
-        setTitle("Parola Sıfırla");
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_parola_sifirlama)
+        init()
+        title = "Parola Sıfırla"
     }
 
     // Kullanıcının girdiği E-Posta adresine parola sıfırlama bağlantısı gönderilecektir.
-    public void istegiGonder(View view) {
+    fun btn_sendRequest(view: View?) {
         // parola sıfırlama işlemi için gereken işlemler yapılsın
-
-        String eposta = edt_epostaParolaSıfırlama.getText().toString();
-
-        if (eposta.equals("")) {
-            Toast.makeText(this, "Gerekli alanı doldurunuz", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "istegiGonder: EditText'en boş veriler alındı");
+        val email = edt_resetPass!!.text.toString()
+        if (email == "") {
+            Toast.makeText(this, "Gerekli alanı doldurunuz", Toast.LENGTH_SHORT).show()
+            Log.i(TAG, "istegiGonder: EditText'en boş veriler alındı")
         } else {
-            firebaseAuth.sendPasswordResetEmail(eposta)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(ResetPassActivity.this, "E-Postanızı kontorl ediniz", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(ResetPassActivity.this, Login.class);
-                            startActivity(intent);
-                            finish();
-                            Log.d(TAG, "onSuccess: Sıfırlama isteği gönderildi ve kullanıcı Giris'e yönlendirilidi");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(ResetPassActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            firebaseAuth!!.sendPasswordResetEmail(email)
+                .addOnSuccessListener {
+                    Toast.makeText(
+                        this@ResetPassActivity,
+                        "E-Postanızı kontorl ediniz",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    val intent = Intent(this@ResetPassActivity, Login::class.java)
+                    startActivity(intent)
+                    finish()
+                    Log.i(
+                        TAG,
+                        "onSuccess: Sıfırlama isteği gönderildi ve kullanıcı Giris'e yönlendirilidi"
+                    )
+                }.addOnFailureListener { e ->
+                    Toast.makeText(
+                        this@ResetPassActivity,
+                        e.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            });
         }
-
     }
 
+    companion object {
+        private const val TAG = "ParolaSifirlama"
+    }
 }

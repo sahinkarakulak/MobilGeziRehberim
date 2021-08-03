@@ -5,13 +5,13 @@
     <item
         android:icon="@drawable/ic_baseline_contact_mail"
         app:showAsAction="always"
-        android:id="@+id/iletisim"
+        android:id="@+id/contact"
         android:title="İletişim"/>
 
     <item
         android:icon="@drawable/ic_baseline_exit"
         app:showAsAction="always"
-        android:id="@+id/cikis"
+        android:id="@+id/signOut"
         android:title="Oturumu Kapat"/>
 
 </menu>

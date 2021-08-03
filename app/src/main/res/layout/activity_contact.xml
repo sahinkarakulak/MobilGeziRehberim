@@ -16,7 +16,7 @@
         app:cardCornerRadius="10dp">
 
         <EditText
-            android:id="@+id/edt_iletisim_konu_baslik"
+            android:id="@+id/edt_contactSubjectTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -34,7 +34,7 @@
         app:cardCornerRadius="10dp">
 
         <EditText
-            android:id="@+id/edt_iletisim_mesaj_icerik"
+            android:id="@+id/edt_contactMessage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
@@ -51,7 +51,7 @@
         android:text="@string/IletisimBilgilendirmeMetni"/>
 
     <Button
-        android:id="@+id/btn_iletisim_gonder"
+        android:id="@+id/btn_contactSend"
         android:background="@drawable/bg_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

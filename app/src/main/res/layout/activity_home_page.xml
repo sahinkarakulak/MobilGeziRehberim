@@ -28,7 +28,4 @@
         app:itemTextColor="@drawable/tab_color"
         app:menu="@menu/bottom_menu" />
 
-
-    // app:labelVisibilityMode="unlabeled"
-
 </LinearLayout>

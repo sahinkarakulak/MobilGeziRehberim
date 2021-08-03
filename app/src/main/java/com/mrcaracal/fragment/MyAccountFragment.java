@@ -38,7 +38,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrcaracal.activity.GoToLocationOnMapActivity;
 import com.mrcaracal.activity.EditProfileActivity;
-import com.mrcaracal.adapter.RecyclerAdapterYapim;
+import com.mrcaracal.adapter.RecyclerAdapterStructure;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.mrcaracal.mobilgezirehberim.R;
 import com.squareup.picasso.Picasso;
@@ -71,7 +71,7 @@ public class MyAccountFragment extends Fragment implements RecyclerViewClickInte
 
     RecyclerView recyclerViewHesabim;
 
-    RecyclerAdapterYapim recyclerAdapterYapim;
+    RecyclerAdapterStructure recyclerAdapterStructure;
 
     TextView tv_kullaniciAdi, tv_kullaniciBio;
     Button btn_profili_duzenle;
@@ -121,7 +121,7 @@ public class MyAccountFragment extends Fragment implements RecyclerViewClickInte
         // RecyclerView Tanımlama İşlemi
         recyclerViewHesabim = viewGroup.findViewById(R.id.recyclerViewHesabim);
         recyclerViewHesabim.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB,
+        recyclerAdapterStructure = new RecyclerAdapterStructure(gonderiIDleriFB,
                 kullaniciEpostalariFB,
                 resimAdresleriFB,
                 yerIsimleriFB,
@@ -133,7 +133,7 @@ public class MyAccountFragment extends Fragment implements RecyclerViewClickInte
                 taglarFB,
                 zamanlarFB,
                 this);
-        recyclerViewHesabim.setAdapter(recyclerAdapterYapim);
+        recyclerViewHesabim.setAdapter(recyclerAdapterStructure);
 
         img_profil_resmi = viewGroup.findViewById(R.id.img_profil_resmi);
         tv_kullaniciAdi = viewGroup.findViewById(R.id.tv_kullaniciAdi);
@@ -267,7 +267,7 @@ public class MyAccountFragment extends Fragment implements RecyclerViewClickInte
                                 sehirFB.add(sehir);
                                 zamanlarFB.add(zaman);
 
-                                recyclerAdapterYapim.notifyDataSetChanged();
+                                recyclerAdapterStructure.notifyDataSetChanged();
                                 Log.d(TAG, "onComplete: Çekilen veriler RecyclerAdapterYapim'a gönderildi");
                             }
                         }
@@ -326,7 +326,7 @@ public class MyAccountFragment extends Fragment implements RecyclerViewClickInte
                                 sehirFB.add(sehir);
                                 zamanlarFB.add(zaman);
 
-                                recyclerAdapterYapim.notifyDataSetChanged();
+                                recyclerAdapterStructure.notifyDataSetChanged();
                                 Log.d(TAG, "onComplete: Çekilen veriler RecyclerAdapterYapim'a gönderildi");
                             }
                         }
@@ -537,12 +537,12 @@ public class MyAccountFragment extends Fragment implements RecyclerViewClickInte
     }
 
     @Override
-    public void onDigerSeceneklerClick(int position) {
+    public void onOtherOperationsClick(int position) {
         POSITION_DEGERI = position;
-        dialogPenceresiAc(position);
+        onOpenDialogWindow(position);
     }
 
-    public void dialogPenceresiAc(int position) {
+    public void onOpenDialogWindow(int position) {
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
         View bottomSheetView = LayoutInflater.from(getActivity())

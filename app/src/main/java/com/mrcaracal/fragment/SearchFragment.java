@@ -53,7 +53,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mrcaracal.activity.GoToLocationOnMapActivity;
-import com.mrcaracal.adapter.RecyclerAdapterYapim;
+import com.mrcaracal.adapter.RecyclerAdapterStructure;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.mrcaracal.modul.Posts;
 import com.mrcaracal.modul.ContactInfo;
@@ -91,7 +91,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickInterfa
     ArrayList<Timestamp> zamanlarFB;
     RecyclerView recycler_view_ara;
     WebView webView;
-    RecyclerAdapterYapim recyclerAdapterYapim;
+    RecyclerAdapterStructure recyclerAdapterStructure;
     ImageView img_konuma_gore_bul;
     EditText edt_anahtar_kelime_arat;
     Spinner sp_ara_neye_gore, sp_sehirler;
@@ -294,7 +294,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickInterfa
 
         recycler_view_ara = viewGroup.findViewById(R.id.recycler_view_ara);
         recycler_view_ara.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerAdapterYapim = new RecyclerAdapterYapim(gonderiIDleriFB,
+        recyclerAdapterStructure = new RecyclerAdapterStructure(gonderiIDleriFB,
                 kullaniciEpostalariFB,
                 resimAdresleriFB,
                 yerIsimleriFB,
@@ -307,7 +307,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickInterfa
                 zamanlarFB,
                 this);
 
-        recycler_view_ara.setAdapter(recyclerAdapterYapim);
+        recycler_view_ara.setAdapter(recyclerAdapterStructure);
 
         return viewGroup;
     }
@@ -449,7 +449,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickInterfa
 
                                 veriCagir(snapshot.getData());
 
-                                recyclerAdapterYapim.notifyDataSetChanged();
+                                recyclerAdapterStructure.notifyDataSetChanged();
                                 Log.d(TAG, "onComplete: Sonu...");
 
                                 // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise
@@ -487,7 +487,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickInterfa
 
                                 veriCagir(documentSnapshot.getData());
 
-                                recyclerAdapterYapim.notifyDataSetChanged();
+                                recyclerAdapterStructure.notifyDataSetChanged();
                                 Log.d(TAG, "onComplete: Sonu...");
                             }
                         }
@@ -522,7 +522,7 @@ public class SearchFragment extends Fragment implements RecyclerViewClickInterfa
 
                                 veriCagir(snapshot.getData());
 
-                                recyclerAdapterYapim.notifyDataSetChanged();
+                                recyclerAdapterStructure.notifyDataSetChanged();
                                 Log.d(TAG, "onComplete: Sonu...");
 
                                 // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise
@@ -667,11 +667,11 @@ public class SearchFragment extends Fragment implements RecyclerViewClickInterfa
     }
 
     @Override
-    public void onDigerSeceneklerClick(int position) {
-        dialogPenceresiAc(position);
+    public void onOtherOperationsClick(int position) {
+        onOpenDialogWindow(position);
     }
 
-    public void dialogPenceresiAc(int position) {
+    public void onOpenDialogWindow(int position) {
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
         View bottomSheetView = LayoutInflater.from(getActivity())

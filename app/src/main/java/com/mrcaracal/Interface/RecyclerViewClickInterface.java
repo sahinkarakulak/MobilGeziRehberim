@@ -4,8 +4,8 @@ public interface RecyclerViewClickInterface {
 
     void onLongItemClick(int position);
 
-    void onDigerSeceneklerClick(int position);
+    void onOtherOperationsClick(int position);
 
-    void dialogPenceresiAc (int position);
+    void onOpenDialogWindow(int position);
 
 }

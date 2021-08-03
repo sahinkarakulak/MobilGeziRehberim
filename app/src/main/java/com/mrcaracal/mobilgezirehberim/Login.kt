@@ -49,9 +49,9 @@ class Login : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_giris)
+        setContentView(R.layout.activity_login)
         init()
-        title = "Login"
+        title = "Giriş"
 
         // Remember me!
         val rememverInfo = GET!!.getBoolean("boolean_key", false)

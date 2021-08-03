@@ -1,88 +1,74 @@
-package com.mrcaracal.activity;
+package com.mrcaracal.activity
 
-import android.Manifest;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.Manifest
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import com.mrcaracal.mobilgezirehberim.R
+import java.io.IOException
+import java.util.*
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListener {
+    var locationManager: LocationManager? = null
+    var locationListener: LocationListener? = null
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.mrcaracal.mobilgezirehberim.R;
+    var latitude = 0.0.toFloat()
+    var longitude = 0.0.toFloat()
+    var addres = ""
+    var postCode: String? = null
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+    private lateinit var GET: SharedPreferences
+    private lateinit var SET: SharedPreferences.Editor
 
-public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
+    private var mMap: GoogleMap? = null
+    private var marker: Marker? = null
 
-    private static final String TAG = "Harita";
-
-    LocationManager locationManager;
-    LocationListener locationListener;
-    float enlem = (float) 0.0;
-    float boylam = (float) 0.0;
-    String adres = "";
-    String posta_kodu;
-    SharedPreferences GET;
-    SharedPreferences.Editor SET;
-    private GoogleMap mMap;
-    private Marker marker;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_harita);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_my_map)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-        setTitle("Harita");
-
-        GET = getSharedPreferences("harita", MODE_PRIVATE);
-        SET = GET.edit();
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment!!.getMapAsync(this)
+        title = "Harita"
+        GET = getSharedPreferences("harita", MODE_PRIVATE)
+        SET = GET.edit()
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
 
-//        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-
+        //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
+        locationListener = object : LocationListener {
             // KULLANICININ KONUM VE ADRES BİLGİLERİ ANLIK OLARAK ALINSIN VE PAYLAŞ EKRANINDA YAZDIRILSIN
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                enlem = (float) location.getLatitude();
-                boylam = (float) location.getLongitude();
-
-                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-                adres = "";
+            override fun onLocationChanged(location: Location) {
+                latitude = location.latitude.toFloat()
+                longitude = location.longitude.toFloat()
+                val geocoder = Geocoder(applicationContext, Locale.getDefault())
+                addres = ""
                 try {
-                    List<Address> addressList = geocoder.getFromLocation(enlem, boylam, 1);
-                    if (addressList != null && addressList.size() > 0) {
+                    val addressList =
+                        geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
+                    if (addressList != null && addressList.size > 0) {
                         /*if (addressList.get(0).getCountryName() != null) {
                             adres += addressList.get(0).getCountryName();
                         }
@@ -92,120 +78,135 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
                         if (addressList.get(0).getSubThoroughfare() != null) {
                             adres += "\t" + addressList.get(0).getSubThoroughfare();
                         }*/
-                        adres += addressList.get(0).getAddressLine(0);
-                        posta_kodu = addressList.get(0).getPostalCode();
-
-                        if (posta_kodu == null) {
-                            posta_kodu = "?";
+                        addres += addressList[0].getAddressLine(0)
+                        postCode = addressList[0].postalCode
+                        if (postCode == null) {
+                            postCode = "?"
                         }
                     }
-                } catch (IOException e) {
+                } catch (e: IOException) {
                     /*Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();*/
-                    e.printStackTrace();
+                    e.printStackTrace()
                 }
-
-                SET.putFloat("enlem", enlem);
-                SET.putFloat("boylam", boylam);
-                SET.putString("adres", adres);
-                SET.putString("postaKodu", posta_kodu);
-                SET.commit();
+                SET!!.putFloat("enlem", latitude)
+                SET!!.putFloat("boylam", longitude)
+                SET!!.putString("adres", addres)
+                SET!!.putString("postaKodu", postCode)
+                SET!!.commit()
 
                 /*Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: "
-                        + boylam + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();*/
-                konumuBul();
-
+                        + boylam + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();*/findLocation()
             }
 
             // Bazı cihazlarda çökmeler yaşandığından aşağıdaki 2 metodu da kullanmak gerekti.
-            @Override
-            public void onProviderDisabled(@NonNull String provider) {
-                String str_provider = provider;
+            override fun onProviderDisabled(provider: String) {
+                val str_provider = provider
                 /*Toast.makeText(Harita.this, str_provider + " Kapalı", Toast.LENGTH_SHORT).show();*/
             }
 
-            @Override
-            public void onProviderEnabled(@NonNull String provider) {
-                String str_provider = provider;
+            override fun onProviderEnabled(provider: String) {
+                val str_provider = provider
                 /*Toast.makeText(Harita.this, str_provider + " Açık", Toast.LENGTH_SHORT).show();*/
             }
-        };
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        }
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             // İzin işlemleri
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 4);
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                4
+            )
         } else {
             // Lokasyon işlemleri
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000, 3, locationListener);
+            locationManager!!.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                15000,
+                3f,
+                locationListener as LocationListener
+            )
         }
     }
 
-
-    private void konumuBul() {
-        LatLng konum = new LatLng(enlem, boylam);
+    private fun findLocation() {
+        val location = LatLng(
+            latitude.toDouble(), longitude.toDouble()
+        )
         //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        mMap.addMarker(new MarkerOptions().position(konum).title("Konumum"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(konum, 16));
-        mMap.setOnMapClickListener(this);
+        mMap!!.addMarker(MarkerOptions().position(location).title("Konumum"))
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16f))
+        mMap!!.setOnMapClickListener(this)
     }
 
     // FARKLI HARİTA TÜRLERİ İÇİN MENÜLEİR LİSTELEDİK
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.harita_menu, menu);
-        return true;
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.harita_menu, menu)
+        return true
     }
 
     // FARKLI HARİTA TÜRLERİNE TIKLANDIĞINDA YAPILACAK İŞLEMLERİ BELİRLEDİK
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Change the map type based on the user's selection.
-        switch (item.getItemId()) {
-            case R.id.normal_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                return true;
-            case R.id.hybrid_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                return true;
-            case R.id.satellite_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                return true;
-            case R.id.terrain_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        return when (item.itemId) {
+            R.id.normal_map -> {
+                mMap!!.mapType = GoogleMap.MAP_TYPE_NORMAL
+                true
+            }
+            R.id.hybrid_map -> {
+                mMap!!.mapType = GoogleMap.MAP_TYPE_HYBRID
+                true
+            }
+            R.id.satellite_map -> {
+                mMap!!.mapType = GoogleMap.MAP_TYPE_SATELLITE
+                true
+            }
+            R.id.terrain_map -> {
+                mMap!!.mapType = GoogleMap.MAP_TYPE_TERRAIN
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        if (grantResults.length > 0) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (grantResults.size > 0) {
             if (requestCode == 4) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000, 3, locationListener);
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    )
+                    == PackageManager.PERMISSION_GRANTED
+                ) {
+                    locationManager!!.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        15000,
+                        3f,
+                        locationListener!!
+                    )
                 }
             }
         }
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     //  KULLANICI YENİ KONUM SEÇERSE PAYLAŞ EKRANINDA KONUM VE ADRES BİLGİLERİ YAZDIRILSIN
-    @Override
-    public void onMapClick(LatLng latLng) {
-        Log.d(TAG, "onMapClick: Çalıştı");
-
-        enlem = (float) latLng.latitude;
-        boylam = (float) latLng.longitude;
-
-        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-        adres = "";
+    override fun onMapClick(latLng: LatLng) {
+        Log.d(TAG, "onMapClick: Çalıştı")
+        latitude = latLng.latitude.toFloat()
+        longitude = latLng.longitude.toFloat()
+        val geocoder = Geocoder(applicationContext, Locale.getDefault())
+        addres = ""
         try {
-            List<Address> addressList = geocoder.getFromLocation(enlem, boylam, 1);
-            if (addressList != null && addressList.size() > 0) {
+            val addressList = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
+            if (addressList != null && addressList.size > 0) {
                 /*if (addressList.get(0).getCountryName() != null) {
                     adres += addressList.get(0).getCountryName();
                 }
@@ -215,38 +216,37 @@ public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallba
                 if (addressList.get(0).getSubThoroughfare() != null) {
                     adres += "\t" + addressList.get(0).getSubThoroughfare();
                 }*/
-                adres += addressList.get(0).getAddressLine(0);
-                posta_kodu = addressList.get(0).getPostalCode();
-
-                if (posta_kodu == null) {
-                    posta_kodu = "?";
+                addres += addressList[0].getAddressLine(0)
+                postCode = addressList[0].postalCode
+                if (postCode == null) {
+                    postCode = "?"
                 }
             }
-        } catch (IOException e) {
+        } catch (e: IOException) {
             /*Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();*/
-            Log.d(TAG, "onMapClick: " + e.getMessage());
-            e.printStackTrace();
+            Log.d(TAG, "onMapClick: " + e.message)
+            e.printStackTrace()
         }
 
         /*Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam
-                + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();*/
-
-        if (marker != null) {
-            marker.remove();
+                + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();*/if (marker != null) {
+            marker!!.remove()
         }
-        marker = mMap.addMarker(new MarkerOptions()
+        marker = mMap!!.addMarker(
+            MarkerOptions()
                 .position(latLng)
                 .title("Seçilen Yeni Konum")
                 .draggable(true)
                 .visible(true)
-        );
-
-        SET.putFloat("enlem", enlem);
-        SET.putFloat("boylam", boylam);
-        SET.putString("adres", adres);
-        SET.putString("postaKodu", posta_kodu);
-        SET.commit();
-
+        )
+        SET!!.putFloat("enlem", latitude)
+        SET!!.putFloat("boylam", longitude)
+        SET!!.putString("adres", addres)
+        SET!!.putString("postaKodu", postCode)
+        SET!!.commit()
     }
 
+    companion object {
+        private const val TAG = "Harita"
+    }
 }

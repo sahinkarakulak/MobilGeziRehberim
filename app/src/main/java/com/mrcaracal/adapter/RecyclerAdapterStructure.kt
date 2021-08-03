@@ -1,130 +1,85 @@
-package com.mrcaracal.adapter;
+package com.mrcaracal.adapter
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
+import com.mrcaracal.Interface.RecyclerViewClickInterface
+import com.mrcaracal.adapter.RecyclerAdapterStructure.GonderiHolder
+import com.mrcaracal.mobilgezirehberim.R
+import com.squareup.picasso.Picasso
+import java.util.*
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+class RecyclerAdapterStructure(
+    private val gonderiIDleriListesi: ArrayList<String>,
+    private val kullaniciEpostalariListesi: ArrayList<String>,
+    private val resimAdresleriListesi: ArrayList<String>,
+    private val yerIsimleriListesi: ArrayList<String>,
+    private val konumlariListesi: ArrayList<String>,
+    private val adresleriListesi: ArrayList<String>,
+    private val sehirListesi: ArrayList<String>,
+    private val yorumlarListesi: ArrayList<String>,
+    private val postaKodlari: ArrayList<String>,
+    private val taglarListesi: ArrayList<String>,
+    private val zamanlarListesi: ArrayList<Timestamp>,
+    private val recyclerViewClickInterface: RecyclerViewClickInterface
+) : RecyclerView.Adapter<GonderiHolder>() {
 
-import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.mrcaracal.Interface.RecyclerViewClickInterface;
-import com.mrcaracal.mobilgezirehberim.R;
-import com.squareup.picasso.Picasso;
+    var firebaseAuth: FirebaseAuth? = null
+    var firebaseUser: FirebaseUser? = null
+    var firebaseFirestore: FirebaseFirestore? = null
 
-import java.util.ArrayList;
-
-public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYapim.GonderiHolder> {
-
-    private static final String TAG = "RecyclerAdapterYapim";
-    private final ArrayList<String> gonderiIDleriListesi;
-    private final ArrayList<String> kullaniciEpostalariListesi;
-    private final ArrayList<String> resimAdresleriListesi;
-    private final ArrayList<String> yerIsimleriListesi;
-    private final ArrayList<String> konumlariListesi;
-    private final ArrayList<String> adresleriListesi;
-    private final ArrayList<String> sehirListesi;
-    private final ArrayList<String> yorumlarListesi;
-    private final ArrayList<String> postaKodlari;
-    private final ArrayList<String> taglarListesi;
-    private final ArrayList<com.google.firebase.Timestamp> zamanlarListesi;
-    private final RecyclerViewClickInterface recyclerViewClickInterface;
-    FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
-    FirebaseFirestore firebaseFirestore;
-
-    public RecyclerAdapterYapim(ArrayList<String> gonderiIDleriListesi,
-                                ArrayList<String> kullaniciEpostalariListesi,
-                                ArrayList<String> resimAdresleriListesi,
-                                ArrayList<String> yerIsimleriListesi,
-                                ArrayList<String> konumlariListesi,
-                                ArrayList<String> adresleriListesi,
-                                ArrayList<String> sehirListesi,
-                                ArrayList<String> yorumlarListesi,
-                                ArrayList<String> postaKodlari,
-                                ArrayList<String> taglarListesi,
-                                ArrayList<Timestamp> zamanlarListesi,
-                                RecyclerViewClickInterface recyclerViewClickInterface) {
-        this.gonderiIDleriListesi = gonderiIDleriListesi;
-        this.kullaniciEpostalariListesi = kullaniciEpostalariListesi;
-        this.resimAdresleriListesi = resimAdresleriListesi;
-        this.yerIsimleriListesi = yerIsimleriListesi;
-        this.konumlariListesi = konumlariListesi;
-        this.adresleriListesi = adresleriListesi;
-        this.sehirListesi = sehirListesi;
-        this.yorumlarListesi = yorumlarListesi;
-        this.postaKodlari = postaKodlari;
-        this.taglarListesi = taglarListesi;
-        this.zamanlarListesi = zamanlarListesi;
-        this.recyclerViewClickInterface = recyclerViewClickInterface;
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GonderiHolder {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val view = layoutInflater.inflate(R.layout.recycler_row, parent, false)
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseUser = firebaseAuth!!.currentUser
+        firebaseFirestore = FirebaseFirestore.getInstance()
+        return GonderiHolder(view)
     }
 
-    @NonNull
-    @Override
-    public GonderiHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.recycler_row, parent, false);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-        return new GonderiHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull GonderiHolder holder, int position) {
+    override fun onBindViewHolder(holder: GonderiHolder, position: Int) {
 
         // Kullanıcıya gösterilen kısım
         /*holder.row_epostasi.setText(kullaniciEpostalariListesi.get(position));*/
-        holder.row_yerIsmi.setText(yerIsimleriListesi.get(position));
-        holder.row_YorumBilgisi.setText(yorumlarListesi.get(position));
+        holder.row_yerIsmi.text = yerIsimleriListesi[position]
+        holder.row_YorumBilgisi.text = yorumlarListesi[position]
         Picasso.get()
-                .load(resimAdresleriListesi.get(position))
-                .centerCrop()
-                .fit()
-                .into(holder.row_resimAdresi);
-
-        holder.row_resimAdresi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        Log.d(TAG, "onBindViewHolder: " + "Veriler çekildi ve işlendi");
+            .load(resimAdresleriListesi[position])
+            .centerCrop()
+            .fit()
+            .into(holder.row_resimAdresi)
+        holder.row_resimAdresi.setOnClickListener { }
+        Log.d(TAG, "onBindViewHolder: " + "Veriler çekildi ve işlendi")
     }
 
     // kaç tane row olduğunu ayarlar - listemizde
-    @Override
-    public int getItemCount() {
-
-        return resimAdresleriListesi.size();
+    override fun getItemCount(): Int {
+        return resimAdresleriListesi.size
     }
 
     //
-    class GonderiHolder extends RecyclerView.ViewHolder {
+    inner class GonderiHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var row_resimAdresi: ImageView
+        var row_yerIsmi: TextView
+        var row_YorumBilgisi: TextView
+        var ll_diger_secenekler: LinearLayout
 
-        ImageView row_resimAdresi;
-        TextView row_yerIsmi, row_YorumBilgisi;
-        LinearLayout ll_diger_secenekler;
+        init {
 
-        public GonderiHolder(@NonNull View itemView) {
-            super(itemView);
-
-            /*row_epostasi = itemView.findViewById(R.id.row_epostasi);*/
-            row_resimAdresi = itemView.findViewById(R.id.row_resimAdresi);
-            row_yerIsmi = itemView.findViewById(R.id.row_yerIsmi);
-            row_YorumBilgisi = itemView.findViewById(R.id.row_YorumBilgisi);
-            ll_diger_secenekler = itemView.findViewById(R.id.ll_diger_secenekler);
+            /*row_epostasi = itemView.findViewById(R.id.row_epostasi);*/row_resimAdresi =
+                itemView.findViewById(R.id.row_resimAdresi)
+            row_yerIsmi = itemView.findViewById(R.id.row_yerIsmi)
+            row_YorumBilgisi = itemView.findViewById(R.id.row_YorumBilgisi)
+            ll_diger_secenekler = itemView.findViewById(R.id.ll_diger_secenekler)
 
             // position'a göre hangisine tıklandıysa position'u bunun için oluşturulan RecyclerViewClickInterface'e göndersin.
             // RecyclerViewClickInterface'i hangi sınıf impelements edecekse orada kullanılsın.
@@ -141,24 +96,19 @@ public class RecyclerAdapterYapim extends RecyclerView.Adapter<RecyclerAdapterYa
                     recyclerViewClickInterface.onLongItemClick(getAdapterPosition());
                     return false;
                 }
-            });*/
-
-            row_resimAdresi.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    recyclerViewClickInterface.onLongItemClick(getAdapterPosition());
-                    return false;
-                }
-            });
-
-            ll_diger_secenekler.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    recyclerViewClickInterface.onDigerSeceneklerClick(getAdapterPosition());
-                }
-            });
-
+            });*/row_resimAdresi.setOnLongClickListener {
+                recyclerViewClickInterface.onLongItemClick(adapterPosition)
+                false
+            }
+            ll_diger_secenekler.setOnClickListener {
+                recyclerViewClickInterface.onOtherOperationsClick(
+                    adapterPosition
+                )
+            }
         }
     }
 
+    companion object {
+        private const val TAG = "RecyclerAdapterYapim"
+    }
 }

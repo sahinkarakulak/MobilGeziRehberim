@@ -9,7 +9,7 @@
     tools:context="com.mrcaracal.activity.EditProfileActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/img_kullaniciResmi"
+        android:id="@+id/img_userPicture"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_gravity="center"
@@ -19,7 +19,7 @@
         app:civ_border_width="1dp" />
 
     <TextView
-        android:id="@+id/tv_kullaniciResmiDegistir"
+        android:id="@+id/tv_userChangePicture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -41,7 +41,7 @@
         app:cardCornerRadius="10dp">
 
         <EditText
-            android:id="@+id/et_kullaniciAdiAl"
+            android:id="@+id/edt_getUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -63,7 +63,7 @@
         app:cardCornerRadius="10dp">
 
         <EditText
-            android:id="@+id/et_biyografiAl"
+            android:id="@+id/edt_getBiography"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -87,7 +87,7 @@
         app:cardCornerRadius="10dp">
 
         <TextView
-            android:id="@+id/txt_kullanici_ePosta_adresi"
+            android:id="@+id/tv_userEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="18dp"
@@ -97,7 +97,7 @@
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:id="@+id/btn_guncelle"
+        android:id="@+id/btn_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"

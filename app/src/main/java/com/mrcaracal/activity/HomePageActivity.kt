@@ -1,142 +1,114 @@
-package com.mrcaracal.activity;
+package com.mrcaracal.activity
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
+import android.content.Intent
+import android.os.Bundle
+import android.os.Handler
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.mrcaracal.fragment.HomePageFragment
+import com.mrcaracal.fragment.MyAccountFragment
+import com.mrcaracal.fragment.SearchFragment
+import com.mrcaracal.fragment.ShareFragment
+import com.mrcaracal.mobilgezirehberim.Login
+import com.mrcaracal.mobilgezirehberim.R
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+private const val TAG = "HomePageActivity"
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.mrcaracal.fragment.HomePageFragment;
-import com.mrcaracal.fragment.SearchFragment;
-import com.mrcaracal.fragment.MyAccountFragment;
-import com.mrcaracal.fragment.ShareFragment;
-import com.mrcaracal.mobilgezirehberim.Login;
-import com.mrcaracal.mobilgezirehberim.R;
+class HomePageActivity : AppCompatActivity() {
 
-public class HomePageActivity extends AppCompatActivity {
-    
-    private static final String TAG = "HomePage";
+    var doubleBackToExitPressedOnce = false
+    var firebaseAuth: FirebaseAuth? = null
+    var firebaseFirestore: FirebaseFirestore? = null
 
-    boolean doubleBackToExitPressedOnce = false;
-
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
-
-    private void init() {
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
+    private fun init() {
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseFirestore = FirebaseFirestore.getInstance()
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ana_sayfa);
-        init();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_home_page)
+        init()
+        title = "Mobil Gezi Rehberim"
+        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, HomePageFragment()).commit()
+        Log.i(TAG, "onCreate: F_Anasayfa Fragment'i açıldı")
 
-        setTitle("Mobil Gezi Rehberim");
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomePageFragment()).commit();
-        Log.d(TAG, "onCreate: F_Anasayfa Fragment'i açıldı");
-
-        // BottomNavigation
-        // Nesnesini oluşturup tıklanma işlemlerinde neler yapılacağını belirttik.
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomN);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Fragment seciliFragment = null;
-
-                // Hangi menüye tıklanmışsa onu tespit ediyoruz.
-                switch (menuItem.getItemId()) {
-                    case R.id.ana_sayfa:
-                        seciliFragment = new HomePageFragment();
-                        setTitle("Mobil Gezi Rehberim");
-                        Log.d(TAG, "onNavigationItemSelected: F_Anasayfa fragment'i seçildi");
-                        break;
-                    case R.id.ara:
-                        seciliFragment = new SearchFragment();
-                        setTitle("Ara");
-                        Log.d(TAG, "onNavigationItemSelected: F_Ara fragment'i seçildi");
-                        break;
-                    case R.id.paylas:
-                        seciliFragment = new ShareFragment();
-                        setTitle("Paylaş");
-                        Log.d(TAG, "onNavigationItemSelected: F_Paylas fragment'i seçildi");
-                        break;
-                    case R.id.hesabim:
-                        seciliFragment = new MyAccountFragment();
-                        setTitle("Hesabım");
-                        Log.d(TAG, "onNavigationItemSelected: F_Hesabim fragment'i seçildi");
-                        break;
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomN)
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            var selectedFragment: Fragment? = null
+            when (menuItem.itemId) {
+                R.id.ana_sayfa -> {
+                    selectedFragment = HomePageFragment()
+                    title = "Mobil Gezi Rehberim"
+                    Log.i(TAG, "onNavigationItemSelected: F_Anasayfa fragment'i seçildi")
                 }
-                // Tespit ettiğimiz fragment'i yayınlıyoruz.
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, seciliFragment).commit();
-
-                // Seçili fragmentin kullanıcının anlaması için true yaptık
-                return true;
+                R.id.ara -> {
+                    selectedFragment = SearchFragment()
+                    title = "Ara"
+                    Log.i(TAG, "onNavigationItemSelected: F_Ara fragment'i seçildi")
+                }
+                R.id.paylas -> {
+                    selectedFragment = ShareFragment()
+                    title = "Paylaş"
+                    Log.i(TAG, "onNavigationItemSelected: F_Paylas fragment'i seçildi")
+                }
+                R.id.hesabim -> {
+                    selectedFragment = MyAccountFragment()
+                    title = "Hesabım"
+                    Log.i(TAG, "onNavigationItemSelected: F_Hesabim fragment'i seçildi")
+                }
             }
-        });
-    }
+            // Tespit ettiğimiz fragment'i yayınlıyoruz.
+            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, selectedFragment!!)
+                .commit()
 
-
-    // Uygulamanın sağ üst tarafında menünün yer almasını sağlayan kısım
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.ust_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    // Uygulamanın sağ üst tarafındaki menüde tıklama durumunda yapılacak işlemler...
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.iletisim:
-                Intent iletisim = new Intent(HomePageActivity.this, ContactActivity.class);
-                startActivity(iletisim);
-                Log.d(TAG, "onOptionsItemSelected: İletişim menüsü seçildi");
-                break;
-
-            case R.id.cikis:
-                Intent cikis = new Intent(HomePageActivity.this, Login.class);
-                startActivity(cikis);
-                finish();
-                firebaseAuth.signOut();
-                Log.d(TAG, "onOptionsItemSelected: Çıkış menüsü seçildi");
-                break;
+            // Seçili fragmentin kullanıcının anlaması için true yaptık
+            true
         }
-        return super.onOptionsItemSelected(item);
     }
 
-    // Geri tuşuna çift tıklama ile uygulamadan çıkma işlemi
-    @Override
-    public void onBackPressed() {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.ust_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        when (id) {
+            R.id.contact -> {
+                val contact = Intent(this@HomePageActivity, ContactActivity::class.java)
+                startActivity(contact)
+                Log.i(TAG, "onOptionsItemSelected: İletişim menüsü seçildi")
+            }
+            R.id.signOut -> {
+                val signOut = Intent(this@HomePageActivity, Login::class.java)
+                startActivity(signOut)
+                finish()
+                firebaseAuth!!.signOut()
+                Log.i(TAG, "onOptionsItemSelected: Çıkış menüsü seçildi")
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
+            super.onBackPressed()
+            return
         }
+        doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Çıkmak için tekrar basınız", Toast.LENGTH_SHORT).show()
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+    }
 
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Çıkmak için tekrar basınız", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-
-            }
-        }, 2000);
+    companion object {
+        private const val TAG = "HomePage"
     }
 }

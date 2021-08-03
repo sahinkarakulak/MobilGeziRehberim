@@ -1,60 +1,58 @@
-package com.mrcaracal.activity;
+package com.mrcaracal.activity
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.modul.ContactInfo
 
-import androidx.appcompat.app.AppCompatActivity;
+private const val TAG = "ContactActivity"
 
-import com.mrcaracal.modul.ContactInfo;
-import com.mrcaracal.mobilgezirehberim.R;
+class ContactActivity : AppCompatActivity() {
 
-public class ContactActivity extends AppCompatActivity {
+    var edt_contactSubjectTitle: EditText? = null
+    var edt_contactMessage: EditText? = null
+    var btn_contactSend: Button? = null
 
-    private static final String TAG = "Iletisim";
-
-    EditText edt_iletisim_konu_baslik, edt_iletisim_mesaj_icerik;
-    Button btn_iletisim_gonder;
-
-    private void init() {
-        edt_iletisim_konu_baslik = findViewById(R.id.edt_iletisim_konu_baslik);
-        edt_iletisim_mesaj_icerik = findViewById(R.id.edt_iletisim_mesaj_icerik);
-        btn_iletisim_gonder = findViewById(R.id.btn_iletisim_gonder);
+    private fun init() {
+        edt_contactSubjectTitle = findViewById(R.id.edt_contactSubjectTitle)
+        edt_contactMessage = findViewById(R.id.edt_contactMessage)
+        btn_contactSend = findViewById(R.id.btn_contactSend)
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_iletisim);
-        init();
-        setTitle("İletişim");
-
-        btn_iletisim_gonder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String str_konu_baslik = edt_iletisim_konu_baslik.getText().toString();
-                String str_mesaj_icerik = edt_iletisim_mesaj_icerik.getText().toString();
-
-                ContactInfo contactInfo = new ContactInfo();
-
-                if (str_konu_baslik.equals("") || str_mesaj_icerik.equals("")) {
-                    Toast.makeText(ContactActivity.this, "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onClick: EditText'en boş veriler alındı");
-                } else {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.getAdmin_hesaplari());
-                    intent.putExtra(Intent.EXTRA_SUBJECT, str_konu_baslik);
-                    intent.putExtra(Intent.EXTRA_TEXT, str_mesaj_icerik);
-                    intent.setType("plain/text");
-                    startActivity(Intent.createChooser(intent, "Ne ile göndermek istersiniz?"));
-                    Log.d(TAG, "onClick: E-Mail gönderildi");
-                }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_contact)
+        init()
+        title = "İletişim"
+        btn_contactSend!!.setOnClickListener {
+            val str_subject = edt_contactSubjectTitle!!.text.toString()
+            val str_message = edt_contactMessage!!.text.toString()
+            val contactInfo = ContactInfo()
+            if (str_subject == "" || str_message == "") {
+                Toast.makeText(
+                    this@ContactActivity,
+                    "Gerekli alanları doldurunuz",
+                    Toast.LENGTH_SHORT
+                ).show()
+                Log.i(TAG, "onClick: EditText'en boş veriler alındı")
+            } else {
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.admin_hesaplari)
+                intent.putExtra(Intent.EXTRA_SUBJECT, str_subject)
+                intent.putExtra(Intent.EXTRA_TEXT, str_message)
+                intent.type = "plain/text"
+                startActivity(Intent.createChooser(intent, "Ne ile göndermek istersiniz?"))
+                Log.i(TAG, "onClick: E-Mail gönderildi")
             }
-        });
+        }
+    }
 
+    companion object {
+        private const val TAG = "Iletisim"
     }
 }

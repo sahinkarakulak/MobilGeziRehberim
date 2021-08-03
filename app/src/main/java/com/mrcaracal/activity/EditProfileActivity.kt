@@ -1,252 +1,197 @@
-package com.mrcaracal.activity;
+package com.mrcaracal.activity
 
-import android.content.ContentResolver;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.webkit.MimeTypeMap;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.util.Log
+import android.webkit.MimeTypeMap
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.StorageTask
+import com.mrcaracal.mobilgezirehberim.R
+import com.squareup.picasso.Picasso
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
+import java.util.*
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+private const val TAG = "EditProfileActivity"
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
-import com.mrcaracal.mobilgezirehberim.R;
-import com.squareup.picasso.Picasso;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+class EditProfileActivity : AppCompatActivity() {
 
-import java.util.HashMap;
-import java.util.Map;
+    var firebaseUser: FirebaseUser? = null
+    var storageReference: StorageReference? = null
+    var img_userPicture: ImageView? = null
+    var tv_userChangePicture: TextView? = null
+    var edt_getUserName: EditText? = null
+    var edt_getBiography: EditText? = null
+    var tv_userEmail: TextView? = null
+    var btn_update: Button? = null
+    var documentReference: DocumentReference? = null
+    private var mImageUri: Uri? = null
+    private var uploadTask: StorageTask<*>? = null
 
-public class EditProfileActivity extends AppCompatActivity {
-
-    private static final String TAG = "ProfilDuzenle";
-
-    FirebaseUser firebaseUser;
-    StorageReference storageReference;
-    ImageView img_kullaniciResmi;
-    TextView tv_kullaniciResmiDegistir;
-    EditText et_kullaniciAdiAl, et_biyografiAl;
-    TextView txt_kullanici_ePosta_adresi;
-    Button btn_guncelle;
-    DocumentReference documentReference;
-    private Uri mImageUri;
-    private StorageTask uploadTask;
-
-    private void initialize() {
-
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        storageReference = FirebaseStorage.getInstance().getReference("Resimler");
-
-        img_kullaniciResmi = findViewById(R.id.img_kullaniciResmi);
-        tv_kullaniciResmiDegistir = findViewById(R.id.tv_kullaniciResmiDegistir);
-        et_kullaniciAdiAl = findViewById(R.id.et_kullaniciAdiAl);
-        et_biyografiAl = findViewById(R.id.et_biyografiAl);
-        txt_kullanici_ePosta_adresi = findViewById(R.id.txt_kullanici_ePosta_adresi);
-        btn_guncelle = findViewById(R.id.btn_guncelle);
+    private fun initialize() {
+        firebaseUser = FirebaseAuth.getInstance().currentUser
+        storageReference = FirebaseStorage.getInstance().getReference("Resimler")
+        img_userPicture = findViewById(R.id.img_userPicture)
+        tv_userChangePicture = findViewById(R.id.tv_userChangePicture)
+        edt_getUserName = findViewById(R.id.edt_getUserName)
+        edt_getBiography = findViewById(R.id.edt_getBiography)
+        tv_userEmail = findViewById(R.id.tv_userEmail)
+        btn_update = findViewById(R.id.btn_update)
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profil_duzenle);
-        initialize();
-
-        setTitle("Profili Düzenle");
-
-        txt_kullanici_ePosta_adresi.setText(firebaseUser.getEmail());
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_edit_profile)
+        initialize()
+        title = "Profili Düzenle"
+        tv_userEmail!!.text = firebaseUser!!.email
         documentReference = FirebaseFirestore
-                .getInstance()
-                .collection("Kullanicilar")
-                .document(firebaseUser.getEmail());
-
-        documentReference
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            if (documentSnapshot.exists()) {
-
-                                et_kullaniciAdiAl.setText(documentSnapshot.getString("kullaniciAdi"));
-                                et_biyografiAl.setText(documentSnapshot.getString("bio"));
-                                Picasso.get().load(documentSnapshot.getString("kullaniciResmi")).into(img_kullaniciResmi);
-                                Log.d(TAG, "onComplete: VT'den kullanıcı bilgileri alındı ve gösterildi");
-                            }
-
-                        }
+            .getInstance()
+            .collection("Kullanicilar")
+            .document(firebaseUser!!.email!!)
+        documentReference!!
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val documentSnapshot = task.result
+                    if (documentSnapshot.exists()) {
+                        edt_getUserName!!.setText(documentSnapshot.getString("kullaniciAdi"))
+                        edt_getBiography!!.setText(documentSnapshot.getString("bio"))
+                        Picasso.get().load(documentSnapshot.getString("kullaniciResmi"))
+                            .into(img_userPicture)
+                        Log.i(TAG, "onComplete: VT'den kullanıcı bilgileri alındı ve gösterildi")
                     }
-                });
-
-        tv_kullaniciResmiDegistir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CropImage
-                        .activity()
-                        .setAspectRatio(1, 1)
-                        .setCropShape(CropImageView.CropShape.OVAL)
-                        .start(EditProfileActivity.this);
+                }
             }
-        });
-
-        img_kullaniciResmi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CropImage
-                        .activity()
-                        .setAspectRatio(1, 1)
-                        .setCropShape(CropImageView.CropShape.OVAL)
-                        .start(EditProfileActivity.this);
-            }
-        });
-
-        btn_guncelle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profiliGuncelle(et_kullaniciAdiAl.getText().toString(), et_biyografiAl.getText().toString());
-                Log.d(TAG, "onClick: EditText'en alınan veriler parametre olarak gönderildi");
-            }
-        });
-
+        tv_userChangePicture!!.setOnClickListener {
+            CropImage
+                .activity()
+                .setAspectRatio(1, 1)
+                .setCropShape(CropImageView.CropShape.OVAL)
+                .start(this@EditProfileActivity)
+        }
+        img_userPicture!!.setOnClickListener {
+            CropImage
+                .activity()
+                .setAspectRatio(1, 1)
+                .setCropShape(CropImageView.CropShape.OVAL)
+                .start(this@EditProfileActivity)
+        }
+        btn_update!!.setOnClickListener {
+            updateUser(edt_getUserName!!.text.toString(), edt_getBiography!!.text.toString())
+            Log.d(TAG, "onClick: EditText'en alınan veriler parametre olarak gönderildi")
+        }
     }
 
-    private void profiliGuncelle(String k_adi, String k_bio) {
-        DocumentReference documentReference2 = FirebaseFirestore.getInstance()
-                .collection("Kullanicilar")
-                .document(firebaseUser.getEmail());
-
-        Map<String, Object> guncelVeriler = new HashMap<>();
-        guncelVeriler.put("kullaniciAdi", k_adi);
-        guncelVeriler.put("bio", k_bio);
-
+    private fun updateUser(u_name: String, u_bio: String) {
+        val documentReference2 = FirebaseFirestore.getInstance()
+            .collection("Kullanicilar")
+            .document(firebaseUser!!.email!!)
+        val guncelVeriler: MutableMap<String, Any> = HashMap()
+        guncelVeriler["kullaniciAdi"] = u_name
+        guncelVeriler["bio"] = u_bio
         documentReference2
-                .update(guncelVeriler)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "onSuccess: Sadece istenen veriler güncellendi");
-                        startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
-                        Log.d(TAG, "onSuccess: Kullanıcı A_Anasayfaya yönlendirildi");
-                    }
-                });
+            .update(guncelVeriler)
+            .addOnSuccessListener {
+                Log.i(TAG, "onSuccess: Sadece istenen veriler güncellendi")
+                startActivity(Intent(this@EditProfileActivity, HomePageActivity::class.java))
+                Log.i(TAG, "onSuccess: Kullanıcı A_Anasayfaya yönlendirildi")
+            }
     }
 
-    private String getFileExtension(Uri uri) {
-        ContentResolver contentResolver = getContentResolver();
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    private fun getFileExtension(uri: Uri): String? {
+        val contentResolver = contentResolver
+        val mimeTypeMap = MimeTypeMap.getSingleton()
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri))
     }
 
-    private void uploadImage() {
-
+    // Conver işlemi sonrası hatalar gerçekleşti. DÜZELTİLECEKTİR!
+    /*private fun uploadImage() {
         if (mImageUri != null) {
-            Log.d(TAG, "uploadImage: Koşul sağlandı");
-            StorageReference storageReference2 = storageReference.child(firebaseUser.getEmail()).child(System.currentTimeMillis()
-                    + "." + getFileExtension(mImageUri));
-
-            uploadTask = storageReference2.putFile(mImageUri);
-            Log.d(TAG, "uploadImage: Resim yolu alındı");
-            uploadTask.continueWithTask(new Continuation() {
-                @Override
-                public Object then(@NonNull Task task) throws Exception {
-
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
+            Log.d(TAG, "uploadImage: Koşul sağlandı")
+            val storageReference2 = storageReference!!.child(firebaseUser!!.email!!).child(
+                System.currentTimeMillis()
+                    .toString() + "." + getFileExtension(mImageUri!!)
+            )
+            uploadTask = storageReference2.putFile(mImageUri!!)
+            Log.d(TAG, "uploadImage: Resim yolu alındı")
+            uploadTask.continueWithTask(object : Continuation<Any?, Any?> {
+                @Throws(Exception::class)
+                override fun then(task: Task<*>): Any? {
+                    if (!task.isSuccessful) {
+                        throw task.exception
                     }
-
-                    return storageReference2.getDownloadUrl();
+                    return storageReference2.downloadUrl
                 }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        String myUrl = downloadUri.toString();
-
-                        Map<String, Object> hasmap = new HashMap<>();
-                        hasmap.put("kullaniciResmi", "" + myUrl);
-
-                        FirebaseFirestore.getInstance()
-                                .collection("Kullanicilar")
-                                .document(firebaseUser.getEmail())
-                                .update(hasmap)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-
-                                        Log.d(TAG, "onSuccess: VT'de resim yolu değiştirildi");
-
-                                        documentReference
-                                                .get()
-                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                        if (task.isSuccessful()) {
-                                                            DocumentSnapshot documentSnapshot = task.getResult();
-                                                            if (documentSnapshot.exists()) {
-
-                                                                Picasso.get().load(documentSnapshot.getString("kullaniciResmi")).into(img_kullaniciResmi);
-                                                                Log.d(TAG, "onComplete: Resim yolu çekilip Picasso ile yayınlandı");
-                                                            }
-                                                        }
-                                                    }
-                                                });
+            }).addOnCompleteListener(OnCompleteListener<Uri?> { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    val myUrl = downloadUri.toString()
+                    val hasmap: MutableMap<String, Any> = HashMap()
+                    hasmap["kullaniciResmi"] = "" + myUrl
+                    FirebaseFirestore.getInstance()
+                        .collection("Kullanicilar")
+                        .document(firebaseUser!!.email!!)
+                        .update(hasmap)
+                        .addOnSuccessListener {
+                            Log.d(TAG, "onSuccess: VT'de resim yolu değiştirildi")
+                            documentReference
+                                ?.get()
+                                ?.addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        val documentSnapshot = task.result
+                                        if (documentSnapshot.exists()) {
+                                            Picasso.get()
+                                                .load(documentSnapshot.getString("kullaniciResmi"))
+                                                .into(img_userPicture)
+                                            Log.d(
+                                                TAG,
+                                                "onComplete: Resim yolu çekilip Picasso ile yayınlandı"
+                                            )
+                                        }
                                     }
-                                });
-                    } else {
-                        Toast.makeText(EditProfileActivity.this, "Bir hata gerçekleşti", Toast.LENGTH_SHORT).show();
-                    }
+                                }
+                        }
+                } else {
+                    Toast.makeText(
+                        this@EditProfileActivity,
+                        "Bir hata gerçekleşti",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "onFailure: " + e.getMessage());
-                }
-            });
+            }).addOnFailureListener(OnFailureListener { e ->
+                Toast.makeText(this@EditProfileActivity, e.message, Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "onFailure: " + e.message)
+            })
         } else {
-            Toast.makeText(this, "Resim seçilmedi", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Resim seçilmedi", Toast.LENGTH_SHORT).show()
         }
-    }
+    }*/
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            mImageUri = result.getUri();
-            uploadImage();
-
-            Toast.makeText(this, "Profil resmi güncellendi", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "onActivityResult: Profil resmi güncellendi");
+            val result = CropImage.getActivityResult(data)
+            mImageUri = result.uri
+            uploadImage()
+            Toast.makeText(this, "Profil resmi güncellendi", Toast.LENGTH_SHORT).show()
+            Log.i(TAG, "onActivityResult: Profil resmi güncellendi")
         } else {
-            Toast.makeText(this, "Vaz mı geçtin?", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "onActivityResult: İşlemden vazgeçildi");
+            Toast.makeText(this, "Vaz mı geçtin?", Toast.LENGTH_SHORT).show()
+            Log.i(TAG, "onActivityResult: İşlemden vazgeçildi")
         }
+    }*/
 
+    companion object {
+        private const val TAG = "ProfilDuzenle"
     }
 }

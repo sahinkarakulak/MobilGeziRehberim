@@ -1,87 +1,82 @@
-package com.mrcaracal.activity;
+package com.mrcaracal.activity
 
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.mrcaracal.mobilgezirehberim.R
 
-import androidx.appcompat.app.AppCompatActivity;
+private const val TAG = "GoToLocationOnMapActivi"
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.mrcaracal.mobilgezirehberim.R;
+class GoToLocationOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
-public class GoToLocationOnMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private lateinit var GET: SharedPreferences
+    private lateinit var SET: SharedPreferences.Editor
+    private var mMap: GoogleMap? = null
 
-    private static final String TAG = "HaritaKonumaGit";
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_go_to_location_on_map)
 
-    SharedPreferences GET;
-    SharedPreferences.Editor SET;
-
-    private GoogleMap mMap;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_harita_konuma_git);
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map2);
-        mapFragment.getMapAsync(this);
-
-        setTitle("Gönderi Konumu");
-
-        GET = getSharedPreferences("harita", MODE_PRIVATE);
-        SET = GET.edit();
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map2) as SupportMapFragment?
+        mapFragment!!.getMapAsync(this)
+        title = "Gönderi Konumu"
+        GET = getSharedPreferences("harita", MODE_PRIVATE)
+        SET = GET.edit()
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        val latitude = GET!!.getFloat("konum_git_enlem", 0f).toDouble()
+        val longitude = GET!!.getFloat("konum_git_boylam", 0f).toDouble()
+        Log.i(TAG, "onMapReady: $latitude,$longitude")
 
-        double enlem = GET.getFloat("konum_git_enlem", 0);
-        double boylam = GET.getFloat("konum_git_boylam", 0);
-
-        Log.d(TAG, "onMapReady: " + enlem + "," + boylam);
-
-        LatLng gonderi_konumu = new LatLng(enlem, boylam);
-        mMap.addMarker(new MarkerOptions().position(gonderi_konumu).title("Gönderi Konumu"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gonderi_konumu, 16));
+        val postLocation = LatLng(latitude, longitude)
+        mMap!!.addMarker(MarkerOptions().position(postLocation).title("Gönderi Konumu"))
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(postLocation, 16f))
     }
 
     // FARKLI HARİTA TÜRLERİ İÇİN MENÜLEİR LİSTELEDİK
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.harita_menu, menu);
-        return true;
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.harita_menu, menu)
+        return true
     }
 
     // FARKLI HARİTA TÜRLERİNE TIKLANDIĞINDA YAPILACAK İŞLEMLERİ BELİRLEDİK
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Change the map type based on the user's selection.
-        switch (item.getItemId()) {
-            case R.id.normal_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                return true;
-            case R.id.hybrid_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                return true;
-            case R.id.satellite_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                return true;
-            case R.id.terrain_map:
-                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        return when (item.itemId) {
+            R.id.normal_map -> {
+                mMap!!.mapType = GoogleMap.MAP_TYPE_NORMAL
+                true
+            }
+            R.id.hybrid_map -> {
+                mMap!!.mapType = GoogleMap.MAP_TYPE_HYBRID
+                true
+            }
+            R.id.satellite_map -> {
+                mMap!!.mapType = GoogleMap.MAP_TYPE_SATELLITE
+                true
+            }
+            R.id.terrain_map -> {
+                mMap!!.mapType = GoogleMap.MAP_TYPE_TERRAIN
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    companion object {
+        private const val TAG = "HaritaKonumaGit"
     }
 }
