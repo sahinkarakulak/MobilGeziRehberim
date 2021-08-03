@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/img_konuma_gore_bul"
+            android:id="@+id/img_finfByLocation"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:background="@drawable/bg_edit_text"
@@ -28,7 +28,7 @@
             android:layout_weight="1">
 
             <EditText
-                android:id="@+id/edt_anahtar_kelime_arat"
+                android:id="@+id/edt_keyValueSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -40,7 +40,7 @@
                 android:visibility="visible" />
 
             <Spinner
-                android:id="@+id/sp_sehirler"
+                android:id="@+id/sp_cities"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -53,7 +53,7 @@
         </RelativeLayout>
 
         <Spinner
-            android:id="@+id/sp_ara_neye_gore"
+            android:id="@+id/sp_searchByWhat"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/bg_spinner"
@@ -68,21 +68,12 @@
         android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_ara"
+            android:id="@+id/recycler_view_search"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <WebView
-            android:id="@+id/webview"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

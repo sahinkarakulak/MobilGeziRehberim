@@ -12,7 +12,7 @@
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_profil_resmi"
+            android:id="@+id/img_profileProfilePicture"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="96dp"
             android:layout_height="96dp"
@@ -31,7 +31,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_kullaniciAdi"
+                android:id="@+id/tv_userName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -39,7 +39,7 @@
                 android:text="" />
 
             <TextView
-                android:id="@+id/tv_kullaniciBio"
+                android:id="@+id/tv_userBio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -51,7 +51,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_profili_duzenle"
+        android:id="@+id/btn_editProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
@@ -60,7 +60,7 @@
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomHesabimMenusu"
+        android:id="@+id/bn_accountMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground"
@@ -72,7 +72,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewHesabim"
+        android:id="@+id/recyclerViewAccount"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

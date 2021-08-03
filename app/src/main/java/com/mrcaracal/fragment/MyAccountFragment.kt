@@ -1,607 +1,493 @@
-package com.mrcaracal.fragment;
+package com.mrcaracal.fragment
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.mrcaracal.Interface.RecyclerViewClickInterface
+import com.mrcaracal.activity.EditProfileActivity
+import com.mrcaracal.activity.GoToLocationOnMapActivity
+import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.mobilgezirehberim.R
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
+import java.text.DateFormat
+import java.util.*
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+class MyAccountFragment() : Fragment(), RecyclerViewClickInterface {
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.mrcaracal.activity.GoToLocationOnMapActivity;
-import com.mrcaracal.activity.EditProfileActivity;
-import com.mrcaracal.adapter.RecyclerAdapterStructure;
-import com.mrcaracal.Interface.RecyclerViewClickInterface;
-import com.mrcaracal.mobilgezirehberim.R;
-import com.squareup.picasso.Picasso;
+    var firebaseAuth: FirebaseAuth? = null
+    var firebaseUser: FirebaseUser? = null
+    var firebaseFirestore: FirebaseFirestore? = null
+    var postIDsFirebase: ArrayList<String>? = null
+    var userEmailsFirebase: ArrayList<String>? = null
+    var pictureLinksFirebase: ArrayList<String>? = null
+    var placeNamesFirebase: ArrayList<String>? = null
+    var locationFirebase: ArrayList<String>? = null
+    var addressesFirebase: ArrayList<String>? = null
+    var citiesFirebase: ArrayList<String>? = null
+    var commentsFirebase: ArrayList<String>? = null
+    var postCodesFirebase: ArrayList<String>? = null
+    var tagsFirebase: ArrayList<String>? = null
+    private lateinit var timesFirebase: ArrayList<Timestamp>
+    private lateinit var recyclerViewAccount: RecyclerView
+    var recyclerAdapterStructure: RecyclerAdapterStructure? = null
+    private lateinit var tv_userName: TextView
+    private lateinit var tv_userBio: TextView
+    private lateinit var btn_editProfile: Button
+    var img_profileProfilePicture: CircleImageView? = null
+    var positionValue = 0
+    var tabControl = "paylasilanlar"
 
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Map;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class MyAccountFragment extends Fragment implements RecyclerViewClickInterface {
-
-    private static final String TAG = "F_Hesabim";
-
-    FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
-    FirebaseFirestore firebaseFirestore;
-
-    ArrayList<String> gonderiIDleriFB;
-    ArrayList<String> kullaniciEpostalariFB;
-    ArrayList<String> resimAdresleriFB;
-    ArrayList<String> yerIsimleriFB;
-    ArrayList<String> konumlariFB;
-    ArrayList<String> adresleriFB;
-    ArrayList<String> sehirFB;
-    ArrayList<String> yorumlarFB;
-    ArrayList<String> postaKoduFB;
-    ArrayList<String> taglarFB;
-    ArrayList<Timestamp> zamanlarFB;
-
-    RecyclerView recyclerViewHesabim;
-
-    RecyclerAdapterStructure recyclerAdapterStructure;
-
-    TextView tv_kullaniciAdi, tv_kullaniciBio;
-    Button btn_profili_duzenle;
-
-    CircleImageView img_profil_resmi;
-
-    int POSITION_DEGERI;
-    String TABKONTROL = "paylasilanlar";
     // kaydedilenler
-
-    SharedPreferences GET;
-    SharedPreferences.Editor SET;
-
-    double enlem;
-    double boylam;
-
-    ViewGroup viewGroup;
-
-    private void init() {
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-
-        gonderiIDleriFB = new ArrayList<>();
-        kullaniciEpostalariFB = new ArrayList<>();
-        resimAdresleriFB = new ArrayList<>();
-        yerIsimleriFB = new ArrayList<>();
-        konumlariFB = new ArrayList<>();
-        adresleriFB = new ArrayList<>();
-        sehirFB = new ArrayList<>();
-        yorumlarFB = new ArrayList<>();
-        postaKoduFB = new ArrayList<>();
-        taglarFB = new ArrayList<>();
-        zamanlarFB = new ArrayList<>();
-
-        GET = getActivity().getSharedPreferences("harita", Context.MODE_PRIVATE);
-        SET = GET.edit();
-
+    private lateinit var GET: SharedPreferences
+    private lateinit var SET: SharedPreferences.Editor
+    var latitude = 0.0
+    var longitude = 0.0
+    var viewGroup: ViewGroup? = null
+    private fun init() {
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseFirestore = FirebaseFirestore.getInstance()
+        firebaseUser = firebaseAuth!!.currentUser
+        postIDsFirebase = ArrayList()
+        userEmailsFirebase = ArrayList()
+        pictureLinksFirebase = ArrayList()
+        placeNamesFirebase = ArrayList()
+        locationFirebase = ArrayList()
+        addressesFirebase = ArrayList()
+        citiesFirebase = ArrayList()
+        commentsFirebase = ArrayList()
+        postCodesFirebase = ArrayList()
+        tagsFirebase = ArrayList()
+        timesFirebase = ArrayList()
+        GET = activity!!.getSharedPreferences("harita", Context.MODE_PRIVATE)
+        SET = GET.edit()
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        viewGroup = (ViewGroup) inflater.inflate(R.layout.frag_hesabim, container, false);
-        init();
-
-        paylasilanlariCek();
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        viewGroup = inflater.inflate(R.layout.frag_my_account, container, false) as ViewGroup
+        init()
+        pullTheShared()
 
         // RecyclerView Tanımlama İşlemi
-        recyclerViewHesabim = viewGroup.findViewById(R.id.recyclerViewHesabim);
-        recyclerViewHesabim.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerAdapterStructure = new RecyclerAdapterStructure(gonderiIDleriFB,
-                kullaniciEpostalariFB,
-                resimAdresleriFB,
-                yerIsimleriFB,
-                konumlariFB,
-                adresleriFB,
-                sehirFB,
-                yorumlarFB,
-                postaKoduFB,
-                taglarFB,
-                zamanlarFB,
-                this);
-        recyclerViewHesabim.setAdapter(recyclerAdapterStructure);
-
-        img_profil_resmi = viewGroup.findViewById(R.id.img_profil_resmi);
-        tv_kullaniciAdi = viewGroup.findViewById(R.id.tv_kullaniciAdi);
-        tv_kullaniciBio = viewGroup.findViewById(R.id.tv_kullaniciBio);
-
-        btn_profili_duzenle = viewGroup.findViewById(R.id.btn_profili_duzenle);
-
-        btn_profili_duzenle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent profili_duzenle = new Intent(getActivity(), EditProfileActivity.class);
-                startActivity(profili_duzenle);
-                Log.d(TAG, "onClick: Kullanıcı A_ProfiliDuzenle'e yönlendirildi");
-            }
-        });
-
-        DocumentReference documentReference = FirebaseFirestore
-                .getInstance()
-                .collection("Kullanicilar")
-                .document(firebaseUser.getEmail());
-
+        recyclerViewAccount = viewGroup!!.findViewById(R.id.recyclerViewAccount)
+        recyclerViewAccount.setLayoutManager(LinearLayoutManager(activity))
+        recyclerAdapterStructure = RecyclerAdapterStructure(
+            (postIDsFirebase)!!,
+            (userEmailsFirebase)!!,
+            (pictureLinksFirebase)!!,
+            (placeNamesFirebase)!!,
+            (locationFirebase)!!,
+            (addressesFirebase)!!,
+            (citiesFirebase)!!,
+            (commentsFirebase)!!,
+            (postCodesFirebase)!!,
+            (tagsFirebase)!!,
+            timesFirebase,
+            this
+        )
+        recyclerViewAccount.setAdapter(recyclerAdapterStructure)
+        img_profileProfilePicture = viewGroup!!.findViewById(R.id.img_profileProfilePicture)
+        tv_userName = viewGroup!!.findViewById(R.id.tv_userName)
+        tv_userBio = viewGroup!!.findViewById(R.id.tv_userBio)
+        btn_editProfile = viewGroup!!.findViewById(R.id.btn_editProfile)
+        btn_editProfile.setOnClickListener(View.OnClickListener {
+            val editProfile = Intent(activity, EditProfileActivity::class.java)
+            startActivity(editProfile)
+            Log.i(TAG, "onClick: Kullanıcı A_ProfiliDuzenle'e yönlendirildi")
+        })
+        val documentReference = FirebaseFirestore
+            .getInstance()
+            .collection("Kullanicilar")
+            .document((firebaseUser!!.email)!!)
         documentReference
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        Log.d(TAG, "onComplete: Veriler çekildi");
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            if (documentSnapshot.exists()) {
-                                tv_kullaniciAdi.setText(documentSnapshot.getString("kullaniciAdi"));
-                                tv_kullaniciBio.setText(documentSnapshot.getString("bio"));
-                                Picasso.get().load(documentSnapshot.getString("kullaniciResmi")).into(img_profil_resmi);
-                                Log.d(TAG, "onComplete: Çekilen veriler kullanıldı\n" + documentSnapshot.getString("kullaniciResmi"));
-
-                                if (documentSnapshot.getString("kullaniciResmi") == null) {
-                                    Picasso.get().load(R.drawable.defaultpp).into(img_profil_resmi);
-                                    Log.d(TAG, "onComplete: Default resim kullanıldı");
-                                }
-
-                            }
+            .get()
+            .addOnCompleteListener { task ->
+                Log.i(TAG, "onComplete: Veriler çekildi")
+                if (task.isSuccessful) {
+                    val documentSnapshot = (task.result)
+                    if (documentSnapshot.exists()) {
+                        tv_userName.setText(documentSnapshot.getString("kullaniciAdi"))
+                        tv_userBio.setText(documentSnapshot.getString("bio"))
+                        Picasso.get().load(documentSnapshot.getString("kullaniciResmi"))
+                            .into(img_profileProfilePicture)
+                        Log.i(TAG,"onComplete: Çekilen veriler kullanıldı\n" + documentSnapshot.getString("kullaniciResmi")
+                        )
+                        if (documentSnapshot.getString("kullaniciResmi") == null) {
+                            Picasso.get().load(R.drawable.defaultpp).into(img_profileProfilePicture)
+                            Log.i(TAG, "onComplete: Default resim kullanıldı")
                         }
                     }
-                });
-
-        BottomNavigationView bottomNavigationView = viewGroup.findViewById(R.id.bottomHesabimMenusu);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                // Hangi TAB'a tıklanmışsa onu tespit ediyoruz.
-                switch (item.getItemId()) {
-
-                    case R.id.paylasilanlar:
-                        Log.d(TAG, "onNavigationItemSelected: Paylaşılanlar TAB'ı");
-                        TABKONTROL = "paylasilanlar";
-                        listeTemizleme();
-                        paylasilanlariCek();
-                        Log.d(TAG, "onNavigationItemSelected: paylasilanlariCek() çağrıldı");
-                        recyclerViewHesabim.scrollToPosition(0);
-                        break;
-                    case R.id.kaydedilenler:
-                        Log.d(TAG, "onNavigationItemSelected: Kaydedilenler TAB'ı");
-                        TABKONTROL = "kaydedilenler";
-                        listeTemizleme();
-                        kaydedilenleriCek();
-                        Log.d(TAG, "onNavigationItemSelected: kaydedilenleriCek() çağrıldı");
-                        recyclerViewHesabim.scrollToPosition(0);
-                        break;
                 }
-                return true;
             }
-        });
-        return viewGroup;
+        val bottomNavigationView: BottomNavigationView =
+            viewGroup!!.findViewById(R.id.bn_accountMenu)
+        bottomNavigationView.setOnNavigationItemSelectedListener { item -> // Hangi TAB'a tıklanmışsa onu tespit ediyoruz.
+            when (item.itemId) {
+                R.id.shared -> {
+                    Log.i(TAG, "onNavigationItemSelected: Paylaşılanlar TAB'ı")
+                    tabControl = "paylasilanlar"
+                    clearList()
+                    pullTheShared()
+                    Log.i(TAG, "onNavigationItemSelected: paylasilanlariCek() çağrıldı")
+                    recyclerViewAccount.scrollToPosition(0)
+                }
+                R.id.recorded -> {
+                    Log.i(TAG, "onNavigationItemSelected: Kaydedilenler TAB'ı")
+                    tabControl = "kaydedilenler"
+                    clearList()
+                    pullTheRecorded()
+                    Log.i(TAG, "onNavigationItemSelected: kaydedilenleriCek() çağrıldı")
+                    recyclerViewAccount.scrollToPosition(0)
+                }
+            }
+            true
+        }
+        return viewGroup
     }
 
-    public void listeTemizleme() {
-        gonderiIDleriFB.clear();
-        kullaniciEpostalariFB.clear();
-        resimAdresleriFB.clear();
-        yerIsimleriFB.clear();
-        konumlariFB.clear();
-        adresleriFB.clear();
-        sehirFB.clear();
-        yorumlarFB.clear();
-        postaKoduFB.clear();
-        taglarFB.clear();
-        zamanlarFB.clear();
+    fun clearList() {
+        postIDsFirebase!!.clear()
+        userEmailsFirebase!!.clear()
+        pictureLinksFirebase!!.clear()
+        placeNamesFirebase!!.clear()
+        locationFirebase!!.clear()
+        addressesFirebase!!.clear()
+        citiesFirebase!!.clear()
+        commentsFirebase!!.clear()
+        postCodesFirebase!!.clear()
+        tagsFirebase!!.clear()
+        timesFirebase!!.clear()
     }
 
-    public void paylasilanlariCek() {
-        Log.d(TAG, "paylasilanlariCek: ...");
-        CollectionReference collectionReference = firebaseFirestore
-                .collection("Paylasilanlar")
-                .document(firebaseUser.getEmail())
-                .collection("Paylastiklari");
-
+    fun pullTheShared() {
+        Log.i(TAG, "paylasilanlariCek: ...")
+        val collectionReference = firebaseFirestore
+            ?.collection("Paylasilanlar")
+            ?.document((firebaseUser!!.email)!!)
+            ?.collection("Paylastiklari")
         collectionReference
+            ?.orderBy("zaman", Query.Direction.DESCENDING)
+            ?.get()
+            ?.addOnCompleteListener { task ->
+                Log.d(TAG, "onComplete: ")
+                if (task.isSuccessful) {
+                    val querySnapshot = (task.result)
+                    for (documentSnapshot: DocumentSnapshot in querySnapshot) {
+                        val dataClusterAccount = documentSnapshot.data
+                        val postID = dataClusterAccount!!["gonderiID"].toString()
+                        val userEmail = dataClusterAccount["kullaniciEposta"].toString()
+                        var palceName = dataClusterAccount["yerIsmi"].toString()
+                        palceName = palceName.substring(0, 1).toUpperCase() + palceName.substring(1)
+                        val location = dataClusterAccount["konum"].toString()
+                        val pictureLink = dataClusterAccount["resimAdresi"].toString()
+                        val comment = dataClusterAccount["yorum"].toString()
+                        val addres = dataClusterAccount["adres"].toString()
+                        val city = dataClusterAccount["sehir"].toString()
+                        val postCode = dataClusterAccount["postaKodu"].toString()
+                        val time = dataClusterAccount["zaman"] as Timestamp?
+                        postIDsFirebase!!.add(postID)
+                        userEmailsFirebase!!.add(userEmail)
+                        pictureLinksFirebase!!.add(pictureLink)
+                        placeNamesFirebase!!.add(palceName)
+                        locationFirebase!!.add(location)
+                        commentsFirebase!!.add(comment)
+                        postCodesFirebase!!.add(postCode)
+                        tagsFirebase!!.add(dataClusterAccount["taglar"].toString())
+                        addressesFirebase!!.add(addres)
+                        citiesFirebase!!.add(city)
+                        if (time != null) {
+                            timesFirebase!!.add(time)
+                        }
+                        recyclerAdapterStructure!!.notifyDataSetChanged()
+                        Log.d(TAG, "onComplete: Çekilen veriler RecyclerAdapterYapim'a gönderildi")
+                    }
+                }
+            }
+            ?.addOnFailureListener { e ->
+                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "onFailure: " + e.message)
+            }
+    }
+
+    fun pullTheRecorded() {
+        Log.d(TAG, "kaydedilenleriCek: ...")
+        val collectionReference = firebaseFirestore
+            ?.collection("Kaydedenler")
+            ?.document((firebaseUser!!.email)!!)
+            ?.collection("Kaydedilenler")
+        if (collectionReference != null) {
+            collectionReference
                 .orderBy("zaman", Query.Direction.DESCENDING)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Log.d(TAG, "onComplete: ");
-                        if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
-                            for (DocumentSnapshot documentSnapshot : querySnapshot) {
-                                final Map<String, Object> verilerKumesiHesaim = documentSnapshot.getData();
-
-                                String gonderiID = verilerKumesiHesaim.get("gonderiID").toString();
-                                String kullaniciEposta = verilerKumesiHesaim.get("kullaniciEposta").toString();
-                                String yerIsmi = verilerKumesiHesaim.get("yerIsmi").toString();
-                                yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
-                                String konum = verilerKumesiHesaim.get("konum").toString();
-                                String resimAdresi = verilerKumesiHesaim.get("resimAdresi").toString();
-                                String yorum = verilerKumesiHesaim.get("yorum").toString();
-                                String adres = verilerKumesiHesaim.get("adres").toString();
-                                String sehir = verilerKumesiHesaim.get("sehir").toString();
-                                String postaKodu = verilerKumesiHesaim.get("postaKodu").toString();
-                                Timestamp zaman = (Timestamp) verilerKumesiHesaim.get("zaman");
-
-                                gonderiIDleriFB.add(gonderiID);
-                                kullaniciEpostalariFB.add(kullaniciEposta);
-                                resimAdresleriFB.add(resimAdresi);
-                                yerIsimleriFB.add(yerIsmi);
-                                konumlariFB.add(konum);
-                                yorumlarFB.add(yorum);
-                                postaKoduFB.add(postaKodu);
-                                taglarFB.add(verilerKumesiHesaim.get("taglar").toString());
-                                adresleriFB.add(adres);
-                                sehirFB.add(sehir);
-                                zamanlarFB.add(zaman);
-
-                                recyclerAdapterStructure.notifyDataSetChanged();
-                                Log.d(TAG, "onComplete: Çekilen veriler RecyclerAdapterYapim'a gönderildi");
+                .addOnCompleteListener { task ->
+                    Log.d(TAG, "onComplete: Veriler filtrelenmiş olarak çekildi")
+                    if (task.isSuccessful) {
+                        val querySnapshot = (task.result)
+                        for (documentSnapshot: DocumentSnapshot in querySnapshot) {
+                            val dataClusterAccount = documentSnapshot.data
+                            val postID = dataClusterAccount!!["gonderiID"].toString()
+                            val userEmail = dataClusterAccount["kullaniciEposta"].toString()
+                            var placeName = dataClusterAccount["yerIsmi"].toString()
+                            placeName = placeName.substring(0, 1).toUpperCase() + placeName.substring(1)
+                            val location = dataClusterAccount["konum"].toString()
+                            val picatureLink = dataClusterAccount["resimAdresi"].toString()
+                            val comment = dataClusterAccount["yorum"].toString()
+                            val postCode = dataClusterAccount["postaKodu"].toString()
+                            val addres = dataClusterAccount["adres"].toString()
+                            val city = dataClusterAccount["sehir"].toString()
+                            val time = dataClusterAccount["zaman"] as Timestamp?
+                            postIDsFirebase!!.add(postID)
+                            userEmailsFirebase!!.add(userEmail)
+                            pictureLinksFirebase!!.add(picatureLink)
+                            placeNamesFirebase!!.add(placeName)
+                            locationFirebase!!.add(location)
+                            commentsFirebase!!.add(comment)
+                            postCodesFirebase!!.add(postCode)
+                            tagsFirebase!!.add(dataClusterAccount["taglar"].toString())
+                            addressesFirebase!!.add(addres)
+                            citiesFirebase!!.add(city)
+                            if (time != null) {
+                                timesFirebase!!.add(time)
                             }
+                            recyclerAdapterStructure!!.notifyDataSetChanged()
+                            Log.d(TAG, "onComplete: Çekilen veriler RecyclerAdapterYapim'a gönderildi")
                         }
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onFailure: " + e.getMessage());
-                    }
-                });
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "onFailure: " + e.message)
+                }
+        }
     }
 
-    public void kaydedilenleriCek() {
-        Log.d(TAG, "kaydedilenleriCek: ...");
-
-        CollectionReference collectionReference = firebaseFirestore
-                .collection("Kaydedenler")
-                .document(firebaseUser.getEmail())
-                .collection("Kaydedilenler");
-
-        collectionReference
-                .orderBy("zaman", Query.Direction.DESCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Log.d(TAG, "onComplete: Veriler filtrelenmiş olarak çekildi");
-                        if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
-                            for (DocumentSnapshot documentSnapshot : querySnapshot) {
-                                final Map<String, Object> verilerKumesiHesaim = documentSnapshot.getData();
-
-                                String gonderiID = verilerKumesiHesaim.get("gonderiID").toString();
-                                String kullaniciEposta = verilerKumesiHesaim.get("kullaniciEposta").toString();
-                                String yerIsmi = verilerKumesiHesaim.get("yerIsmi").toString();
-                                yerIsmi = yerIsmi.substring(0, 1).toUpperCase() + yerIsmi.substring(1);
-                                String konum = verilerKumesiHesaim.get("konum").toString();
-                                String resimAdresi = verilerKumesiHesaim.get("resimAdresi").toString();
-                                String yorum = verilerKumesiHesaim.get("yorum").toString();
-                                String postaKodu = verilerKumesiHesaim.get("postaKodu").toString();
-                                String adres = verilerKumesiHesaim.get("adres").toString();
-                                String sehir = verilerKumesiHesaim.get("sehir").toString();
-                                Timestamp zaman = (Timestamp) verilerKumesiHesaim.get("zaman");
-
-                                gonderiIDleriFB.add(gonderiID);
-                                kullaniciEpostalariFB.add(kullaniciEposta);
-                                resimAdresleriFB.add(resimAdresi);
-                                yerIsimleriFB.add(yerIsmi);
-                                konumlariFB.add(konum);
-                                yorumlarFB.add(yorum);
-                                postaKoduFB.add(postaKodu);
-                                taglarFB.add(verilerKumesiHesaim.get("taglar").toString());
-                                adresleriFB.add(adres);
-                                sehirFB.add(sehir);
-                                zamanlarFB.add(zaman);
-
-                                recyclerAdapterStructure.notifyDataSetChanged();
-                                Log.d(TAG, "onComplete: Çekilen veriler RecyclerAdapterYapim'a gönderildi");
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onFailure: " + e.getMessage());
-                    }
-                });
-    }
-
-    public void paylasilanlardanKaldir() {
+    fun removeFromShared() {
 
         // ÖNEMLİ
         // ALERTDIALOG İLE EMİN MİSİN DİYE KULLANICIYA SORULSUN. VERİLEN CEVABA GÖRE İŞLEM YAPILSIN!
 
         //1. Adım
         firebaseFirestore
-                .collection("Paylasilanlar")
-                .document(kullaniciEpostalariFB.get(POSITION_DEGERI))
-                .collection("Paylastiklari")
-                .document(gonderiIDleriFB.get(POSITION_DEGERI))
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(@NonNull Void aVoid) {
-                        //
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //
-                    }
-                });
+            ?.collection("Paylasilanlar")
+            ?.document(userEmailsFirebase!![positionValue])
+            ?.collection("Paylastiklari")
+            ?.document(postIDsFirebase!![positionValue])
+            ?.delete()
+            ?.addOnSuccessListener {
+                //
+            }
+            ?.addOnFailureListener {
+                //
+            }
 
         //2. Adım
         firebaseFirestore
-                .collection("Gonderiler")
-                .document(gonderiIDleriFB.get(POSITION_DEGERI))
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(@NonNull Void aVoid) {
-                        //
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //
-                    }
-                });
-
+            ?.collection("Gonderiler")
+            ?.document(postIDsFirebase!![positionValue])
+            ?.delete()
+            ?.addOnSuccessListener {
+                //
+            }
+            ?.addOnFailureListener {
+                //
+            }
     }
 
-    public void kaydedilenlerdenKaldir() {
+    fun removeFromSaved() {
 
         // ÖNEMLİ
         // ALERTDIALOG İLE EMİN MİSİN DİYE KULLANICIYA SORULSUN. VERİLEN CEVABA GÖRE İŞLEM YAPILSIN!
-
         firebaseFirestore
-                .collection("Kaydedenler")
-                .document(firebaseUser.getEmail())
-                .collection("Kaydedilenler")
-                .document(gonderiIDleriFB.get(POSITION_DEGERI))
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(@NonNull Void aVoid) {
-                        Toast.makeText(getActivity(), "Kaldırıldı", Toast.LENGTH_SHORT).show();
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "İşlem Başarısız", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+            ?.collection("Kaydedenler")
+            ?.document((firebaseUser!!.email)!!)
+            ?.collection("Kaydedilenler")
+            ?.document(postIDsFirebase!![positionValue])
+            ?.delete()
+            ?.addOnSuccessListener {
+                Toast.makeText(activity, "Kaldırıldı", Toast.LENGTH_SHORT).show()
+            }
+            ?.addOnFailureListener {
+                Toast.makeText(activity, "İşlem Başarısız", Toast.LENGTH_SHORT).show()
+            }
     }
 
-    public void paylasilanlardanKonumaGit() {
-        String[] gonderi_konumu = konumlariFB.get(POSITION_DEGERI).split(",");
-
-        int belirtec = 0;
-
-        for (String konumxy : gonderi_konumu) {
-            belirtec++;
-            if (belirtec == 1)
-                enlem = Double.parseDouble(konumxy);
-            if (belirtec == 2)
-                boylam = Double.parseDouble(konumxy);
+    fun goToLocationFromShared() {
+        val postLocation = locationFirebase!![positionValue].split(",").toTypedArray()
+        var adverb = 0
+        for (locationXY: String in postLocation) {
+            adverb++
+            if (adverb == 1) latitude = locationXY.toDouble()
+            if (adverb == 2) longitude = locationXY.toDouble()
         }
-
-        SET.putFloat("konum_git_enlem", (float) enlem);
-        SET.putFloat("konum_git_boylam", (float) boylam);
-        SET.commit();
-
-        startActivity(new Intent(getActivity(), GoToLocationOnMapActivity.class));
-
-        Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
+        SET!!.putFloat("konum_git_enlem", latitude.toFloat())
+        SET!!.putFloat("konum_git_boylam", longitude.toFloat())
+        SET!!.commit()
+        startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
+        Log.i(TAG, "Enlem: $latitude   \tBoylam: $longitude")
     }
 
-    public void kaydedilenlerdenKonumaGit() {
-        String[] gonderi_konumu = konumlariFB.get(POSITION_DEGERI).split(",");
-
-        int belirtec = 0;
-
-        for (String konumxy : gonderi_konumu) {
-            belirtec++;
-            if (belirtec == 1)
-                enlem = Double.parseDouble(konumxy);
-            if (belirtec == 2)
-                boylam = Double.parseDouble(konumxy);
+    fun goToLocationFromSaved() {
+        val postLocation = locationFirebase!![positionValue].split(",").toTypedArray()
+        var adverb = 0
+        for (locationXY: String in postLocation) {
+            adverb++
+            if (adverb == 1) latitude = locationXY.toDouble()
+            if (adverb == 2) longitude = locationXY.toDouble()
         }
-
-        SET.putFloat("konum_git_enlem", (float) enlem);
-        SET.putFloat("konum_git_boylam", (float) boylam);
-        SET.commit();
-
-        startActivity(new Intent(getActivity(), GoToLocationOnMapActivity.class));
-
-        Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
+        SET!!.putFloat("konum_git_enlem", latitude.toFloat())
+        SET!!.putFloat("konum_git_boylam", longitude.toFloat())
+        SET!!.commit()
+        startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
+        Log.i(TAG, "Enlem: $latitude   \tBoylam: $longitude")
     }
 
-    public void konumaGitIslemleri(int position) {
-        String[] gonderi_konumu = konumlariFB.get(position).split(",");
-
-        int belirtec = 0;
-
-        for (String konumxy : gonderi_konumu) {
-            belirtec++;
-            if (belirtec == 1)
-                enlem = Double.parseDouble(konumxy);
-            if (belirtec == 2)
-                boylam = Double.parseDouble(konumxy);
+    fun konumaGitIslemleri(position: Int) {
+        val postLocation = locationFirebase!![position].split(",").toTypedArray()
+        var adverb = 0
+        for (locationXY: String in postLocation) {
+            adverb++
+            if (adverb == 1) latitude = locationXY.toDouble()
+            if (adverb == 2) longitude = locationXY.toDouble()
         }
-
-        SET.putFloat("konum_git_enlem", (float) enlem);
-        SET.putFloat("konum_git_boylam", (float) boylam);
-        SET.commit();
-
-        startActivity(new Intent(getActivity(), GoToLocationOnMapActivity.class));
-
-        Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
-
+        SET!!.putFloat("konum_git_enlem", latitude.toFloat())
+        SET!!.putFloat("konum_git_boylam", longitude.toFloat())
+        SET!!.commit()
+        startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
+        Log.i(TAG, "Enlem: $latitude   \tBoylam: $longitude")
     }
 
-    public String tagGoster(int position) {
-
-        String taggg = "";
-        String al_taglar = taglarFB.get(position);
-        int tag_uzunluk = al_taglar.length();
-        String alinan_taglar;
-        String[] a_t;
-
-        switch (TABKONTROL) {
-            case "paylasilanlar":
-                alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1);
-                a_t = alinan_taglar.split(",");
-
-                for (String tags : a_t) {
-                    Log.d(TAG, "onLongItemClick: " + tags.trim());
-                    taggg += "#" + tags.trim() + " ";
+    // Bu kısımda kullanınlan türkçe değişken isimlerini daha sonrasından düzenle inglizce yap
+    fun showTag(position: Int): String {
+        var taggg = ""
+        val al_taglar = tagsFirebase!![position]
+        val tag_uzunluk = al_taglar.length
+        val alinan_taglar: String
+        val a_t: Array<String>
+        when (tabControl) {
+            "paylasilanlar" -> {
+                alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
+                a_t = alinan_taglar.split(",").toTypedArray()
+                for (tags: String in a_t) {
+                    Log.d(TAG, "onLongItemClick: " + tags.trim { it <= ' ' })
+                    taggg += "#" + tags.trim { it <= ' ' } + " "
                 }
-                break;
-
-            case "kaydedilenler":
-                alinan_taglar = al_taglar.substring(2, tag_uzunluk - 2);
-                a_t = alinan_taglar.split(",");
-
-                for (String tags : a_t) {
-                    Log.d(TAG, "onLongItemClick: " + tags.trim());
-                    taggg += "#" + tags.trim() + " ";
+            }
+            "kaydedilenler" -> {
+                alinan_taglar = al_taglar.substring(2, tag_uzunluk - 2)
+                a_t = alinan_taglar.split(",").toTypedArray()
+                for (tags: String in a_t) {
+                    Log.d(TAG, "onLongItemClick: " + tags.trim { it <= ' ' })
+                    taggg += "#" + tags.trim { it <= ' ' } + " "
                 }
-                break;
+            }
         }
-
-        return taggg;
+        return taggg
     }
 
     // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
-    @Override
-    public void onLongItemClick(int position) {
-        Log.d(TAG, "onLongItemClick: Uzun tık");
-
-        String tarih_ve_saat = DateFormat.getDateTimeInstance().format(zamanlarFB.get(position).toDate());
-        String gonderi_detay_goster = yorumlarFB.get(position) + "\n\nPaylaşan: " + kullaniciEpostalariFB.get(position) +
-                "\nTarih: " + tarih_ve_saat + "\nAdres: " + adresleriFB.get(position) +
-                "\n\nEtiketler: " + tagGoster(position);
-
-        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+    override fun onLongItemClick(position: Int) {
+        Log.i(TAG, "onLongItemClick: Uzun tık")
+        val dateAndTime = DateFormat.getDateTimeInstance().format(
+            timesFirebase!![position]!!.toDate()
+        )
+        val showDetailPost =
+            (commentsFirebase!!.get(position) + "\n\nPaylaşan: " + userEmailsFirebase!![position] +
+                    "\nTarih: " + dateAndTime + "\nAdres: " + addressesFirebase!![position] +
+                    "\n\nEtiketler: " + showTag(position))
+        val alert = AlertDialog.Builder(activity)
         alert
-                .setTitle(yerIsimleriFB.get(position))
-                .setMessage(gonderi_detay_goster)
-                .setNegativeButton("TAMAM", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //
-                    }
-                })
-                .show();
+            .setTitle(placeNamesFirebase!![position])
+            .setMessage(showDetailPost)
+            .setNegativeButton("TAMAM") { dialog, which ->
+                //
+            }
+            .show()
     }
 
-    @Override
-    public void onOtherOperationsClick(int position) {
-        POSITION_DEGERI = position;
-        onOpenDialogWindow(position);
+    override fun onOtherOperationsClick(position: Int) {
+        positionValue = position
+        onOpenDialogWindow(position)
     }
 
-    public void onOpenDialogWindow(int position) {
-
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
-        View bottomSheetView = LayoutInflater.from(getActivity())
-                .inflate(R.layout.layout_bottom_sheet_hesabim, viewGroup.findViewById(R.id.bottomSheetContainer_hesabim));
-
-        TextView baslik = bottomSheetView.findViewById(R.id.bs_baslik);
-        baslik.setText(yerIsimleriFB.get(position));
+    override fun onOpenDialogWindow(position: Int) {
+        val bottomSheetDialog = BottomSheetDialog((activity)!!, R.style.BottomSheetDialogTheme)
+        val bottomSheetView = LayoutInflater.from(activity)
+            .inflate(
+                R.layout.layout_bottom_sheet_hesabim,
+                viewGroup!!.findViewById(R.id.bottomSheetContainer_hesabim)
+            )
+        val title = bottomSheetView.findViewById<TextView>(R.id.bs_baslik)
+        title.text = placeNamesFirebase!!.get(position)
 
         // KONUMA GİT
-        bottomSheetView.findViewById(R.id.bs_konuma_git).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (TABKONTROL) {
-                    case "paylasilanlar":
-                        paylasilanlardanKonumaGit();
-                        break;
-                    case "kaydedilenler":
-                        kaydedilenlerdenKonumaGit();
-                        break;
+        bottomSheetView.findViewById<View>(R.id.bs_konuma_git).setOnClickListener(
+            View.OnClickListener {
+                when (tabControl) {
+                    "paylasilanlar" -> goToLocationFromShared()
+                    "kaydedilenler" -> goToLocationFromSaved()
                 }
-                bottomSheetDialog.dismiss();
-            }
-        });
+                bottomSheetDialog.dismiss()
+            })
 
         // KALDIR
-        bottomSheetView.findViewById(R.id.bs_kaldir).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                switch (TABKONTROL) {
-                    case "paylasilanlar":
-                        paylasilanlardanKaldir();
-                        listeTemizleme();
-                        paylasilanlariCek();
-                        recyclerViewHesabim.scrollToPosition(0);
-                        break;
-                    case "kaydedilenler":
-                        kaydedilenlerdenKaldir();
-                        listeTemizleme();
-                        kaydedilenleriCek();
-                        recyclerViewHesabim.scrollToPosition(0);
-                        break;
+        bottomSheetView.findViewById<View>(R.id.bs_kaldir)
+            .setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View) {
+                    when (tabControl) {
+                        "paylasilanlar" -> {
+                            removeFromShared()
+                            clearList()
+                            pullTheShared()
+                            recyclerViewAccount!!.scrollToPosition(0)
+                        }
+                        "kaydedilenler" -> {
+                            removeFromSaved()
+                            clearList()
+                            pullTheRecorded()
+                            recyclerViewAccount!!.scrollToPosition(0)
+                        }
+                    }
+                    bottomSheetDialog.dismiss()
                 }
-
-                bottomSheetDialog.dismiss();
-            }
-        });
+            })
 
         // İPTAL butonu
-        bottomSheetView.findViewById(R.id.bottom_sheet_iptal_btnsi).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-                bottomSheetDialog.dismiss();
-            }
-        });
+        bottomSheetView.findViewById<View>(R.id.bottom_sheet_iptal_btnsi)
+            .setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View) {
+                    //
+                    bottomSheetDialog.dismiss()
+                }
+            })
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
+    }
 
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
-
+    companion object {
+        private val TAG = "F_Hesabim"
     }
 }
