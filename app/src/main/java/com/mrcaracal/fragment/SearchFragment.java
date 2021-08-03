@@ -1,4 +1,4 @@
-package com.mrcaracal.Fragment;
+package com.mrcaracal.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -18,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -53,12 +52,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mrcaracal.Activity.HaritaKonumaGit;
-import com.mrcaracal.Adapter.RecyclerAdapterYapim;
+import com.mrcaracal.activity.GoToLocationOnMapActivity;
+import com.mrcaracal.adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
-import com.mrcaracal.Modul.Gonderiler;
-import com.mrcaracal.Modul.IletisimBilgileri;
-import com.mrcaracal.Modul.Sehirler;
+import com.mrcaracal.modul.Posts;
+import com.mrcaracal.modul.ContactInfo;
+import com.mrcaracal.modul.Cities;
 import com.mrcaracal.mobilgezirehberim.R;
 
 import java.text.DateFormat;
@@ -68,7 +67,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class F_Ara extends Fragment implements RecyclerViewClickInterface {
+public class SearchFragment extends Fragment implements RecyclerViewClickInterface {
 
     private static final String TAG = "F_Ara";
 
@@ -224,9 +223,9 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             }
         });
 
-        Sehirler sehirler_al = new Sehirler();
+        Cities cities_al = new Cities();
         sp_sehirler = viewGroup.findViewById(R.id.sp_sehirler);
-        sp_adapter_sehirler = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, sehirler_al.sehirler);
+        sp_adapter_sehirler = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, cities_al.sehirler);
         sp_adapter_sehirler.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_sehirler.setAdapter(sp_adapter_sehirler);
 
@@ -238,8 +237,8 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                 recycler_view_ara.scrollToPosition(0);
 
                 if (anahtar_kelimemiz.equals("sehir")) {
-                    Sehirler sehirler = new Sehirler();
-                    String secilen_sehir_kodu = sehirler.sehirler(parent.getSelectedItem().toString());
+                    Cities cities = new Cities();
+                    String secilen_sehir_kodu = cities.sehirler(parent.getSelectedItem().toString());
                     /*Toast.makeText(getActivity(), "Seçilen şehir kodu: "+secilen_sehir_kodu, Toast.LENGTH_SHORT).show();*/
 
                     if (secilen_sehir_kodu.equals("Şehir Seçin!")) {
@@ -587,7 +586,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
             Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
         } else {
 
-            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position),
+            Posts MGonderiler = new Posts(gonderiIDleriFB.get(position),
                     kullaniciEpostalariFB.get(position),
                     resimAdresleriFB.get(position),
                     yerIsimleriFB.get(position),
@@ -661,7 +660,7 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
         SET.putFloat("konum_git_boylam", (float) boylam);
         SET.commit();
 
-        startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
+        startActivity(new Intent(getActivity(), GoToLocationOnMapActivity.class));
 
         Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
 
@@ -705,10 +704,10 @@ public class F_Ara extends Fragment implements RecyclerViewClickInterface {
                     Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    IletisimBilgileri iletisimBilgileri = new IletisimBilgileri();
+                    ContactInfo contactInfo = new ContactInfo();
 
                     Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_EMAIL, iletisimBilgileri.getAdmin_hesaplari());
+                    intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.getAdmin_hesaplari());
                     intent.putExtra(Intent.EXTRA_SUBJECT, "");
                     intent.putExtra(Intent.EXTRA_TEXT, "");
                     intent.setType("plain/text");

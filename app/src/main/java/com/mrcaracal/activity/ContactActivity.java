@@ -1,4 +1,4 @@
-package com.mrcaracal.Activity;
+package com.mrcaracal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +10,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mrcaracal.Modul.IletisimBilgileri;
+import com.mrcaracal.modul.ContactInfo;
 import com.mrcaracal.mobilgezirehberim.R;
 
-public class Iletisim extends AppCompatActivity {
+public class ContactActivity extends AppCompatActivity {
 
     private static final String TAG = "Iletisim";
 
@@ -39,14 +39,14 @@ public class Iletisim extends AppCompatActivity {
                 String str_konu_baslik = edt_iletisim_konu_baslik.getText().toString();
                 String str_mesaj_icerik = edt_iletisim_mesaj_icerik.getText().toString();
 
-                IletisimBilgileri iletisimBilgileri = new IletisimBilgileri();
+                ContactInfo contactInfo = new ContactInfo();
 
                 if (str_konu_baslik.equals("") || str_mesaj_icerik.equals("")) {
-                    Toast.makeText(Iletisim.this, "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ContactActivity.this, "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onClick: EditText'en boş veriler alındı");
                 } else {
                     Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_EMAIL, iletisimBilgileri.getAdmin_hesaplari());
+                    intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.getAdmin_hesaplari());
                     intent.putExtra(Intent.EXTRA_SUBJECT, str_konu_baslik);
                     intent.putExtra(Intent.EXTRA_TEXT, str_mesaj_icerik);
                     intent.setType("plain/text");

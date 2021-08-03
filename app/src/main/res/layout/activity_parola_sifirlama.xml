@@ -10,7 +10,7 @@
     android:padding="20dp"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="com.mrcaracal.Activity.ParolaSifirlama">
+    tools:context="com.mrcaracal.activity.ResetPassActivity">
 
     <androidx.cardview.widget.CardView
         android:backgroundTint="#E8161717"

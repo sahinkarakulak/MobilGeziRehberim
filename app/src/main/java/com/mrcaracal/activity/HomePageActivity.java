@@ -1,4 +1,4 @@
-package com.mrcaracal.Activity;
+package com.mrcaracal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,16 +15,16 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.mrcaracal.Fragment.F_Anasayfa;
-import com.mrcaracal.Fragment.F_Ara;
-import com.mrcaracal.Fragment.F_Hesabim;
-import com.mrcaracal.Fragment.F_Paylas;
-import com.mrcaracal.mobilgezirehberim.Giris;
+import com.mrcaracal.fragment.HomePageFragment;
+import com.mrcaracal.fragment.SearchFragment;
+import com.mrcaracal.fragment.MyAccountFragment;
+import com.mrcaracal.fragment.ShareFragment;
+import com.mrcaracal.mobilgezirehberim.Login;
 import com.mrcaracal.mobilgezirehberim.R;
 
-public class AnaSayfa extends AppCompatActivity {
+public class HomePageActivity extends AppCompatActivity {
     
-    private static final String TAG = "AnaSayfa";
+    private static final String TAG = "HomePage";
 
     boolean doubleBackToExitPressedOnce = false;
 
@@ -46,7 +46,7 @@ public class AnaSayfa extends AppCompatActivity {
 
         setTitle("Mobil Gezi Rehberim");
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new F_Anasayfa()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomePageFragment()).commit();
         Log.d(TAG, "onCreate: F_Anasayfa Fragment'i açıldı");
 
         // BottomNavigation
@@ -60,22 +60,22 @@ public class AnaSayfa extends AppCompatActivity {
                 // Hangi menüye tıklanmışsa onu tespit ediyoruz.
                 switch (menuItem.getItemId()) {
                     case R.id.ana_sayfa:
-                        seciliFragment = new F_Anasayfa();
+                        seciliFragment = new HomePageFragment();
                         setTitle("Mobil Gezi Rehberim");
                         Log.d(TAG, "onNavigationItemSelected: F_Anasayfa fragment'i seçildi");
                         break;
                     case R.id.ara:
-                        seciliFragment = new F_Ara();
+                        seciliFragment = new SearchFragment();
                         setTitle("Ara");
                         Log.d(TAG, "onNavigationItemSelected: F_Ara fragment'i seçildi");
                         break;
                     case R.id.paylas:
-                        seciliFragment = new F_Paylas();
+                        seciliFragment = new ShareFragment();
                         setTitle("Paylaş");
                         Log.d(TAG, "onNavigationItemSelected: F_Paylas fragment'i seçildi");
                         break;
                     case R.id.hesabim:
-                        seciliFragment = new F_Hesabim();
+                        seciliFragment = new MyAccountFragment();
                         setTitle("Hesabım");
                         Log.d(TAG, "onNavigationItemSelected: F_Hesabim fragment'i seçildi");
                         break;
@@ -103,13 +103,13 @@ public class AnaSayfa extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.iletisim:
-                Intent iletisim = new Intent(AnaSayfa.this, Iletisim.class);
+                Intent iletisim = new Intent(HomePageActivity.this, ContactActivity.class);
                 startActivity(iletisim);
                 Log.d(TAG, "onOptionsItemSelected: İletişim menüsü seçildi");
                 break;
 
             case R.id.cikis:
-                Intent cikis = new Intent(AnaSayfa.this, Giris.class);
+                Intent cikis = new Intent(HomePageActivity.this, Login.class);
                 startActivity(cikis);
                 finish();
                 firebaseAuth.signOut();

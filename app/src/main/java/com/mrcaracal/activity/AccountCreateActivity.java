@@ -1,4 +1,4 @@
-package com.mrcaracal.Activity;
+package com.mrcaracal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,15 +16,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.mrcaracal.Modul.KullaniciBilgileri;
-import com.mrcaracal.mobilgezirehberim.Giris;
+import com.mrcaracal.modul.UserInfo;
+import com.mrcaracal.mobilgezirehberim.Login;
 import com.mrcaracal.mobilgezirehberim.R;
 
-public class HesapOlusturma extends AppCompatActivity {
+public class AccountCreateActivity extends AppCompatActivity {
 
     private static final String TAG = "HesapOlusturma";
 
-    KullaniciBilgileri MKullaniciBilgileri;
+    UserInfo MUserInfo;
 
     EditText edt_kullaniciAdi, edt_eposta, edt_parola1, edt_parola2;
     String kullaniciAdi, eposta, parola1, parola2;
@@ -77,20 +77,20 @@ public class HesapOlusturma extends AppCompatActivity {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Toast.makeText(HesapOlusturma.this, "Doğrulama bağlantısı E-Posta adresinize gönderildi.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(AccountCreateActivity.this, "Doğrulama bağlantısı E-Posta adresinize gönderildi.", Toast.LENGTH_SHORT).show();
                                                 Log.d(TAG, "onSuccess: Doğrulama baplantııs E-Posta adresine gönderildi");
-                                                MKullaniciBilgileri = new KullaniciBilgileri(kullaniciAdi, eposta, parola1, "MGR'i Seviyorum", "https://firebasestorage.googleapis.com/v0/b/mobilgezirehberim-7aca5.appspot.com/o/Resimler%2Fdefaultpp.png?alt=media&token=97fe9138-0aad-4ea9-af78-536c637b3be4");
+                                                MUserInfo = new UserInfo(kullaniciAdi, eposta, parola1, "MGR'i Seviyorum", "https://firebasestorage.googleapis.com/v0/b/mobilgezirehberim-7aca5.appspot.com/o/Resimler%2Fdefaultpp.png?alt=media&token=97fe9138-0aad-4ea9-af78-536c637b3be4");
 
                                                 DocumentReference documentReference = firebaseFirestore
                                                         .collection("Kullanicilar")
                                                         .document(eposta);
 
                                                 documentReference
-                                                        .set(MKullaniciBilgileri)
+                                                        .set(MUserInfo)
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
-                                                                Intent intent = new Intent(HesapOlusturma.this, Giris.class);
+                                                                Intent intent = new Intent(AccountCreateActivity.this, Login.class);
                                                                 startActivity(intent);
                                                                 finish();
                                                                 firebaseAuth.signOut();
@@ -100,7 +100,7 @@ public class HesapOlusturma extends AppCompatActivity {
                                                         .addOnFailureListener(new OnFailureListener() {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(HesapOlusturma.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(AccountCreateActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                                 Log.d(TAG, "onFailure: " + e.getMessage());
                                                             }
                                                         });
@@ -111,7 +111,7 @@ public class HesapOlusturma extends AppCompatActivity {
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(HesapOlusturma.this, "Beklenmedik bir hata gerçekleşti\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(AccountCreateActivity.this, "Beklenmedik bir hata gerçekleşti\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 Log.d(TAG, "onFailure: " + e.getMessage());
                                             }
                                         });

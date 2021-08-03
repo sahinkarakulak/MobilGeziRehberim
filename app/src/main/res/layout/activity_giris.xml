@@ -8,7 +8,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".Giris">
+    tools:context=".Login">
 
     <androidx.cardview.widget.CardView
         android:backgroundTint="#E8161717"
@@ -33,7 +33,7 @@
                 android:src="@drawable/mrl" />
 
             <EditText
-                android:id="@+id/edt_epostaGiris"
+                android:id="@+id/edt_emailLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -51,7 +51,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/edt_parolaGiris"
+                    android:id="@+id/edt_passLogin"
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -61,7 +61,7 @@
                     android:inputType="textPassword" />
 
                 <ImageView
-                    android:id="@+id/img_parola_goster_gizle"
+                    android:id="@+id/img_passHideShow"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -70,7 +70,7 @@
             </LinearLayout>
 
             <CheckBox
-                android:id="@+id/chb_giris_bilgileri_hatirla"
+                android:id="@+id/chb_loginInfosRemember"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/bg_button"
-                android:onClick="girisYap"
+                android:onClick="btn_login"
                 android:text="giriş yap" />
 
             <LinearLayout
@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:onClick="txt_parolamıUnuttum"
+                    android:onClick="txt_iForgotMyPass"
                     android:padding="5dp"
                     android:text="Parolamı Unuttum!"
                     android:textAlignment="center" />
@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:onClick="txt_hesapOlustur"
+                    android:onClick="txt_createAccount"
                     android:padding="5dp"
                     android:text="Hesap Oluştur!"
                     android:textAlignment="center" />

@@ -1,6 +1,6 @@
-package com.mrcaracal.Modul;
+package com.mrcaracal.modul;
 
-public class IletisimBilgileri {
+public class ContactInfo {
 
     String[] admin_hesaplari = {
             "karakulaksahin@gmail.com",
@@ -8,7 +8,7 @@ public class IletisimBilgileri {
             "hayrullahkose1@gmail.com"
     };
 
-    public IletisimBilgileri() {
+    public ContactInfo() {
 
     }
 

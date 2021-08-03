@@ -1,4 +1,4 @@
-package com.mrcaracal.Activity;
+package com.mrcaracal.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class Harita extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
+public class MyMapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private static final String TAG = "Harita";
 

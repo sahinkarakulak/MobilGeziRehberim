@@ -1,4 +1,4 @@
-package com.mrcaracal.Fragment;
+package com.mrcaracal.fragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,11 +34,11 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mrcaracal.Activity.HaritaKonumaGit;
-import com.mrcaracal.Adapter.RecyclerAdapterYapim;
+import com.mrcaracal.activity.GoToLocationOnMapActivity;
+import com.mrcaracal.adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
-import com.mrcaracal.Modul.Gonderiler;
-import com.mrcaracal.Modul.IletisimBilgileri;
+import com.mrcaracal.modul.Posts;
+import com.mrcaracal.modul.ContactInfo;
 import com.mrcaracal.mobilgezirehberim.R;
 
 import java.text.DateFormat;
@@ -47,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
+public class HomePageFragment extends Fragment implements RecyclerViewClickInterface {
 
     private static final String TAG = "F_Anasayfa";
 
@@ -224,7 +223,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
             Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
         } else {
 
-            Gonderiler MGonderiler = new Gonderiler(gonderiIDleriFB.get(position),
+            Posts MGonderiler = new Posts(gonderiIDleriFB.get(position),
                     kullaniciEpostalariFB.get(position),
                     resimAdresleriFB.get(position),
                     yerIsimleriFB.get(position),
@@ -278,7 +277,7 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
         SET.putFloat("konum_git_boylam", (float) boylam);
         SET.commit();
 
-        startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
+        startActivity(new Intent(getActivity(), GoToLocationOnMapActivity.class));
 
         Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
 
@@ -327,10 +326,10 @@ public class F_Anasayfa extends Fragment implements RecyclerViewClickInterface {
                     Toast.makeText(getActivity(), "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    IletisimBilgileri iletisimBilgileri = new IletisimBilgileri();
+                    ContactInfo contactInfo = new ContactInfo();
 
                     Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_EMAIL, iletisimBilgileri.getAdmin_hesaplari());
+                    intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.getAdmin_hesaplari());
                     intent.putExtra(Intent.EXTRA_SUBJECT, "");
                     intent.putExtra(Intent.EXTRA_TEXT, "");
                     intent.setType("plain/text");

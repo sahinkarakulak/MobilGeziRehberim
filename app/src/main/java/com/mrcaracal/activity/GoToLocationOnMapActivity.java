@@ -1,8 +1,7 @@
-package com.mrcaracal.Activity;
+package com.mrcaracal.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mrcaracal.mobilgezirehberim.R;
 
-public class HaritaKonumaGit extends AppCompatActivity implements OnMapReadyCallback {
+public class GoToLocationOnMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = "HaritaKonumaGit";
 

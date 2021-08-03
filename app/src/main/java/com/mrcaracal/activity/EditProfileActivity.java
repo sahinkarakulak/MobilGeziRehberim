@@ -1,4 +1,4 @@
-package com.mrcaracal.Activity;
+package com.mrcaracal.activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -38,7 +38,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfilDuzenle extends AppCompatActivity {
+public class EditProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfilDuzenle";
 
@@ -108,7 +108,7 @@ public class ProfilDuzenle extends AppCompatActivity {
                         .activity()
                         .setAspectRatio(1, 1)
                         .setCropShape(CropImageView.CropShape.OVAL)
-                        .start(ProfilDuzenle.this);
+                        .start(EditProfileActivity.this);
             }
         });
 
@@ -119,7 +119,7 @@ public class ProfilDuzenle extends AppCompatActivity {
                         .activity()
                         .setAspectRatio(1, 1)
                         .setCropShape(CropImageView.CropShape.OVAL)
-                        .start(ProfilDuzenle.this);
+                        .start(EditProfileActivity.this);
             }
         });
 
@@ -148,7 +148,7 @@ public class ProfilDuzenle extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: Sadece istenen veriler güncellendi");
-                        startActivity(new Intent(ProfilDuzenle.this, AnaSayfa.class));
+                        startActivity(new Intent(EditProfileActivity.this, HomePageActivity.class));
                         Log.d(TAG, "onSuccess: Kullanıcı A_Anasayfaya yönlendirildi");
                     }
                 });
@@ -217,13 +217,13 @@ public class ProfilDuzenle extends AppCompatActivity {
                                     }
                                 });
                     } else {
-                        Toast.makeText(ProfilDuzenle.this, "Bir hata gerçekleşti", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditProfileActivity.this, "Bir hata gerçekleşti", Toast.LENGTH_SHORT).show();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(ProfilDuzenle.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onFailure: " + e.getMessage());
                 }
             });

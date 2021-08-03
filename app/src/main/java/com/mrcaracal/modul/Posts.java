@@ -1,11 +1,10 @@
-package com.mrcaracal.Modul;
+package com.mrcaracal.modul;
 
 import com.google.firebase.firestore.FieldValue;
 
-import java.util.Arrays;
 import java.util.List;
 
-public class Gonderiler {
+public class Posts {
 
     private String gonderiID;
     private String kullaniciEposta;
@@ -19,12 +18,12 @@ public class Gonderiler {
     private List<String> taglar;
     private FieldValue zaman;
 
-    public Gonderiler() {
+    public Posts() {
 
     }
 
-    public Gonderiler(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi,
-                      String konum, String adres, String yorum, FieldValue zaman) {
+    public Posts(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi,
+                 String konum, String adres, String yorum, FieldValue zaman) {
         this.gonderiID = gonderiID;
         this.kullaniciEposta = kullaniciEposta;
         this.resimAdresi = resimAdresi;
@@ -35,8 +34,8 @@ public class Gonderiler {
         this.zaman = zaman;
     }
 
-    public Gonderiler(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi,
-                      String konum, String adres, String sehir, String yorum, String postaKodu, List<String> taglar, FieldValue zaman) {
+    public Posts(String gonderiID, String kullaniciEposta, String resimAdresi, String yerIsmi,
+                 String konum, String adres, String sehir, String yorum, String postaKodu, List<String> taglar, FieldValue zaman) {
         this.gonderiID = gonderiID;
         this.kullaniciEposta = kullaniciEposta;
         this.resimAdresi = resimAdresi;

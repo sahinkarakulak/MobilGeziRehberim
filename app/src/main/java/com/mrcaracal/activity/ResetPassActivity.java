@@ -1,4 +1,4 @@
-package com.mrcaracal.Activity;
+package com.mrcaracal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.mrcaracal.mobilgezirehberim.Giris;
+import com.mrcaracal.mobilgezirehberim.Login;
 import com.mrcaracal.mobilgezirehberim.R;
 
-public class ParolaSifirlama extends AppCompatActivity {
+public class ResetPassActivity extends AppCompatActivity {
 
     private static final String TAG = "ParolaSifirlama";
 
@@ -53,8 +53,8 @@ public class ParolaSifirlama extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(ParolaSifirlama.this, "E-Postanızı kontorl ediniz", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(ParolaSifirlama.this, Giris.class);
+                            Toast.makeText(ResetPassActivity.this, "E-Postanızı kontorl ediniz", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ResetPassActivity.this, Login.class);
                             startActivity(intent);
                             finish();
                             Log.d(TAG, "onSuccess: Sıfırlama isteği gönderildi ve kullanıcı Giris'e yönlendirilidi");
@@ -62,7 +62,7 @@ public class ParolaSifirlama extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(ParolaSifirlama.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPassActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

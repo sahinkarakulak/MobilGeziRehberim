@@ -1,4 +1,4 @@
-package com.mrcaracal.Fragment;
+package com.mrcaracal.fragment;
 
 import android.Manifest;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,9 +36,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.mrcaracal.Activity.AnaSayfa;
-import com.mrcaracal.Activity.Harita;
-import com.mrcaracal.Modul.Gonderiler;
+import com.mrcaracal.activity.HomePageActivity;
+import com.mrcaracal.activity.MyMapActivity;
+import com.mrcaracal.modul.Posts;
 import com.mrcaracal.mobilgezirehberim.R;
 import com.squareup.picasso.Picasso;
 
@@ -49,11 +48,11 @@ import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 
-public class F_Paylas extends Fragment {
+public class ShareFragment extends Fragment {
 
     private static final String TAG = "F_Paylas";
 
-    Gonderiler MGonderiler;
+    Posts MGonderiler;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firebaseFirestore;
@@ -74,7 +73,7 @@ public class F_Paylas extends Fragment {
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
 
-    public F_Paylas() {
+    public ShareFragment() {
         //
     }
 
@@ -127,7 +126,7 @@ public class F_Paylas extends Fragment {
         konum_sec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), Harita.class));
+                startActivity(new Intent(getActivity(), MyMapActivity.class));
                 Log.d(TAG, "onClick: Kullanıcı Harita'a yönlendirildi");
             }
         });
@@ -211,7 +210,7 @@ public class F_Paylas extends Fragment {
                                                 UUID uuid1 = UUID.randomUUID();
                                                 gonderiID = "" + uuid1;
 
-                                                MGonderiler = new Gonderiler(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres,
+                                                MGonderiler = new Posts(gonderiID, kullaniciEposta, resimAdresi, yerIsmi, konum, adres,
                                                         sehirrr, yorum, posta_kodu, taglar, FieldValue.serverTimestamp());
 
                                                 DocumentReference documentReference1 = firebaseFirestore
@@ -236,7 +235,7 @@ public class F_Paylas extends Fragment {
                                                                             @Override
                                                                             public void onSuccess(Void aVoid) {
 
-                                                                                Intent intent = new Intent(getActivity(), AnaSayfa.class);
+                                                                                Intent intent = new Intent(getActivity(), HomePageActivity.class);
                                                                                 // Tüm aktiviteleri kapat
                                                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                                                 startActivity(intent);

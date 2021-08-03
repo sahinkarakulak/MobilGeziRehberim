@@ -1,4 +1,4 @@
-package com.mrcaracal.Fragment;
+package com.mrcaracal.fragment;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -37,9 +36,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mrcaracal.Activity.HaritaKonumaGit;
-import com.mrcaracal.Activity.ProfilDuzenle;
-import com.mrcaracal.Adapter.RecyclerAdapterYapim;
+import com.mrcaracal.activity.GoToLocationOnMapActivity;
+import com.mrcaracal.activity.EditProfileActivity;
+import com.mrcaracal.adapter.RecyclerAdapterYapim;
 import com.mrcaracal.Interface.RecyclerViewClickInterface;
 import com.mrcaracal.mobilgezirehberim.R;
 import com.squareup.picasso.Picasso;
@@ -50,7 +49,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
+public class MyAccountFragment extends Fragment implements RecyclerViewClickInterface {
 
     private static final String TAG = "F_Hesabim";
 
@@ -145,7 +144,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         btn_profili_duzenle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent profili_duzenle = new Intent(getActivity(), ProfilDuzenle.class);
+                Intent profili_duzenle = new Intent(getActivity(), EditProfileActivity.class);
                 startActivity(profili_duzenle);
                 Log.d(TAG, "onClick: Kullanıcı A_ProfiliDuzenle'e yönlendirildi");
             }
@@ -431,7 +430,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         SET.putFloat("konum_git_boylam", (float) boylam);
         SET.commit();
 
-        startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
+        startActivity(new Intent(getActivity(), GoToLocationOnMapActivity.class));
 
         Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
     }
@@ -453,7 +452,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         SET.putFloat("konum_git_boylam", (float) boylam);
         SET.commit();
 
-        startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
+        startActivity(new Intent(getActivity(), GoToLocationOnMapActivity.class));
 
         Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
     }
@@ -475,7 +474,7 @@ public class F_Hesabim extends Fragment implements RecyclerViewClickInterface {
         SET.putFloat("konum_git_boylam", (float) boylam);
         SET.commit();
 
-        startActivity(new Intent(getActivity(), HaritaKonumaGit.class));
+        startActivity(new Intent(getActivity(), GoToLocationOnMapActivity.class));
 
         Log.d(TAG, "Enlem: " + enlem + "   \tBoylam: " + boylam);
 
