@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.Login
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.UserInfo
@@ -17,15 +18,15 @@ private const val TAG = "AccountCreateActivity"
 
 class AccountCreateActivity : AppCompatActivity() {
 
-    var userInfo: UserInfo? = null
-    var edt_userName: EditText? = null
-    var edt_userEmail: EditText? = null
-    var edt_userPassOne: EditText? = null
-    var edt_userPassTwo: EditText? = null
-    var userName: String? = null
-    var email: String? = null
-    var passOne: String? = null
-    var passTwo: String? = null
+    lateinit var userInfo: UserInfo
+    lateinit var edt_userName: EditText
+    lateinit var edt_userEmail: EditText
+    lateinit var edt_userPassOne: EditText
+    lateinit var edt_userPassTwo: EditText
+    lateinit var userName: String
+    lateinit var email: String
+    lateinit var passOne: String
+    lateinit var passTwo: String
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseFirestore: FirebaseFirestore
 
@@ -42,36 +43,27 @@ class AccountCreateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_create)
         init()
-        title = "Hesap Oluştur"
+        title = getString(R.string.account_create)
     }
 
     fun btn_createAccount(view: View?) {
-        userName = edt_userName!!.text.toString()
-        email = edt_userEmail!!.text.toString()
-        passOne = edt_userPassOne!!.text.toString()
-        passTwo = edt_userPassTwo!!.text.toString()
+        userName = edt_userName.text.toString()
+        email = edt_userEmail.text.toString()
+        passOne = edt_userPassOne.text.toString()
+        passTwo = edt_userPassTwo.text.toString()
 
         if (userName == "" || email == "" || passOne == "" || passTwo == "") {
-            Toast.makeText(this, "Gerekli alanları doldurunuz...", Toast.LENGTH_SHORT).show()
-            Log.i(TAG, "btn_hesabiOlustur: EditText'en boşveriler çekildi")
+            toast("Gerekli alanları doldurunuz")
         } else {
             if (passOne == passTwo) {
                 firebaseAuth
-                    .createUserWithEmailAndPassword(email!!, passOne!!)
+                    .createUserWithEmailAndPassword(email, passOne)
                     .addOnSuccessListener {
                         firebaseAuth
                             .getCurrentUser()
                             ?.sendEmailVerification()
                             ?.addOnSuccessListener {
-                                Toast.makeText(
-                                    this@AccountCreateActivity,
-                                    "Doğrulama bağlantısı E-Posta adresinize gönderildi.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                Log.i(
-                                    TAG,
-                                    "onSuccess: Doğrulama baplantııs E-Posta adresine gönderildi"
-                                )
+                                toast("Doğrulama bağlantısı E-Posta adresinize gönderildi.")
                                 userInfo = UserInfo(
                                     userName,
                                     email,
@@ -81,45 +73,26 @@ class AccountCreateActivity : AppCompatActivity() {
                                 )
                                 val documentReference = firebaseFirestore
                                     .collection("Kullanicilar")
-                                    .document(email!!)
+                                    .document(email)
                                 documentReference
-                                    .set(userInfo!!)
+                                    .set(userInfo)
                                     .addOnSuccessListener {
                                         val intent =
                                             Intent(this@AccountCreateActivity, Login::class.java)
                                         startActivity(intent)
                                         finish()
-                                        firebaseAuth!!.signOut()
-                                        Log.i(
-                                            TAG,
-                                            "onSuccess: Kayıttan sonra kullanıcı Giris'e gönderildi"
-                                        )
+                                        firebaseAuth.signOut()
                                     }
                                     .addOnFailureListener { e ->
-                                        Toast.makeText(
-                                            this@AccountCreateActivity,
-                                            e.message,
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        Log.i(TAG, "onFailure: " + e.message)
+                                        toast(e.localizedMessage)
                                     }
                             }
                             ?.addOnFailureListener { e ->
-                                Toast.makeText(
-                                    this@AccountCreateActivity, """
-                         Beklenmedik bir hata gerçekleşti
-                         ${e.message}
-                         """.trimIndent(), Toast.LENGTH_SHORT
-                                ).show()
-                                Log.i(TAG, "onFailure: " + e.message)
+                                toast(e.localizedMessage)
                             }
                     }
-            } else Toast.makeText(
-                this,
-                "Parolalar uyuşmuyor. Lütfen kontrol ediniz...",
-                Toast.LENGTH_SHORT
-            ).show()
+            } else
+                toast("Parolalar uyuşmuyor. Lütfen kontrol ediniz...")
         }
     }
-
 }

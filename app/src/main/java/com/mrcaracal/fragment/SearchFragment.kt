@@ -42,22 +42,22 @@ import java.util.*
 class SearchFragment() : Fragment(), RecyclerViewClickInterface {
     private val accordingToWhat = arrayOf("Yer İsmi", "Etiket", "Şehir", "Kullanıcı")
 
-    var firebaseAuth: FirebaseAuth? = null
+    lateinit var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null
-    var firebaseFirestore: FirebaseFirestore? = null
-    var postIDsFirebase: ArrayList<String>? = null
-    var userEmailsFirebase: ArrayList<String>? = null
-    var pictureLinksFirebase: ArrayList<String>? = null
-    var placeNamesFirebase: ArrayList<String>? = null
-    var locationFirebase: ArrayList<String>? = null
-    var addressesFirebase: ArrayList<String>? = null
-    var citiesFirebase: ArrayList<String>? = null
-    var commentsFirebase: ArrayList<String>? = null
-    var postCodesFirebase: ArrayList<String>? = null
-    var tagsFirebase: ArrayList<String>? = null
+    lateinit var firebaseFirestore: FirebaseFirestore
+    lateinit var postIDsFirebase: ArrayList<String>
+    lateinit var userEmailsFirebase: ArrayList<String>
+    lateinit var pictureLinksFirebase: ArrayList<String>
+    lateinit var placeNamesFirebase: ArrayList<String>
+    lateinit var locationFirebase: ArrayList<String>
+    lateinit var addressesFirebase: ArrayList<String>
+    lateinit var citiesFirebase: ArrayList<String>
+    lateinit var commentsFirebase: ArrayList<String>
+    lateinit var postCodesFirebase: ArrayList<String>
+    lateinit var tagsFirebase: ArrayList<String>
     private lateinit var timesFirebase: ArrayList<Timestamp>
     private lateinit var recycler_view_search: RecyclerView
-    var recyclerAdapterStructure: RecyclerAdapterStructure? = null
+    lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
     private lateinit var img_finfByLocation: ImageView
     private lateinit var edt_keyValueSearch: EditText
     private lateinit var sp_searchByWhat: Spinner
@@ -67,13 +67,13 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
     private lateinit var SET: SharedPreferences.Editor
     var latitude = 0.0
     var longitude = 0.0
-    var viewGroup: ViewGroup? = null
-    private var sp_adapterAccordingToWhat: ArrayAdapter<String>? = null
-    private var sp_adapterCities: ArrayAdapter<String>? = null
+    lateinit var viewGroup: ViewGroup
+    private lateinit var sp_adapterAccordingToWhat: ArrayAdapter<String>
+    private lateinit var sp_adapterCities: ArrayAdapter<String>
 
     private fun init() {
         firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth!!.currentUser
+        firebaseUser = firebaseAuth.currentUser
         firebaseFirestore = FirebaseFirestore.getInstance()
         postIDsFirebase = ArrayList()
         userEmailsFirebase = ArrayList()
@@ -94,10 +94,10 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewGroup = inflater.inflate(R.layout.frag_search, container, false) as ViewGroup
         init()
-        img_finfByLocation = viewGroup!!.findViewById(R.id.img_finfByLocation)
+        img_finfByLocation = viewGroup.findViewById(R.id.img_finfByLocation)
         img_finfByLocation.setOnClickListener(View.OnClickListener {
             if (ContextCompat.checkSelfPermission(
                     (activity)!!,
@@ -111,13 +111,13 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                 )
             } else {
                 clearList()
-                recycler_view_search!!.scrollToPosition(0)
+                recycler_view_search.scrollToPosition(0)
                 listNearbyPlaces()
             }
         })
-        sp_searchByWhat = viewGroup!!.findViewById(R.id.sp_searchByWhat)
+        sp_searchByWhat = viewGroup.findViewById(R.id.sp_searchByWhat)
         sp_adapterAccordingToWhat = ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, accordingToWhat)
-        sp_adapterAccordingToWhat!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sp_adapterAccordingToWhat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_searchByWhat.setAdapter(sp_adapterAccordingToWhat)
         sp_searchByWhat.setOnItemSelectedListener(object : OnItemSelectedListener {
             override fun onItemSelected(
@@ -127,40 +127,40 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                 id: Long
             ) {
                 if ((parent.selectedItem.toString() == accordingToWhat[0])) {
-                    edt_keyValueSearch!!.visibility = View.VISIBLE
-                    sp_cities!!.visibility = View.INVISIBLE
+                    edt_keyValueSearch.visibility = View.VISIBLE
+                    sp_cities.visibility = View.INVISIBLE
 
                     // Yer İsmine göre işlemler yapılsın.
                     clearList()
-                    recycler_view_search!!.scrollToPosition(0)
+                    recycler_view_search.scrollToPosition(0)
                     keyValue = "yerIsmi"
                 }
                 if ((parent.selectedItem.toString() == accordingToWhat[1])) {
-                    edt_keyValueSearch!!.visibility = View.VISIBLE
-                    sp_cities!!.visibility = View.INVISIBLE
+                    edt_keyValueSearch.visibility = View.VISIBLE
+                    sp_cities.visibility = View.INVISIBLE
 
                     // Etikete göre işlemler yapılsın.
                     clearList()
-                    recycler_view_search!!.scrollToPosition(0)
+                    recycler_view_search.scrollToPosition(0)
                     keyValue = "taglar"
                 }
 
                 // Bu item seçilirse Ara çubuğu spinner'a dönüşsün ve orada şehirler listelensin.
                 // Seçilen şehre göre posta kodu değeri alınsın ve VT de ona göre bir arama yapılsın.
                 if ((parent.selectedItem.toString() == accordingToWhat[2])) {
-                    edt_keyValueSearch!!.visibility = View.INVISIBLE
-                    sp_cities!!.visibility = View.VISIBLE
+                    edt_keyValueSearch.visibility = View.INVISIBLE
+                    sp_cities.visibility = View.VISIBLE
                     clearList()
-                    recycler_view_search!!.scrollToPosition(0)
+                    recycler_view_search.scrollToPosition(0)
                     keyValue = "sehir"
                 }
                 if ((parent.selectedItem.toString() == accordingToWhat[3])) {
-                    edt_keyValueSearch!!.visibility = View.VISIBLE
-                    sp_cities!!.visibility = View.INVISIBLE
+                    edt_keyValueSearch.visibility = View.VISIBLE
+                    sp_cities.visibility = View.INVISIBLE
 
                     // Kullanıcıya göre işlemler yapılsın.
                     clearList()
-                    recycler_view_search!!.scrollToPosition(0)
+                    recycler_view_search.scrollToPosition(0)
                     keyValue = "kullaniciEposta"
                 }
 
@@ -182,10 +182,10 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         })
         val cities_al = Cities()
-        sp_cities = viewGroup!!.findViewById(R.id.sp_cities)
+        sp_cities = viewGroup.findViewById(R.id.sp_cities)
         sp_adapterCities =
             ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, cities_al.cities)
-        sp_adapterCities!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sp_adapterCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_cities.setAdapter(sp_adapterCities)
         sp_cities.setOnItemSelectedListener(object : OnItemSelectedListener {
             override fun onItemSelected(
@@ -195,7 +195,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                 id: Long
             ) {
                 clearList()
-                recycler_view_search!!.scrollToPosition(0)
+                recycler_view_search.scrollToPosition(0)
                 if ((keyValue == "sehir")) {
                     val cities = Cities()
                     val selectedCityCode = cities.selectedCity(parent.selectedItem.toString())
@@ -212,17 +212,15 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         })
-        edt_keyValueSearch = viewGroup!!.findViewById(R.id.edt_keyValueSearch)
+        edt_keyValueSearch = viewGroup.findViewById(R.id.edt_keyValueSearch)
         edt_keyValueSearch.addTextChangedListener(object : TextWatcher {
             // Önce
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                Log.i(TAG, "beforeTextChanged: Önce")
                 //
             }
 
             // Esnasında
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                Log.d(TAG, "onTextChanged: Esnasında")
                 clearList()
                 if ((keyValue == "taglar")) {
                     searchForTag(keyValue, s.toString().toLowerCase())
@@ -233,23 +231,22 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
 
             // Sonra
             override fun afterTextChanged(s: Editable) {
-                Log.i(TAG, "afterTextChanged: Sonra")
                 //
             }
         })
-        recycler_view_search = viewGroup!!.findViewById(R.id.recycler_view_search)
+        recycler_view_search = viewGroup.findViewById(R.id.recycler_view_search)
         recycler_view_search.setLayoutManager(LinearLayoutManager(activity))
         recyclerAdapterStructure = RecyclerAdapterStructure(
-            (postIDsFirebase)!!,
-            (userEmailsFirebase)!!,
-            (pictureLinksFirebase)!!,
-            (placeNamesFirebase)!!,
-            (locationFirebase)!!,
-            (addressesFirebase)!!,
-            (citiesFirebase)!!,
-            (commentsFirebase)!!,
-            (postCodesFirebase)!!,
-            (tagsFirebase)!!,
+            (postIDsFirebase),
+            (userEmailsFirebase),
+            (pictureLinksFirebase),
+            (placeNamesFirebase),
+            (locationFirebase),
+            (addressesFirebase),
+            (citiesFirebase),
+            (commentsFirebase),
+            (postCodesFirebase),
+            (tagsFirebase),
             timesFirebase,
             this
         )
@@ -300,7 +297,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                         super.onLocationResult(locationResult)
                         LocationServices.getFusedLocationProviderClient(activity)
                             .removeLocationUpdates(this)
-                        if (locationResult != null && locationResult.locations.size > 0) {
+                        if (locationResult.locations.size > 0) {
                             val lastestLocationIndex = locationResult.locations.size - 1
                             val latitude = locationResult.locations[lastestLocationIndex].latitude
                             val longitude = locationResult.locations[lastestLocationIndex].longitude
@@ -330,17 +327,17 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
     }
 
     fun clearList() {
-        postIDsFirebase!!.clear()
-        userEmailsFirebase!!.clear()
-        pictureLinksFirebase!!.clear()
-        placeNamesFirebase!!.clear()
-        locationFirebase!!.clear()
-        addressesFirebase!!.clear()
-        citiesFirebase!!.clear()
-        commentsFirebase!!.clear()
-        postCodesFirebase!!.clear()
-        tagsFirebase!!.clear()
-        timesFirebase!!.clear()
+        postIDsFirebase.clear()
+        userEmailsFirebase.clear()
+        pictureLinksFirebase.clear()
+        placeNamesFirebase.clear()
+        locationFirebase.clear()
+        addressesFirebase.clear()
+        citiesFirebase.clear()
+        commentsFirebase.clear()
+        postCodesFirebase.clear()
+        tagsFirebase.clear()
+        timesFirebase.clear()
     }
 
     fun veriCagir(data: Map<String, Any>?) {
@@ -355,117 +352,98 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
         val city = dataCluster["sehir"].toString()
         val comment = dataCluster["yorum"].toString()
         val postCode = dataCluster["postaKodu"].toString()
-        val time = dataCluster["zaman"] as Timestamp?
-        postIDsFirebase!!.add(postID)
-        userEmailsFirebase!!.add(userEmail)
-        pictureLinksFirebase!!.add(pictureLink)
-        placeNamesFirebase!!.add(placeName)
-        locationFirebase!!.add(location)
-        addressesFirebase!!.add(addres)
-        citiesFirebase!!.add(city)
-        commentsFirebase!!.add(comment)
-        postCodesFirebase!!.add(postCode)
-        tagsFirebase!!.add(dataCluster["taglar"].toString())
-        if (time != null) {
-            timesFirebase!!.add(time)
-        }
+        val time = dataCluster["zaman"] as Timestamp
+        postIDsFirebase.add(postID)
+        userEmailsFirebase.add(userEmail)
+        pictureLinksFirebase.add(pictureLink)
+        placeNamesFirebase.add(placeName)
+        locationFirebase.add(location)
+        addressesFirebase.add(addres)
+        citiesFirebase.add(city)
+        commentsFirebase.add(comment)
+        postCodesFirebase.add(postCode)
+        tagsFirebase.add(dataCluster["taglar"].toString())
+        timesFirebase.add(time)
     }
 
     fun search(relevantField: String?, keywordWrited: String) {
-        Log.i(TAG, "aramaYap: Çalıştı")
         clearList()
 
         //recycler_view_ara.scrollToPosition(0);
         val collectionReference = firebaseFirestore
-            ?.collection("Gonderiler")
-        if (collectionReference != null) {
-            collectionReference
-                .orderBy((relevantField)!!)
-                .startAt(keywordWrited)
-                .endAt(keywordWrited + "\uf8ff")
-                .get()
-                .addOnCompleteListener { task ->
-                    Log.i(TAG, "onComplete: Veriler filtrelenmiş şekilde çekildi")
-                    if (task.isSuccessful) {
-                        val querySnapshot = (task.result)
-                        for (snapshot: DocumentSnapshot in querySnapshot) {
-                            veriCagir(snapshot.data)
-                            recyclerAdapterStructure!!.notifyDataSetChanged()
-                            Log.i(TAG, "onComplete: Sonu...")
+            .collection("Gonderiler")
+        collectionReference
+            .orderBy((relevantField)!!)
+            .startAt(keywordWrited)
+            .endAt(keywordWrited + "\uf8ff")
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val querySnapshot = (task.result)
+                    for (snapshot: DocumentSnapshot in querySnapshot) {
+                        veriCagir(snapshot.data)
+                        recyclerAdapterStructure.notifyDataSetChanged()
 
-                            // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise
-                            // aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
-                        }
+                        // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise
+                        // aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
                     }
-                }.addOnFailureListener { e ->
-                    Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
-                    Log.i(TAG, "onFailure: " + e.message)
                 }
-        }
+            }.addOnFailureListener { e ->
+                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+            }
     }
 
     fun searchForTag(relevantField: String?, keywordWrited: String?) {
-        Log.d(TAG, "aramaYapEtiketIcin: Çalıştı")
         clearList()
         val collectionReference = firebaseFirestore
-            ?.collection("Gonderiler")
-        if (collectionReference != null) {
-            collectionReference
-                .whereArrayContains((relevantField)!!, (keywordWrited)!!)
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val querySnapshot = (task.result)
-                        for (documentSnapshot: DocumentSnapshot in querySnapshot) {
-                            veriCagir(documentSnapshot.data)
-                            recyclerAdapterStructure!!.notifyDataSetChanged()
-                            Log.i(TAG, "onComplete: Sonu...")
-                        }
+            .collection("Gonderiler")
+        collectionReference
+            .whereArrayContains((relevantField)!!, (keywordWrited)!!)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val querySnapshot = (task.result)
+                    for (documentSnapshot: DocumentSnapshot in querySnapshot) {
+                        veriCagir(documentSnapshot.data)
+                        recyclerAdapterStructure.notifyDataSetChanged()
                     }
                 }
-                .addOnFailureListener { }
-        }
+            }
+            .addOnFailureListener { }
     }
 
     fun searchForCity(postCode: String) {
-        Log.i(TAG, "aramaYapSehirIcin: Çalıştı")
         val collectionReference = firebaseFirestore
-            ?.collection("Gonderiler")
-        if (collectionReference != null) {
-            collectionReference
-                .orderBy("postaKodu")
-                .startAt(postCode)
-                .endAt(postCode + "\uf8ff")
-                .get()
-                .addOnCompleteListener { task ->
-                    Log.i(TAG, "onComplete: Veriler filtrelenmiş şekilde çekildi")
-                    if (task.isSuccessful) {
-                        val querySnapshot = (task.result)
-                        for (snapshot: DocumentSnapshot in querySnapshot) {
-                            veriCagir(snapshot.data)
-                            recyclerAdapterStructure!!.notifyDataSetChanged()
-                            Log.d(TAG, "onComplete: Sonu...")
+            .collection("Gonderiler")
+        collectionReference
+            .orderBy("postaKodu")
+            .startAt(postCode)
+            .endAt(postCode + "\uf8ff")
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val querySnapshot = (task.result)
+                    for (snapshot: DocumentSnapshot in querySnapshot) {
+                        veriCagir(snapshot.data)
+                        recyclerAdapterStructure.notifyDataSetChanged()
 
-                            // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise
-                            // aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
-                        }
+                        // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise
+                        // aynı olanların 1 tanesi hariç hepsini ArrayList'n çıkar.
                     }
-                }.addOnFailureListener { e ->
-                    Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
-                    Log.i(TAG, "onFailure: " + e.message)
                 }
-        }
+            }.addOnFailureListener { e ->
+                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+            }
     }
 
     // Değişken isimlerini daha sonra ingilizce olarak düzenle
     fun showTag(position: Int): String {
         var taggg = ""
-        val al_taglar = tagsFirebase!![position]
+        val al_taglar = tagsFirebase[position]
         val tag_uzunluk = al_taglar.length
         val alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
         val a_t = alinan_taglar.split(",").toTypedArray()
         for (tags: String in a_t) {
-            Log.d(TAG, "onLongItemClick: " + tags.trim { it <= ' ' })
             taggg += "#" + tags.trim { it <= ' ' } + " "
         }
         return taggg
@@ -473,17 +451,16 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
 
     // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
     override fun onLongItemClick(position: Int) {
-        Log.i(TAG, "onLongItemClick: Uzun tık")
         val dateAndTime = DateFormat.getDateTimeInstance().format(
-            timesFirebase!![position]!!.toDate()
+            timesFirebase[position].toDate()
         )
         val showDetailPost =
-            (commentsFirebase!!.get(position) + "\n\nPaylaşan: " + userEmailsFirebase!![position] +
-                    "\nTarih: " + dateAndTime + "\nAdres: " + addressesFirebase!![position] +
+            (commentsFirebase.get(position) + "\n\nPaylaşan: " + userEmailsFirebase[position] +
+                    "\nTarih: " + dateAndTime + "\nAdres: " + addressesFirebase[position] +
                     "\n\nEtiketler: " + showTag(position))
         val alert = AlertDialog.Builder(activity)
         alert
-            .setTitle(placeNamesFirebase!![position])
+            .setTitle(placeNamesFirebase[position])
             .setMessage(showDetailPost)
             .setNegativeButton("TAMAM") { dialog, which ->
                 //
@@ -492,36 +469,34 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
     }
 
     fun saveOperations(position: Int) {
-        if ((userEmailsFirebase!![position] == firebaseUser!!.email)) {
+        if ((userEmailsFirebase[position] == firebaseUser?.email)) {
             Toast.makeText(activity, "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show()
         } else {
             val MGonderiler = Posts(
-                postIDsFirebase!![position],
-                userEmailsFirebase!![position],
-                pictureLinksFirebase!![position],
-                placeNamesFirebase!![position],
-                locationFirebase!![position],
-                addressesFirebase!![position],
-                citiesFirebase!![position],
-                commentsFirebase!![position],
-                postCodesFirebase!![position], listOf(tagsFirebase!![position]),
+                postIDsFirebase[position],
+                userEmailsFirebase[position],
+                pictureLinksFirebase[position],
+                placeNamesFirebase[position],
+                locationFirebase[position],
+                addressesFirebase[position],
+                citiesFirebase[position],
+                commentsFirebase[position],
+                postCodesFirebase[position], listOf(tagsFirebase[position]),
                 FieldValue.serverTimestamp()
             )
             val documentReference = firebaseFirestore
-                ?.collection("Kaydedenler")
-                ?.document((firebaseUser!!.email)!!)
-                ?.collection("Kaydedilenler")
-                ?.document(postIDsFirebase!![position])
-            if (documentReference != null) {
-                documentReference
-                    .set(MGonderiler)
-                    .addOnSuccessListener {
-                        Toast.makeText(activity, "Kaydedildi", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
-                    }
-            }
+                .collection("Kaydedenler")
+                .document((firebaseUser?.email)!!)
+                .collection("Kaydedilenler")
+                .document(postIDsFirebase[position])
+            documentReference
+                .set(MGonderiler)
+                .addOnSuccessListener {
+                    Toast.makeText(activity, "Kaydedildi", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                }
 
 
             // Aşağıdaki işlemler gerekmiyor. Ama şimdilik burada bulunsun
@@ -546,18 +521,17 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
     }
 
     fun goToLocationOperations(position: Int) {
-        val postLocation = locationFirebase!![position].split(",").toTypedArray()
+        val postLocation = locationFirebase[position].split(",").toTypedArray()
         var adverb = 0
         for (konumxy: String in postLocation) {
             adverb++
             if (adverb == 1) latitude = konumxy.toDouble()
             if (adverb == 2) longitude = konumxy.toDouble()
         }
-        SET!!.putFloat("konum_git_enlem", latitude.toFloat())
-        SET!!.putFloat("konum_git_boylam", longitude.toFloat())
-        SET!!.commit()
+        SET.putFloat("konum_git_enlem", latitude.toFloat())
+        SET.putFloat("konum_git_boylam", longitude.toFloat())
+        SET.commit()
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
-        Log.i(TAG, "Enlem: $latitude   \tBoylam: $longitude")
     }
 
     override fun onOtherOperationsClick(position: Int) {
@@ -569,7 +543,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
         val bottomSheetView = LayoutInflater.from(activity)
             .inflate(
                 R.layout.layout_bottom_sheet,
-                viewGroup!!.findViewById(R.id.bottomSheetContainer)
+                viewGroup.findViewById(R.id.bottomSheetContainer)
             )
 
         // Gönderiyi Kaydet
@@ -592,7 +566,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    if ((userEmailsFirebase!![position] == firebaseUser!!.email)) {
+                    if ((userEmailsFirebase[position] == firebaseUser!!.email)) {
                         Toast.makeText(activity, "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT)
                             .show()
                     } else {

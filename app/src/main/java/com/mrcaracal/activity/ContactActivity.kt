@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.ContactInfo
 
@@ -14,9 +15,9 @@ private const val TAG = "ContactActivity"
 
 class ContactActivity : AppCompatActivity() {
 
-    var edt_contactSubjectTitle: EditText? = null
-    var edt_contactMessage: EditText? = null
-    var btn_contactSend: Button? = null
+    lateinit var edt_contactSubjectTitle: EditText
+    lateinit var edt_contactMessage: EditText
+    lateinit var btn_contactSend: Button
 
     private fun init() {
         edt_contactSubjectTitle = findViewById(R.id.edt_contactSubjectTitle)
@@ -28,18 +29,13 @@ class ContactActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact)
         init()
-        title = "İletişim"
-        btn_contactSend!!.setOnClickListener {
-            val str_subject = edt_contactSubjectTitle!!.text.toString()
-            val str_message = edt_contactMessage!!.text.toString()
+        title = getString(R.string.contact)
+        btn_contactSend.setOnClickListener {
+            val str_subject = edt_contactSubjectTitle.text.toString()
+            val str_message = edt_contactMessage.text.toString()
             val contactInfo = ContactInfo()
             if (str_subject == "" || str_message == "") {
-                Toast.makeText(
-                    this@ContactActivity,
-                    "Gerekli alanları doldurunuz",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.i(TAG, "onClick: EditText'en boş veriler alındı")
+                toast("Gerekli alanları doldurunuz")
             } else {
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.admin_hesaplari)
@@ -47,7 +43,6 @@ class ContactActivity : AppCompatActivity() {
                 intent.putExtra(Intent.EXTRA_TEXT, str_message)
                 intent.type = "plain/text"
                 startActivity(Intent.createChooser(intent, "Ne ile göndermek istersiniz?"))
-                Log.i(TAG, "onClick: E-Mail gönderildi")
             }
         }
     }

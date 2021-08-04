@@ -57,54 +57,50 @@ class EditProfileActivity : AppCompatActivity() {
         documentReference = FirebaseFirestore
             .getInstance()
             .collection("Kullanicilar")
-            .document(firebaseUser!!.email!!)
-        documentReference!!
+            .document(firebaseUser?.email!!)
+        documentReference
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val documentSnapshot = task.result
                     if (documentSnapshot.exists()) {
-                        edt_getUserName!!.setText(documentSnapshot.getString("kullaniciAdi"))
-                        edt_getBiography!!.setText(documentSnapshot.getString("bio"))
+                        edt_getUserName.setText(documentSnapshot.getString("kullaniciAdi"))
+                        edt_getBiography.setText(documentSnapshot.getString("bio"))
                         Picasso.get().load(documentSnapshot.getString("kullaniciResmi"))
                             .into(img_userPicture)
-                        Log.i(TAG, "onComplete: VT'den kullanıcı bilgileri alındı ve gösterildi")
                     }
                 }
             }
-        tv_userChangePicture!!.setOnClickListener {
+        tv_userChangePicture.setOnClickListener {
             CropImage
                 .activity()
                 .setAspectRatio(1, 1)
                 .setCropShape(CropImageView.CropShape.OVAL)
                 .start(this@EditProfileActivity)
         }
-        img_userPicture!!.setOnClickListener {
+        img_userPicture.setOnClickListener {
             CropImage
                 .activity()
                 .setAspectRatio(1, 1)
                 .setCropShape(CropImageView.CropShape.OVAL)
                 .start(this@EditProfileActivity)
         }
-        btn_update!!.setOnClickListener {
-            updateUser(edt_getUserName!!.text.toString(), edt_getBiography!!.text.toString())
-            Log.i(TAG, "onClick: EditText'en alınan veriler parametre olarak gönderildi")
+        btn_update.setOnClickListener {
+            updateUser(edt_getUserName.text.toString(), edt_getBiography.text.toString())
         }
     }
 
     private fun updateUser(u_name: String, u_bio: String) {
         val documentReference2 = FirebaseFirestore.getInstance()
             .collection("Kullanicilar")
-            .document(firebaseUser!!.email!!)
+            .document(firebaseUser?.email!!)
         val currentDatas: MutableMap<String, Any> = HashMap()
         currentDatas["kullaniciAdi"] = u_name
         currentDatas["bio"] = u_bio
         documentReference2
             .update(currentDatas)
             .addOnSuccessListener {
-                Log.i(TAG, "onSuccess: Sadece istenen veriler güncellendi")
                 startActivity(Intent(this@EditProfileActivity, HomePageActivity::class.java))
-                Log.i(TAG, "onSuccess: Kullanıcı A_Anasayfaya yönlendirildi")
             }
     }
 
@@ -116,65 +112,51 @@ class EditProfileActivity : AppCompatActivity() {
 
     // Convert işlemi sonrası hatalar gerçekleşti. DÜZELTİLECEKTİR!
     private fun uploadImage() {
-        if (mImageUri != null) {
-            Log.i(TAG, "uploadImage: Koşul sağlandı")
-            val storageReference2 = storageReference!!.child(firebaseUser!!.email!!).child(
-                System.currentTimeMillis()
-                    .toString() + "." + getFileExtension(mImageUri!!)
-            )
-            uploadTask = storageReference2.putFile(mImageUri!!)
-            Log.i(TAG, "uploadImage: Resim yolu alındı")
-            uploadTask.continueWithTask(object : Continuation<Any?, Any?> {
-                @Throws(Exception::class)
-                override fun then(task: Task<*>): Any? {
-                    if (!task.isSuccessful) {
-                        throw task.exception
-                    }
-                    return storageReference2.downloadUrl
+        val storageReference2 = storageReference.child(firebaseUser!!.email!!).child(
+            System.currentTimeMillis()
+                .toString() + "." + getFileExtension(mImageUri)
+        )
+
+        val uploadTask = storageReference2.putFile(mImageUri)
+        uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
                 }
-            }).addOnCompleteListener(OnCompleteListener<Uri?> { task ->
-                if (task.isSuccessful) {
-                    val downloadUri = task.result
-                    val myUrl = downloadUri.toString()
-                    val hasmap: MutableMap<String, Any> = HashMap()
-                    hasmap["kullaniciResmi"] = "" + myUrl
-                    FirebaseFirestore.getInstance()
-                        .collection("Kullanicilar")
-                        .document(firebaseUser!!.email!!)
-                        .update(hasmap)
-                        .addOnSuccessListener {
-                            Log.i(TAG, "onSuccess: VT'de resim yolu değiştirildi")
-                            documentReference
-                                ?.get()
-                                ?.addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        val documentSnapshot = task.result
-                                        if (documentSnapshot.exists()) {
-                                            Picasso.get()
-                                                .load(documentSnapshot.getString("kullaniciResmi"))
-                                                .into(img_userPicture)
-                                            Log.i(
-                                                TAG,
-                                                "onComplete: Resim yolu çekilip Picasso ile yayınlandı"
-                                            )
-                                        }
+            }
+            storageReference2.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+                val myUrl = downloadUri.toString()
+                val hasmap: MutableMap<String, Any> = HashMap()
+                hasmap["kullaniciResmi"] = "" + myUrl
+                FirebaseFirestore.getInstance()
+                    .collection("Kullanicilar")
+                    .document(firebaseUser?.email!!)
+                    .update(hasmap)
+                    .addOnSuccessListener {
+                        documentReference
+                            .get()
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    val documentSnapshot = task.result
+                                    if (documentSnapshot.exists()) {
+                                        Picasso.get()
+                                            .load(documentSnapshot.getString("kullaniciResmi"))
+                                            .into(img_userPicture)
+
                                     }
                                 }
-                        }
-                } else {
-                    Toast.makeText(
-                        this@EditProfileActivity,
-                        "Bir hata gerçekleşti",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }).addOnFailureListener(OnFailureListener { e ->
-                Toast.makeText(this@EditProfileActivity, e.message, Toast.LENGTH_SHORT).show()
-                Log.i(TAG, "onFailure: " + e.message)
-            })
-        } else {
-            Toast.makeText(this, "Resim seçilmedi", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+            } else {
+                toast(R.string.error_occurred)
+            }
+        } .addOnFailureListener {
+            toast(it.localizedMessage.orEmpty())
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -183,11 +165,9 @@ class EditProfileActivity : AppCompatActivity() {
             val result = CropImage.getActivityResult(data)
             mImageUri = result.uri
             uploadImage()
-            Toast.makeText(this, "Profil resmi güncellendi", Toast.LENGTH_SHORT).show()
-            Log.i(TAG, "onActivityResult: Profil resmi güncellendi")
+            toast("Profil resmi güncellendi")
         } else {
-            Toast.makeText(this, "Vaz mı geçtin?", Toast.LENGTH_SHORT).show()
-            Log.i(TAG, "onActivityResult: İşlemden vazgeçildi")
+            toast("Vaz mı geçtin?")
         }
     }
 

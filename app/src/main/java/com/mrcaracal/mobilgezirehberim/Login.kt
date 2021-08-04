@@ -18,16 +18,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.mrcaracal.activity.AccountCreateActivity
 import com.mrcaracal.activity.HomePageActivity
 import com.mrcaracal.activity.ResetPassActivity
+import com.mrcaracal.extensions.toast
 
 private const val TAG = "Login"
 
 class Login : AppCompatActivity() {
 
-    var progressDialog: ProgressDialog? = null
-    var edt_emailLogin: EditText? = null
-    var edt_passLogin: EditText? = null
-    var chb_loginInfosRemember: CheckBox? = null
-    var img_passHideShow: ImageView? = null
+    lateinit var progressDialog: ProgressDialog
+    lateinit var edt_emailLogin: EditText
+    lateinit var edt_passLogin: EditText
+    lateinit var chb_loginInfosRemember: CheckBox
+    lateinit var img_passHideShow: ImageView
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
@@ -51,29 +52,26 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         init()
-        title = "Giriş"
+        title = getString(R.string.login)
 
         // Remember me!
-        val rememverInfo = GET!!.getBoolean("boolean_key", false)
+        val rememverInfo = GET.getBoolean("boolean_key", false)
         if (rememverInfo == true) {
-            chb_loginInfosRemember!!.isChecked = true
-            edt_emailLogin!!.setText(GET!!.getString("keyPosta", ""))
-            edt_passLogin!!.setText(GET!!.getString("keyParola", ""))
-            Log.i(TAG, "onCreate: Kullanıcının girdiği bilgiler alındı")
+            chb_loginInfosRemember.isChecked = true
+            edt_emailLogin.setText(GET.getString("keyPosta", ""))
+            edt_passLogin.setText(GET.getString("keyParola", ""))
         } else {
-            chb_loginInfosRemember!!.isChecked = false
-            edt_emailLogin!!.setText("")
-            edt_passLogin!!.setText("")
-            Log.i(TAG, "onCreate: Kullanıcının girdiği bilgiler serbest bırakıldı")
+            chb_loginInfosRemember.isChecked = false
+            edt_emailLogin.setText("")
+            edt_passLogin.setText("")
         }
 
         // Kullanıcı daha önceden giriş yapmış ise otomatik olarak giriş yapıp Ana sayfaya yönelendirilecektir.
-        val firebaseUser = firebaseAuth!!.currentUser
+        val firebaseUser = firebaseAuth?.currentUser
         if (firebaseUser != null) {
             val intent = Intent(this@Login, HomePageActivity::class.java)
             startActivity(intent)
             finish()
-            Log.i(TAG, "onCreate: Kullanıcı doğrudan uygulama içine yönlendirildi")
         }
     }
 
@@ -81,53 +79,44 @@ class Login : AppCompatActivity() {
     fun txt_createAccount(view: View?) {
         val intent = Intent(this@Login, AccountCreateActivity::class.java)
         startActivity(intent)
-        Log.i(TAG, "txt_hesapOlustur: Kullanıcı HesapOlusturma'a geçti")
     }
 
     // Kullanıcının girdiği bilgiler doğrultusunda giriş yapma işlemleri...
     fun btn_login(view: View?) {
         // Her şey tamam ise giriş yapılsın
-        val email = edt_emailLogin!!.text.toString()
-        val pass = edt_passLogin!!.text.toString()
+        val email = edt_emailLogin.text.toString()
+        val pass = edt_passLogin.text.toString()
         if (email == "" || pass == "") {
-            Toast.makeText(this, "Lütfen gerekli alanları doldrunuz", Toast.LENGTH_SHORT).show()
-            Log.i(TAG, "girisYap: EditText içerisinden boş veri çekildi")
+            toast("Lütfen gerekli alanları doldrunuz")
         } else {
             firebaseAuth!!.signInWithEmailAndPassword(email, pass)
                 .addOnSuccessListener {
-                    if (firebaseAuth!!.currentUser!!.isEmailVerified) {
+                    if (firebaseAuth?.currentUser!!.isEmailVerified) {
                         progressDialog = ProgressDialog(this)
-                        progressDialog!!.setMessage("Giriş Yapılıyor")
-                        progressDialog!!.show()
+                        progressDialog.setMessage("Giriş Yapılıyor")
+                        progressDialog.show()
                         val intent = Intent(this, HomePageActivity::class.java)
                         startActivity(intent)
                         finish()
-                        Log.i(TAG, "onSuccess: Kullanıcı Giris'e geçti")
                     } else {
-                        Toast.makeText(
-                            this,
-                            "E-Postanıza gelen bağlantıdan hesabınızı onaylayın",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.i(TAG, "onSuccess: Kullanıcıya hesap doğrulama bağlantısı gönderildi")
+                        toast("E-Postanıza gelen bağlantıdan hesabınızı onaylayın")
                     }
                     progressDialog!!.dismiss()
                 }.addOnFailureListener { e ->
-                    Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-                    Log.i(TAG, "onFailure: " + e.message)
+                    toast(e.localizedMessage)
                 }
         }
     }
 
     fun passHideAndShow() {
-        img_passHideShow!!.setOnClickListener {
+        img_passHideShow.setOnClickListener {
             if (hide_show == false) {
-                edt_passLogin!!.inputType = InputType.TYPE_CLASS_TEXT
-                edt_passLogin!!.transformationMethod = null
+                edt_passLogin.inputType = InputType.TYPE_CLASS_TEXT
+                edt_passLogin.transformationMethod = null
                 hide_show = true
             } else {
-                edt_passLogin!!.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
-                edt_passLogin!!.transformationMethod = PasswordTransformationMethod.getInstance()
+                edt_passLogin.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+                edt_passLogin.transformationMethod = PasswordTransformationMethod.getInstance()
                 hide_show = false
             }
         }
@@ -137,30 +126,25 @@ class Login : AppCompatActivity() {
     fun txt_iForgotMyPass(view: View?) {
         val intent = Intent(this@Login, ResetPassActivity::class.java)
         startActivity(intent)
-        Log.i(TAG, "txt_parolamıUnuttum: Kullanıcı ParolaSifirlama'a geçti")
     }
 
     // Beni hatırla işlemi - onResume durumunda yapılacaklar
     override fun onResume() {
         super.onResume()
         passHideAndShow()
-        chb_loginInfosRemember!!.setOnClickListener {
-            status = chb_loginInfosRemember!!.isChecked
+        chb_loginInfosRemember.setOnClickListener {
+            status = chb_loginInfosRemember.isChecked
             if (status == true) {
-                SET!!.putBoolean("boolean_key", true)
-                SET!!.putString("keyPosta", edt_emailLogin!!.text.toString())
-                SET!!.putString("keyParola", edt_passLogin!!.text.toString())
-                SET!!.commit()
-                Log.i(
-                    TAG,
-                    "onClick: Kullanıcının girdiği bilgiler çekildi ve EditText'e yazdırıldı"
-                )
+                SET.putBoolean("boolean_key", true)
+                SET.putString("keyPosta", edt_emailLogin.text.toString())
+                SET.putString("keyParola", edt_passLogin.text.toString())
+                SET.commit()
+
             } else {
-                SET!!.putBoolean("boolean_key", false)
-                SET!!.putString("keyPosta", "")
-                SET!!.putString("keyParola", "")
-                SET!!.commit()
-                Log.i(TAG, "onClick: herhangi bir şey yazdırılmadı")
+                SET.putBoolean("boolean_key", false)
+                SET.putString("keyPosta", "")
+                SET.putString("keyParola", "")
+                SET.commit()
             }
         }
     }
@@ -172,7 +156,7 @@ class Login : AppCompatActivity() {
             return
         }
         doubleBackToExitPressedOnce = true
-        Toast.makeText(this, "Çıkmak için tekrar basınız", Toast.LENGTH_SHORT).show()
+        toast("Çıkmak için tekrar basınız")
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 }

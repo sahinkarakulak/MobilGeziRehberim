@@ -29,19 +29,21 @@ import java.util.*
 private const val TAG = "MyMapActivity"
 
 class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListener {
-    var locationManager: LocationManager? = null
-    var locationListener: LocationListener? = null
+    lateinit var locationManager: LocationManager
+    lateinit var locationListener: LocationListener
 
     var latitude = 0.0.toFloat()
     var longitude = 0.0.toFloat()
     var addres = ""
-    var postCode: String? = null
+    lateinit var postCode: String
+
+    private var MAP_KEY = "harita"
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
 
-    private var mMap: GoogleMap? = null
-    private var marker: Marker? = null
+    private lateinit var mMap: GoogleMap
+    private lateinit var marker: Marker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +52,8 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
-        title = "Harita"
-        GET = getSharedPreferences("harita", MODE_PRIVATE)
+        title = getString(R.string.map)
+        GET = getSharedPreferences(MAP_KEY, MODE_PRIVATE)
         SET = GET.edit()
     }
 
@@ -82,19 +84,16 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
                         }*/
                         addres += addressList[0].getAddressLine(0)
                         postCode = addressList[0].postalCode
-                        if (postCode == null) {
-                            postCode = "?"
-                        }
                     }
                 } catch (e: IOException) {
                     /*Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();*/
                     e.printStackTrace()
                 }
-                SET!!.putFloat("enlem", latitude)
-                SET!!.putFloat("boylam", longitude)
-                SET!!.putString("adres", addres)
-                SET!!.putString("postaKodu", postCode)
-                SET!!.commit()
+                SET.putFloat("enlem", latitude)
+                SET.putFloat("boylam", longitude)
+                SET.putString("adres", addres)
+                SET.putString("postaKodu", postCode)
+                SET.commit()
 
                 /*Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: "
                         + boylam + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();*/findLocation()
@@ -124,7 +123,7 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
             )
         } else {
             // Lokasyon işlemleri
-            locationManager!!.requestLocationUpdates(
+            locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 15000,
                 3f,
@@ -138,9 +137,9 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
             latitude.toDouble(), longitude.toDouble()
         )
         //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        mMap!!.addMarker(MarkerOptions().position(location).title("Konumum"))
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16f))
-        mMap!!.setOnMapClickListener(this)
+        mMap.addMarker(MarkerOptions().position(location).title("Konumum"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16f))
+        mMap.setOnMapClickListener(this)
     }
 
     // FARKLI HARİTA TÜRLERİ İÇİN MENÜLEİR LİSTELEDİK
@@ -155,19 +154,19 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
         // Change the map type based on the user's selection.
         return when (item.itemId) {
             R.id.normal_map -> {
-                mMap!!.mapType = GoogleMap.MAP_TYPE_NORMAL
+                mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
                 true
             }
             R.id.hybrid_map -> {
-                mMap!!.mapType = GoogleMap.MAP_TYPE_HYBRID
+                mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
                 true
             }
             R.id.satellite_map -> {
-                mMap!!.mapType = GoogleMap.MAP_TYPE_SATELLITE
+                mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
                 true
             }
             R.id.terrain_map -> {
-                mMap!!.mapType = GoogleMap.MAP_TYPE_TERRAIN
+                mMap.mapType = GoogleMap.MAP_TYPE_TERRAIN
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -187,11 +186,11 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
                     )
                     == PackageManager.PERMISSION_GRANTED
                 ) {
-                    locationManager!!.requestLocationUpdates(
+                    locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
                         15000,
                         3f,
-                        locationListener!!
+                        locationListener
                     )
                 }
             }
@@ -201,7 +200,6 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
 
     //  KULLANICI YENİ KONUM SEÇERSE PAYLAŞ EKRANINDA KONUM VE ADRES BİLGİLERİ YAZDIRILSIN
     override fun onMapClick(latLng: LatLng) {
-        Log.d(TAG, "onMapClick: Çalıştı")
         latitude = latLng.latitude.toFloat()
         longitude = latLng.longitude.toFloat()
         val geocoder = Geocoder(applicationContext, Locale.getDefault())
@@ -220,32 +218,26 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
                 }*/
                 addres += addressList[0].getAddressLine(0)
                 postCode = addressList[0].postalCode
-                if (postCode == null) {
-                    postCode = "?"
-                }
             }
         } catch (e: IOException) {
-            /*Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();*/
-            Log.d(TAG, "onMapClick: " + e.message)
             e.printStackTrace()
         }
 
         /*Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam
-                + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();*/if (marker != null) {
-            marker!!.remove()
-        }
-        marker = mMap!!.addMarker(
+                + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();*/
+        marker.remove()
+        marker = mMap.addMarker(
             MarkerOptions()
                 .position(latLng)
                 .title("Seçilen Yeni Konum")
                 .draggable(true)
                 .visible(true)
         )
-        SET!!.putFloat("enlem", latitude)
-        SET!!.putFloat("boylam", longitude)
-        SET!!.putString("adres", addres)
-        SET!!.putString("postaKodu", postCode)
-        SET!!.commit()
+        SET.putFloat("enlem", latitude)
+        SET.putFloat("boylam", longitude)
+        SET.putString("adres", addres)
+        SET.putString("postaKodu", postCode)
+        SET.commit()
     }
 
 }

@@ -34,38 +34,39 @@ import java.util.*
 private const val TAG = "ShareFragment"
 
 class ShareFragment : Fragment() {
-    var MGonderiler: Posts? = null
-    var firebaseAuth: FirebaseAuth? = null
+    lateinit var MGonderiler: Posts
+    lateinit var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null
-    var firebaseFirestore: FirebaseFirestore? = null
-    var picturePath: Uri? = null
+    lateinit var firebaseFirestore: FirebaseFirestore
+    lateinit var picturePath: Uri
     private lateinit var img_sharePictureSelected: ImageView
-    var edt_sharePlaceName: EditText? = null
-    var edt_shareComment: EditText? = null
-    var edt_shareTag: EditText? = null
-    var edt_location: EditText? = null
-    var edt_addres: EditText? = null
-    var edt_city: EditText? = null
+    lateinit var edt_sharePlaceName: EditText
+    lateinit var edt_shareComment: EditText
+    lateinit var edt_shareTag: EditText
+    lateinit var edt_location: EditText
+    lateinit var edt_addres: EditText
+    lateinit var edt_city: EditText
     private lateinit var btn_shareSend: Button
     private lateinit var selectLocation: Button
     private lateinit var btn_addTag: Button
-    var tv_printTags: TextView? = null
-    var sv_share: ScrollView? = null
-    private lateinit var GET: SharedPreferences
-    private lateinit var SET: SharedPreferences.Editor
+    lateinit var tv_printTags: TextView
+    lateinit var sv_share: ScrollView
+    lateinit var GET: SharedPreferences
+    lateinit var SET: SharedPreferences.Editor
     var latitude = 0f
     var longitude = 0f
-    var addres: String? = null
-    var postCode: String? = null
-    var postID: String? = null
-    var tags: List<String>? = null
-    private var firebaseStorage: FirebaseStorage? = null
-    private var storageReference: StorageReference? = null
+    lateinit var addres: String
+    lateinit var postCode: String
+    lateinit var postID: String
+    lateinit var tags: List<String>
+    private lateinit var firebaseStorage: FirebaseStorage
+    private lateinit var storageReference: StorageReference
+
     private fun init() {
         firebaseStorage = FirebaseStorage.getInstance()
-        storageReference = firebaseStorage!!.reference
+        storageReference = firebaseStorage.reference
         firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth!!.currentUser
+        firebaseUser = firebaseAuth.currentUser
         firebaseFirestore = FirebaseFirestore.getInstance()
         GET = activity!!.getSharedPreferences("harita", Context.MODE_PRIVATE)
         SET = GET.edit()
@@ -75,7 +76,7 @@ class ShareFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val viewGroup = inflater.inflate(R.layout.frag_share, container, false) as ViewGroup
         init()
         img_sharePictureSelected = viewGroup.findViewById(R.id.img_sharePictureSelected)
@@ -96,7 +97,6 @@ class ShareFragment : Fragment() {
         btn_addTag.setOnClickListener(View.OnClickListener { tagOlusturma() })
         selectLocation.setOnClickListener(View.OnClickListener {
             startActivity(Intent(activity, MyMapActivity::class.java))
-            Log.i(TAG, "onClick: Kullanıcı Harita'a yönlendirildi")
         })
         btn_shareSend.setOnClickListener(View.OnClickListener { shareSend() })
         return viewGroup
@@ -104,58 +104,46 @@ class ShareFragment : Fragment() {
 
     // Daha sonradan değişken isimlerini ingilizce olacak şekilde düzenle
     fun tagOlusturma() {
-        val tagler = edt_shareTag!!.text.toString().toLowerCase().split(" ").toTypedArray()
+        val tagler = edt_shareTag.text.toString().toLowerCase().split(" ").toTypedArray()
         var etiket_sayisi = 0
         var taggg = ""
         for (tags in tagler) {
             etiket_sayisi++
-            Log.d(TAG, "TAGLER: " + tags.trim { it <= ' ' })
             this.tags = Arrays.asList(*tagler)
             taggg += "#$tags   "
-            tv_printTags!!.text = taggg
+            tv_printTags.text = taggg
             if (etiket_sayisi == 5) break
         }
     }
 
     fun shareSend() {
-        Log.d(TAG, "ÇALIŞTI")
-        btn_shareSend!!.isEnabled = true
-        val placeNameControl = edt_sharePlaceName!!.text.toString()
-        val commentControl = edt_shareComment!!.text.toString()
-        val locationControl = edt_location!!.text.toString()
-        val addresControl = edt_addres!!.text.toString()
-        Log.i(TAG, "paylasGonder: Kullanıcının girdiği veriler alındı")
+        btn_shareSend.isEnabled = true
+        val placeNameControl = edt_sharePlaceName.text.toString()
+        val commentControl = edt_shareComment.text.toString()
+        val locationControl = edt_location.text.toString()
+        val addresControl = edt_addres.text.toString()
         if (placeNameControl != "" && locationControl != "" && commentControl != "" && addresControl != "") {
             val uuid = UUID.randomUUID()
             val placeName = firebaseUser!!.email + "--" + placeNameControl + "--" + uuid
             try {
                 storageReference
-                    ?.child("Resimler")
-                    ?.child(placeName)
-                    ?.putFile(picturePath!!)
-                    ?.addOnSuccessListener {
+                    .child("Resimler")
+                    .child(placeName)
+                    .putFile(picturePath)
+                    .addOnSuccessListener {
                         val storageReference1 =
                             FirebaseStorage.getInstance().getReference("Resimler/$placeName")
                         storageReference1
                             .downloadUrl
                             .addOnSuccessListener { uri ->
-                                val firebaseUser = firebaseAuth!!.currentUser
+                                val firebaseUser = firebaseAuth.currentUser
                                 val userEmail = firebaseUser!!.email
                                 val pictureLink = uri.toString()
-                                val placeName = edt_sharePlaceName!!.text.toString().toLowerCase()
-                                val location = edt_location!!.text.toString()
-                                val comment = edt_shareComment!!.text.toString()
-                                val addres = edt_addres!!.text.toString()
-                                var cityyy: String? = edt_city!!.text.toString()
-                                if (tags == null) {
-                                    tags = Arrays.asList(
-                                        "mgr",
-                                        "gezi",
-                                        "rehber",
-                                        "seyahat",
-                                        "etiketsiz"
-                                    )
-                                }
+                                val placeName = edt_sharePlaceName.text.toString().toLowerCase()
+                                val location = edt_location.text.toString()
+                                val comment = edt_shareComment.text.toString()
+                                val addres = edt_addres.text.toString()
+                                var cityyy: String? = edt_city.text.toString()
                                 if (cityyy == null) {
                                     cityyy = null
                                 }
@@ -166,76 +154,66 @@ class ShareFragment : Fragment() {
                                     cityyy, comment, postCode, tags, FieldValue.serverTimestamp()
                                 )
                                 val documentReference1 = firebaseFirestore
-                                    ?.collection("Paylasilanlar")
-                                    ?.document(firebaseUser.email!!)
-                                    ?.collection("Paylastiklari")
-                                    ?.document(postID!!)
-                                if (documentReference1 != null) {
-                                    documentReference1
-                                        .set(MGonderiler!!)
-                                        .addOnSuccessListener {
-                                            val documentReference2 = firebaseFirestore
-                                                ?.collection("Gonderiler")
-                                                ?.document(postID!!)
-                                            if (documentReference2 != null) {
-                                                documentReference2
-                                                    .set(MGonderiler!!)
-                                                    .addOnSuccessListener {
-                                                        val intent =
-                                                            Intent(activity, HomePageActivity::class.java)
-                                                        // Tüm aktiviteleri kapat
-                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                                        startActivity(intent)
-                                                    }
-                                                    .addOnFailureListener { e ->
-                                                        btn_shareSend!!.isEnabled = false
-                                                        Log.i(TAG, "onFailure: " + e.message)
-                                                    }
+                                    .collection("Paylasilanlar")
+                                    .document(firebaseUser.email!!)
+                                    .collection("Paylastiklari")
+                                    .document(postID)
+                                documentReference1
+                                    .set(MGonderiler)
+                                    .addOnSuccessListener {
+                                        val documentReference2 = firebaseFirestore
+                                            .collection("Gonderiler")
+                                            .document(postID)
+                                        documentReference2
+                                            .set(MGonderiler)
+                                            .addOnSuccessListener {
+                                                val intent =
+                                                    Intent(activity, HomePageActivity::class.java)
+                                                // Tüm aktiviteleri kapat
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                                startActivity(intent)
                                             }
-                                        }
-                                        .addOnFailureListener { e ->
-                                            btn_shareSend!!.isEnabled = false
-                                            Toast.makeText(activity, e.message, Toast.LENGTH_SHORT)
-                                                .show()
-                                            Log.i(TAG, "onFailure: " + e.message)
-                                        }
-                                }
+                                            .addOnFailureListener { e ->
+                                                btn_shareSend.isEnabled = false
+                                            }
+                                    }
+                                    .addOnFailureListener { e ->
+                                        btn_shareSend.isEnabled = false
+                                        Toast.makeText(activity, e.message, Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
                             }
                             .addOnFailureListener { e ->
-                                Log.i(TAG, "onFailure: " + e.message)
-                                btn_shareSend!!.isEnabled = false
+                                btn_shareSend.isEnabled = false
                             }
                         val myToast = Toast.makeText(activity, "Gönderildi", Toast.LENGTH_SHORT)
                         myToast.show()
                         val handler = Handler()
                         handler.postDelayed({ myToast.cancel() }, 400)
                     }
-                    ?.addOnFailureListener { e ->
-                        btn_shareSend!!.isEnabled = false
+                    .addOnFailureListener { e ->
+                        btn_shareSend.isEnabled = false
                         Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
-                        Log.i(TAG, "onFailure: " + e.message)
                     }
             } catch (e: Exception) {
                 Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
-                Log.i(TAG, "paylasGonder: " + e.message)
-                btn_shareSend!!.isEnabled = false
+                btn_shareSend.isEnabled = false
             }
         } else {
             Toast.makeText(activity, "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show()
-            btn_shareSend!!.isEnabled = false
+            btn_shareSend.isEnabled = false
         }
     }
 
     override fun onResume() {
         super.onResume()
-        Log.i(TAG, "onResume: Çalıştı")
         // BU ACTİVİY'E TEKRAR GELİNDİĞİNDE HARİTA SINIFINDAN GEREKLİ KOORDİNAT VE ADRES BİLGİLERİNİ BURADA ALSIN VE GEREKLİ YERLERDE YAYINLASIN
-        latitude = GET!!.getFloat("enlem", 0f)
-        longitude = GET!!.getFloat("boylam", 0f)
-        addres = GET!!.getString("adres", "Türkiye Üsküdar")
-        postCode = GET!!.getString("postaKodu", "12000")
-        edt_location!!.setText("$latitude,$longitude")
-        edt_addres!!.setText("" + addres)
+        latitude = GET.getFloat("enlem", 0f)
+        longitude = GET.getFloat("boylam", 0f)
+        addres = GET.getString("adres", "Türkiye Üsküdar")!!
+        postCode = GET.getString("postaKodu", "12000")!!
+        edt_location.setText("$latitude,$longitude")
+        edt_addres.setText("" + addres)
     }
 
     private fun choosePictureFromGallery() {
@@ -254,7 +232,6 @@ class ShareFragment : Fragment() {
             val intentGaleri =
                 Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intentGaleri, 2)
-            Log.i(TAG, "onClick: Daha önceden izin verildiğinden kullanıcı Galeriye yönlendirildi")
         }
     }
 
@@ -274,9 +251,8 @@ class ShareFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.i(TAG, "onActivityResult: Çalıştı")
         if (requestCode == 2 && resultCode == Activity.RESULT_OK && data != null) {
-            picturePath = data.data
+            picturePath = data.data!!
             Picasso.get()
                 .load(picturePath)
                 .centerCrop()

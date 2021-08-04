@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.HomePageFragment
 import com.mrcaracal.fragment.MyAccountFragment
 import com.mrcaracal.fragment.SearchFragment
@@ -24,8 +25,8 @@ private const val TAG = "HomePageActivity"
 class HomePageActivity : AppCompatActivity() {
 
     var doubleBackToExitPressedOnce = false
-    var firebaseAuth: FirebaseAuth? = null
-    var firebaseFirestore: FirebaseFirestore? = null
+    lateinit var firebaseAuth: FirebaseAuth
+    lateinit var firebaseFirestore: FirebaseFirestore
 
     private fun init() {
         firebaseAuth = FirebaseAuth.getInstance()
@@ -36,9 +37,8 @@ class HomePageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
         init()
-        title = "Mobil Gezi Rehberim"
+        title = getString(R.string.app_name_home)
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout, HomePageFragment()).commit()
-        Log.i(TAG, "onCreate: F_Anasayfa Fragment'i açıldı")
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomN)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
@@ -46,23 +46,19 @@ class HomePageActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.homepage -> {
                     selectedFragment = HomePageFragment()
-                    title = "Mobil Gezi Rehberim"
-                    Log.i(TAG, "onNavigationItemSelected: F_Anasayfa fragment'i seçildi")
+                    title = getString(R.string.app_name_home)
                 }
                 R.id.search -> {
                     selectedFragment = SearchFragment()
-                    title = "Ara"
-                    Log.i(TAG, "onNavigationItemSelected: F_Ara fragment'i seçildi")
+                    title = getString(R.string.search)
                 }
                 R.id.share -> {
                     selectedFragment = ShareFragment()
-                    title = "Paylaş"
-                    Log.i(TAG, "onNavigationItemSelected: F_Paylas fragment'i seçildi")
+                    title = getString(R.string.share)
                 }
                 R.id.profile -> {
                     selectedFragment = MyAccountFragment()
-                    title = "Hesabım"
-                    Log.i(TAG, "onNavigationItemSelected: F_Hesabim fragment'i seçildi")
+                    title = getString(R.string.my_account)
                 }
             }
             // Tespit ettiğimiz fragment'i yayınlıyoruz.
@@ -85,14 +81,12 @@ class HomePageActivity : AppCompatActivity() {
             R.id.contact -> {
                 val contact = Intent(this@HomePageActivity, ContactActivity::class.java)
                 startActivity(contact)
-                Log.i(TAG, "onOptionsItemSelected: İletişim menüsü seçildi")
             }
             R.id.signOut -> {
                 val signOut = Intent(this@HomePageActivity, Login::class.java)
                 startActivity(signOut)
                 finish()
-                firebaseAuth!!.signOut()
-                Log.i(TAG, "onOptionsItemSelected: Çıkış menüsü seçildi")
+                firebaseAuth.signOut()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -104,7 +98,7 @@ class HomePageActivity : AppCompatActivity() {
             return
         }
         doubleBackToExitPressedOnce = true
-        Toast.makeText(this, "Çıkmak için tekrar basınız", Toast.LENGTH_SHORT).show()
+        toast("Çıkmak için tekrar basınız")
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 

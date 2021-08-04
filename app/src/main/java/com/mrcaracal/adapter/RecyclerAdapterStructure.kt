@@ -35,15 +35,15 @@ class RecyclerAdapterStructure(
     private val recyclerViewClickInterface: RecyclerViewClickInterface
 ) : RecyclerView.Adapter<GonderiHolder>() {
 
-    var firebaseAuth: FirebaseAuth? = null
+    lateinit var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null
-    var firebaseFirestore: FirebaseFirestore? = null
+    lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GonderiHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.recycler_row, parent, false)
         firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth!!.currentUser
+        firebaseUser = firebaseAuth.currentUser
         firebaseFirestore = FirebaseFirestore.getInstance()
         return GonderiHolder(view)
     }
@@ -60,7 +60,6 @@ class RecyclerAdapterStructure(
             .fit()
             .into(holder.row_picturePath)
         holder.row_picturePath.setOnClickListener { }
-        Log.d(TAG, "onBindViewHolder: " + "Veriler çekildi ve işlendi")
     }
 
     // kaç tane row olduğunu ayarlar - listemizde
