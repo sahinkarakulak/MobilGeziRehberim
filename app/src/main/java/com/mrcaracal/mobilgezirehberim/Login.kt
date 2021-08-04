@@ -7,12 +7,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.mrcaracal.activity.AccountCreateActivity

@@ -1,6 +1,5 @@
 package com.mrcaracal.extensions
 
-import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 import androidx.annotation.StringRes

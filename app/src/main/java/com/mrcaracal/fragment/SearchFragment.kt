@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -498,7 +497,6 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                     Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
                 }
 
-
             // Aşağıdaki işlemler gerekmiyor. Ama şimdilik burada bulunsun
             /*Map<String, Object> map = new HashMap();
             map.put("gonderiID", true);
@@ -516,7 +514,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                         public void onSuccess(@NonNull Void aVoid) {
                             // İşlem Başarılı
                         }
-                    });*/Log.d(TAG, "onClick: Gönderi kaydedildi")
+                    });*/
         }
     }
 

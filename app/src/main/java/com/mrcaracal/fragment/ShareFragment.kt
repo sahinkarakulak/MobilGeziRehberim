@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -227,7 +226,6 @@ class ShareFragment : Fragment() {
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
                 1
             )
-            Log.i(TAG, "onClick: Daha önceden izin verilmediğinden izin istendi")
         } else {
             val intentGaleri =
                 Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
