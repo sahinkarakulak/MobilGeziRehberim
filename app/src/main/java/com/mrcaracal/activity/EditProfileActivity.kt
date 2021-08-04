@@ -15,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
+import com.google.firebase.storage.UploadTask
+import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
@@ -26,16 +28,15 @@ private const val TAG = "EditProfileActivity"
 class EditProfileActivity : AppCompatActivity() {
 
     var firebaseUser: FirebaseUser? = null
-    var storageReference: StorageReference? = null
-    var img_userPicture: ImageView? = null
-    var tv_userChangePicture: TextView? = null
-    var edt_getUserName: EditText? = null
-    var edt_getBiography: EditText? = null
-    var tv_userEmail: TextView? = null
-    var btn_update: Button? = null
-    var documentReference: DocumentReference? = null
-    private var mImageUri: Uri? = null
-    private var uploadTask: StorageTask<*>? = null
+    lateinit var storageReference: StorageReference
+    lateinit var img_userPicture: ImageView
+    lateinit var tv_userChangePicture: TextView
+    lateinit var edt_getUserName: EditText
+    lateinit var edt_getBiography: EditText
+    lateinit var tv_userEmail: TextView
+    lateinit var btn_update: Button
+    lateinit var documentReference: DocumentReference
+    private lateinit var mImageUri: Uri
 
     private fun initialize() {
         firebaseUser = FirebaseAuth.getInstance().currentUser
@@ -52,8 +53,9 @@ class EditProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
         initialize()
-        title = "Profili Düzenle"
-        tv_userEmail!!.text = firebaseUser!!.email
+        title = getString(R.string.edit_profile)
+
+        tv_userEmail.text = firebaseUser?.email
         documentReference = FirebaseFirestore
             .getInstance()
             .collection("Kullanicilar")

@@ -21,4 +21,20 @@
     <string name="paylas_ekle">ekle</string>
     <string name="paylas_konum_sec">Konum\nSeç</string>
     <string name="paylas_gonder">gönder</string>
+    <string name="error_occurred">Bir hata oluştu</string>
+    <string name="image_not_selected">Resim seçilmedi</string>
+    <string name="edit_profile">Profil Düzenle</string>
+    <string name="account_create">Hesap Oluştur</string>
+    <string name="contact">İletişim</string>
+    <string name="postLocation">Gönderi Konumu</string>
+    <string name="app_name_home">Mobil Gezi Rehberim</string>
+    <string name="search">Ara</string>
+    <string name="share">Paylaş</string>
+    <string name="login">Giriş</string>
+    <string name="my_account">Hesabım</string>
+    <string name="reset_pass">Parola Sıfırla</string>
+    <string name="map">Harita</string>
+
+
+
 </resources>
