@@ -489,7 +489,4 @@ class MyAccountFragment() : Fragment(), RecyclerViewClickInterface {
         bottomSheetDialog.show()
     }
 
-    companion object {
-        private val TAG = "F_Hesabim"
-    }
 }

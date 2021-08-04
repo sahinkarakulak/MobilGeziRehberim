@@ -35,7 +35,6 @@ private const val TAG = "HomePageFragment"
 
 class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
 
-    //    ProgressDialog progressDialog;
     var firebaseAuth: FirebaseAuth? = null
     var firebaseUser: FirebaseUser? = null
     var firebaseFirestore: FirebaseFirestore? = null
@@ -315,7 +314,4 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
         bottomSheetDialog.show()
     }
 
-    companion object {
-        private val TAG = "F_Anasayfa"
-    }
 }
