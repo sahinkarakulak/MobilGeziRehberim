@@ -115,15 +115,15 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     // Convert işlemi sonrası hatalar gerçekleşti. DÜZELTİLECEKTİR!
-    /*private fun uploadImage() {
+    private fun uploadImage() {
         if (mImageUri != null) {
-            Log.d(TAG, "uploadImage: Koşul sağlandı")
+            Log.i(TAG, "uploadImage: Koşul sağlandı")
             val storageReference2 = storageReference!!.child(firebaseUser!!.email!!).child(
                 System.currentTimeMillis()
                     .toString() + "." + getFileExtension(mImageUri!!)
             )
             uploadTask = storageReference2.putFile(mImageUri!!)
-            Log.d(TAG, "uploadImage: Resim yolu alındı")
+            Log.i(TAG, "uploadImage: Resim yolu alındı")
             uploadTask.continueWithTask(object : Continuation<Any?, Any?> {
                 @Throws(Exception::class)
                 override fun then(task: Task<*>): Any? {
@@ -143,7 +143,7 @@ class EditProfileActivity : AppCompatActivity() {
                         .document(firebaseUser!!.email!!)
                         .update(hasmap)
                         .addOnSuccessListener {
-                            Log.d(TAG, "onSuccess: VT'de resim yolu değiştirildi")
+                            Log.i(TAG, "onSuccess: VT'de resim yolu değiştirildi")
                             documentReference
                                 ?.get()
                                 ?.addOnCompleteListener { task ->
@@ -153,7 +153,7 @@ class EditProfileActivity : AppCompatActivity() {
                                             Picasso.get()
                                                 .load(documentSnapshot.getString("kullaniciResmi"))
                                                 .into(img_userPicture)
-                                            Log.d(
+                                            Log.i(
                                                 TAG,
                                                 "onComplete: Resim yolu çekilip Picasso ile yayınlandı"
                                             )
@@ -170,14 +170,14 @@ class EditProfileActivity : AppCompatActivity() {
                 }
             }).addOnFailureListener(OnFailureListener { e ->
                 Toast.makeText(this@EditProfileActivity, e.message, Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "onFailure: " + e.message)
+                Log.i(TAG, "onFailure: " + e.message)
             })
         } else {
             Toast.makeText(this, "Resim seçilmedi", Toast.LENGTH_SHORT).show()
         }
-    }*/
+    }
 
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             val result = CropImage.getActivityResult(data)
@@ -189,6 +189,6 @@ class EditProfileActivity : AppCompatActivity() {
             Toast.makeText(this, "Vaz mı geçtin?", Toast.LENGTH_SHORT).show()
             Log.i(TAG, "onActivityResult: İşlemden vazgeçildi")
         }
-    }*/
+    }
 
 }
