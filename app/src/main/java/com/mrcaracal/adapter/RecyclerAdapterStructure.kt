@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -96,14 +97,20 @@ class RecyclerAdapterStructure(
                     recyclerViewClickInterface.onLongItemClick(getAdapterPosition());
                     return false;
                 }
-            });*/row_picturePath.setOnLongClickListener {
+            });*/
+            row_picturePath.setOnLongClickListener {
                 recyclerViewClickInterface.onLongItemClick(adapterPosition)
                 false
             }
+            
             ll_otherOperations.setOnClickListener {
                 recyclerViewClickInterface.onOtherOperationsClick(
                     adapterPosition
                 )
+            }
+            
+            row_comment.setOnClickListener {
+                recyclerViewClickInterface.onCommentClick(adapterPosition)
             }
         }
     }

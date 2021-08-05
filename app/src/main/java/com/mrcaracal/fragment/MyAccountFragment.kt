@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,6 +27,7 @@ import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.EditProfileActivity
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -191,7 +193,7 @@ class MyAccountFragment() : Fragment(), RecyclerViewClickInterface {
                         val postID = dataClusterAccount!!["gonderiID"].toString()
                         val userEmail = dataClusterAccount["kullaniciEposta"].toString()
                         var palceName = dataClusterAccount["yerIsmi"].toString()
-                        palceName = palceName.substring(0, 1).toUpperCase() + palceName.substring(1)
+                        palceName = palceName.substring(0, 1).uppercase() + palceName.substring(1)
                         val location = dataClusterAccount["konum"].toString()
                         val pictureLink = dataClusterAccount["resimAdresi"].toString()
                         val comment = dataClusterAccount["yorum"].toString()
@@ -457,6 +459,11 @@ class MyAccountFragment() : Fragment(), RecyclerViewClickInterface {
             })
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
+    }
+
+    override fun onCommentClick(position: Int) {
+        //
+        activity?.let { toast(it, "MyAccountFragment içerisinde tıklandı") }
     }
 
 }

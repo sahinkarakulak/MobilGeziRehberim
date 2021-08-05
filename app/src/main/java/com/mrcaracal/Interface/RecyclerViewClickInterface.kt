@@ -1,11 +1,8 @@
-package com.mrcaracal.Interface;
+package com.mrcaracal.Interface
 
-public interface RecyclerViewClickInterface {
-
-    void onLongItemClick(int position);
-
-    void onOtherOperationsClick(int position);
-
-    void onOpenDialogWindow(int position);
-
+interface RecyclerViewClickInterface {
+    fun onLongItemClick(position: Int)
+    fun onOtherOperationsClick(position: Int)
+    fun onOpenDialogWindow(position: Int)
+    fun onCommentClick(position: Int)
 }

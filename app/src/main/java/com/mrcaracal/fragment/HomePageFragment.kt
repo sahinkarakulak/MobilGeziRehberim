@@ -24,6 +24,7 @@ import com.google.firebase.firestore.Query
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.ContactInfo
 import com.mrcaracal.modul.Posts
@@ -108,9 +109,6 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
     }
 
     fun rewind() {
-        //progressDialog = new ProgressDialog(getActivity());
-        //progressDialog.setMessage("Yükleniyor");
-        //progressDialog.show();
         val collectionReference = firebaseFirestore
             .collection("Gonderiler")
 
@@ -128,7 +126,7 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
                         val postID = dataCluster!!["gonderiID"].toString()
                         val userEmail = dataCluster["kullaniciEposta"].toString()
                         var palceName = dataCluster["yerIsmi"].toString()
-                        palceName = palceName.substring(0, 1).toUpperCase() + palceName.substring(1)
+                        palceName = palceName.substring(0, 1).uppercase() + palceName.substring(1)
                         val pictureLink = dataCluster["resimAdresi"].toString()
                         val location = dataCluster["konum"].toString()
                         val addres = dataCluster["adres"].toString()
@@ -150,7 +148,6 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
                         timesFirebase.add(time)
                         recyclerAdapterStructure.notifyDataSetChanged()
 
-                        //progressDialog.dismiss();
                     }
                 }
             }
@@ -182,7 +179,7 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
         alert
             .setTitle(placeNamesFirebase[position])
             .setMessage(showDetailPost)
-            .setNegativeButton("TAMAM") { dialog, which ->
+            .setNegativeButton("TAMAM") { _dialog, which ->
                 //
             }
             .show()
@@ -190,7 +187,7 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
 
     fun saveOperations(position: Int) {
         if ((userEmailsFirebase[position] == firebaseUser!!.email)) {
-            Toast.makeText(activity, "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT).show()
+            activity?.let { toast(it, "Bunu zaten siz paylaştınız") }
         } else {
             val MGonderiler = Posts(
                 postIDsFirebase[position],
@@ -212,10 +209,10 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
             documentReference
                 .set(MGonderiler)
                 .addOnSuccessListener {
-                    Toast.makeText(activity, "Kaydedildi", Toast.LENGTH_SHORT).show()
+                    activity?.let { it1 -> toast(it1, "Kaydedildi") }
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                    activity?.let { e.message?.let { it1 -> toast(it, it1) } }
                 }
         }
     }
@@ -271,8 +268,7 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     if ((userEmailsFirebase[position] == firebaseUser?.email)) {
-                        Toast.makeText(activity, "Bunu zaten siz paylaştınız", Toast.LENGTH_SHORT)
-                            .show()
+                        toast(activity!!, "Bunu zaten siz paylaştınız")
                     } else {
                         val contactInfo = ContactInfo()
                         val intent = Intent(Intent.ACTION_SEND)
@@ -296,6 +292,11 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
             })
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
+    }
+
+    override fun onCommentClick(position: Int) {
+        //
+        activity?.let { toast(it, "HomePageFragment içerisinde tıklandı") }
     }
 
 }

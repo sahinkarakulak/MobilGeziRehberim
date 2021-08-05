@@ -16,8 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:orientation="horizontal">
 
             <TextView
@@ -33,8 +33,10 @@
                 android:textStyle="bold"/>
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:src="@drawable/ic_baseline_more_horiz_24"/>
 
         </LinearLayout>
@@ -50,12 +52,12 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingLeft="15dp"
-            android:paddingRight="5dp"
+            android:paddingRight="15dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/row_comment"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLines="1"
@@ -63,6 +65,13 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:textStyle="italic"/>
+
+            <!--<ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_baseline_add_comment_24"/>-->
 
         </LinearLayout>
 

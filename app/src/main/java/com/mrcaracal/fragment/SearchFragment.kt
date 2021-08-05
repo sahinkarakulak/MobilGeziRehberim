@@ -31,6 +31,7 @@ import com.google.firebase.firestore.*
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.Cities
 import com.mrcaracal.modul.ContactInfo
@@ -198,7 +199,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                 if ((keyValue == "sehir")) {
                     val cities = Cities()
                     val selectedCityCode = cities.selectedCity(parent.selectedItem.toString())
-                    /*Toast.makeText(getActivity(), "Seçilen şehir kodu: "+secilen_sehir_kodu, Toast.LENGTH_SHORT).show();*/if ((selectedCityCode == "Şehir Seçin!")) {
+                    if ((selectedCityCode == "Şehir Seçin!")) {
                         Toast.makeText(activity, "Lütfen Şehir Seçin!", Toast.LENGTH_SHORT).show()
                     } else {
                         // VT'de Gonderiler bölümünde posta kodu alınan değerle başlayan tüm gonderileri çeken bir algoritma geliştir.
@@ -222,9 +223,9 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 clearList()
                 if ((keyValue == "taglar")) {
-                    searchForTag(keyValue, s.toString().toLowerCase())
+                    searchForTag(keyValue, s.toString().lowercase())
                 } else {
-                    search(keyValue, s.toString().toLowerCase())
+                    search(keyValue, s.toString().lowercase())
                 }
             }
 
@@ -281,13 +282,6 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                     (activity)!!, Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return
             }
             LocationServices.getFusedLocationProviderClient(activity)
@@ -344,7 +338,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
         val postID = dataCluster!!["gonderiID"].toString()
         val userEmail = dataCluster["kullaniciEposta"].toString()
         var placeName = dataCluster["yerIsmi"].toString()
-        placeName = placeName.substring(0, 1).toUpperCase() + placeName.substring(1)
+        placeName = placeName.substring(0, 1).uppercase() + placeName.substring(1)
         val pictureLink = dataCluster["resimAdresi"].toString()
         val location = dataCluster["konum"].toString()
         val addres = dataCluster["adres"].toString()
@@ -590,6 +584,11 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
             })
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
+    }
+
+    override fun onCommentClick(position: Int) {
+        //
+        activity?.let { toast(it, "SearchFragment içerisinde tıklandı") }
     }
 
     companion object {
