@@ -108,10 +108,6 @@ class RecyclerAdapterStructure(
                     adapterPosition
                 )
             }
-            
-            row_comment.setOnClickListener {
-                recyclerViewClickInterface.onCommentClick(adapterPosition)
-            }
         }
     }
 

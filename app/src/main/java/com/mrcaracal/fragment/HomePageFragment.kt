@@ -294,9 +294,4 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
         bottomSheetDialog.show()
     }
 
-    override fun onCommentClick(position: Int) {
-        //
-        activity?.let { toast(it, "HomePageFragment içerisinde tıklandı") }
-    }
-
 }

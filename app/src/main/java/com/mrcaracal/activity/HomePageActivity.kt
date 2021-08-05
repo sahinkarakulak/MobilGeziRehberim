@@ -13,7 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.HomePageFragment
 import com.mrcaracal.fragment.MyAccountFragment
-import com.mrcaracal.fragment.SearchFragment
+import com.mrcaracal.fragment.search.SearchFragment
 import com.mrcaracal.fragment.ShareFragment
 import com.mrcaracal.mobilgezirehberim.Login
 import com.mrcaracal.mobilgezirehberim.R

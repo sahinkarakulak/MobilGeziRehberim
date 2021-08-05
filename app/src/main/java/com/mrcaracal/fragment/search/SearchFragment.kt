@@ -1,4 +1,4 @@
-package com.mrcaracal.fragment
+package com.mrcaracal.fragment.search
 
 import android.Manifest
 import android.app.AlertDialog
@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +32,6 @@ import com.google.firebase.firestore.*
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
-import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.Cities
 import com.mrcaracal.modul.ContactInfo
@@ -40,6 +40,7 @@ import java.text.DateFormat
 import java.util.*
 
 class SearchFragment() : Fragment(), RecyclerViewClickInterface {
+    //list yap string dosyasınd arry
     private val accordingToWhat = arrayOf("Yer İsmi", "Etiket", "Şehir", "Kullanıcı")
 
     lateinit var firebaseAuth: FirebaseAuth
@@ -163,20 +164,6 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                     recycler_view_search.scrollToPosition(0)
                     keyValue = "kullaniciEposta"
                 }
-
-                /*if(parent.getSelectedItem().toString().equals(neye_gore[4])){
-
-                    recycler_view_ara.setVisibility(View.INVISIBLE);
-                    webView = viewGroup.findViewById(R.id.webview);
-                    webView.setVisibility(View.VISIBLE);
-                    webView.getSettings().setJavaScriptEnabled(true);
-                    //Zoom yapılabilinir olup olmadığını belirtiyoruz
-                    webView.getSettings().setBuiltInZoomControls(true);
-                    //Hangi adresi açacağını belirtiyoruz
-                    webView.loadUrl("https://www.instagram.com/explore/tags/kapadokya/");
-                    //Açılacak olan web adresinin uygulama içinde mi yoksa tarayıcı da mı açılacağını ayarlıyoruz
-                    webView.setWebViewClient(new WebViewClient());
-                }*/
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -295,13 +282,14 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                             val latitude = locationResult.locations[lastestLocationIndex].latitude
                             val longitude = locationResult.locations[lastestLocationIndex].longitude
                             val geocoder = Geocoder(activity, Locale.getDefault())
-                            var addressList: List<Address>? = null
+                            var addressList: List<Address>
                             try {
                                 addressList = geocoder.getFromLocation(latitude, longitude, 1)
 
                                 //if (addressList != null || !addressList!!.isEmpty()) {
                                 if (addressList != null) {
                                     val postaKodumuz = addressList[0].postalCode
+                                    Log.i(TAG, "onLocationResult: " + postaKodumuz)
                                     searchForCity(postaKodumuz.substring(0, 2))
                                 }
                             } catch (e: Exception) {
@@ -333,7 +321,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
         timesFirebase.clear()
     }
 
-    fun veriCagir(data: Map<String, Any>?) {
+    fun getData(data: Map<String, Any>?) {
         val dataCluster = data
         val postID = dataCluster!!["gonderiID"].toString()
         val userEmail = dataCluster["kullaniciEposta"].toString()
@@ -374,7 +362,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                 if (task.isSuccessful) {
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
-                        veriCagir(snapshot.data)
+                        getData(snapshot.data)
                         recyclerAdapterStructure.notifyDataSetChanged()
 
                         // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise
@@ -397,7 +385,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                 if (task.isSuccessful) {
                     val querySnapshot = (task.result)
                     for (documentSnapshot: DocumentSnapshot in querySnapshot) {
-                        veriCagir(documentSnapshot.data)
+                        getData(documentSnapshot.data)
                         recyclerAdapterStructure.notifyDataSetChanged()
                     }
                 }
@@ -417,7 +405,7 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
                 if (task.isSuccessful) {
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
-                        veriCagir(snapshot.data)
+                        getData(snapshot.data)
                         recyclerAdapterStructure.notifyDataSetChanged()
 
                         // Arraylistlerin içinde tüm özellikleriyle aynı olan gönderiler var ise
@@ -586,13 +574,8 @@ class SearchFragment() : Fragment(), RecyclerViewClickInterface {
         bottomSheetDialog.show()
     }
 
-    override fun onCommentClick(position: Int) {
-        //
-        activity?.let { toast(it, "SearchFragment içerisinde tıklandı") }
-    }
-
     companion object {
-        private val TAG = "F_Ara"
+        private val TAG = "SearchFragment"
         private val REQUEST_CODE_LOCATION_PERMISSON = 203
     }
 }

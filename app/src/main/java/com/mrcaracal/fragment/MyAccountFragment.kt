@@ -461,9 +461,4 @@ class MyAccountFragment() : Fragment(), RecyclerViewClickInterface {
         bottomSheetDialog.show()
     }
 
-    override fun onCommentClick(position: Int) {
-        //
-        activity?.let { toast(it, "MyAccountFragment içerisinde tıklandı") }
-    }
-
 }
