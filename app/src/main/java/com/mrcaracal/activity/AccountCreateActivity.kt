@@ -12,8 +12,6 @@ import com.mrcaracal.mobilgezirehberim.Login
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.UserInfo
 
-private const val TAG = "AccountCreateActivity"
-
 class AccountCreateActivity : AppCompatActivity() {
 
     lateinit var userInfo: UserInfo
@@ -27,6 +25,9 @@ class AccountCreateActivity : AppCompatActivity() {
     lateinit var passTwo: String
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseFirestore: FirebaseFirestore
+
+    private val FIREBASE_COLLECTION_NAME = "Kullanicilar"
+    private val DEFAULT_PP_LINK = "https://firebasestorage.googleapis.com/v0/b/mobilgezirehberim-7aca5.appspot.com/o/Resimler%2Fdefaultpp.png?alt=media&token=97fe9138-0aad-4ea9-af78-536c637b3be4"
 
     fun init() {
         firebaseAuth = FirebaseAuth.getInstance()
@@ -51,7 +52,7 @@ class AccountCreateActivity : AppCompatActivity() {
         passTwo = edt_userPassTwo.text.toString()
 
         if (userName == "" || email == "" || passOne == "" || passTwo == "") {
-            toast("Gerekli alanları doldurunuz")
+            toast(R.string.fill_in_the_required_fields.toString())
         } else {
             if (passOne == passTwo) {
                 firebaseAuth
@@ -61,16 +62,16 @@ class AccountCreateActivity : AppCompatActivity() {
                             .getCurrentUser()
                             ?.sendEmailVerification()
                             ?.addOnSuccessListener {
-                                toast("Doğrulama bağlantısı E-Posta adresinize gönderildi.")
+                                toast(R.string.verification_link_sent.toString())
                                 userInfo = UserInfo(
                                     userName,
                                     email,
                                     passOne,
-                                    "MGR'i Seviyorum",
-                                    "https://firebasestorage.googleapis.com/v0/b/mobilgezirehberim-7aca5.appspot.com/o/Resimler%2Fdefaultpp.png?alt=media&token=97fe9138-0aad-4ea9-af78-536c637b3be4"
+                                    R.string.ı_love_mgr.toString(),
+                                    DEFAULT_PP_LINK
                                 )
                                 val documentReference = firebaseFirestore
-                                    .collection("Kullanicilar")
+                                    .collection(FIREBASE_COLLECTION_NAME)
                                     .document(email)
                                 documentReference
                                     .set(userInfo)
@@ -90,7 +91,7 @@ class AccountCreateActivity : AppCompatActivity() {
                             }
                     }
             } else
-                toast("Parolalar uyuşmuyor. Lütfen kontrol ediniz...")
+                toast(R.string.passwords_are_not_the_same.toString())
         }
     }
 }

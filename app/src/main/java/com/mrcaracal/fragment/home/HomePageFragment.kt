@@ -1,4 +1,4 @@
-package com.mrcaracal.fragment
+package com.mrcaracal.fragment.home
 
 import android.app.AlertDialog
 import android.content.Context
@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,23 +16,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
-import com.mrcaracal.modul.ContactInfo
-import com.mrcaracal.modul.Posts
+import com.mrcaracal.modul.MyArrayList
 import java.text.DateFormat
 import java.util.*
 
-private const val TAG = "HomePageFragment"
-
-class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
+class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
     lateinit var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null
@@ -57,6 +50,8 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
     var latitude = 0.0
     var longitude = 0.0
 
+    private lateinit var firebaseOperationForHome: FirebaseOperationForHome
+
     private fun init() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser
@@ -72,8 +67,22 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
         postCodesFirebase = ArrayList()
         tagsFirebase = ArrayList()
         timesFirebase = ArrayList()
-        GET = activity!!.getSharedPreferences("harita", Context.MODE_PRIVATE)
+        GET = activity!!.getSharedPreferences(R.string.map_key.toString(), Context.MODE_PRIVATE)
         SET = GET.edit()
+
+        firebaseOperationForHome = FirebaseOperationForHome(
+            postIDsFirebase,
+            userEmailsFirebase,
+            pictureLinksFirebase,
+            placeNamesFirebase,
+            locationFirebase,
+            addressesFirebase,
+            citiesFirebase,
+            commentsFirebase,
+            postCodesFirebase,
+            tagsFirebase,
+            timesFirebase
+        )
     }
 
     override fun onCreateView(
@@ -84,12 +93,9 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
         viewGroup = inflater.inflate(R.layout.frag_home_page, container, false) as ViewGroup
         init()
 
-        // Yeniden eskiye çekme
-        rewind()
-
         // RecyclerView Tanımlama İşlemi
         recyclerView = viewGroup.findViewById(R.id.recyclerView)
-        recyclerView.setLayoutManager(LinearLayoutManager(activity))
+        recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerAdapterStructure = RecyclerAdapterStructure(
             (postIDsFirebase),
             (userEmailsFirebase),
@@ -104,117 +110,12 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
             timesFirebase,
             this
         )
-        recyclerView.setAdapter(recyclerAdapterStructure)
+        recyclerView.adapter = recyclerAdapterStructure
+
+        // Yeniden eskiye çekme
+        firebaseOperationForHome.rewind(FirebaseFirestore.getInstance(), recyclerAdapterStructure)
+
         return viewGroup
-    }
-
-    fun rewind() {
-        val collectionReference = firebaseFirestore
-            .collection("Gonderiler")
-
-        // VT'ye kaydedilme zamanına göre verileri çek
-        collectionReference
-            .orderBy("zaman", Query.Direction.DESCENDING)
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val querySnapshot = (task.result)
-                    for (snapshot: DocumentSnapshot in querySnapshot) {
-
-                        // Çekilen her veriyi Map dizinine at ve daha sonra çekip kullan
-                        val dataCluster = snapshot.data
-                        val postID = dataCluster!!["gonderiID"].toString()
-                        val userEmail = dataCluster["kullaniciEposta"].toString()
-                        var palceName = dataCluster["yerIsmi"].toString()
-                        palceName = palceName.substring(0, 1).uppercase() + palceName.substring(1)
-                        val pictureLink = dataCluster["resimAdresi"].toString()
-                        val location = dataCluster["konum"].toString()
-                        val addres = dataCluster["adres"].toString()
-                        val city = dataCluster["sehir"].toString()
-                        val comment = dataCluster["yorum"].toString()
-                        val postCode = dataCluster["postaKodu"].toString()
-                        val time = dataCluster["zaman"] as Timestamp
-
-                        postIDsFirebase.add(postID)
-                        userEmailsFirebase.add(userEmail)
-                        pictureLinksFirebase.add(pictureLink)
-                        placeNamesFirebase.add(palceName)
-                        locationFirebase.add(location)
-                        addressesFirebase.add(addres)
-                        citiesFirebase.add(city)
-                        commentsFirebase.add(comment)
-                        postCodesFirebase.add(postCode)
-                        tagsFirebase.add(dataCluster["taglar"].toString())
-                        timesFirebase.add(time)
-                        recyclerAdapterStructure.notifyDataSetChanged()
-
-                    }
-                }
-            }
-    }
-
-    // Daha sonra uygun ingilizce kelimelerle değişken isimlerini oluştur.
-    fun tagGoster(position: Int): String {
-        var taggg = ""
-        val al_taglar = tagsFirebase[position]
-        val tag_uzunluk = al_taglar.length
-        val alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
-        val a_t = alinan_taglar.split(",").toTypedArray()
-        for (tags: String in a_t) {
-            taggg += "#" + tags.trim { it <= ' ' } + " "
-        }
-        return taggg
-    }
-
-    // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
-    override fun onLongItemClick(position: Int) {
-        val dateAndTime = DateFormat.getDateTimeInstance().format(
-            timesFirebase[position].toDate()
-        )
-        val showDetailPost =
-            (commentsFirebase.get(position) + "\n\nPaylaşan: " + userEmailsFirebase[position] +
-                    "\nTarih: " + dateAndTime + "\nAdres: " + addressesFirebase[position] +
-                    "\n\nEtiketler: " + tagGoster(position))
-        val alert = AlertDialog.Builder(activity)
-        alert
-            .setTitle(placeNamesFirebase[position])
-            .setMessage(showDetailPost)
-            .setNegativeButton("TAMAM") { _dialog, which ->
-                //
-            }
-            .show()
-    }
-
-    fun saveOperations(position: Int) {
-        if ((userEmailsFirebase[position] == firebaseUser!!.email)) {
-            activity?.let { toast(it, "Bunu zaten siz paylaştınız") }
-        } else {
-            val MGonderiler = Posts(
-                postIDsFirebase[position],
-                userEmailsFirebase[position],
-                pictureLinksFirebase[position],
-                placeNamesFirebase[position],
-                locationFirebase[position],
-                addressesFirebase[position],
-                citiesFirebase[position],
-                commentsFirebase[position],
-                postCodesFirebase[position], listOf(tagsFirebase[position]),
-                FieldValue.serverTimestamp()
-            )
-            val documentReference = firebaseFirestore
-                .collection("Kaydedenler")
-                .document((firebaseUser?.email)!!)
-                .collection("Kaydedilenler")
-                .document(postIDsFirebase[position])
-            documentReference
-                .set(MGonderiler)
-                .addOnSuccessListener {
-                    activity?.let { it1 -> toast(it1, "Kaydedildi") }
-                }
-                .addOnFailureListener { e ->
-                    activity?.let { e.message?.let { it1 -> toast(it, it1) } }
-                }
-        }
     }
 
     fun goToLocationOperations(position: Int) {
@@ -229,6 +130,26 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
         SET.putFloat("konum_git_boylam", longitude.toFloat())
         SET.commit()
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
+    }
+
+    override fun onLongItemClick(position: Int) {
+        val dateAndTime = DateFormat.getDateTimeInstance().format(
+            timesFirebase[position].toDate()
+        )
+        val showDetailPost =
+            (commentsFirebase.get(position) +
+                    R.string.sharing.toString() + "\n\n: " + userEmailsFirebase[position] +
+                    R.string.date.toString() + "\n: " + dateAndTime +
+                    R.string.addres.toString() + "\n: " + addressesFirebase[position] +
+                    R.string.labels.toString() + "\n\n: " + firebaseOperationForHome.tagGoster(position))
+        val alert = AlertDialog.Builder(activity)
+        alert
+            .setTitle(placeNamesFirebase[position])
+            .setMessage(showDetailPost)
+            .setNegativeButton(R.string.ok.toString()) { _dialog, which ->
+                //
+            }
+            .show()
     }
 
     override fun onOtherOperationsClick(position: Int) {
@@ -249,7 +170,12 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
         // Gönderiyi Kaydet
         bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
-                saveOperations(position)
+                firebaseUser?.let { it1 ->
+                    firebaseOperationForHome.saveOperations(
+                        position,
+                        it1, firebaseFirestore
+                    )
+                }
                 bottomSheetDialog.dismiss()
             })
 
@@ -263,20 +189,19 @@ class HomePageFragment() : Fragment(), RecyclerViewClickInterface {
             })
 
         // Detaylı Şikayet Bildir (Mail)
-        // Bu kısımda cihazdaki MAİL uygulamasının açılıp kullanıcının burada geliştiricilere istediği verileri göndermesi sağlanacak
         bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     if ((userEmailsFirebase[position] == firebaseUser?.email)) {
-                        toast(activity!!, "Bunu zaten siz paylaştınız")
+                        toast(activity!!, R.string.you_already_shared_this.toString())
                     } else {
-                        val contactInfo = ContactInfo()
+                        val contactInfo = MyArrayList()
                         val intent = Intent(Intent.ACTION_SEND)
-                        intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.admin_hesaplari)
+                        intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.admin_account)
                         intent.putExtra(Intent.EXTRA_SUBJECT, "")
                         intent.putExtra(Intent.EXTRA_TEXT, "")
                         intent.type = "plain/text"
-                        startActivity(Intent.createChooser(intent, "Ne ile göndermek istersiniz?"))
+                        startActivity(Intent.createChooser(intent, R.string.what_would_u_like_to_send_with.toString()))
                     }
                     bottomSheetDialog.dismiss()
                 }

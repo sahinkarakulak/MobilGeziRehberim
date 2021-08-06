@@ -7,9 +7,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
-import com.mrcaracal.modul.ContactInfo
-
-private const val TAG = "ContactActivity"
+import com.mrcaracal.modul.MyArrayList
 
 class ContactActivity : AppCompatActivity() {
 
@@ -31,16 +29,16 @@ class ContactActivity : AppCompatActivity() {
         btn_contactSend.setOnClickListener {
             val str_subject = edt_contactSubjectTitle.text.toString()
             val str_message = edt_contactMessage.text.toString()
-            val contactInfo = ContactInfo()
+            val contactInfo = MyArrayList()
             if (str_subject == "" || str_message == "") {
-                toast("Gerekli alanları doldurunuz")
+                toast(R.string.fill_in_the_required_fields.toString())
             } else {
                 val intent = Intent(Intent.ACTION_SEND)
-                intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.admin_hesaplari)
+                intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.admin_account)
                 intent.putExtra(Intent.EXTRA_SUBJECT, str_subject)
                 intent.putExtra(Intent.EXTRA_TEXT, str_message)
                 intent.type = "plain/text"
-                startActivity(Intent.createChooser(intent, "Ne ile göndermek istersiniz?"))
+                startActivity(Intent.createChooser(intent, R.string.what_would_u_like_to_send_with.toString()))
             }
         }
     }

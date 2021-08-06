@@ -25,8 +25,6 @@ import com.mrcaracal.mobilgezirehberim.R
 import java.io.IOException
 import java.util.*
 
-private const val TAG = "MyMapActivity"
-
 class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListener {
     lateinit var locationManager: LocationManager
     lateinit var locationListener: LocationListener
@@ -34,9 +32,11 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
     var latitude = 0.0.toFloat()
     var longitude = 0.0.toFloat()
     var addres = ""
+    private val LATITUDE = "enlem"
+    private val LONGITUDE = "boylam"
+    private val ADDRES = "adres"
+    private val POST_CODE = "postaKodu"
     lateinit var postCode: String
-
-    private var MAP_KEY = "harita"
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
@@ -47,12 +47,11 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_map)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
         title = getString(R.string.map)
-        GET = getSharedPreferences(MAP_KEY, MODE_PRIVATE)
+        GET = getSharedPreferences(R.string.map_key.toString(), MODE_PRIVATE)
         SET = GET.edit()
     }
 
@@ -88,10 +87,10 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
                     /*Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();*/
                     e.printStackTrace()
                 }
-                SET.putFloat("enlem", latitude)
-                SET.putFloat("boylam", longitude)
-                SET.putString("adres", addres)
-                SET.putString("postaKodu", postCode)
+                SET.putFloat(LATITUDE, latitude)
+                SET.putFloat(LONGITUDE, longitude)
+                SET.putString(ADDRES, addres)
+                SET.putString(POST_CODE, postCode)
                 SET.commit()
 
                 /*Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: "
@@ -136,7 +135,7 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
             latitude.toDouble(), longitude.toDouble()
         )
         //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        mMap.addMarker(MarkerOptions().position(location).title("Konumum"))
+        mMap.addMarker(MarkerOptions().position(location).title(R.string.my_locaiton.toString()))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16f))
         mMap.setOnMapClickListener(this)
     }
@@ -222,20 +221,18 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
             e.printStackTrace()
         }
 
-        /*Toast.makeText(this, "Yeni Konum Alındı;\n\nEnlem: " + enlem + "\nBoylam: " + boylam
-                + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();*/
         marker.remove()
         marker = mMap.addMarker(
             MarkerOptions()
                 .position(latLng)
-                .title("Seçilen Yeni Konum")
+                .title(R.string.selected_new_location.toString())
                 .draggable(true)
                 .visible(true)
         )
-        SET.putFloat("enlem", latitude)
-        SET.putFloat("boylam", longitude)
-        SET.putString("adres", addres)
-        SET.putString("postaKodu", postCode)
+        SET.putFloat(LATITUDE, latitude)
+        SET.putFloat(LONGITUDE, longitude)
+        SET.putString(ADDRES, addres)
+        SET.putString(POST_CODE, postCode)
         SET.commit()
     }
 

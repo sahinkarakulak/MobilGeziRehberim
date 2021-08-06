@@ -1,4 +1,4 @@
-package com.mrcaracal.fragment
+package com.mrcaracal.fragment.share
 
 import android.Manifest
 import android.app.Activity
@@ -25,12 +25,11 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.mrcaracal.activity.HomePageActivity
 import com.mrcaracal.activity.MyMapActivity
+import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.Posts
 import com.squareup.picasso.Picasso
 import java.util.*
-
-private const val TAG = "ShareFragment"
 
 class ShareFragment : Fragment() {
     lateinit var MGonderiler: Posts
@@ -61,13 +60,18 @@ class ShareFragment : Fragment() {
     private lateinit var firebaseStorage: FirebaseStorage
     private lateinit var storageReference: StorageReference
 
+    private val STORAGE_NAME = "Resimler"
+    private val COLLECTION_NAME_SHARED = "Paylasilanlar"
+    private val COLLECTION_NAME_THEY_SHARED = "Paylastiklari"
+    private val COLLECTION_NAME_POST = "Gonderiler"
+
     private fun init() {
         firebaseStorage = FirebaseStorage.getInstance()
         storageReference = firebaseStorage.reference
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser
         firebaseFirestore = FirebaseFirestore.getInstance()
-        GET = activity!!.getSharedPreferences("harita", Context.MODE_PRIVATE)
+        GET = activity!!.getSharedPreferences(R.string.map_key.toString(), Context.MODE_PRIVATE)
         SET = GET.edit()
     }
 
@@ -93,7 +97,7 @@ class ShareFragment : Fragment() {
 
         // Galeriden resim çekmek için yapılacaklar
         img_sharePictureSelected.setOnClickListener(View.OnClickListener { choosePictureFromGallery() })
-        btn_addTag.setOnClickListener(View.OnClickListener { tagOlusturma() })
+        btn_addTag.setOnClickListener(View.OnClickListener { createTag() })
         selectLocation.setOnClickListener(View.OnClickListener {
             startActivity(Intent(activity, MyMapActivity::class.java))
         })
@@ -101,9 +105,8 @@ class ShareFragment : Fragment() {
         return viewGroup
     }
 
-    // Daha sonradan değişken isimlerini ingilizce olacak şekilde düzenle
-    fun tagOlusturma() {
-        val tagler = edt_shareTag.text.toString().toLowerCase().split(" ").toTypedArray()
+    fun createTag() {
+        val tagler = edt_shareTag.text.toString().lowercase().split(" ").toTypedArray()
         var etiket_sayisi = 0
         var taggg = ""
         for (tags in tagler) {
@@ -126,19 +129,19 @@ class ShareFragment : Fragment() {
             val placeName = firebaseUser!!.email + "--" + placeNameControl + "--" + uuid
             try {
                 storageReference
-                    .child("Resimler")
+                    .child(STORAGE_NAME)
                     .child(placeName)
                     .putFile(picturePath)
                     .addOnSuccessListener {
                         val storageReference1 =
-                            FirebaseStorage.getInstance().getReference("Resimler/$placeName")
+                            FirebaseStorage.getInstance().getReference(STORAGE_NAME + "/$placeName")
                         storageReference1
                             .downloadUrl
                             .addOnSuccessListener { uri ->
                                 val firebaseUser = firebaseAuth.currentUser
                                 val userEmail = firebaseUser!!.email
                                 val pictureLink = uri.toString()
-                                val placeName = edt_sharePlaceName.text.toString().toLowerCase()
+                                val placeName = edt_sharePlaceName.text.toString().lowercase()
                                 val location = edt_location.text.toString()
                                 val comment = edt_shareComment.text.toString()
                                 val addres = edt_addres.text.toString()
@@ -153,15 +156,15 @@ class ShareFragment : Fragment() {
                                     cityyy, comment, postCode, tags, FieldValue.serverTimestamp()
                                 )
                                 val documentReference1 = firebaseFirestore
-                                    .collection("Paylasilanlar")
+                                    .collection(COLLECTION_NAME_SHARED)
                                     .document(firebaseUser.email!!)
-                                    .collection("Paylastiklari")
+                                    .collection(COLLECTION_NAME_THEY_SHARED)
                                     .document(postID)
                                 documentReference1
                                     .set(MGonderiler)
                                     .addOnSuccessListener {
                                         val documentReference2 = firebaseFirestore
-                                            .collection("Gonderiler")
+                                            .collection(COLLECTION_NAME_POST)
                                             .document(postID)
                                         documentReference2
                                             .set(MGonderiler)
@@ -185,7 +188,7 @@ class ShareFragment : Fragment() {
                             .addOnFailureListener { e ->
                                 btn_shareSend.isEnabled = false
                             }
-                        val myToast = Toast.makeText(activity, "Gönderildi", Toast.LENGTH_SHORT)
+                        val myToast = Toast.makeText(activity, R.string.sended.toString(), Toast.LENGTH_SHORT)
                         myToast.show()
                         val handler = Handler()
                         handler.postDelayed({ myToast.cancel() }, 400)
@@ -199,14 +202,13 @@ class ShareFragment : Fragment() {
                 btn_shareSend.isEnabled = false
             }
         } else {
-            Toast.makeText(activity, "Gerekli alanları doldurunuz", Toast.LENGTH_SHORT).show()
+            activity?.let { toast(it, R.string.fill_in_the_required_fields.toString()) }
             btn_shareSend.isEnabled = false
         }
     }
 
     override fun onResume() {
         super.onResume()
-        // BU ACTİVİY'E TEKRAR GELİNDİĞİNDE HARİTA SINIFINDAN GEREKLİ KOORDİNAT VE ADRES BİLGİLERİNİ BURADA ALSIN VE GEREKLİ YERLERDE YAYINLASIN
         latitude = GET.getFloat("enlem", 0f)
         longitude = GET.getFloat("boylam", 0f)
         addres = GET.getString("adres", "Türkiye Üsküdar")!!

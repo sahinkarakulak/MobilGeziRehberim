@@ -30,11 +30,32 @@
     <string name="app_name_home">Mobil Gezi Rehberim</string>
     <string name="search">Ara</string>
     <string name="share">Paylaş</string>
+    <string name="sended">Gönderildi</string>
+    <string name="sharing">Paylaşan</string>
+    <string name="updated">Güncellendi</string>
+    <string name="date">Tarih</string>
+    <string name="addres">Adres</string>
+    <string name="labels">Etiketler</string>
+    <string name="ok">TAMAM</string>
     <string name="login">Giriş</string>
+    <string name="login_in">Giriş yapılıyor</string>
     <string name="my_account">Hesabım</string>
     <string name="reset_pass">Parola Sıfırla</string>
+    <string name="my_locaiton">Konumum</string>
     <string name="map">Harita</string>
-
-
+    <string name="map_key">harita</string>
+    <string name="selected_new_location">Seçilen Yeni Konum</string>
+    <string name="ı_love_mgr">MGR\'i Seviyorum</string>
+    <string name="what_would_u_like_to_send_with">Ne ile göndermek istersiniz?</string>
+    <string name="you_already_shared_this">Bunu zaten siz paylaştınız</string>
+    <string name="passwords_are_not_the_same">Parolalar yanı değil</string>
+    <string name="verification_link_sent">Doğrulama bağlantısı e-posta adresinizi gönderildi</string>
+    <string name="fill_in_the_required_fields">Gerekli alanları doldurunuz</string>
+    <string name="did_you_give_up">Vaz mı geçtin?</string>
+    <string name="press_again_to_exit">Çıkmak için tekarar basın</string>
+    <string name="check_your_e_mail">E-postanızı kontrol ediniz</string>
+    <string name="please_select_city">Lütfen şehir seçin</string>
+    <string name="not_allowed">İzin verilmedi</string>
+    <string name="confirm_your_account_from_the_link_in_your_e_mail">E-postanızdaki bağlantıdan hesabınızı onaylayın</string>
 
 </resources>

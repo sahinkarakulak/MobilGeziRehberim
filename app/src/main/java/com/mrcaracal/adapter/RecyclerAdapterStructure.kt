@@ -18,21 +18,19 @@ import com.mrcaracal.mobilgezirehberim.R
 import com.squareup.picasso.Picasso
 import java.util.*
 
-private const val TAG = "RecyclerAdapterStructur"
-
 class RecyclerAdapterStructure(
-    private val gonderiIDleriListesi: ArrayList<String>,
-    private val kullaniciEpostalariListesi: ArrayList<String>,
-    private val resimAdresleriListesi: ArrayList<String>,
-    private val yerIsimleriListesi: ArrayList<String>,
-    private val konumlariListesi: ArrayList<String>,
-    private val adresleriListesi: ArrayList<String>,
-    private val sehirListesi: ArrayList<String>,
-    private val yorumlarListesi: ArrayList<String>,
-    private val postaKodlari: ArrayList<String>,
-    private val taglarListesi: ArrayList<String>,
-    private val zamanlarListesi: ArrayList<Timestamp>,
-    private val recyclerViewClickInterface: RecyclerViewClickInterface
+    val gonderiIDleriListesi: ArrayList<String>,
+    val kullaniciEpostalariListesi: ArrayList<String>,
+    val resimAdresleriListesi: ArrayList<String>,
+    val yerIsimleriListesi: ArrayList<String>,
+    val konumlariListesi: ArrayList<String>,
+    val adresleriListesi: ArrayList<String>,
+    val sehirListesi: ArrayList<String>,
+    val yorumlarListesi: ArrayList<String>,
+    val postaKodlari: ArrayList<String>,
+    val taglarListesi: ArrayList<String>,
+    val zamanlarListesi: ArrayList<Timestamp>,
+    val recyclerViewClickInterface: RecyclerViewClickInterface
 ) : RecyclerView.Adapter<GonderiHolder>() {
 
     lateinit var firebaseAuth: FirebaseAuth

@@ -13,15 +13,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mrcaracal.mobilgezirehberim.R
 
-private const val TAG = "GoToLocationOnMapActivi"
-
 class GoToLocationOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
     private lateinit var mMap: GoogleMap
 
-    private var MAP_KEY = "harita"
     private var GO_TO_LOCATION_LATITUDE = "konum_git_enlem"
     private var GO_TO_LOCATION_LONGITUDE = "konum_git_boylam"
     private var POST_LOCATION = "Gönderi Konumu"
@@ -34,7 +31,7 @@ class GoToLocationOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map2) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
         title = getString(R.string.postLocation)
-        GET = getSharedPreferences(MAP_KEY, MODE_PRIVATE)
+        GET = getSharedPreferences(R.string.map_key.toString(), MODE_PRIVATE)
         SET = GET.edit()
     }
 

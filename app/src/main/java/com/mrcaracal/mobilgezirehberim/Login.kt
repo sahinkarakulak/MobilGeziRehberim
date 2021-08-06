@@ -18,8 +18,6 @@ import com.mrcaracal.activity.HomePageActivity
 import com.mrcaracal.activity.ResetPassActivity
 import com.mrcaracal.extensions.toast
 
-private const val TAG = "Login"
-
 class Login : AppCompatActivity() {
 
     lateinit var progressDialog: ProgressDialog
@@ -85,21 +83,21 @@ class Login : AppCompatActivity() {
         val email = edt_emailLogin.text.toString()
         val pass = edt_passLogin.text.toString()
         if (email == "" || pass == "") {
-            toast("Lütfen gerekli alanları doldrunuz")
+            toast(R.string.fill_in_the_required_fields.toString())
         } else {
             firebaseAuth!!.signInWithEmailAndPassword(email, pass)
                 .addOnSuccessListener {
                     if (firebaseAuth?.currentUser!!.isEmailVerified) {
                         progressDialog = ProgressDialog(this)
-                        progressDialog.setMessage("Giriş Yapılıyor")
+                        progressDialog.setMessage(R.string.login_in.toString())
                         progressDialog.show()
                         val intent = Intent(this, HomePageActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
-                        toast("E-Postanıza gelen bağlantıdan hesabınızı onaylayın")
+                        toast(R.string.confirm_your_account_from_the_link_in_your_e_mail.toString())
                     }
-                    progressDialog!!.dismiss()
+                    progressDialog.dismiss()
                 }.addOnFailureListener { e ->
                     toast(e.localizedMessage)
                 }
@@ -154,7 +152,7 @@ class Login : AppCompatActivity() {
             return
         }
         doubleBackToExitPressedOnce = true
-        toast("Çıkmak için tekrar basınız")
+        toast(R.string.press_again_to_exit.toString())
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 }

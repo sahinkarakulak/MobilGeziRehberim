@@ -20,8 +20,6 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import java.util.*
 
-private const val TAG = "EditProfileActivity"
-
 class EditProfileActivity : AppCompatActivity() {
 
     var firebaseUser: FirebaseUser? = null
@@ -35,9 +33,15 @@ class EditProfileActivity : AppCompatActivity() {
     lateinit var documentReference: DocumentReference
     private lateinit var mImageUri: Uri
 
+    private val STORAGE_NAME = "Resimler"
+    private val FIREBASE_COLLECTION_NAME = "Kullanicilar"
+    private val FIREBASE_DOC_VAL_USERNAME = "kullaniciAdi"
+    private val FIREBASE_DOC_VAL_BIO = "bio"
+    private val FIREBASE_DOC_VAL_USERPIC = "kullaniciResmi"
+
     private fun initialize() {
         firebaseUser = FirebaseAuth.getInstance().currentUser
-        storageReference = FirebaseStorage.getInstance().getReference("Resimler")
+        storageReference = FirebaseStorage.getInstance().getReference(STORAGE_NAME)
         img_userPicture = findViewById(R.id.img_userPicture)
         tv_userChangePicture = findViewById(R.id.tv_userChangePicture)
         edt_getUserName = findViewById(R.id.edt_getUserName)
@@ -55,7 +59,7 @@ class EditProfileActivity : AppCompatActivity() {
         tv_userEmail.text = firebaseUser?.email
         documentReference = FirebaseFirestore
             .getInstance()
-            .collection("Kullanicilar")
+            .collection(FIREBASE_COLLECTION_NAME)
             .document(firebaseUser?.email!!)
         documentReference
             .get()
@@ -63,9 +67,9 @@ class EditProfileActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val documentSnapshot = task.result
                     if (documentSnapshot.exists()) {
-                        edt_getUserName.setText(documentSnapshot.getString("kullaniciAdi"))
-                        edt_getBiography.setText(documentSnapshot.getString("bio"))
-                        Picasso.get().load(documentSnapshot.getString("kullaniciResmi"))
+                        edt_getUserName.setText(documentSnapshot.getString(FIREBASE_DOC_VAL_USERNAME))
+                        edt_getBiography.setText(documentSnapshot.getString(FIREBASE_DOC_VAL_BIO))
+                        Picasso.get().load(documentSnapshot.getString(FIREBASE_DOC_VAL_USERPIC))
                             .into(img_userPicture)
                     }
                 }
@@ -91,11 +95,11 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun updateUser(u_name: String, u_bio: String) {
         val documentReference2 = FirebaseFirestore.getInstance()
-            .collection("Kullanicilar")
+            .collection(FIREBASE_COLLECTION_NAME)
             .document(firebaseUser?.email!!)
         val currentDatas: MutableMap<String, Any> = HashMap()
-        currentDatas["kullaniciAdi"] = u_name
-        currentDatas["bio"] = u_bio
+        currentDatas[FIREBASE_DOC_VAL_USERNAME] = u_name
+        currentDatas[FIREBASE_DOC_VAL_BIO] = u_bio
         documentReference2
             .update(currentDatas)
             .addOnSuccessListener {
@@ -109,7 +113,6 @@ class EditProfileActivity : AppCompatActivity() {
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri))
     }
 
-    // Convert işlemi sonrası hatalar gerçekleşti. DÜZELTİLECEKTİR!
     private fun uploadImage() {
         val storageReference2 = storageReference.child(firebaseUser!!.email!!).child(
             System.currentTimeMillis()
@@ -129,9 +132,9 @@ class EditProfileActivity : AppCompatActivity() {
                 val downloadUri = task.result
                 val myUrl = downloadUri.toString()
                 val hasmap: MutableMap<String, Any> = HashMap()
-                hasmap["kullaniciResmi"] = "" + myUrl
+                hasmap[FIREBASE_DOC_VAL_USERPIC] = "" + myUrl
                 FirebaseFirestore.getInstance()
-                    .collection("Kullanicilar")
+                    .collection(FIREBASE_COLLECTION_NAME)
                     .document(firebaseUser?.email!!)
                     .update(hasmap)
                     .addOnSuccessListener {
@@ -142,7 +145,7 @@ class EditProfileActivity : AppCompatActivity() {
                                     val documentSnapshot = task.result
                                     if (documentSnapshot.exists()) {
                                         Picasso.get()
-                                            .load(documentSnapshot.getString("kullaniciResmi"))
+                                            .load(documentSnapshot.getString(FIREBASE_DOC_VAL_USERPIC))
                                             .into(img_userPicture)
 
                                     }
@@ -164,9 +167,9 @@ class EditProfileActivity : AppCompatActivity() {
             val result = CropImage.getActivityResult(data)
             mImageUri = result.uri
             uploadImage()
-            toast("Profil resmi güncellendi")
+            toast(R.string.updated.toString())
         } else {
-            toast("Vaz mı geçtin?")
+            toast(R.string.did_you_give_up.toString())
         }
     }
 

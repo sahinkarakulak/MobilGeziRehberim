@@ -11,14 +11,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.extensions.toast
-import com.mrcaracal.fragment.HomePageFragment
-import com.mrcaracal.fragment.MyAccountFragment
+import com.mrcaracal.fragment.home.HomePageFragment
+import com.mrcaracal.fragment.account.MyAccountFragment
 import com.mrcaracal.fragment.search.SearchFragment
-import com.mrcaracal.fragment.ShareFragment
+import com.mrcaracal.fragment.share.ShareFragment
 import com.mrcaracal.mobilgezirehberim.Login
 import com.mrcaracal.mobilgezirehberim.R
-
-private const val TAG = "HomePageActivity"
 
 class HomePageActivity : AppCompatActivity() {
 
@@ -96,7 +94,7 @@ class HomePageActivity : AppCompatActivity() {
             return
         }
         doubleBackToExitPressedOnce = true
-        toast("Çıkmak için tekrar basınız")
+        toast(R.string.press_again_to_exit.toString())
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 
