@@ -7,7 +7,6 @@ class UserInfo {
     var bio: String? = null
     var kullaniciResmi: String? = null
 
-    constructor() {}
     constructor(
         kullaniciAdi: String?,
         kullaniciEposta: String?,
@@ -18,18 +17,6 @@ class UserInfo {
         this.kullaniciAdi = kullaniciAdi
         this.kullaniciEposta = kullaniciEposta
         this.kulaniciParola = kulaniciParola
-        this.bio = bio
-        this.kullaniciResmi = kullaniciResmi
-    }
-
-    constructor(
-        kullaniciAdi: String?,
-        kullaniciEposta: String?,
-        bio: String?,
-        kullaniciResmi: String?
-    ) {
-        this.kullaniciAdi = kullaniciAdi
-        this.kullaniciEposta = kullaniciEposta
         this.bio = bio
         this.kullaniciResmi = kullaniciResmi
     }

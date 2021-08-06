@@ -15,21 +15,6 @@ class Posts {
     var taglar: List<String>? = null
     var zaman: FieldValue? = null
 
-    constructor() {}
-    constructor(
-        gonderiID: String?, kullaniciEposta: String?, resimAdresi: String?, yerIsmi: String?,
-        konum: String?, adres: String?, yorum: String?, zaman: FieldValue?
-    ) {
-        this.gonderiID = gonderiID
-        this.kullaniciEposta = kullaniciEposta
-        this.resimAdresi = resimAdresi
-        this.yerIsmi = yerIsmi
-        this.konum = konum
-        this.adres = adres
-        this.yorum = yorum
-        this.zaman = zaman
-    }
-
     constructor(
         gonderiID: String?,
         kullaniciEposta: String?,
