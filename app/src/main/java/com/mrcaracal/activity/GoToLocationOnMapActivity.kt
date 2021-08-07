@@ -31,7 +31,7 @@ class GoToLocationOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map2) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
         title = getString(R.string.postLocation)
-        GET = getSharedPreferences(R.string.map_key.toString(), MODE_PRIVATE)
+        GET = getSharedPreferences(getString(R.string.map_key), MODE_PRIVATE)
         SET = GET.edit()
     }
 

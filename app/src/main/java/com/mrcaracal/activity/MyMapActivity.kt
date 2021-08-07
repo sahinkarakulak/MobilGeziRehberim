@@ -51,7 +51,7 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
         title = getString(R.string.map)
-        GET = getSharedPreferences(R.string.map_key.toString(), MODE_PRIVATE)
+        GET = getSharedPreferences(getString(R.string.map_key), MODE_PRIVATE)
         SET = GET.edit()
     }
 
@@ -135,7 +135,7 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
             latitude.toDouble(), longitude.toDouble()
         )
         //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        mMap.addMarker(MarkerOptions().position(location).title(R.string.my_locaiton.toString()))
+        mMap.addMarker(MarkerOptions().position(location).title(getString(R.string.my_locaiton)))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16f))
         mMap.setOnMapClickListener(this)
     }
@@ -225,7 +225,7 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
         marker = mMap.addMarker(
             MarkerOptions()
                 .position(latLng)
-                .title(R.string.selected_new_location.toString())
+                .title(getString(R.string.selected_new_location))
                 .draggable(true)
                 .visible(true)
         )

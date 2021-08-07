@@ -31,14 +31,14 @@ class ContactActivity : AppCompatActivity() {
             val str_message = edt_contactMessage.text.toString()
             val contactInfo = MyArrayList()
             if (str_subject == "" || str_message == "") {
-                toast(R.string.fill_in_the_required_fields.toString())
+                toast(getString(R.string.fill_in_the_required_fields))
             } else {
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.admin_account)
                 intent.putExtra(Intent.EXTRA_SUBJECT, str_subject)
                 intent.putExtra(Intent.EXTRA_TEXT, str_message)
                 intent.type = "plain/text"
-                startActivity(Intent.createChooser(intent, R.string.what_would_u_like_to_send_with.toString()))
+                startActivity(Intent.createChooser(intent, getString(R.string.fill_in_the_required_fields)))
             }
         }
     }

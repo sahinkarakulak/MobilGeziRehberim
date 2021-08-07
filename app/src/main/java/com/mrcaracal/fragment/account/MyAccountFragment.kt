@@ -51,18 +51,18 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     private lateinit var tv_userBio: TextView
     private lateinit var btn_editProfile: Button
     lateinit var img_profileProfilePicture: CircleImageView
-    var positionValue = 0
-    var tabControl = "paylasilanlar"
 
     private val FIREBASE_COLLECTION_NAME = "Kullanicilar"
     private val FIREBASE_DOC_VAL_USERNAME = "kullaniciAdi"
     private val FIREBASE_DOC_VAL_BIO = "bio"
     private val FIREBASE_DOC_VAL_USERPIC = "kullaniciResmi"
+    var POSITION_VALUE = 0
+    var TAB_CONTROL = "paylasilanlar"
+    var LATITUDE = 0.0
+    var LONGITUDE = 0.0
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
-    var latitude = 0.0
-    var longitude = 0.0
     lateinit var viewGroup: ViewGroup
 
     private lateinit var firebaseOperationForAccount: FirebaseOperationForAccount
@@ -82,7 +82,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         postCodesFirebase = ArrayList()
         tagsFirebase = ArrayList()
         timesFirebase = ArrayList()
-        GET = activity!!.getSharedPreferences(R.string.map_key.toString(), Context.MODE_PRIVATE)
+        GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
 
         firebaseOperationForAccount = FirebaseOperationForAccount(
@@ -167,7 +167,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         bottomNavigationView.setOnNavigationItemSelectedListener { item -> // Hangi TAB'a tıklanmışsa onu tespit ediyoruz.
             when (item.itemId) {
                 R.id.shared -> {
-                    tabControl = "paylasilanlar"
+                    TAB_CONTROL = "paylasilanlar"
                     firebaseOperationForAccount.clearList()
                     firebaseOperationForAccount.pullTheShared(
                         firebaseFirestore,
@@ -176,7 +176,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                     recyclerViewAccount.scrollToPosition(0)
                 }
                 R.id.recorded -> {
-                    tabControl = "kaydedilenler"
+                    TAB_CONTROL = "kaydedilenler"
                     firebaseOperationForAccount.clearList()
                     firebaseOperationForAccount.pullTheRecorded(
                         firebaseFirestore,
@@ -191,56 +191,55 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     }
 
     fun goToLocationFromShared() {
-        val postLocation = locationFirebase[positionValue].split(",").toTypedArray()
+        val postLocation = locationFirebase[POSITION_VALUE].split(",").toTypedArray()
         var adverb = 0
         for (locationXY: String in postLocation) {
             adverb++
-            if (adverb == 1) latitude = locationXY.toDouble()
-            if (adverb == 2) longitude = locationXY.toDouble()
+            if (adverb == 1) LATITUDE = locationXY.toDouble()
+            if (adverb == 2) LONGITUDE = locationXY.toDouble()
         }
-        SET.putFloat("konum_git_enlem", latitude.toFloat())
-        SET.putFloat("konum_git_boylam", longitude.toFloat())
+        SET.putFloat("konum_git_enlem", LATITUDE.toFloat())
+        SET.putFloat("konum_git_boylam", LONGITUDE.toFloat())
         SET.commit()
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
 
     fun goToLocationFromSaved() {
-        val postLocation = locationFirebase[positionValue].split(",").toTypedArray()
+        val postLocation = locationFirebase[POSITION_VALUE].split(",").toTypedArray()
         var adverb = 0
         for (locationXY: String in postLocation) {
             adverb++
-            if (adverb == 1) latitude = locationXY.toDouble()
-            if (adverb == 2) longitude = locationXY.toDouble()
+            if (adverb == 1) LATITUDE = locationXY.toDouble()
+            if (adverb == 2) LONGITUDE = locationXY.toDouble()
         }
-        SET.putFloat("konum_git_enlem", latitude.toFloat())
-        SET.putFloat("konum_git_boylam", longitude.toFloat())
+        SET.putFloat("konum_git_enlem", LATITUDE.toFloat())
+        SET.putFloat("konum_git_boylam", LONGITUDE.toFloat())
         SET.commit()
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
 
-    // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
     override fun onLongItemClick(position: Int) {
         val dateAndTime = DateFormat.getDateTimeInstance().format(
             timesFirebase[position].toDate()
         )
         val showDetailPost =
             (commentsFirebase.get(position) +
-                    R.string.sharing.toString() + "\n\n: " + userEmailsFirebase[position] +
-                    R.string.date.toString() + "\n: " + dateAndTime +
-                    R.string.addres.toString() + "\n: " + addressesFirebase[position] +
-                    R.string.labels.toString() + "\n\n: " + firebaseOperationForAccount.showTag(position, tabControl))
+                    "\n\n${getString(R.string.sharing)}: " + userEmailsFirebase[position] +
+                    "\n${getString(R.string.date)}: " + dateAndTime +
+                    "\n${getString(R.string.addres)}: " + addressesFirebase[position] +
+                    "\n\n" + firebaseOperationForAccount.showTag(position, TAB_CONTROL))
         val alert = AlertDialog.Builder(activity)
         alert
             .setTitle(placeNamesFirebase[position])
             .setMessage(showDetailPost)
-            .setNegativeButton(R.string.ok.toString()) { dialog, which ->
+            .setNegativeButton(getString(R.string.ok)) { _dialog, which ->
                 //
             }
             .show()
     }
 
     override fun onOtherOperationsClick(position: Int) {
-        positionValue = position
+        POSITION_VALUE = position
         onOpenDialogWindow(position)
     }
 
@@ -257,7 +256,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         // KONUMA GİT
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation).setOnClickListener(
             View.OnClickListener {
-                when (tabControl) {
+                when (TAB_CONTROL) {
                     "paylasilanlar" -> goToLocationFromShared()
                     "kaydedilenler" -> goToLocationFromSaved()
                 }
@@ -268,11 +267,11 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_remove)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    when (tabControl) {
+                    when (TAB_CONTROL) {
                         "paylasilanlar" -> {
                             firebaseOperationForAccount.removeFromShared(
                                 firebaseFirestore,
-                                positionValue
+                                POSITION_VALUE
                             )
                             firebaseOperationForAccount.clearList()
                             firebaseUser?.let {
@@ -287,7 +286,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                             firebaseUser?.let {
                                 firebaseOperationForAccount.removeFromSaved(
                                     firebaseFirestore,
-                                    it, positionValue
+                                    it, POSITION_VALUE
                                 )
                             }
                             firebaseOperationForAccount.clearList()

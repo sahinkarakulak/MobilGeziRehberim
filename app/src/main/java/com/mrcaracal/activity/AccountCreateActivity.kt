@@ -52,7 +52,7 @@ class AccountCreateActivity : AppCompatActivity() {
         passTwo = edt_userPassTwo.text.toString()
 
         if (userName == "" || email == "" || passOne == "" || passTwo == "") {
-            toast(R.string.fill_in_the_required_fields.toString())
+            toast(getString(R.string.fill_in_the_required_fields))
         } else {
             if (passOne == passTwo) {
                 firebaseAuth
@@ -62,12 +62,12 @@ class AccountCreateActivity : AppCompatActivity() {
                             .getCurrentUser()
                             ?.sendEmailVerification()
                             ?.addOnSuccessListener {
-                                toast(R.string.verification_link_sent.toString())
+                                toast("${getString(R.string.verification_link_sent)}")
                                 userInfo = UserInfo(
                                     userName,
                                     email,
                                     passOne,
-                                    R.string.ı_love_mgr.toString(),
+                                    "${getString(R.string.ı_love_mgr)}",
                                     DEFAULT_PP_LINK
                                 )
                                 val documentReference = firebaseFirestore
@@ -91,7 +91,7 @@ class AccountCreateActivity : AppCompatActivity() {
                             }
                     }
             } else
-                toast(R.string.passwords_are_not_the_same.toString())
+                toast(getString(R.string.passwords_are_not_the_same))
         }
     }
 }

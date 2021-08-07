@@ -94,7 +94,7 @@ class HomePageActivity : AppCompatActivity() {
             return
         }
         doubleBackToExitPressedOnce = true
-        toast(R.string.press_again_to_exit.toString())
+        toast(getString(R.string.press_again_to_exit))
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 

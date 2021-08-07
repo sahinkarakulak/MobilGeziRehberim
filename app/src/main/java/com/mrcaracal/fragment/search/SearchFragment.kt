@@ -82,7 +82,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         postCodesFirebase = ArrayList()
         tagsFirebase = ArrayList()
         timesFirebase = ArrayList()
-        GET = activity!!.getSharedPreferences(R.string.map_key.toString(), Context.MODE_PRIVATE)
+        GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
 
         selectionOptions = MyArrayList()
@@ -194,7 +194,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                     val cities = Cities()
                     val selectedCityCode = cities.selectedCity(parent.selectedItem.toString())
                     if ((selectedCityCode == "Şehir Seçin!")) {
-                        Toast.makeText(activity, R.string.please_select_city.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, getString(R.string.please_select_city), Toast.LENGTH_SHORT).show()
                     } else {
                         // VT'de Gonderiler bölümünde posta kodu alınan değerle başlayan tüm gonderileri çeken bir algoritma geliştir.
                         if (selectedCityCode != null) {
@@ -273,23 +273,21 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
 
-    // Her bir recyclerRow'a uzunca tıklandığında yapılacak işlemler
     override fun onLongItemClick(position: Int) {
         val dateAndTime = DateFormat.getDateTimeInstance().format(
             timesFirebase[position].toDate()
         )
-
         val showDetailPost =
             (commentsFirebase.get(position) +
-                    R.string.sharing.toString() + "\n\n: " + userEmailsFirebase[position] +
-                    R.string.date.toString() + "\n: " + dateAndTime +
-                    R.string.addres.toString() + "\n: " + addressesFirebase[position] +
-                    R.string.labels.toString() + "\n\n: " + firebaseOperationForSearch.showTag(position))
+                    "\n\n${getString(R.string.sharing)}: " + userEmailsFirebase[position] +
+                    "\n${getString(R.string.date)}: " + dateAndTime +
+                    "\n${getString(R.string.addres)}: " + addressesFirebase[position] +
+                    "\n\n" + firebaseOperationForSearch.showTag(position))
         val alert = AlertDialog.Builder(activity)
         alert
             .setTitle(placeNamesFirebase[position])
             .setMessage(showDetailPost)
-            .setNegativeButton(R.string.ok.toString()) { dialog, which ->
+            .setNegativeButton(getString(R.string.ok)) { _dialog, which ->
                 //
             }
             .show()
@@ -329,7 +327,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     if ((userEmailsFirebase[position] == firebaseUser.email)) {
-                        Toast.makeText(activity, R.string.you_already_shared_this.toString(), Toast.LENGTH_SHORT)
+                        Toast.makeText(activity, getString(R.string.you_already_shared_this), Toast.LENGTH_SHORT)
                             .show()
                     } else {
                         val contactInfo = MyArrayList()
@@ -338,7 +336,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                         intent.putExtra(Intent.EXTRA_SUBJECT, "")
                         intent.putExtra(Intent.EXTRA_TEXT, "")
                         intent.type = "plain/text"
-                        startActivity(Intent.createChooser(intent, R.string.what_would_u_like_to_send_with.toString()))
+                        startActivity(Intent.createChooser(intent, getString(R.string.what_would_u_like_to_send_with)))
                     }
                     bottomSheetDialog.dismiss()
                 }
@@ -372,7 +370,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                     )
                 }
             } else {
-                Toast.makeText(activity, R.string.not_allowed.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.not_allowed), Toast.LENGTH_SHORT).show()
             }
         }
     }

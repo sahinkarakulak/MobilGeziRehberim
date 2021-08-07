@@ -24,7 +24,7 @@ import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.MyArrayList
 import java.text.DateFormat
-import java.util.*
+import kotlin.collections.ArrayList
 
 class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
@@ -50,6 +50,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
     var latitude = 0.0
     var longitude = 0.0
 
+    private var firebasemodul : ArrayList<FirebaseModul> = ArrayList()
     private lateinit var firebaseOperationForHome: FirebaseOperationForHome
 
     private fun init() {
@@ -67,7 +68,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         postCodesFirebase = ArrayList()
         tagsFirebase = ArrayList()
         timesFirebase = ArrayList()
-        GET = activity!!.getSharedPreferences(R.string.map_key.toString(), Context.MODE_PRIVATE)
+        GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
 
         firebaseOperationForHome = FirebaseOperationForHome(
@@ -83,6 +84,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
             tagsFirebase,
             timesFirebase
         )
+
     }
 
     override fun onCreateView(
@@ -138,15 +140,15 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         )
         val showDetailPost =
             (commentsFirebase.get(position) +
-                    R.string.sharing.toString() + "\n\n: " + userEmailsFirebase[position] +
-                    R.string.date.toString() + "\n: " + dateAndTime +
-                    R.string.addres.toString() + "\n: " + addressesFirebase[position] +
-                    R.string.labels.toString() + "\n\n: " + firebaseOperationForHome.tagGoster(position))
+                    "\n\n${getString(R.string.sharing)}: " + userEmailsFirebase[position] +
+                    "\n${getString(R.string.date)}: " + dateAndTime +
+                    "\n${getString(R.string.addres)}: " + addressesFirebase[position] +
+                    "\n\n" + firebaseOperationForHome.tagGoster(position))
         val alert = AlertDialog.Builder(activity)
         alert
             .setTitle(placeNamesFirebase[position])
             .setMessage(showDetailPost)
-            .setNegativeButton(R.string.ok.toString()) { _dialog, which ->
+            .setNegativeButton(getString(R.string.ok)) { _dialog, which ->
                 //
             }
             .show()
@@ -193,7 +195,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
                     if ((userEmailsFirebase[position] == firebaseUser?.email)) {
-                        toast(activity!!, R.string.you_already_shared_this.toString())
+                        toast(activity!!, getString(R.string.you_already_shared_this))
                     } else {
                         val contactInfo = MyArrayList()
                         val intent = Intent(Intent.ACTION_SEND)
@@ -201,7 +203,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
                         intent.putExtra(Intent.EXTRA_SUBJECT, "")
                         intent.putExtra(Intent.EXTRA_TEXT, "")
                         intent.type = "plain/text"
-                        startActivity(Intent.createChooser(intent, R.string.what_would_u_like_to_send_with.toString()))
+                        startActivity(Intent.createChooser(intent, getString(R.string.what_would_u_like_to_send_with)))
                     }
                     bottomSheetDialog.dismiss()
                 }

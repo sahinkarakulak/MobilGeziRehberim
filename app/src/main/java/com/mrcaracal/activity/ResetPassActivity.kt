@@ -32,11 +32,11 @@ class ResetPassActivity : AppCompatActivity() {
         // parola sıfırlama işlemi için gereken işlemler yapılsın
         val email = edt_resetPass.text.toString()
         if (email == "") {
-            toast(R.string.fill_in_the_required_fields.toString())
+            toast(getString(R.string.fill_in_the_required_fields))
         } else {
             firebaseAuth.sendPasswordResetEmail(email)
                 .addOnSuccessListener {
-                    toast(R.string.check_your_e_mail.toString())
+                    toast(getString(R.string.check_your_e_mail))
                     val intent = Intent(this@ResetPassActivity, Login::class.java)
                     startActivity(intent)
                     finish()

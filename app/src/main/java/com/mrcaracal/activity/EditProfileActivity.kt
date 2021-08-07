@@ -153,7 +153,7 @@ class EditProfileActivity : AppCompatActivity() {
                             }
                     }
             } else {
-                toast(R.string.error_occurred)
+                toast(getString(R.string.error_occurred))
             }
         } .addOnFailureListener {
             toast(it.localizedMessage.orEmpty())
@@ -167,9 +167,9 @@ class EditProfileActivity : AppCompatActivity() {
             val result = CropImage.getActivityResult(data)
             mImageUri = result.uri
             uploadImage()
-            toast(R.string.updated.toString())
+            toast(getString(R.string.updated))
         } else {
-            toast(R.string.did_you_give_up.toString())
+            toast(getString(R.string.did_you_give_up))
         }
     }
 

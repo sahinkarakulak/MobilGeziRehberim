@@ -83,19 +83,19 @@ class Login : AppCompatActivity() {
         val email = edt_emailLogin.text.toString()
         val pass = edt_passLogin.text.toString()
         if (email == "" || pass == "") {
-            toast(R.string.fill_in_the_required_fields.toString())
+            toast(getString(R.string.fill_in_the_required_fields))
         } else {
             firebaseAuth!!.signInWithEmailAndPassword(email, pass)
                 .addOnSuccessListener {
                     if (firebaseAuth?.currentUser!!.isEmailVerified) {
                         progressDialog = ProgressDialog(this)
-                        progressDialog.setMessage(R.string.login_in.toString())
+                        progressDialog.setMessage(getString(R.string.login_in))
                         progressDialog.show()
                         val intent = Intent(this, HomePageActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
-                        toast(R.string.confirm_your_account_from_the_link_in_your_e_mail.toString())
+                        toast(getString(R.string.confirm_your_account_from_the_link_in_your_e_mail))
                     }
                     progressDialog.dismiss()
                 }.addOnFailureListener { e ->
@@ -152,7 +152,7 @@ class Login : AppCompatActivity() {
             return
         }
         doubleBackToExitPressedOnce = true
-        toast(R.string.press_again_to_exit.toString())
+        toast(getString(R.string.press_again_to_exit))
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 }

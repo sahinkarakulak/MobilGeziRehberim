@@ -71,7 +71,7 @@ class ShareFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser
         firebaseFirestore = FirebaseFirestore.getInstance()
-        GET = activity!!.getSharedPreferences(R.string.map_key.toString(), Context.MODE_PRIVATE)
+        GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
     }
 
@@ -188,7 +188,7 @@ class ShareFragment : Fragment() {
                             .addOnFailureListener { e ->
                                 btn_shareSend.isEnabled = false
                             }
-                        val myToast = Toast.makeText(activity, R.string.sended.toString(), Toast.LENGTH_SHORT)
+                        val myToast = Toast.makeText(activity, getString(R.string.sended), Toast.LENGTH_SHORT)
                         myToast.show()
                         val handler = Handler()
                         handler.postDelayed({ myToast.cancel() }, 400)
@@ -202,7 +202,7 @@ class ShareFragment : Fragment() {
                 btn_shareSend.isEnabled = false
             }
         } else {
-            activity?.let { toast(it, R.string.fill_in_the_required_fields.toString()) }
+            activity?.let { toast(it, getString(R.string.fill_in_the_required_fields)) }
             btn_shareSend.isEnabled = false
         }
     }
