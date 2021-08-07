@@ -50,7 +50,6 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
     var latitude = 0.0
     var longitude = 0.0
 
-    private var firebasemodul : ArrayList<FirebaseModul> = ArrayList()
     private lateinit var firebaseOperationForHome: FirebaseOperationForHome
 
     private fun init() {

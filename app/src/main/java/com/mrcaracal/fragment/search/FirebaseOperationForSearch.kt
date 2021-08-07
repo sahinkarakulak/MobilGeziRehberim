@@ -234,7 +234,8 @@ class FirebaseOperationForSearch(
                 addressesFirebase[position],
                 citiesFirebase[position],
                 commentsFirebase[position],
-                postCodesFirebase[position], listOf(tagsFirebase[position]),
+                postCodesFirebase[position],
+                listOf(tagsFirebase[position]),
                 FieldValue.serverTimestamp()
             )
             val documentReference = firebaseFirestore
