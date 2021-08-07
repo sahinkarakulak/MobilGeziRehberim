@@ -62,12 +62,12 @@ class AccountCreateActivity : AppCompatActivity() {
                             .getCurrentUser()
                             ?.sendEmailVerification()
                             ?.addOnSuccessListener {
-                                toast("${getString(R.string.verification_link_sent)}")
+                                toast(getString(R.string.verification_link_sent))
                                 userInfo = UserInfo(
                                     userName,
                                     email,
                                     passOne,
-                                    "${getString(R.string.ı_love_mgr)}",
+                                    getString(R.string.ı_love_mgr),
                                     DEFAULT_PP_LINK
                                 )
                                 val documentReference = firebaseFirestore
