@@ -17,14 +17,11 @@ import com.mrcaracal.activity.AccountCreateActivity
 import com.mrcaracal.activity.HomePageActivity
 import com.mrcaracal.activity.ResetPassActivity
 import com.mrcaracal.extensions.toast
+import com.mrcaracal.mobilgezirehberim.databinding.ActivityLoginBinding
 
 class Login : AppCompatActivity() {
 
-    lateinit var progressDialog: ProgressDialog
-    lateinit var edt_emailLogin: EditText
-    lateinit var edt_passLogin: EditText
-    lateinit var chb_loginInfosRemember: CheckBox
-    lateinit var img_passHideShow: ImageView
+    private lateinit var binding: ActivityLoginBinding
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
@@ -36,30 +33,28 @@ class Login : AppCompatActivity() {
 
     fun init() {
         firebaseAuth = FirebaseAuth.getInstance()
-        edt_emailLogin = findViewById(R.id.edt_emailLogin)
-        edt_passLogin = findViewById(R.id.edt_passLogin)
-        img_passHideShow = findViewById(R.id.img_passHideShow)
-        chb_loginInfosRemember = findViewById(R.id.chb_loginInfosRemember)
         GET = getSharedPreferences(packageName, MODE_PRIVATE)
         SET = GET.edit()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         init()
         title = getString(R.string.login)
 
         // Remember me!
         val rememverInfo = GET.getBoolean("boolean_key", false)
         if (rememverInfo == true) {
-            chb_loginInfosRemember.isChecked = true
-            edt_emailLogin.setText(GET.getString("keyPosta", ""))
-            edt_passLogin.setText(GET.getString("keyParola", ""))
+            binding.chbLoginInfosRemember.isChecked = true
+            binding.edtEmailLogin.setText(GET.getString("keyPosta", ""))
+            binding.edtPassLogin.setText(GET.getString("keyParola", ""))
         } else {
-            chb_loginInfosRemember.isChecked = false
-            edt_emailLogin.setText("")
-            edt_passLogin.setText("")
+            binding.chbLoginInfosRemember.isChecked = false
+            binding.edtEmailLogin.setText("")
+            binding.edtPassLogin.setText("")
         }
 
         // Kullanıcı daha önceden giriş yapmış ise otomatik olarak giriş yapıp Ana sayfaya yönelendirilecektir.
@@ -80,24 +75,20 @@ class Login : AppCompatActivity() {
     // Kullanıcının girdiği bilgiler doğrultusunda giriş yapma işlemleri...
     fun btn_login(view: View?) {
         // Her şey tamam ise giriş yapılsın
-        val email = edt_emailLogin.text.toString()
-        val pass = edt_passLogin.text.toString()
+        val email = binding.edtEmailLogin.text.toString()
+        val pass = binding.edtPassLogin.text.toString()
         if (email == "" || pass == "") {
             toast(getString(R.string.fill_in_the_required_fields))
         } else {
             firebaseAuth!!.signInWithEmailAndPassword(email, pass)
                 .addOnSuccessListener {
                     if (firebaseAuth?.currentUser!!.isEmailVerified) {
-                        progressDialog = ProgressDialog(this)
-                        progressDialog.setMessage(getString(R.string.login_in))
-                        progressDialog.show()
                         val intent = Intent(this, HomePageActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
                         toast(getString(R.string.confirm_your_account_from_the_link_in_your_e_mail))
                     }
-                    progressDialog.dismiss()
                 }.addOnFailureListener { e ->
                     toast(e.localizedMessage)
                 }
@@ -105,14 +96,14 @@ class Login : AppCompatActivity() {
     }
 
     fun passHideAndShow() {
-        img_passHideShow.setOnClickListener {
+        binding.imgPassHideShow.setOnClickListener {
             if (hide_show == false) {
-                edt_passLogin.inputType = InputType.TYPE_CLASS_TEXT
-                edt_passLogin.transformationMethod = null
+                binding.edtPassLogin.inputType = InputType.TYPE_CLASS_TEXT
+                binding.edtPassLogin.transformationMethod = null
                 hide_show = true
             } else {
-                edt_passLogin.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
-                edt_passLogin.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.edtPassLogin.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.edtPassLogin.transformationMethod = PasswordTransformationMethod.getInstance()
                 hide_show = false
             }
         }
@@ -128,12 +119,12 @@ class Login : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         passHideAndShow()
-        chb_loginInfosRemember.setOnClickListener {
-            status = chb_loginInfosRemember.isChecked
+        binding.chbLoginInfosRemember.setOnClickListener {
+            status = binding.chbLoginInfosRemember.isChecked
             if (status == true) {
                 SET.putBoolean("boolean_key", true)
-                SET.putString("keyPosta", edt_emailLogin.text.toString())
-                SET.putString("keyParola", edt_passLogin.text.toString())
+                SET.putString("keyPosta", binding.edtEmailLogin.text.toString())
+                SET.putString("keyParola", binding.edtPassLogin.text.toString())
                 SET.commit()
 
             } else {

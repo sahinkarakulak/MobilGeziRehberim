@@ -10,15 +10,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.Login
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.mobilgezirehberim.databinding.ActivityAccountCreateBinding
 import com.mrcaracal.modul.UserInfo
 
 class AccountCreateActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityAccountCreateBinding
+
     lateinit var userInfo: UserInfo
-    lateinit var edt_userName: EditText
-    lateinit var edt_userEmail: EditText
-    lateinit var edt_userPassOne: EditText
-    lateinit var edt_userPassTwo: EditText
     lateinit var userName: String
     lateinit var email: String
     lateinit var passOne: String
@@ -32,24 +31,22 @@ class AccountCreateActivity : AppCompatActivity() {
     fun init() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
-        edt_userName = findViewById(R.id.edt_userName)
-        edt_userEmail = findViewById(R.id.edt_userEmail)
-        edt_userPassOne = findViewById(R.id.edt_userPassOne)
-        edt_userPassTwo = findViewById(R.id.edt_userPassTwo)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_account_create)
+        binding = ActivityAccountCreateBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         init()
         title = getString(R.string.account_create)
     }
 
     fun btn_createAccount(view: View?) {
-        userName = edt_userName.text.toString()
-        email = edt_userEmail.text.toString()
-        passOne = edt_userPassOne.text.toString()
-        passTwo = edt_userPassTwo.text.toString()
+        userName = binding.edtUserName.text.toString()
+        email = binding.edtUserEmail.text.toString()
+        passOne = binding.edtUserPassOne.text.toString()
+        passTwo = binding.edtUserPassTwo.text.toString()
 
         if (userName == "" || email == "" || passOne == "" || passTwo == "") {
             toast(getString(R.string.fill_in_the_required_fields))

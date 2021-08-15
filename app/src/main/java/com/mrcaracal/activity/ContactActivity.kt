@@ -7,28 +7,22 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.mobilgezirehberim.databinding.ActivityContactBinding
 import com.mrcaracal.modul.MyArrayList
 
 class ContactActivity : AppCompatActivity() {
 
-    lateinit var edt_contactSubjectTitle: EditText
-    lateinit var edt_contactMessage: EditText
-    lateinit var btn_contactSend: Button
-
-    private fun init() {
-        edt_contactSubjectTitle = findViewById(R.id.edt_contactSubjectTitle)
-        edt_contactMessage = findViewById(R.id.edt_contactMessage)
-        btn_contactSend = findViewById(R.id.btn_contactSend)
-    }
+    private lateinit var binding: ActivityContactBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_contact)
-        init()
+        binding = ActivityContactBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         title = getString(R.string.contact)
-        btn_contactSend.setOnClickListener {
-            val str_subject = edt_contactSubjectTitle.text.toString()
-            val str_message = edt_contactMessage.text.toString()
+        binding.btnContactSend.setOnClickListener {
+            val str_subject = binding.edtContactSubjectTitle.text.toString()
+            val str_message = binding.edtContactMessage.text.toString()
             val contactInfo = MyArrayList()
             if (str_subject == "" || str_message == "") {
                 toast(getString(R.string.fill_in_the_required_fields))

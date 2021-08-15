@@ -24,12 +24,15 @@ import com.mrcaracal.activity.EditProfileActivity
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.mobilgezirehberim.databinding.FragHomePageBinding
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import java.text.DateFormat
 import java.util.*
 
 class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
+
+    private var _binding : FragHomePageBinding? = null
 
     lateinit var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null

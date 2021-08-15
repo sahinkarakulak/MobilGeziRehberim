@@ -15,6 +15,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.mobilgezirehberim.databinding.ActivityEditProfileBinding
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -22,14 +23,10 @@ import java.util.*
 
 class EditProfileActivity : AppCompatActivity() {
 
+    private lateinit var binding : ActivityEditProfileBinding
+
     var firebaseUser: FirebaseUser? = null
     lateinit var storageReference: StorageReference
-    lateinit var img_userPicture: ImageView
-    lateinit var tv_userChangePicture: TextView
-    lateinit var edt_getUserName: EditText
-    lateinit var edt_getBiography: EditText
-    lateinit var tv_userEmail: TextView
-    lateinit var btn_update: Button
     lateinit var documentReference: DocumentReference
     private lateinit var mImageUri: Uri
 
@@ -42,21 +39,17 @@ class EditProfileActivity : AppCompatActivity() {
     private fun initialize() {
         firebaseUser = FirebaseAuth.getInstance().currentUser
         storageReference = FirebaseStorage.getInstance().getReference(STORAGE_NAME)
-        img_userPicture = findViewById(R.id.img_userPicture)
-        tv_userChangePicture = findViewById(R.id.tv_userChangePicture)
-        edt_getUserName = findViewById(R.id.edt_getUserName)
-        edt_getBiography = findViewById(R.id.edt_getBiography)
-        tv_userEmail = findViewById(R.id.tv_userEmail)
-        btn_update = findViewById(R.id.btn_update)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_profile)
+        binding = ActivityEditProfileBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         initialize()
         title = getString(R.string.edit_profile)
 
-        tv_userEmail.text = firebaseUser?.email
+        binding.tvUserEmail.text = firebaseUser?.email
         documentReference = FirebaseFirestore
             .getInstance()
             .collection(FIREBASE_COLLECTION_NAME)
@@ -67,29 +60,29 @@ class EditProfileActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val documentSnapshot = task.result
                     if (documentSnapshot.exists()) {
-                        edt_getUserName.setText(documentSnapshot.getString(FIREBASE_DOC_VAL_USERNAME))
-                        edt_getBiography.setText(documentSnapshot.getString(FIREBASE_DOC_VAL_BIO))
+                        binding.edtGetUserName.setText(documentSnapshot.getString(FIREBASE_DOC_VAL_USERNAME))
+                        binding.edtGetBiography.setText(documentSnapshot.getString(FIREBASE_DOC_VAL_BIO))
                         Picasso.get().load(documentSnapshot.getString(FIREBASE_DOC_VAL_USERPIC))
-                            .into(img_userPicture)
+                            .into(binding.imgUserPicture)
                     }
                 }
             }
-        tv_userChangePicture.setOnClickListener {
+        binding.tvUserChangePicture.setOnClickListener {
             CropImage
                 .activity()
                 .setAspectRatio(1, 1)
                 .setCropShape(CropImageView.CropShape.OVAL)
                 .start(this@EditProfileActivity)
         }
-        img_userPicture.setOnClickListener {
+        binding.imgUserPicture.setOnClickListener {
             CropImage
                 .activity()
                 .setAspectRatio(1, 1)
                 .setCropShape(CropImageView.CropShape.OVAL)
                 .start(this@EditProfileActivity)
         }
-        btn_update.setOnClickListener {
-            updateUser(edt_getUserName.text.toString(), edt_getBiography.text.toString())
+        binding.btnUpdate.setOnClickListener {
+            updateUser(binding.edtGetUserName.text.toString(), binding.edtGetBiography.text.toString())
         }
     }
 
@@ -146,7 +139,7 @@ class EditProfileActivity : AppCompatActivity() {
                                     if (documentSnapshot.exists()) {
                                         Picasso.get()
                                             .load(documentSnapshot.getString(FIREBASE_DOC_VAL_USERPIC))
-                                            .into(img_userPicture)
+                                            .into(binding.imgUserPicture)
 
                                     }
                                 }
