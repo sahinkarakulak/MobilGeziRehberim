@@ -46,24 +46,29 @@
             android:padding="10dp">
 
             <TextView
+                android:id="@+id/dw_sharing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Paylaşan: " />
+                android:text="Sharing:" />
 
             <TextView
+                android:id="@+id/dw_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tarih" />
+                android:text="Date:" />
 
             <TextView
+                android:id="@+id/dw_addres"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Adres: " />
+                android:text="Addres: " />
 
             <TextView
+                android:id="@+id/dw_labels"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Etiketler: " />
+                android:layout_marginTop="10dp"
+                android:text="Labels" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -122,7 +127,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1016" />
+                        android:text="4,3" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -168,6 +173,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:progressTint="@color/white"
                 android:numStars="5" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -175,6 +181,7 @@
     </androidx.cardview.widget.CardView>
 
     <Button
+        android:id="@+id/dw_ok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

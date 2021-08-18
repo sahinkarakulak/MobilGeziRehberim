@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,8 +24,8 @@ import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.MyArrayList
+import org.w3c.dom.Text
 import java.text.DateFormat
-import kotlin.collections.ArrayList
 
 class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
@@ -134,23 +135,37 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
     }
 
     override fun onLongItemClick(position: Int) {
+
+        val mDialogView = LayoutInflater.from(activity).inflate(R.layout.custom_dialog_window,viewGroup, false)
+
         val dateAndTime = DateFormat.getDateTimeInstance().format(
             timesFirebase[position].toDate()
         )
-        val showDetailPost =
-            (commentsFirebase.get(position) +
-                    "\n\n${getString(R.string.sharing)}: " + userEmailsFirebase[position] +
-                    "\n${getString(R.string.date)}: " + dateAndTime +
-                    "\n${getString(R.string.addres)}: " + addressesFirebase[position] +
-                    "\n\n" + firebaseOperationForHome.showTag(position))
-        val alert = AlertDialog.Builder(activity)
-        alert
-            .setTitle(placeNamesFirebase[position])
-            .setMessage(showDetailPost)
-            .setNegativeButton(getString(R.string.ok)) { _dialog, which ->
-                //
-            }
-            .show()
+
+        val mBuilder = AlertDialog.Builder(activity)
+            .setView(mDialogView)
+
+        var title = mDialogView.findViewById<TextView>(R.id.dw_title)
+        var comment = mDialogView.findViewById<TextView>(R.id.dw_comment)
+        var sharing = mDialogView.findViewById<TextView>(R.id.dw_sharing)
+        var date = mDialogView.findViewById<TextView>(R.id.dw_date)
+        var addres = mDialogView.findViewById<TextView>(R.id.dw_addres)
+        var labels = mDialogView.findViewById<TextView>(R.id.dw_labels)
+        title.text = placeNamesFirebase[position]
+        comment.text = commentsFirebase[position]
+        sharing.text = userEmailsFirebase[position]
+        date.text = dateAndTime
+        addres.text = addressesFirebase[position]
+        labels.text = firebaseOperationForHome.showTag(position)
+
+        val mAlertDialog = mBuilder.create()
+        mDialogView.findViewById<Button>(R.id.dw_ok).setOnClickListener {
+            mAlertDialog.dismiss()
+        }
+
+        mAlertDialog.show()
+
+
     }
 
     override fun onOtherOperationsClick(position: Int) {
@@ -202,7 +217,12 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
                         intent.putExtra(Intent.EXTRA_SUBJECT, "")
                         intent.putExtra(Intent.EXTRA_TEXT, "")
                         intent.type = "plain/text"
-                        startActivity(Intent.createChooser(intent, getString(R.string.what_would_u_like_to_send_with)))
+                        startActivity(
+                            Intent.createChooser(
+                                intent,
+                                getString(R.string.what_would_u_like_to_send_with)
+                            )
+                        )
                     }
                     bottomSheetDialog.dismiss()
                 }
