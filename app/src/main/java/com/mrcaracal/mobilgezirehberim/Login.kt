@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.view.View
@@ -144,6 +145,9 @@ class Login : AppCompatActivity() {
         }
         doubleBackToExitPressedOnce = true
         toast(getString(R.string.press_again_to_exit))
-        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+
+        Handler(Looper.myLooper() ?: return).postDelayed({
+            doubleBackToExitPressedOnce = false
+        }, 2000)
     }
 }

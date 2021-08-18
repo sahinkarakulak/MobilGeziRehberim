@@ -28,18 +28,6 @@ class FirebaseOperationForHome(
     private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
     private val COLLECTION_NAME_POST = "Gonderiler"
 
-    fun tagGoster(position: Int): String {
-        var taggg = ""
-        val al_taglar = tagsFirebase[position]
-        val tag_uzunluk = al_taglar.length
-        val alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
-        val a_t = alinan_taglar.split(",").toTypedArray()
-        for (tags: String in a_t) {
-            taggg += "#" + tags.trim { it <= ' ' } + " "
-        }
-        return taggg
-    }
-
     fun rewind(
         firebaseFirestore: FirebaseFirestore,
         recyclerAdapterStructure: RecyclerAdapterStructure
@@ -123,6 +111,18 @@ class FirebaseOperationForHome(
                     //
                 }
         }
+    }
+
+    fun showTag(position: Int): String {
+        var taggg = ""
+        val al_taglar = tagsFirebase[position]
+        val tag_uzunluk = al_taglar.length
+        val alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
+        val a_t = alinan_taglar.split(",").toTypedArray()
+        for (tags: String in a_t) {
+            taggg += "#" + tags.trim { it <= ' ' } + " "
+        }
+        return taggg
     }
 
 }

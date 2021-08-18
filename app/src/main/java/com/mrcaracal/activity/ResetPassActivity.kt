@@ -9,28 +9,26 @@ import com.google.firebase.auth.FirebaseAuth
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.Login
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.mobilgezirehberim.databinding.ActivityParolaSifirlamaBinding
 
 class ResetPassActivity : AppCompatActivity() {
 
-    lateinit var edt_resetPass: EditText
+    private lateinit var binding: ActivityParolaSifirlamaBinding
     lateinit var firebaseAuth: FirebaseAuth
-
-    private fun init() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        edt_resetPass = findViewById(R.id.edt_resetPass)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_parola_sifirlama)
-        init()
+        binding = ActivityParolaSifirlamaBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        firebaseAuth = FirebaseAuth.getInstance()
         title = getString(R.string.reset_pass)
     }
 
     // Kullanıcının girdiği E-Posta adresine parola sıfırlama bağlantısı gönderilecektir.
     fun btn_sendRequest(view: View?) {
         // parola sıfırlama işlemi için gereken işlemler yapılsın
-        val email = edt_resetPass.text.toString()
+        val email = binding.edtResetPass.text.toString()
         if (email == "") {
             toast(getString(R.string.fill_in_the_required_fields))
         } else {

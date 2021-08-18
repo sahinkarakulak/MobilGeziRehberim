@@ -29,11 +29,15 @@ import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.mobilgezirehberim.databinding.FragSearchBinding
 import com.mrcaracal.modul.Cities
 import com.mrcaracal.modul.MyArrayList
 import java.text.DateFormat
 
 class SearchFragment : Fragment(), RecyclerViewClickInterface {
+
+    private var _binding: FragSearchBinding? = null
+    private val binding get() = _binding!!
 
     lateinit var firebaseAuth: FirebaseAuth
     lateinit var firebaseUser: FirebaseUser
@@ -49,16 +53,11 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
     lateinit var postCodesFirebase: ArrayList<String>
     lateinit var tagsFirebase: ArrayList<String>
     lateinit var timesFirebase: ArrayList<Timestamp>
-    private lateinit var recycler_view_search: RecyclerView
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
-    private lateinit var img_finfByLocation: ImageView
-    private lateinit var edt_keyValueSearch: EditText
-    private lateinit var sp_searchByWhat: Spinner
-    private lateinit var sp_cities: Spinner
-    var keyValue = "yerIsmi"
     private lateinit var selectionOptions: MyArrayList
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
+    var keyValue = "yerIsmi"
     var latitude = 0.0
     var longitude = 0.0
     lateinit var viewGroup: ViewGroup
@@ -108,10 +107,13 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewGroup = inflater.inflate(R.layout.frag_search, container, false) as ViewGroup
+
+        _binding = FragSearchBinding.inflate(inflater, container, false)
+        val view = binding.root
         init()
-        img_finfByLocation = viewGroup.findViewById(R.id.img_finfByLocation)
-        img_finfByLocation.setOnClickListener(View.OnClickListener {
+
+
+        binding.imgFinfByLocation.setOnClickListener(View.OnClickListener {
             if (ContextCompat.checkSelfPermission(
                     (activity)!!,
                     Manifest.permission.ACCESS_FINE_LOCATION
@@ -124,18 +126,17 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                 )
             } else {
                 firebaseOperationForSearch.clearList()
-                recycler_view_search.scrollToPosition(0)
+                binding.recyclerViewSearch.scrollToPosition(0)
                 //listNearbyPlaces()
                 firebaseOperationForSearch.listNearbyPlaces(activity!!, recyclerAdapterStructure)
             }
         })
 
-        sp_searchByWhat = viewGroup.findViewById(R.id.sp_searchByWhat)
         sp_adapterAccordingToWhat =
             ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, selectionOptions.accordingToWhat)
         sp_adapterAccordingToWhat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_searchByWhat.adapter = sp_adapterAccordingToWhat
-        sp_searchByWhat.onItemSelectedListener = object : OnItemSelectedListener {
+        binding.spSearchByWhat.adapter = sp_adapterAccordingToWhat
+        binding.spSearchByWhat.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
                 view: View,
@@ -143,31 +144,31 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                 id: Long
             ) {
                 if ((parent.selectedItem.toString() == selectionOptions.accordingToWhat[0])) {
-                    edt_keyValueSearch.visibility = View.VISIBLE
-                    sp_cities.visibility = View.INVISIBLE
+                    binding.edtKeyValueSearch.visibility = View.VISIBLE
+                    binding.spCities.visibility = View.INVISIBLE
                     firebaseOperationForSearch.clearList()
-                    recycler_view_search.scrollToPosition(0)
+                    binding.recyclerViewSearch.scrollToPosition(0)
                     keyValue = "yerIsmi"
                 }
                 if ((parent.selectedItem.toString() == selectionOptions.accordingToWhat[1].toString())) {
-                    edt_keyValueSearch.visibility = View.VISIBLE
-                    sp_cities.visibility = View.INVISIBLE
+                    binding.edtKeyValueSearch.visibility = View.VISIBLE
+                    binding.spCities.visibility = View.INVISIBLE
                     firebaseOperationForSearch.clearList()
-                    recycler_view_search.scrollToPosition(0)
+                    binding.recyclerViewSearch.scrollToPosition(0)
                     keyValue = "taglar"
                 }
                 if ((parent.selectedItem.toString() == selectionOptions.accordingToWhat[2].toString())) {
-                    edt_keyValueSearch.visibility = View.INVISIBLE
-                    sp_cities.visibility = View.VISIBLE
+                    binding.edtKeyValueSearch.visibility = View.INVISIBLE
+                    binding.spCities.visibility = View.VISIBLE
                     firebaseOperationForSearch.clearList()
-                    recycler_view_search.scrollToPosition(0)
+                    binding.recyclerViewSearch.scrollToPosition(0)
                     keyValue = "sehir"
                 }
                 if ((parent.selectedItem.toString() == selectionOptions.accordingToWhat[3].toString())) {
-                    edt_keyValueSearch.visibility = View.VISIBLE
-                    sp_cities.visibility = View.INVISIBLE
+                    binding.edtKeyValueSearch.visibility = View.VISIBLE
+                    binding.spCities.visibility = View.INVISIBLE
                     firebaseOperationForSearch.clearList()
-                    recycler_view_search.scrollToPosition(0)
+                    binding.recyclerViewSearch.scrollToPosition(0)
                     keyValue = "kullaniciEposta"
                 }
             }
@@ -176,12 +177,11 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         }
 
         val cities_al = Cities()
-        sp_cities = viewGroup.findViewById(R.id.sp_cities)
         sp_adapterCities =
             ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, cities_al.cities)
         sp_adapterCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_cities.adapter = sp_adapterCities
-        sp_cities.onItemSelectedListener = object : OnItemSelectedListener {
+        binding.spCities.adapter = sp_adapterCities
+        binding.spCities.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
                 view: View,
@@ -189,7 +189,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                 id: Long
             ) {
                 firebaseOperationForSearch.clearList()
-                recycler_view_search.scrollToPosition(0)
+                binding.recyclerViewSearch.scrollToPosition(0)
                 if ((keyValue == "sehir")) {
                     val cities = Cities()
                     val selectedCityCode = cities.selectedCity(parent.selectedItem.toString())
@@ -212,8 +212,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        edt_keyValueSearch = viewGroup.findViewById(R.id.edt_keyValueSearch)
-        edt_keyValueSearch.addTextChangedListener(object : TextWatcher {
+        binding.edtKeyValueSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 firebaseOperationForSearch.clearList()
@@ -239,8 +238,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
 
             override fun afterTextChanged(s: Editable) {}
         })
-        recycler_view_search = viewGroup.findViewById(R.id.recycler_view_search)
-        recycler_view_search.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerViewSearch.layoutManager = LinearLayoutManager(activity)
         recyclerAdapterStructure = RecyclerAdapterStructure(
             (postIDsFirebase),
             (userEmailsFirebase),
@@ -255,8 +253,8 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
             timesFirebase,
             this
         )
-        recycler_view_search.adapter = recyclerAdapterStructure
-        return viewGroup
+        binding.recyclerViewSearch.adapter = recyclerAdapterStructure
+        return view
     }
 
     fun goToLocationOperations(position: Int) {
@@ -308,7 +306,6 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         // Gönderiyi Kaydet
         bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
-                //saveOperations(position)
                 firebaseOperationForSearch.saveOperations(position, firebaseUser, firebaseFirestore)
                 bottomSheetDialog.dismiss()
             })
@@ -373,6 +370,11 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                 Toast.makeText(activity, getString(R.string.not_allowed), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

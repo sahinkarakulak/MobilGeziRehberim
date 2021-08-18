@@ -3,6 +3,7 @@ package com.mrcaracal.mobilgezirehberim
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
@@ -20,7 +21,12 @@ class SplashScreen : AppCompatActivity() {
         animation = AnimationUtils.loadAnimation(applicationContext, R.anim.anim1)
         txt_giris_yazisi.startAnimation(animation)
 
-        Handler().postDelayed({
+        /*Handler().postDelayed({
+            val intent = Intent(this@SplashScreen, Login::class.java)
+            startActivity(intent)
+        }, 3000)*/
+
+        Handler(Looper.myLooper() ?: return).postDelayed({
             val intent = Intent(this@SplashScreen, Login::class.java)
             startActivity(intent)
         }, 3000)

@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -26,40 +27,35 @@ import com.google.firebase.storage.StorageReference
 import com.mrcaracal.activity.HomePageActivity
 import com.mrcaracal.activity.MyMapActivity
 import com.mrcaracal.extensions.toast
+import com.mrcaracal.mobilgezirehberim.Login
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.mobilgezirehberim.databinding.FragShareBinding
 import com.mrcaracal.modul.Posts
 import com.squareup.picasso.Picasso
 import java.util.*
 
 class ShareFragment : Fragment() {
-    lateinit var MGonderiler: Posts
-    lateinit var firebaseAuth: FirebaseAuth
+
+    private var _binding : FragShareBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var MGonderiler: Posts
+    private lateinit var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null
-    lateinit var firebaseFirestore: FirebaseFirestore
-    lateinit var picturePath: Uri
-    private lateinit var img_sharePictureSelected: ImageView
-    lateinit var edt_sharePlaceName: EditText
-    lateinit var edt_shareComment: EditText
-    lateinit var edt_shareTag: EditText
-    lateinit var edt_location: EditText
-    lateinit var edt_addres: EditText
-    lateinit var edt_city: EditText
-    private lateinit var btn_shareSend: Button
-    private lateinit var selectLocation: Button
-    private lateinit var btn_addTag: Button
-    lateinit var tv_printTags: TextView
-    lateinit var sv_share: ScrollView
+    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var firebaseStorage: FirebaseStorage
+    private lateinit var storageReference: StorageReference
+    private lateinit var picturePath: Uri
+
     lateinit var GET: SharedPreferences
     lateinit var SET: SharedPreferences.Editor
-    var latitude = 0f
-    var longitude = 0f
     lateinit var addres: String
     lateinit var postCode: String
     lateinit var postID: String
     lateinit var tags: List<String>
-    private lateinit var firebaseStorage: FirebaseStorage
-    private lateinit var storageReference: StorageReference
 
+    var latitude = 0f
+    var longitude = 0f
     private val STORAGE_NAME = "Resimler"
     private val COLLECTION_NAME_SHARED = "Paylasilanlar"
     private val COLLECTION_NAME_THEY_SHARED = "Paylastiklari"
@@ -80,9 +76,14 @@ class ShareFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val viewGroup = inflater.inflate(R.layout.frag_share, container, false) as ViewGroup
+        /*val viewGroup = inflater.inflate(R.layout.frag_share, container, false) as ViewGroup*/
         init()
-        img_sharePictureSelected = viewGroup.findViewById(R.id.img_sharePictureSelected)
+
+        _binding = FragShareBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+
+        /*img_sharePictureSelected = viewGroup.findViewById(R.id.img_sharePictureSelected)
         edt_sharePlaceName = viewGroup.findViewById(R.id.edt_sharePlaceName)
         edt_location = viewGroup.findViewById(R.id.edt_location)
         edt_addres = viewGroup.findViewById(R.id.edt_addres)
@@ -93,37 +94,38 @@ class ShareFragment : Fragment() {
         btn_shareSend = viewGroup.findViewById(R.id.btn_shareSend)
         btn_addTag = viewGroup.findViewById(R.id.btn_addTag)
         tv_printTags = viewGroup.findViewById(R.id.tv_printTags)
-        sv_share = viewGroup.findViewById(R.id.sv_share)
+        sv_share = viewGroup.findViewById(R.id.sv_share)*/
 
         // Galeriden resim çekmek için yapılacaklar
-        img_sharePictureSelected.setOnClickListener(View.OnClickListener { choosePictureFromGallery() })
-        btn_addTag.setOnClickListener(View.OnClickListener { createTag() })
-        selectLocation.setOnClickListener(View.OnClickListener {
+        binding.imgSharePictureSelected.setOnClickListener(View.OnClickListener { choosePictureFromGallery() })
+        binding.btnAddTag.setOnClickListener(View.OnClickListener { createTag() })
+        binding.selectLocation.setOnClickListener(View.OnClickListener {
             startActivity(Intent(activity, MyMapActivity::class.java))
         })
-        btn_shareSend.setOnClickListener(View.OnClickListener { shareSend() })
-        return viewGroup
+        binding.btnShareSend.setOnClickListener(View.OnClickListener { shareSend() })
+        /*return viewGroup*/
+        return view
     }
 
     fun createTag() {
-        val tagler = edt_shareTag.text.toString().lowercase().split(" ").toTypedArray()
+        val tagler = binding.edtShareTag.text.toString().lowercase().split(" ").toTypedArray()
         var etiket_sayisi = 0
         var taggg = ""
         for (tags in tagler) {
             etiket_sayisi++
             this.tags = Arrays.asList(*tagler)
             taggg += "#$tags   "
-            tv_printTags.text = taggg
+            binding.tvPrintTags.text = taggg
             if (etiket_sayisi == 5) break
         }
     }
 
     fun shareSend() {
-        btn_shareSend.isEnabled = true
-        val placeNameControl = edt_sharePlaceName.text.toString()
-        val commentControl = edt_shareComment.text.toString()
-        val locationControl = edt_location.text.toString()
-        val addresControl = edt_addres.text.toString()
+        binding.btnShareSend.isEnabled = true
+        val placeNameControl = binding.edtSharePlaceName.text.toString()
+        val commentControl = binding.edtShareComment.text.toString()
+        val locationControl = binding.edtLocation.text.toString()
+        val addresControl = binding.edtAddres.text.toString()
         if (placeNameControl != "" && locationControl != "" && commentControl != "" && addresControl != "") {
             val uuid = UUID.randomUUID()
             val placeName = firebaseUser!!.email + "--" + placeNameControl + "--" + uuid
@@ -141,11 +143,11 @@ class ShareFragment : Fragment() {
                                 val firebaseUser = firebaseAuth.currentUser
                                 val userEmail = firebaseUser!!.email
                                 val pictureLink = uri.toString()
-                                val placeName = edt_sharePlaceName.text.toString().lowercase()
-                                val location = edt_location.text.toString()
-                                val comment = edt_shareComment.text.toString()
-                                val addres = edt_addres.text.toString()
-                                var cityyy: String? = edt_city.text.toString()
+                                val placeName = binding.edtSharePlaceName.text.toString().lowercase()
+                                val location = binding.edtLocation.text.toString()
+                                val comment = binding.edtShareComment.text.toString()
+                                val addres = binding.edtAddres.text.toString()
+                                var cityyy: String? = binding.edtCity.text.toString()
                                 if (cityyy == null) {
                                     cityyy = null
                                 }
@@ -176,34 +178,35 @@ class ShareFragment : Fragment() {
                                                 startActivity(intent)
                                             }
                                             .addOnFailureListener { e ->
-                                                btn_shareSend.isEnabled = false
+                                                binding.btnShareSend.isEnabled = false
                                             }
                                     }
                                     .addOnFailureListener { e ->
-                                        btn_shareSend.isEnabled = false
+                                        binding.btnShareSend.isEnabled = false
                                         Toast.makeText(activity, e.message, Toast.LENGTH_SHORT)
                                             .show()
                                     }
                             }
                             .addOnFailureListener { e ->
-                                btn_shareSend.isEnabled = false
+                                binding.btnShareSend.isEnabled = false
                             }
                         val myToast = Toast.makeText(activity, getString(R.string.sended), Toast.LENGTH_SHORT)
                         myToast.show()
                         val handler = Handler()
                         handler.postDelayed({ myToast.cancel() }, 400)
+
                     }
                     .addOnFailureListener { e ->
-                        btn_shareSend.isEnabled = false
+                        binding.btnShareSend.isEnabled = false
                         Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
                     }
             } catch (e: Exception) {
                 Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
-                btn_shareSend.isEnabled = false
+                binding.btnShareSend.isEnabled = false
             }
         } else {
             activity?.let { toast(it, getString(R.string.fill_in_the_required_fields)) }
-            btn_shareSend.isEnabled = false
+            binding.btnShareSend.isEnabled = false
         }
     }
 
@@ -213,8 +216,8 @@ class ShareFragment : Fragment() {
         longitude = GET.getFloat("boylam", 0f)
         addres = GET.getString("adres", "Türkiye Üsküdar")!!
         postCode = GET.getString("postaKodu", "12000")!!
-        edt_location.setText("$latitude,$longitude")
-        edt_addres.setText("" + addres)
+        binding.edtLocation.setText("$latitude,$longitude")
+        binding.edtAddres.setText("" + addres)
     }
 
     private fun choosePictureFromGallery() {
@@ -257,9 +260,14 @@ class ShareFragment : Fragment() {
                 .load(picturePath)
                 .centerCrop()
                 .fit()
-                .into(img_sharePictureSelected)
+                .into(binding.imgSharePictureSelected)
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

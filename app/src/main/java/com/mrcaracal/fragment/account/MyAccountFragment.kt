@@ -8,11 +8,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Timestamp
@@ -24,15 +22,15 @@ import com.mrcaracal.activity.EditProfileActivity
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.mobilgezirehberim.R
-import com.mrcaracal.mobilgezirehberim.databinding.FragHomePageBinding
+import com.mrcaracal.mobilgezirehberim.databinding.FragMyAccountBinding
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
 import java.text.DateFormat
 import java.util.*
 
 class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
 
-    private var _binding : FragHomePageBinding? = null
+    private var _binding: FragMyAccountBinding? = null
+    private val binding get() = _binding!!
 
     lateinit var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null
@@ -48,12 +46,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     lateinit var postCodesFirebase: ArrayList<String>
     lateinit var tagsFirebase: ArrayList<String>
     private lateinit var timesFirebase: ArrayList<Timestamp>
-    private lateinit var recyclerViewAccount: RecyclerView
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
-    private lateinit var tv_userName: TextView
-    private lateinit var tv_userBio: TextView
-    private lateinit var btn_editProfile: Button
-    lateinit var img_profileProfilePicture: CircleImageView
 
     private val FIREBASE_COLLECTION_NAME = "Kullanicilar"
     private val FIREBASE_DOC_VAL_USERNAME = "kullaniciAdi"
@@ -108,12 +101,13 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewGroup = inflater.inflate(R.layout.frag_my_account, container, false) as ViewGroup
         init()
 
+        _binding = FragMyAccountBinding.inflate(inflater, container, false)
+        val view = binding.root
+
         // RecyclerView Tanımlama İşlemi
-        recyclerViewAccount = viewGroup.findViewById(R.id.recyclerViewAccount)
-        recyclerViewAccount.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerViewAccount.layoutManager = LinearLayoutManager(activity)
         recyclerAdapterStructure = RecyclerAdapterStructure(
             (postIDsFirebase),
             (userEmailsFirebase),
@@ -136,12 +130,8 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
             )
         }
 
-        recyclerViewAccount.adapter = recyclerAdapterStructure
-        img_profileProfilePicture = viewGroup.findViewById(R.id.img_profileProfilePicture)
-        tv_userName = viewGroup.findViewById(R.id.tv_userName)
-        tv_userBio = viewGroup.findViewById(R.id.tv_userBio)
-        btn_editProfile = viewGroup.findViewById(R.id.btn_editProfile)
-        btn_editProfile.setOnClickListener(View.OnClickListener {
+        binding.recyclerViewAccount.adapter = recyclerAdapterStructure
+        binding.btnEditProfile.setOnClickListener(View.OnClickListener {
             val editProfile = Intent(activity, EditProfileActivity::class.java)
             startActivity(editProfile)
         })
@@ -155,19 +145,19 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                 if (task.isSuccessful) {
                     val documentSnapshot = (task.result)
                     if (documentSnapshot.exists()) {
-                        tv_userName.text = documentSnapshot.getString(FIREBASE_DOC_VAL_USERNAME)
-                        tv_userBio.text = documentSnapshot.getString(FIREBASE_DOC_VAL_BIO)
+                        binding.tvUserName.text =
+                            documentSnapshot.getString(FIREBASE_DOC_VAL_USERNAME)
+                        binding.tvUserBio.text = documentSnapshot.getString(FIREBASE_DOC_VAL_BIO)
                         Picasso.get().load(documentSnapshot.getString(FIREBASE_DOC_VAL_USERPIC))
-                            .into(img_profileProfilePicture)
+                            .into(binding.imgProfileProfilePicture)
                         if (documentSnapshot.getString(FIREBASE_DOC_VAL_USERPIC) == null) {
-                            Picasso.get().load(R.drawable.defaultpp).into(img_profileProfilePicture)
+                            Picasso.get().load(R.drawable.defaultpp)
+                                .into(binding.imgProfileProfilePicture)
                         }
                     }
                 }
             }
-        val bottomNavigationView: BottomNavigationView =
-            viewGroup.findViewById(R.id.bn_accountMenu)
-        bottomNavigationView.setOnNavigationItemSelectedListener { item -> // Hangi TAB'a tıklanmışsa onu tespit ediyoruz.
+        binding.bnAccountMenu.setOnNavigationItemSelectedListener { item -> // Hangi TAB'a tıklanmışsa onu tespit ediyoruz.
             when (item.itemId) {
                 R.id.shared -> {
                     TAB_CONTROL = "paylasilanlar"
@@ -176,7 +166,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                         firebaseFirestore,
                         firebaseUser!!, recyclerAdapterStructure
                     )
-                    recyclerViewAccount.scrollToPosition(0)
+                    binding.recyclerViewAccount.scrollToPosition(0)
                 }
                 R.id.recorded -> {
                     TAB_CONTROL = "kaydedilenler"
@@ -185,12 +175,12 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                         firebaseFirestore,
                         firebaseUser!!, recyclerAdapterStructure
                     )
-                    recyclerViewAccount.scrollToPosition(0)
+                    binding.recyclerViewAccount.scrollToPosition(0)
                 }
             }
             true
         }
-        return viewGroup
+        return view
     }
 
     fun goToLocationFromShared() {
@@ -283,7 +273,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                                     it, recyclerAdapterStructure
                                 )
                             }
-                            recyclerViewAccount.scrollToPosition(0)
+                            binding.recyclerViewAccount.scrollToPosition(0)
                         }
                         "kaydedilenler" -> {
                             firebaseUser?.let {
@@ -299,7 +289,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                                     it, recyclerAdapterStructure
                                 )
                             }
-                            recyclerViewAccount.scrollToPosition(0)
+                            binding.recyclerViewAccount.scrollToPosition(0)
                         }
                     }
                     bottomSheetDialog.dismiss()
@@ -316,6 +306,11 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
             })
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

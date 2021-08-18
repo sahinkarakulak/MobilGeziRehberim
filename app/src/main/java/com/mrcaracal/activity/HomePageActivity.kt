@@ -3,6 +3,7 @@ package com.mrcaracal.activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -95,7 +96,10 @@ class HomePageActivity : AppCompatActivity() {
         }
         doubleBackToExitPressedOnce = true
         toast(getString(R.string.press_again_to_exit))
-        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+        /*Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)*/
+        Handler(Looper.myLooper() ?: return).postDelayed({
+            doubleBackToExitPressedOnce = false
+        }, 2000)
     }
 
 }

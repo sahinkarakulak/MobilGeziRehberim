@@ -142,7 +142,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
                     "\n\n${getString(R.string.sharing)}: " + userEmailsFirebase[position] +
                     "\n${getString(R.string.date)}: " + dateAndTime +
                     "\n${getString(R.string.addres)}: " + addressesFirebase[position] +
-                    "\n\n" + firebaseOperationForHome.tagGoster(position))
+                    "\n\n" + firebaseOperationForHome.showTag(position))
         val alert = AlertDialog.Builder(activity)
         alert
             .setTitle(placeNamesFirebase[position])
