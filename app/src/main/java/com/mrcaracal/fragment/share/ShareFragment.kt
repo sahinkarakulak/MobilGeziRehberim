@@ -9,12 +9,11 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -27,7 +26,6 @@ import com.google.firebase.storage.StorageReference
 import com.mrcaracal.activity.HomePageActivity
 import com.mrcaracal.activity.MyMapActivity
 import com.mrcaracal.extensions.toast
-import com.mrcaracal.mobilgezirehberim.Login
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragShareBinding
 import com.mrcaracal.modul.Posts
@@ -36,7 +34,7 @@ import java.util.*
 
 class ShareFragment : Fragment() {
 
-    private var _binding : FragShareBinding? = null
+    private var _binding: FragShareBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var MGonderiler: Posts
@@ -143,7 +141,8 @@ class ShareFragment : Fragment() {
                                 val firebaseUser = firebaseAuth.currentUser
                                 val userEmail = firebaseUser!!.email
                                 val pictureLink = uri.toString()
-                                val placeName = binding.edtSharePlaceName.text.toString().lowercase()
+                                val placeName =
+                                    binding.edtSharePlaceName.text.toString().lowercase()
                                 val location = binding.edtLocation.text.toString()
                                 val comment = binding.edtShareComment.text.toString()
                                 val addres = binding.edtAddres.text.toString()
@@ -190,7 +189,8 @@ class ShareFragment : Fragment() {
                             .addOnFailureListener { e ->
                                 binding.btnShareSend.isEnabled = false
                             }
-                        val myToast = Toast.makeText(activity, getString(R.string.sended), Toast.LENGTH_SHORT)
+                        val myToast =
+                            Toast.makeText(activity, getString(R.string.sended), Toast.LENGTH_SHORT)
                         myToast.show()
                         val handler = Handler()
                         handler.postDelayed({ myToast.cancel() }, 400)

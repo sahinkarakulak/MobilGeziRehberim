@@ -14,14 +14,14 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.adapter.RecyclerAdapterStructure
-import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.fragment.model.PostModel
+import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.modul.Posts
 import java.util.*
 
 private const val TAG = "FirebaseOperationForSea"
 
-class FirebaseOperationForSearch() {
+class FirebaseOperationForSearch {
 
     private val COLLECTION_NAME_SAVED = "Kaydedilenler"
     private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
@@ -115,6 +115,7 @@ class FirebaseOperationForSearch() {
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
                         getData(snapshot.data)
+                        recyclerAdapterStructure.postModelList = postModelsList
                         recyclerAdapterStructure.notifyDataSetChanged()
                     }
                 }
@@ -140,6 +141,7 @@ class FirebaseOperationForSearch() {
                     val querySnapshot = (task.result)
                     for (documentSnapshot: DocumentSnapshot in querySnapshot) {
                         getData(documentSnapshot.data)
+                        recyclerAdapterStructure.postModelList = postModelsList
                         recyclerAdapterStructure.notifyDataSetChanged()
                     }
                 }
@@ -164,6 +166,7 @@ class FirebaseOperationForSearch() {
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
                         getData(snapshot.data)
+                        recyclerAdapterStructure.postModelList = postModelsList
                         recyclerAdapterStructure.notifyDataSetChanged()
                     }
                 }

@@ -25,7 +25,8 @@ class AccountCreateActivity : AppCompatActivity() {
     private lateinit var firebaseFirestore: FirebaseFirestore
 
     private val FIREBASE_COLLECTION_NAME = "Kullanicilar"
-    private val DEFAULT_PP_LINK = "https://firebasestorage.googleapis.com/v0/b/mobilgezirehberim-7aca5.appspot.com/o/Resimler%2Fdefaultpp.png?alt=media&token=97fe9138-0aad-4ea9-af78-536c637b3be4"
+    private val DEFAULT_PP_LINK =
+        "https://firebasestorage.googleapis.com/v0/b/mobilgezirehberim-7aca5.appspot.com/o/Resimler%2Fdefaultpp.png?alt=media&token=97fe9138-0aad-4ea9-af78-536c637b3be4"
 
     fun init() {
         firebaseAuth = FirebaseAuth.getInstance()
@@ -55,7 +56,7 @@ class AccountCreateActivity : AppCompatActivity() {
                     .createUserWithEmailAndPassword(email, passOne)
                     .addOnSuccessListener {
                         firebaseAuth
-                            .getCurrentUser()
+                            .currentUser
                             ?.sendEmailVerification()
                             ?.addOnSuccessListener {
                                 toast(getString(R.string.verification_link_sent))

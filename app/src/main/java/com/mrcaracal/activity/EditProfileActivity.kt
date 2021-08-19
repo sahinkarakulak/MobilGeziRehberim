@@ -23,7 +23,7 @@ import java.util.*
 
 class EditProfileActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityEditProfileBinding
+    private lateinit var binding: ActivityEditProfileBinding
 
     var firebaseUser: FirebaseUser? = null
     lateinit var storageReference: StorageReference
@@ -60,8 +60,16 @@ class EditProfileActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val documentSnapshot = task.result
                     if (documentSnapshot.exists()) {
-                        binding.edtGetUserName.setText(documentSnapshot.getString(FIREBASE_DOC_VAL_USERNAME))
-                        binding.edtGetBiography.setText(documentSnapshot.getString(FIREBASE_DOC_VAL_BIO))
+                        binding.edtGetUserName.setText(
+                            documentSnapshot.getString(
+                                FIREBASE_DOC_VAL_USERNAME
+                            )
+                        )
+                        binding.edtGetBiography.setText(
+                            documentSnapshot.getString(
+                                FIREBASE_DOC_VAL_BIO
+                            )
+                        )
                         Picasso.get().load(documentSnapshot.getString(FIREBASE_DOC_VAL_USERPIC))
                             .into(binding.imgUserPicture)
                     }
@@ -82,7 +90,10 @@ class EditProfileActivity : AppCompatActivity() {
                 .start(this@EditProfileActivity)
         }
         binding.btnUpdate.setOnClickListener {
-            updateUser(binding.edtGetUserName.text.toString(), binding.edtGetBiography.text.toString())
+            updateUser(
+                binding.edtGetUserName.text.toString(),
+                binding.edtGetBiography.text.toString()
+            )
         }
     }
 
@@ -138,7 +149,11 @@ class EditProfileActivity : AppCompatActivity() {
                                     val documentSnapshot = task.result
                                     if (documentSnapshot.exists()) {
                                         Picasso.get()
-                                            .load(documentSnapshot.getString(FIREBASE_DOC_VAL_USERPIC))
+                                            .load(
+                                                documentSnapshot.getString(
+                                                    FIREBASE_DOC_VAL_USERPIC
+                                                )
+                                            )
                                             .into(binding.imgUserPicture)
 
                                     }
@@ -148,7 +163,7 @@ class EditProfileActivity : AppCompatActivity() {
             } else {
                 toast(getString(R.string.error_occurred))
             }
-        } .addOnFailureListener {
+        }.addOnFailureListener {
             toast(it.localizedMessage.orEmpty())
         }
 

@@ -33,7 +33,8 @@ import com.mrcaracal.modul.Cities
 import com.mrcaracal.modul.MyArrayList
 import java.text.DateFormat
 
-class SearchFragment : Fragment(), RecyclerViewClickInterface {
+class
+SearchFragment : Fragment(), RecyclerViewClickInterface {
 
     private var _binding: FragSearchBinding? = null
     private val binding get() = _binding!!

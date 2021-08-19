@@ -47,7 +47,7 @@ class FirebaseOperationForAccount {
                             postModelsList.add(postModel)
                             Log.i(TAG, "pullTheShared: " + postModel.placeName)
                         }
-
+                        recyclerAdapterStructure.postModelList = postModelsList
                         recyclerAdapterStructure.notifyDataSetChanged()
                     }
                 }

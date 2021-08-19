@@ -15,7 +15,6 @@ import com.mrcaracal.adapter.RecyclerAdapterStructure.GonderiHolder
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.squareup.picasso.Picasso
-import kotlin.collections.ArrayList
 
 class RecyclerAdapterStructure(
     val recyclerViewClickInterface: RecyclerViewClickInterface,
@@ -78,7 +77,6 @@ class RecyclerAdapterStructure(
             row_placeName = itemView.findViewById(R.id.row_placeName)
             row_comment = itemView.findViewById(R.id.row_comment)
             ll_otherOperations = itemView.findViewById(R.id.ll_otherOperations)
-
 
 
             // position'a göre hangisine tıklandıysa position'u bunun için oluşturulan RecyclerViewClickInterface'e göndersin.

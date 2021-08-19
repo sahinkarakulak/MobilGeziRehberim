@@ -125,7 +125,7 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
                 LocationManager.GPS_PROVIDER,
                 15000,
                 3f,
-                locationListener as LocationListener
+                locationListener
             )
         }
     }

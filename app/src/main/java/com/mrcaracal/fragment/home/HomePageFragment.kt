@@ -91,7 +91,8 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
     override fun onLongItemClick(postModel: PostModel) {
 
-        val mDialogView = LayoutInflater.from(activity).inflate(R.layout.custom_dialog_window,viewGroup, false)
+        val mDialogView =
+            LayoutInflater.from(activity).inflate(R.layout.custom_dialog_window, viewGroup, false)
 
         val dateAndTime = DateFormat.getDateTimeInstance().format(
             postModel.time.toDate()

@@ -7,8 +7,8 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.mrcaracal.adapter.RecyclerAdapterStructure
-import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.fragment.model.PostModel
+import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.modul.Posts
 import java.util.*
 
@@ -43,7 +43,7 @@ class FirebaseOperationForHome {
                             postModelsList.add(postModel)
                             Log.i(TAG, "rewind: " + postModel.placeName)
                         }
-
+                        recyclerAdapterStructure.postModelList = postModelsList
                         recyclerAdapterStructure.notifyDataSetChanged()
 
                     }

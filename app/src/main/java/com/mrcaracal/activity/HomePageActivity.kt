@@ -13,8 +13,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.activity.contact.ContactActivity
 import com.mrcaracal.extensions.toast
-import com.mrcaracal.fragment.home.HomePageFragment
 import com.mrcaracal.fragment.account.MyAccountFragment
+import com.mrcaracal.fragment.home.HomePageFragment
 import com.mrcaracal.fragment.search.SearchFragment
 import com.mrcaracal.fragment.share.ShareFragment
 import com.mrcaracal.mobilgezirehberim.Login
@@ -36,7 +36,8 @@ class HomePageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home_page)
         init()
         title = getString(R.string.app_name_home)
-        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, HomePageFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, HomePageFragment())
+            .commit()
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomN)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
