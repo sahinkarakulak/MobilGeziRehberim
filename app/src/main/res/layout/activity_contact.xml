@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context="com.mrcaracal.activity.ContactActivity">
+    tools:context="com.mrcaracal.activity.contact.ContactActivity">
 
 
     <androidx.cardview.widget.CardView

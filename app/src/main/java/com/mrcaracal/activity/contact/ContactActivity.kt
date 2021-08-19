@@ -1,9 +1,7 @@
-package com.mrcaracal.activity
+package com.mrcaracal.activity.contact
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
@@ -32,7 +30,12 @@ class ContactActivity : AppCompatActivity() {
                 intent.putExtra(Intent.EXTRA_SUBJECT, str_subject)
                 intent.putExtra(Intent.EXTRA_TEXT, str_message)
                 intent.type = "plain/text"
-                startActivity(Intent.createChooser(intent, getString(R.string.fill_in_the_required_fields)))
+                startActivity(
+                    Intent.createChooser(
+                        intent,
+                        getString(R.string.fill_in_the_required_fields)
+                    )
+                )
             }
         }
     }

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mrcaracal.activity.contact.ContactActivity
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.home.HomePageFragment
 import com.mrcaracal.fragment.account.MyAccountFragment
