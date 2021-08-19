@@ -1,8 +1,8 @@
 package com.mrcaracal.Interface
 
+import com.mrcaracal.fragment.model.PostModel
+
 interface RecyclerViewClickInterface {
-    fun onLongItemClick(position: Int)
-    fun onOtherOperationsClick(position: Int)
-    fun onOpenDialogWindow(position: Int)
-    //fun onCommentClick(position: Int)
+    fun onLongItemClick(postModel: PostModel)
+    fun onOtherOperationsClick(postModel: PostModel)
 }

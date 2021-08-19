@@ -19,15 +19,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragSearchBinding
 import com.mrcaracal.modul.Cities
@@ -42,17 +41,6 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
     lateinit var firebaseAuth: FirebaseAuth
     lateinit var firebaseUser: FirebaseUser
     lateinit var firebaseFirestore: FirebaseFirestore
-    lateinit var postIDsFirebase: ArrayList<String>
-    lateinit var userEmailsFirebase: ArrayList<String>
-    lateinit var pictureLinksFirebase: ArrayList<String>
-    lateinit var placeNamesFirebase: ArrayList<String>
-    lateinit var locationFirebase: ArrayList<String>
-    lateinit var addressesFirebase: ArrayList<String>
-    lateinit var citiesFirebase: ArrayList<String>
-    lateinit var commentsFirebase: ArrayList<String>
-    lateinit var postCodesFirebase: ArrayList<String>
-    lateinit var tagsFirebase: ArrayList<String>
-    lateinit var timesFirebase: ArrayList<Timestamp>
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
     private lateinit var selectionOptions: MyArrayList
     private lateinit var GET: SharedPreferences
@@ -70,35 +58,12 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser!!
         firebaseFirestore = FirebaseFirestore.getInstance()
-        postIDsFirebase = ArrayList()
-        userEmailsFirebase = ArrayList()
-        pictureLinksFirebase = ArrayList()
-        placeNamesFirebase = ArrayList()
-        locationFirebase = ArrayList()
-        addressesFirebase = ArrayList()
-        citiesFirebase = ArrayList()
-        commentsFirebase = ArrayList()
-        postCodesFirebase = ArrayList()
-        tagsFirebase = ArrayList()
-        timesFirebase = ArrayList()
         GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
 
         selectionOptions = MyArrayList()
 
-        firebaseOperationForSearch = FirebaseOperationForSearch(
-            postIDsFirebase,
-            userEmailsFirebase,
-            pictureLinksFirebase,
-            placeNamesFirebase,
-            locationFirebase,
-            addressesFirebase,
-            citiesFirebase,
-            commentsFirebase,
-            postCodesFirebase,
-            tagsFirebase,
-            timesFirebase
-        )
+        firebaseOperationForSearch = FirebaseOperationForSearch()
     }
 
     @SuppressLint("ResourceType")
@@ -240,25 +205,14 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         })
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(activity)
         recyclerAdapterStructure = RecyclerAdapterStructure(
-            (postIDsFirebase),
-            (userEmailsFirebase),
-            (pictureLinksFirebase),
-            (placeNamesFirebase),
-            (locationFirebase),
-            (addressesFirebase),
-            (citiesFirebase),
-            (commentsFirebase),
-            (postCodesFirebase),
-            (tagsFirebase),
-            timesFirebase,
-            this
+            recyclerViewClickInterface = this
         )
         binding.recyclerViewSearch.adapter = recyclerAdapterStructure
         return view
     }
 
-    fun goToLocationOperations(position: Int) {
-        val postLocation = locationFirebase[position].split(",").toTypedArray()
+    fun goToLocationOperations(postModel: PostModel) {
+        val postLocation = postModel.location.split(",").toTypedArray()
         var adverb = 0
         for (konumxy: String in postLocation) {
             adverb++
@@ -271,19 +225,19 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
 
-    override fun onLongItemClick(position: Int) {
+    override fun onLongItemClick(postModel: PostModel) {
         val dateAndTime = DateFormat.getDateTimeInstance().format(
-            timesFirebase[position].toDate()
+            postModel.time.toDate()
         )
         val showDetailPost =
-            (commentsFirebase.get(position) +
-                    "\n\n${getString(R.string.sharing)}: " + userEmailsFirebase[position] +
+            (postModel.comment +
+                    "\n\n${getString(R.string.sharing)}: " + postModel.userEmail +
                     "\n${getString(R.string.date)}: " + dateAndTime +
-                    "\n${getString(R.string.addres)}: " + addressesFirebase[position] +
-                    "\n\n" + firebaseOperationForSearch.showTag(position))
+                    "\n${getString(R.string.addres)}: " + postModel.address +
+                    "\n\n" + firebaseOperationForSearch.showTag(postModel))
         val alert = AlertDialog.Builder(activity)
         alert
-            .setTitle(placeNamesFirebase[position])
+            .setTitle(postModel.placeName)
             .setMessage(showDetailPost)
             .setNegativeButton(getString(R.string.ok)) { _dialog, which ->
                 //
@@ -291,11 +245,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
             .show()
     }
 
-    override fun onOtherOperationsClick(position: Int) {
-        onOpenDialogWindow(position)
-    }
-
-    override fun onOpenDialogWindow(position: Int) {
+    override fun onOtherOperationsClick(postModel: PostModel) {
         val bottomSheetDialog = BottomSheetDialog((activity)!!, R.style.BottomSheetDialogTheme)
         val bottomSheetView = LayoutInflater.from(activity)
             .inflate(
@@ -306,7 +256,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         // Gönderiyi Kaydet
         bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
-                firebaseOperationForSearch.saveOperations(position, firebaseUser, firebaseFirestore)
+                firebaseOperationForSearch.saveOperations(postModel, firebaseUser, firebaseFirestore)
                 bottomSheetDialog.dismiss()
             })
 
@@ -314,7 +264,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    goToLocationOperations(position)
+                    goToLocationOperations(postModel)
                     bottomSheetDialog.dismiss()
                 }
             })
@@ -323,7 +273,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    if ((userEmailsFirebase[position] == firebaseUser.email)) {
+                    if ((postModel.userEmail == firebaseUser.email)) {
                         Toast.makeText(activity, getString(R.string.you_already_shared_this), Toast.LENGTH_SHORT)
                             .show()
                     } else {

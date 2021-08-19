@@ -1,32 +1,26 @@
 package com.mrcaracal.fragment.home
 
-import com.google.firebase.Timestamp
+import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.fragment.model.PostModelProvider
+import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.modul.Posts
 import java.util.*
 
-class FirebaseOperationForHome(
-    var postIDsFirebase: ArrayList<String>,
-    var userEmailsFirebase: ArrayList<String>,
-    var pictureLinksFirebase: ArrayList<String>,
-    var placeNamesFirebase: ArrayList<String>,
-    var locationFirebase: ArrayList<String>,
-    var addressesFirebase: ArrayList<String>,
-    var citiesFirebase: ArrayList<String>,
-    var commentsFirebase: ArrayList<String>,
-    var postCodesFirebase: ArrayList<String>,
-    var tagsFirebase: ArrayList<String>,
-    var timesFirebase: ArrayList<Timestamp>
-) {
+private const val TAG = "FirebaseOperationForHom"
+
+class FirebaseOperationForHome {
 
     private val COLLECTION_NAME_SAVED = "Kaydedilenler"
     private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
     private val COLLECTION_NAME_POST = "Gonderiler"
+
+    val postModelsList: ArrayList<PostModel> = arrayListOf()
 
     fun rewind(
         firebaseFirestore: FirebaseFirestore,
@@ -44,31 +38,12 @@ class FirebaseOperationForHome(
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
 
-                        // Çekilen her veriyi Map dizinine at ve daha sonra çekip kullan
-                        val dataCluster = snapshot.data
-                        val postID = dataCluster!!["gonderiID"].toString()
-                        val userEmail = dataCluster["kullaniciEposta"].toString()
-                        var palceName = dataCluster["yerIsmi"].toString()
-                        palceName = palceName.substring(0, 1).uppercase() + palceName.substring(1)
-                        val pictureLink = dataCluster["resimAdresi"].toString()
-                        val location = dataCluster["konum"].toString()
-                        val addres = dataCluster["adres"].toString()
-                        val city = dataCluster["sehir"].toString()
-                        val comment = dataCluster["yorum"].toString()
-                        val postCode = dataCluster["postaKodu"].toString()
-                        val time = dataCluster["zaman"] as Timestamp
+                        snapshot.data?.let {
+                            val postModel = PostModelProvider.provide(it)
+                            postModelsList.add(postModel)
+                            Log.i(TAG, "rewind: " + postModel.placeName)
+                        }
 
-                        postIDsFirebase.add(postID)
-                        userEmailsFirebase.add(userEmail)
-                        pictureLinksFirebase.add(pictureLink)
-                        placeNamesFirebase.add(palceName)
-                        locationFirebase.add(location)
-                        addressesFirebase.add(addres)
-                        citiesFirebase.add(city)
-                        commentsFirebase.add(comment)
-                        postCodesFirebase.add(postCode)
-                        tagsFirebase.add(dataCluster["taglar"].toString())
-                        timesFirebase.add(time)
                         recyclerAdapterStructure.notifyDataSetChanged()
 
                     }
@@ -77,31 +52,31 @@ class FirebaseOperationForHome(
     }
 
     fun saveOperations(
-        position: Int,
+        postModel: PostModel,
         firebaseUser: FirebaseUser,
         firebaseFirestore: FirebaseFirestore
     ) {
-        if ((userEmailsFirebase[position] == firebaseUser.email)) {
+        if ((postModel.userEmail == firebaseUser.email)) {
             //activity?.let { toast(it, "Bunu zaten siz paylaştınız") }
         } else {
             val MGonderiler = Posts(
-                postIDsFirebase[position],
-                userEmailsFirebase[position],
-                pictureLinksFirebase[position],
-                placeNamesFirebase[position],
-                locationFirebase[position],
-                addressesFirebase[position],
-                citiesFirebase[position],
-                commentsFirebase[position],
-                postCodesFirebase[position],
-                listOf(tagsFirebase[position]),
+                postModel.postId,
+                postModel.userEmail,
+                postModel.pictureLink,
+                postModel.placeName,
+                postModel.location,
+                postModel.address,
+                postModel.city,
+                postModel.comment,
+                postModel.postCode,
+                listOf(postModel.tag),
                 FieldValue.serverTimestamp()
             )
             val documentReference = firebaseFirestore
                 .collection(COLLECTION_NAME_THEY_SAVED)
                 .document((firebaseUser.email)!!)
                 .collection(COLLECTION_NAME_SAVED)
-                .document(postIDsFirebase[position])
+                .document(postModel.postId)
             documentReference
                 .set(MGonderiler)
                 .addOnSuccessListener {
@@ -113,9 +88,9 @@ class FirebaseOperationForHome(
         }
     }
 
-    fun showTag(position: Int): String {
+    fun showTag(postModel: PostModel): String {
         var taggg = ""
-        val al_taglar = tagsFirebase[position]
+        val al_taglar = postModel.tag
         val tag_uzunluk = al_taglar.length
         val alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
         val a_t = alinan_taglar.split(",").toTypedArray()

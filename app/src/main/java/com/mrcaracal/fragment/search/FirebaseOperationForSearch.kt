@@ -6,73 +6,41 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.os.Looper
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.fragment.model.PostModelProvider
+import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.modul.Posts
 import java.util.*
 
-class FirebaseOperationForSearch(
-    var postIDsFirebase: ArrayList<String>,
-    var userEmailsFirebase: ArrayList<String>,
-    var pictureLinksFirebase: ArrayList<String>,
-    var placeNamesFirebase: ArrayList<String>,
-    var locationFirebase: ArrayList<String>,
-    var addressesFirebase: ArrayList<String>,
-    var citiesFirebase: ArrayList<String>,
-    var commentsFirebase: ArrayList<String>,
-    var postCodesFirebase: ArrayList<String>,
-    var tagsFirebase: ArrayList<String>,
-    var timesFirebase: ArrayList<Timestamp>
-) {
+private const val TAG = "FirebaseOperationForSea"
+
+class FirebaseOperationForSearch() {
 
     private val COLLECTION_NAME_SAVED = "Kaydedilenler"
     private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
     private val COLLECTION_NAME_POST = "Gonderiler"
 
+    val postModelsList: ArrayList<PostModel> = arrayListOf()
+
     fun clearList() {
-        postIDsFirebase.clear()
-        userEmailsFirebase.clear()
-        pictureLinksFirebase.clear()
-        placeNamesFirebase.clear()
-        locationFirebase.clear()
-        addressesFirebase.clear()
-        citiesFirebase.clear()
-        commentsFirebase.clear()
-        postCodesFirebase.clear()
-        tagsFirebase.clear()
-        timesFirebase.clear()
+        postModelsList.clear()
     }
 
     fun getData(data: Map<String, Any>?) {
-        val dataCluster = data
-        val postID = dataCluster!!["gonderiID"].toString()
-        val userEmail = dataCluster["kullaniciEposta"].toString()
-        var placeName = dataCluster["yerIsmi"].toString()
-        placeName = placeName.substring(0, 1).uppercase() + placeName.substring(1)
-        val pictureLink = dataCluster["resimAdresi"].toString()
-        val location = dataCluster["konum"].toString()
-        val addres = dataCluster["adres"].toString()
-        val city = dataCluster["sehir"].toString()
-        val comment = dataCluster["yorum"].toString()
-        val postCode = dataCluster["postaKodu"].toString()
-        val time = dataCluster["zaman"] as Timestamp
-        postIDsFirebase.add(postID)
-        userEmailsFirebase.add(userEmail)
-        pictureLinksFirebase.add(pictureLink)
-        placeNamesFirebase.add(placeName)
-        locationFirebase.add(location)
-        addressesFirebase.add(addres)
-        citiesFirebase.add(city)
-        commentsFirebase.add(comment)
-        postCodesFirebase.add(postCode)
-        tagsFirebase.add(dataCluster["taglar"].toString())
-        timesFirebase.add(time)
+
+        data?.let {
+            val postModel = PostModelProvider.provide(it)
+            postModelsList.add(postModel)
+            Log.i(TAG, "getData: " + postModel.placeName)
+        }
+
     }
 
     fun listNearbyPlaces(activity: Activity, recyclerAdapterStructure: RecyclerAdapterStructure) {
@@ -196,7 +164,6 @@ class FirebaseOperationForSearch(
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
                         getData(snapshot.data)
-                        //getData(snapshot.data)
                         recyclerAdapterStructure.notifyDataSetChanged()
                     }
                 }
@@ -206,31 +173,31 @@ class FirebaseOperationForSearch(
     }
 
     fun saveOperations(
-        position: Int,
+        postModel: PostModel,
         firebaseUser: FirebaseUser,
         firebaseFirestore: FirebaseFirestore
     ) {
-        if ((userEmailsFirebase[position] == firebaseUser.email)) {
+        if ((postModel.userEmail == firebaseUser.email)) {
             //
         } else {
             val MGonderiler = Posts(
-                postIDsFirebase[position],
-                userEmailsFirebase[position],
-                pictureLinksFirebase[position],
-                placeNamesFirebase[position],
-                locationFirebase[position],
-                addressesFirebase[position],
-                citiesFirebase[position],
-                commentsFirebase[position],
-                postCodesFirebase[position],
-                listOf(tagsFirebase[position]),
+                postModel.postId,
+                postModel.userEmail,
+                postModel.pictureLink,
+                postModel.placeName,
+                postModel.location,
+                postModel.address,
+                postModel.city,
+                postModel.comment,
+                postModel.postCode,
+                listOf(postModel.tag),
                 FieldValue.serverTimestamp()
             )
             val documentReference = firebaseFirestore
                 .collection(COLLECTION_NAME_THEY_SAVED)
                 .document((firebaseUser.email)!!)
                 .collection(COLLECTION_NAME_SAVED)
-                .document(postIDsFirebase[position])
+                .document(postModel.postId)
             documentReference
                 .set(MGonderiler)
                 .addOnSuccessListener {
@@ -242,9 +209,9 @@ class FirebaseOperationForSearch(
         }
     }
 
-    fun showTag(position: Int): String {
+    fun showTag(postModel: PostModel): String {
         var taggg = ""
-        val al_taglar = tagsFirebase[position]
+        val al_taglar = postModel.tag
         val tag_uzunluk = al_taglar.length
         val alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
         val a_t = alinan_taglar.split(",").toTypedArray()

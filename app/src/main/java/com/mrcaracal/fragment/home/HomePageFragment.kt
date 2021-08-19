@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,9 +21,9 @@ import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.extensions.toast
+import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.MyArrayList
-import org.w3c.dom.Text
 import java.text.DateFormat
 
 class HomePageFragment : Fragment(), RecyclerViewClickInterface {
@@ -32,17 +31,6 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
     lateinit var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null
     lateinit var firebaseFirestore: FirebaseFirestore
-    lateinit var postIDsFirebase: ArrayList<String>
-    lateinit var userEmailsFirebase: ArrayList<String>
-    lateinit var pictureLinksFirebase: ArrayList<String>
-    lateinit var placeNamesFirebase: ArrayList<String>
-    lateinit var locationFirebase: ArrayList<String>
-    lateinit var addressesFirebase: ArrayList<String>
-    lateinit var citiesFirebase: ArrayList<String>
-    lateinit var commentsFirebase: ArrayList<String>
-    lateinit var postCodesFirebase: ArrayList<String>
-    lateinit var tagsFirebase: ArrayList<String>
-    private lateinit var timesFirebase: ArrayList<Timestamp>
     private lateinit var recyclerView: RecyclerView
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
     lateinit var viewGroup: ViewGroup
@@ -57,33 +45,11 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser
         firebaseFirestore = FirebaseFirestore.getInstance()
-        postIDsFirebase = ArrayList()
-        userEmailsFirebase = ArrayList()
-        pictureLinksFirebase = ArrayList()
-        placeNamesFirebase = ArrayList()
-        locationFirebase = ArrayList()
-        addressesFirebase = ArrayList()
-        citiesFirebase = ArrayList()
-        commentsFirebase = ArrayList()
-        postCodesFirebase = ArrayList()
-        tagsFirebase = ArrayList()
-        timesFirebase = ArrayList()
+
         GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
 
-        firebaseOperationForHome = FirebaseOperationForHome(
-            postIDsFirebase,
-            userEmailsFirebase,
-            pictureLinksFirebase,
-            placeNamesFirebase,
-            locationFirebase,
-            addressesFirebase,
-            citiesFirebase,
-            commentsFirebase,
-            postCodesFirebase,
-            tagsFirebase,
-            timesFirebase
-        )
+        firebaseOperationForHome = FirebaseOperationForHome()
 
     }
 
@@ -99,17 +65,6 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         recyclerView = viewGroup.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerAdapterStructure = RecyclerAdapterStructure(
-            (postIDsFirebase),
-            (userEmailsFirebase),
-            (pictureLinksFirebase),
-            (placeNamesFirebase),
-            (locationFirebase),
-            (addressesFirebase),
-            (citiesFirebase),
-            (commentsFirebase),
-            (postCodesFirebase),
-            (tagsFirebase),
-            timesFirebase,
             this
         )
         recyclerView.adapter = recyclerAdapterStructure
@@ -120,8 +75,8 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         return viewGroup
     }
 
-    fun goToLocationOperations(position: Int) {
-        val postLocation = locationFirebase[position].split(",").toTypedArray()
+    fun goToLocationOperations(postModel: PostModel) {
+        val postLocation = postModel.location.split(",").toTypedArray()
         var adverb = 0
         for (locationXY: String in postLocation) {
             adverb++
@@ -134,12 +89,12 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
 
-    override fun onLongItemClick(position: Int) {
+    override fun onLongItemClick(postModel: PostModel) {
 
         val mDialogView = LayoutInflater.from(activity).inflate(R.layout.custom_dialog_window,viewGroup, false)
 
         val dateAndTime = DateFormat.getDateTimeInstance().format(
-            timesFirebase[position].toDate()
+            postModel.time.toDate()
         )
 
         val mBuilder = AlertDialog.Builder(activity)
@@ -151,12 +106,12 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         var date = mDialogView.findViewById<TextView>(R.id.dw_date)
         var addres = mDialogView.findViewById<TextView>(R.id.dw_addres)
         var labels = mDialogView.findViewById<TextView>(R.id.dw_labels)
-        title.text = placeNamesFirebase[position]
-        comment.text = commentsFirebase[position]
-        sharing.text = userEmailsFirebase[position]
+        title.text = postModel.placeName
+        comment.text = postModel.comment
+        sharing.text = postModel.userEmail
         date.text = dateAndTime
-        addres.text = addressesFirebase[position]
-        labels.text = firebaseOperationForHome.showTag(position)
+        addres.text = postModel.address
+        labels.text = firebaseOperationForHome.showTag(postModel)
 
         val mAlertDialog = mBuilder.create()
         mDialogView.findViewById<Button>(R.id.dw_ok).setOnClickListener {
@@ -168,12 +123,11 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
     }
 
-    override fun onOtherOperationsClick(position: Int) {
-        //Toast.makeText(getActivity(), "DİĞER", Toast.LENGTH_SHORT).show();
-        onOpenDialogWindow(position)
+    override fun onOtherOperationsClick(postModel: PostModel) {
+        onOpenDialogWindow(postModel)
     }
 
-    override fun onOpenDialogWindow(position: Int) {
+    fun onOpenDialogWindow(postModel: PostModel) {
         val bottomSheetDialog = BottomSheetDialog((activity)!!, R.style.BottomSheetDialogTheme)
         val bottomSheetView = LayoutInflater.from(activity)
             .inflate(
@@ -181,14 +135,14 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
                 viewGroup.findViewById(R.id.bottomSheetContainer)
             )
         val title = bottomSheetView.findViewById<TextView>(R.id.bs_baslik)
-        title.text = placeNamesFirebase.get(position)
+        title.text = postModel.placeName
 
         // Gönderiyi Kaydet
         bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
                 firebaseUser?.let { it1 ->
                     firebaseOperationForHome.saveOperations(
-                        position,
+                        postModel,
                         it1, firebaseFirestore
                     )
                 }
@@ -199,7 +153,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    goToLocationOperations(position)
+                    goToLocationOperations(postModel)
                     bottomSheetDialog.dismiss()
                 }
             })
@@ -208,7 +162,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    if ((userEmailsFirebase[position] == firebaseUser?.email)) {
+                    if ((postModel.userEmail == firebaseUser?.email)) {
                         toast(activity!!, getString(R.string.you_already_shared_this))
                     } else {
                         val contactInfo = MyArrayList()

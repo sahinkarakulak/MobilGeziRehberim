@@ -11,9 +11,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,11 +19,11 @@ import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.EditProfileActivity
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragMyAccountBinding
 import com.squareup.picasso.Picasso
 import java.text.DateFormat
-import java.util.*
 
 class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
 
@@ -35,17 +33,6 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     lateinit var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null
     lateinit var firebaseFirestore: FirebaseFirestore
-    lateinit var postIDsFirebase: ArrayList<String>
-    lateinit var userEmailsFirebase: ArrayList<String>
-    lateinit var pictureLinksFirebase: ArrayList<String>
-    lateinit var placeNamesFirebase: ArrayList<String>
-    lateinit var locationFirebase: ArrayList<String>
-    lateinit var addressesFirebase: ArrayList<String>
-    lateinit var citiesFirebase: ArrayList<String>
-    lateinit var commentsFirebase: ArrayList<String>
-    lateinit var postCodesFirebase: ArrayList<String>
-    lateinit var tagsFirebase: ArrayList<String>
-    private lateinit var timesFirebase: ArrayList<Timestamp>
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
 
     private val FIREBASE_COLLECTION_NAME = "Kullanicilar"
@@ -67,33 +54,10 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
         firebaseUser = firebaseAuth.currentUser
-        postIDsFirebase = ArrayList()
-        userEmailsFirebase = ArrayList()
-        pictureLinksFirebase = ArrayList()
-        placeNamesFirebase = ArrayList()
-        locationFirebase = ArrayList()
-        addressesFirebase = ArrayList()
-        citiesFirebase = ArrayList()
-        commentsFirebase = ArrayList()
-        postCodesFirebase = ArrayList()
-        tagsFirebase = ArrayList()
-        timesFirebase = ArrayList()
         GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
 
-        firebaseOperationForAccount = FirebaseOperationForAccount(
-            postIDsFirebase,
-            userEmailsFirebase,
-            pictureLinksFirebase,
-            placeNamesFirebase,
-            locationFirebase,
-            addressesFirebase,
-            citiesFirebase,
-            commentsFirebase,
-            postCodesFirebase,
-            tagsFirebase,
-            timesFirebase
-        )
+        firebaseOperationForAccount = FirebaseOperationForAccount()
     }
 
     override fun onCreateView(
@@ -109,18 +73,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         // RecyclerView Tanımlama İşlemi
         binding.recyclerViewAccount.layoutManager = LinearLayoutManager(activity)
         recyclerAdapterStructure = RecyclerAdapterStructure(
-            (postIDsFirebase),
-            (userEmailsFirebase),
-            (pictureLinksFirebase),
-            (placeNamesFirebase),
-            (locationFirebase),
-            (addressesFirebase),
-            (citiesFirebase),
-            (commentsFirebase),
-            (postCodesFirebase),
-            (tagsFirebase),
-            timesFirebase,
-            this
+            recyclerViewClickInterface = this
         )
 
         firebaseUser?.let {
@@ -183,8 +136,8 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         return view
     }
 
-    fun goToLocationFromShared() {
-        val postLocation = locationFirebase[POSITION_VALUE].split(",").toTypedArray()
+    fun goToLocationFromShared(postModel: PostModel) {
+        val postLocation = postModel.location.split(",").toTypedArray()
         var adverb = 0
         for (locationXY: String in postLocation) {
             adverb++
@@ -197,8 +150,8 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
 
-    fun goToLocationFromSaved() {
-        val postLocation = locationFirebase[POSITION_VALUE].split(",").toTypedArray()
+    fun goToLocationFromSaved(postModel: PostModel) {
+        val postLocation = postModel.location.split(",").toTypedArray()
         var adverb = 0
         for (locationXY: String in postLocation) {
             adverb++
@@ -211,19 +164,19 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
 
-    override fun onLongItemClick(position: Int) {
+    override fun onLongItemClick(postModel: PostModel) {
         val dateAndTime = DateFormat.getDateTimeInstance().format(
-            timesFirebase[position].toDate()
+            postModel.time.toDate()
         )
         val showDetailPost =
-            (commentsFirebase.get(position) +
-                    "\n\n${getString(R.string.sharing)}: " + userEmailsFirebase[position] +
+            (postModel.comment +
+                    "\n\n${getString(R.string.sharing)}: " + postModel.userEmail +
                     "\n${getString(R.string.date)}: " + dateAndTime +
-                    "\n${getString(R.string.addres)}: " + addressesFirebase[position] +
-                    "\n\n" + firebaseOperationForAccount.showTag(position, TAB_CONTROL))
+                    "\n${getString(R.string.addres)}: " + postModel.address +
+                    "\n\n" + firebaseOperationForAccount.showTag(postModel, TAB_CONTROL))
         val alert = AlertDialog.Builder(activity)
         alert
-            .setTitle(placeNamesFirebase[position])
+            .setTitle(postModel.placeName)
             .setMessage(showDetailPost)
             .setNegativeButton(getString(R.string.ok)) { _dialog, which ->
                 //
@@ -231,12 +184,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
             .show()
     }
 
-    override fun onOtherOperationsClick(position: Int) {
-        POSITION_VALUE = position
-        onOpenDialogWindow(position)
-    }
-
-    override fun onOpenDialogWindow(position: Int) {
+    override fun onOtherOperationsClick(postModel: PostModel) {
         val bottomSheetDialog = BottomSheetDialog((activity)!!, R.style.BottomSheetDialogTheme)
         val bottomSheetView = LayoutInflater.from(activity)
             .inflate(
@@ -244,14 +192,14 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                 viewGroup.findViewById(R.id.bottomSheetContainer_hesabim)
             )
         val title = bottomSheetView.findViewById<TextView>(R.id.bs_baslik)
-        title.text = placeNamesFirebase.get(position)
+        title.text = postModel.placeName
 
         // KONUMA GİT
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation).setOnClickListener(
             View.OnClickListener {
                 when (TAB_CONTROL) {
-                    "paylasilanlar" -> goToLocationFromShared()
-                    "kaydedilenler" -> goToLocationFromSaved()
+                    "paylasilanlar" -> goToLocationFromShared(postModel)
+                    "kaydedilenler" -> goToLocationFromSaved(postModel)
                 }
                 bottomSheetDialog.dismiss()
             })

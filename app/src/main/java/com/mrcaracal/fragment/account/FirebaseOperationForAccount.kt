@@ -1,28 +1,17 @@
 package com.mrcaracal.fragment.account
 
 import android.util.Log
-import android.widget.Toast
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.mrcaracal.adapter.RecyclerAdapterStructure
-import java.util.*
+import com.mrcaracal.fragment.model.PostModel
+import com.mrcaracal.fragment.model.PostModelProvider
 
-class FirebaseOperationForAccount(
-    var postIDsFirebase: ArrayList<String>,
-    var userEmailsFirebase: ArrayList<String>,
-    var pictureLinksFirebase: ArrayList<String>,
-    var placeNamesFirebase: ArrayList<String>,
-    var locationFirebase: ArrayList<String>,
-    var addressesFirebase: ArrayList<String>,
-    var citiesFirebase: ArrayList<String>,
-    var commentsFirebase: ArrayList<String>,
-    var postCodesFirebase: ArrayList<String>,
-    var tagsFirebase: ArrayList<String>,
-    var timesFirebase: ArrayList<Timestamp>
-) {
+private const val TAG = "FirebaseOperationForAcc"
+
+class FirebaseOperationForAccount {
 
     private val COLLECTION_NAME_SHARED = "Paylasilanlar"
     private val COLLECTION_NAME_THEY_SHARED = "Paylastiklari"
@@ -30,18 +19,10 @@ class FirebaseOperationForAccount(
     private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
     private val COLLECTION_NAME_POST = "Gonderiler"
 
+    val postModelsList: ArrayList<PostModel> = arrayListOf()
+
     fun clearList() {
-        postIDsFirebase.clear()
-        userEmailsFirebase.clear()
-        pictureLinksFirebase.clear()
-        placeNamesFirebase.clear()
-        locationFirebase.clear()
-        addressesFirebase.clear()
-        citiesFirebase.clear()
-        commentsFirebase.clear()
-        postCodesFirebase.clear()
-        tagsFirebase.clear()
-        timesFirebase.clear()
+        postModelsList.clear()
     }
 
     fun pullTheShared(
@@ -60,29 +41,13 @@ class FirebaseOperationForAccount(
                 if (task.isSuccessful) {
                     val querySnapshot = (task.result)
                     for (documentSnapshot: DocumentSnapshot in querySnapshot) {
-                        val dataClusterAccount = documentSnapshot.data
-                        val postID = dataClusterAccount!!["gonderiID"].toString()
-                        val userEmail = dataClusterAccount["kullaniciEposta"].toString()
-                        var palceName = dataClusterAccount["yerIsmi"].toString()
-                        palceName = palceName.substring(0, 1).uppercase() + palceName.substring(1)
-                        val location = dataClusterAccount["konum"].toString()
-                        val pictureLink = dataClusterAccount["resimAdresi"].toString()
-                        val comment = dataClusterAccount["yorum"].toString()
-                        val addres = dataClusterAccount["adres"].toString()
-                        val city = dataClusterAccount["sehir"].toString()
-                        val postCode = dataClusterAccount["postaKodu"].toString()
-                        val time = dataClusterAccount["zaman"] as Timestamp
-                        postIDsFirebase.add(postID)
-                        userEmailsFirebase.add(userEmail)
-                        pictureLinksFirebase.add(pictureLink)
-                        placeNamesFirebase.add(palceName)
-                        locationFirebase.add(location)
-                        commentsFirebase.add(comment)
-                        postCodesFirebase.add(postCode)
-                        tagsFirebase.add(dataClusterAccount["taglar"].toString())
-                        addressesFirebase.add(addres)
-                        citiesFirebase.add(city)
-                        timesFirebase.add(time)
+
+                        documentSnapshot.data?.let {
+                            val postModel = PostModelProvider.provide(it)
+                            postModelsList.add(postModel)
+                            Log.i(TAG, "pullTheShared: " + postModel.placeName)
+                        }
+
                         recyclerAdapterStructure.notifyDataSetChanged()
                     }
                 }
@@ -108,30 +73,12 @@ class FirebaseOperationForAccount(
                 if (task.isSuccessful) {
                     val querySnapshot = (task.result)
                     for (documentSnapshot: DocumentSnapshot in querySnapshot) {
-                        val dataClusterAccount = documentSnapshot.data
-                        val postID = dataClusterAccount!!["gonderiID"].toString()
-                        val userEmail = dataClusterAccount["kullaniciEposta"].toString()
-                        var placeName = dataClusterAccount["yerIsmi"].toString()
-                        placeName = placeName.substring(0, 1)
-                            .uppercase(Locale.getDefault()) + placeName.substring(1)
-                        val location = dataClusterAccount["konum"].toString()
-                        val picatureLink = dataClusterAccount["resimAdresi"].toString()
-                        val comment = dataClusterAccount["yorum"].toString()
-                        val postCode = dataClusterAccount["postaKodu"].toString()
-                        val addres = dataClusterAccount["adres"].toString()
-                        val city = dataClusterAccount["sehir"].toString()
-                        val time = dataClusterAccount["zaman"] as Timestamp
-                        postIDsFirebase.add(postID)
-                        userEmailsFirebase.add(userEmail)
-                        pictureLinksFirebase.add(picatureLink)
-                        placeNamesFirebase.add(placeName)
-                        locationFirebase.add(location)
-                        commentsFirebase.add(comment)
-                        postCodesFirebase.add(postCode)
-                        tagsFirebase.add(dataClusterAccount["taglar"].toString())
-                        addressesFirebase.add(addres)
-                        citiesFirebase.add(city)
-                        timesFirebase.add(time)
+                        documentSnapshot.data?.let {
+                            val postModel = PostModelProvider.provide(it)
+                            postModelsList.add(postModel)
+
+                        }
+                        recyclerAdapterStructure.postModelList = postModelsList
                         recyclerAdapterStructure.notifyDataSetChanged()
                     }
                 }
@@ -149,9 +96,9 @@ class FirebaseOperationForAccount(
         //1. Adım
         firebaseFirestore
             .collection(COLLECTION_NAME_SHARED)
-            .document(userEmailsFirebase[positionValue])
+            .document(postModelsList[positionValue].userEmail)
             .collection(COLLECTION_NAME_THEY_SHARED)
-            .document(postIDsFirebase[positionValue])
+            .document(postModelsList[positionValue].postId)
             .delete()
             .addOnSuccessListener {
                 //
@@ -163,7 +110,7 @@ class FirebaseOperationForAccount(
         //2. Adım
         firebaseFirestore
             .collection(COLLECTION_NAME_POST)
-            .document(postIDsFirebase[positionValue])
+            .document(postModelsList[positionValue].postId)
             .delete()
             .addOnSuccessListener {
                 //
@@ -185,7 +132,7 @@ class FirebaseOperationForAccount(
             .collection(COLLECTION_NAME_THEY_SAVED)
             .document((firebaseUser.email)!!)
             .collection(COLLECTION_NAME_SAVED)
-            .document(postIDsFirebase[positionValue])
+            .document(postModelsList[positionValue].postId)
             .delete()
             .addOnSuccessListener {
                 //
@@ -195,9 +142,9 @@ class FirebaseOperationForAccount(
             }
     }
 
-    fun showTag(position: Int, tabControl: String): String {
+    fun showTag(postModel: PostModel, tabControl: String): String {
         var taggg = ""
-        val al_taglar = tagsFirebase[position]
+        val al_taglar = postModel.tag
         val tag_uzunluk = al_taglar.length
         val alinan_taglar: String
         val a_t: Array<String>

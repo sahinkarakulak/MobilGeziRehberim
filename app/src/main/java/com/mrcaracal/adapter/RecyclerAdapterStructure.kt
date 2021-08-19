@@ -6,31 +6,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.adapter.RecyclerAdapterStructure.GonderiHolder
+import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.squareup.picasso.Picasso
-import java.util.*
+import kotlin.collections.ArrayList
 
 class RecyclerAdapterStructure(
-    val gonderiIDleriListesi: ArrayList<String>,
-    val kullaniciEpostalariListesi: ArrayList<String>,
-    val resimAdresleriListesi: ArrayList<String>,
-    val yerIsimleriListesi: ArrayList<String>,
-    val konumlariListesi: ArrayList<String>,
-    val adresleriListesi: ArrayList<String>,
-    val sehirListesi: ArrayList<String>,
-    val yorumlarListesi: ArrayList<String>,
-    val postaKodlari: ArrayList<String>,
-    val taglarListesi: ArrayList<String>,
-    val zamanlarListesi: ArrayList<Timestamp>,
-    val recyclerViewClickInterface: RecyclerViewClickInterface
+    val recyclerViewClickInterface: RecyclerViewClickInterface,
+    var postModelList: ArrayList<PostModel> = arrayListOf()
 ) : RecyclerView.Adapter<GonderiHolder>() {
 
     lateinit var firebaseAuth: FirebaseAuth
@@ -50,19 +39,29 @@ class RecyclerAdapterStructure(
 
         // Kullanıcıya gösterilen kısım
         /*holder.row_epostasi.setText(kullaniciEpostalariListesi.get(position));*/
-        holder.row_placeName.text = yerIsimleriListesi[position]
-        holder.row_comment.text = yorumlarListesi[position]
+        holder.row_placeName.text = postModelList[position].placeName
+        holder.row_comment.text = postModelList[position].comment
         Picasso.get()
-            .load(resimAdresleriListesi[position])
+            .load(postModelList[position].pictureLink)
             .centerCrop()
             .fit()
             .into(holder.row_picturePath)
-        holder.row_picturePath.setOnClickListener { }
+
+        holder.ll_otherOperations.setOnClickListener {
+            recyclerViewClickInterface.onOtherOperationsClick(
+                postModelList.get(position)
+            )
+        }
+
+        holder.row_picturePath.setOnLongClickListener {
+            recyclerViewClickInterface.onLongItemClick(postModelList.get(position))
+            false
+        }
     }
 
     // kaç tane row olduğunu ayarlar - listemizde
     override fun getItemCount(): Int {
-        return resimAdresleriListesi.size
+        return postModelList.size
     }
 
     //
@@ -80,6 +79,8 @@ class RecyclerAdapterStructure(
             row_comment = itemView.findViewById(R.id.row_comment)
             ll_otherOperations = itemView.findViewById(R.id.ll_otherOperations)
 
+
+
             // position'a göre hangisine tıklandıysa position'u bunun için oluşturulan RecyclerViewClickInterface'e göndersin.
             // RecyclerViewClickInterface'i hangi sınıf impelements edecekse orada kullanılsın.
             /*itemView.setOnClickListener(new View.OnClickListener() {
@@ -96,16 +97,8 @@ class RecyclerAdapterStructure(
                     return false;
                 }
             });*/
-            row_picturePath.setOnLongClickListener {
-                recyclerViewClickInterface.onLongItemClick(adapterPosition)
-                false
-            }
-            
-            ll_otherOperations.setOnClickListener {
-                recyclerViewClickInterface.onOtherOperationsClick(
-                    adapterPosition
-                )
-            }
+
+
         }
     }
 
