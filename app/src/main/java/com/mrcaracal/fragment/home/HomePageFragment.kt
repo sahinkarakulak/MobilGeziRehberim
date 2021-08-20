@@ -23,7 +23,7 @@ import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
-import com.mrcaracal.modul.MyArrayList
+import com.mrcaracal.modul.UserAccountStore
 import java.text.DateFormat
 
 class HomePageFragment : Fragment(), RecyclerViewClickInterface {
@@ -166,9 +166,8 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
                     if ((postModel.userEmail == firebaseUser?.email)) {
                         toast(activity!!, getString(R.string.you_already_shared_this))
                     } else {
-                        val contactInfo = MyArrayList()
                         val intent = Intent(Intent.ACTION_SEND)
-                        intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.admin_account)
+                        intent.putExtra(Intent.EXTRA_EMAIL, UserAccountStore.adminAccountEmails)
                         intent.putExtra(Intent.EXTRA_SUBJECT, "")
                         intent.putExtra(Intent.EXTRA_TEXT, "")
                         intent.type = "plain/text"

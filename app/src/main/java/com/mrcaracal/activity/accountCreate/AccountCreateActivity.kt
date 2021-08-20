@@ -1,8 +1,12 @@
 package com.mrcaracal.activity.accountCreate
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.mrcaracal.extensions.toast
+import com.mrcaracal.mobilgezirehberim.Login
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.ActivityAccountCreateBinding
 
@@ -19,18 +23,39 @@ class AccountCreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAccountCreateBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-        title = getString(R.string.account_create)
-        viewModel = ViewModelProvider(this).get(AccountCreateViewModel::class.java)
+        setContentView(binding.root)
+        initViewModel()
+        initClickListeners()
+        observeContactState()
+    }
 
+    private fun initViewModel(){
+        viewModel = ViewModelProvider(this).get(AccountCreateViewModel::class.java)
+    }
+
+    private fun initClickListeners(){
         binding.btnCreateAccount.setOnClickListener {
             userName = binding.edtUserName.text.toString()
             email = binding.edtUserEmail.text.toString()
             passOne = binding.edtUserPassOne.text.toString()
             passTwo = binding.edtUserPassTwo.text.toString()
-            viewModel.createAccount(userName, email, passOne, passTwo, it.context)
+            viewModel.createAccount(userName, email, passOne, passTwo)
         }
+    }
 
+    private fun observeContactState(){
+        viewModel.accountCreateState.observe(this){ accountCreateViewState ->
+            when(accountCreateViewState){
+                is AccountCreateViewModel.AccountCreateViewState.ShowRequiredFieldsMessage -> {
+                    toast(R.string.fill_in_the_required_fields)
+                }
+                is AccountCreateViewModel.AccountCreateViewState.CreateAccountAndSignOut -> {
+                    startActivity(Intent(this, Login::class.java))
+                }
+                is AccountCreateViewModel.AccountCreateViewState.ThePassIsNotTheSame -> {
+
+                }
+            }
+        }
     }
 }

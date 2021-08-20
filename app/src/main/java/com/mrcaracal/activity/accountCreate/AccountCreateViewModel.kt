@@ -1,13 +1,9 @@
 package com.mrcaracal.activity.accountCreate
 
-import android.content.Context
-import android.content.Intent
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.mrcaracal.mobilgezirehberim.Login
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.UserInfo
 
@@ -15,6 +11,9 @@ class AccountCreateViewModel : ViewModel() {
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseFirestore: FirebaseFirestore
+
+    var accountCreateState: MutableLiveData<AccountCreateViewState> =
+        MutableLiveData<AccountCreateViewState>()
 
     private val FIREBASE_COLLECTION_NAME = "Kullanicilar"
     private val DEFAULT_PP_LINK =
@@ -24,15 +23,10 @@ class AccountCreateViewModel : ViewModel() {
         userName: String,
         email: String,
         pass1: String,
-        pass2: String,
-        context: Context
+        pass2: String
     ) {
-        if (userName == "" || email == "" || pass1 == "" || pass2 == "") {
-            Toast.makeText(
-                context,
-                R.string.fill_in_the_required_fields.toString(),
-                Toast.LENGTH_SHORT
-            ).show()
+        if (userName.isEmpty() || email.isEmpty() || pass1.isEmpty() || pass2.isEmpty()) {
+            accountCreateState.value = AccountCreateViewState.ShowRequiredFieldsMessage
         } else {
             if (pass1 == pass2) {
                 firebaseAuth
@@ -42,11 +36,7 @@ class AccountCreateViewModel : ViewModel() {
                             .currentUser
                             ?.sendEmailVerification()
                             ?.addOnSuccessListener {
-                                Toast.makeText(
-                                    context,
-                                    R.string.verification_link_sent.toString(),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                //
                                 val userInfo = UserInfo(
                                     userName,
                                     email,
@@ -60,33 +50,32 @@ class AccountCreateViewModel : ViewModel() {
                                 documentReference
                                     .set(userInfo)
                                     .addOnSuccessListener {
-                                        val intent =
-                                            Intent(context, Login::class.java)
-                                        startActivity(context, intent, null)
+                                        accountCreateState.value =
+                                            AccountCreateViewState.CreateAccountAndSignOut
                                         firebaseAuth.signOut()
                                     }
                                     .addOnFailureListener { e ->
-                                        Toast.makeText(
-                                            context,
-                                            e.localizedMessage.toString(),
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        accountCreateState.value =
+                                            AccountCreateViewState.ShowErrorMessage(e = e)
                                     }
                             }
                             ?.addOnFailureListener { e ->
-                                Toast.makeText(
-                                    context,
-                                    e.localizedMessage.toString(),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                accountCreateState.value =
+                                    AccountCreateViewState.ShowErrorMessage(e = e)
                             }
                     }
-            } else
-                Toast.makeText(
-                    context,
-                    R.string.passwords_are_not_the_same.toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+            } else {
+                //accountCreateState.value = AccountCreateViewState.ThePassIsNotTheSame(R.string.passwords_are_not_the_same)
+                accountCreateState.value =
+                    AccountCreateViewState.ThePassIsNotTheSame("Parolalar aynı değil")
+            }
         }
+    }
+
+    sealed class AccountCreateViewState {
+        object ShowRequiredFieldsMessage : AccountCreateViewState()
+        object CreateAccountAndSignOut : AccountCreateViewState()
+        data class ShowErrorMessage(val e: Exception) : AccountCreateViewState()
+        data class ThePassIsNotTheSame(val message: String) : AccountCreateViewState()
     }
 }

@@ -30,7 +30,7 @@ import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragSearchBinding
 import com.mrcaracal.modul.Cities
-import com.mrcaracal.modul.MyArrayList
+import com.mrcaracal.modul.UserAccountStore
 import java.text.DateFormat
 
 class
@@ -43,7 +43,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
     lateinit var firebaseUser: FirebaseUser
     lateinit var firebaseFirestore: FirebaseFirestore
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
-    private lateinit var selectionOptions: MyArrayList
+    private lateinit var selectionOptions: UserAccountStore
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
     var keyValue = "yerIsmi"
@@ -62,7 +62,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
 
-        selectionOptions = MyArrayList()
+        selectionOptions = UserAccountStore()
 
         firebaseOperationForSearch = FirebaseOperationForSearch()
     }
@@ -278,9 +278,9 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                         Toast.makeText(activity, getString(R.string.you_already_shared_this), Toast.LENGTH_SHORT)
                             .show()
                     } else {
-                        val contactInfo = MyArrayList()
+                        val contactInfo = UserAccountStore()
                         val intent = Intent(Intent.ACTION_SEND)
-                        intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.admin_account)
+                        intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.adminAccountEmails)
                         intent.putExtra(Intent.EXTRA_SUBJECT, "")
                         intent.putExtra(Intent.EXTRA_TEXT, "")
                         intent.type = "plain/text"

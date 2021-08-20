@@ -48,15 +48,18 @@
             android:name="com.mrcaracal.activity.MyMapActivity"
             android:label="@string/title_activity_a__harita" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
-        <activity android:name="com.mrcaracal.activity.contact.ContactActivity" />
-        <activity android:name="com.mrcaracal.activity.editProfile.EditProfileActivity" />
+        <activity android:name="com.mrcaracal.activity.contact.ContactActivity"
+          android:label="@string/contact" />
+        <activity android:name="com.mrcaracal.activity.editProfile.EditProfileActivity"
+            android:label="@string/edit_profile"/>
         <activity android:name="com.mrcaracal.activity.HomePageActivity" />
         <activity
             android:name="com.mrcaracal.activity.resetPass.ResetPassActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
         <activity
             android:name="com.mrcaracal.activity.accountCreate.AccountCreateActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:label="@string/account_create"></activity>
         <activity
             android:name=".SplashScreen"
             android:theme="@style/Theme.AppCompat.NoActionBar">

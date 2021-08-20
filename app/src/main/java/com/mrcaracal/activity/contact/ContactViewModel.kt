@@ -1,29 +1,29 @@
 package com.mrcaracal.activity.contact
 
-import android.content.Context
-import android.content.Intent
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mrcaracal.mobilgezirehberim.R
-import com.mrcaracal.modul.MyArrayList
+import com.mrcaracal.modul.UserAccountStore
 
-class ContactViewModel: ViewModel() {
+class ContactViewModel : ViewModel() {
 
-    fun sendMessage(subject: String, message: String, context: Context){
-        val contactInfo = MyArrayList()
-        if (subject == "" || message == "") {
-            Toast.makeText(context, R.string.fill_in_the_required_fields, Toast.LENGTH_SHORT).show()
-        } else {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.admin_account)
-            intent.putExtra(Intent.EXTRA_SUBJECT, subject)
-            intent.putExtra(Intent.EXTRA_TEXT, message)
-            intent.type = "plain/text"
+  var contactState: MutableLiveData<ContactViewState> = MutableLiveData<ContactViewState>()
 
-            startActivity(context, Intent.createChooser(intent,
-                R.string.what_would_u_like_to_send_with.toString()
-            ), null)
-        }
+  fun sendMessage(subject: String, message: String) {
+    if (subject.isEmpty() || message.isEmpty()) {
+      contactState.value = ContactViewState.ShowRequiredFieldsMessage
+    } else {
+      contactState.value = ContactViewState.OpenEmail(
+        subject = subject,
+        message = message,
+        emails = UserAccountStore.adminAccountEmails
+      )
     }
+  }
+
+}
+
+sealed class ContactViewState {
+  object ShowRequiredFieldsMessage : ContactViewState()
+  data class OpenEmail(val subject: String, val message: String, val emails: ArrayList<String>) :
+    ContactViewState()
 }
