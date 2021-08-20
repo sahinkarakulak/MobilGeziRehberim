@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.Interface.RecyclerViewClickInterface
-import com.mrcaracal.activity.EditProfileActivity
+import com.mrcaracal.activity.editProfile.EditProfileActivity
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.fragment.model.PostModel

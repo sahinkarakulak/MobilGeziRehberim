@@ -1,4 +1,4 @@
-package com.mrcaracal.activity
+package com.mrcaracal.activity.editProfile
 
 import android.content.Intent
 import android.net.Uri
@@ -13,6 +13,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.mrcaracal.activity.HomePageActivity
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.ActivityEditProfileBinding

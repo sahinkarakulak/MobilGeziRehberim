@@ -1,6 +1,5 @@
 package com.mrcaracal.fragment.account
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -8,8 +7,6 @@ import com.google.firebase.firestore.Query
 import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
-
-private const val TAG = "FirebaseOperationForAcc"
 
 class FirebaseOperationForAccount {
 
@@ -45,7 +42,6 @@ class FirebaseOperationForAccount {
                         documentSnapshot.data?.let {
                             val postModel = PostModelProvider.provide(it)
                             postModelsList.add(postModel)
-                            Log.i(TAG, "pullTheShared: " + postModel.placeName)
                         }
                         recyclerAdapterStructure.postModelList = postModelsList
                         recyclerAdapterStructure.notifyDataSetChanged()

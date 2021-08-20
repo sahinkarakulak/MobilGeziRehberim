@@ -10,7 +10,7 @@
     android:padding="20dp"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="com.mrcaracal.activity.ResetPassActivity">
+    tools:context="com.mrcaracal.activity.resetPass.ResetPassActivity">
 
     <androidx.cardview.widget.CardView
         android:backgroundTint="#E8161717"
@@ -46,7 +46,7 @@
                 android:hint="E-Posta"/>
 
             <Button
-                android:onClick="btn_sendRequest"
+                android:id="@+id/btn_sendRequest"
                 android:background="@drawable/bg_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

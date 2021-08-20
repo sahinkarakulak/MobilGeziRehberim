@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseUser
@@ -18,8 +17,6 @@ import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.modul.Posts
 import java.util.*
-
-private const val TAG = "FirebaseOperationForSea"
 
 class FirebaseOperationForSearch {
 
@@ -38,7 +35,6 @@ class FirebaseOperationForSearch {
         data?.let {
             val postModel = PostModelProvider.provide(it)
             postModelsList.add(postModel)
-            Log.i(TAG, "getData: " + postModel.placeName)
         }
 
     }

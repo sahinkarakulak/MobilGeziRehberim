@@ -1,6 +1,5 @@
 package com.mrcaracal.fragment.home
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -11,8 +10,6 @@ import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.modul.Posts
 import java.util.*
-
-private const val TAG = "FirebaseOperationForHom"
 
 class FirebaseOperationForHome {
 
@@ -41,7 +38,6 @@ class FirebaseOperationForHome {
                         snapshot.data?.let {
                             val postModel = PostModelProvider.provide(it)
                             postModelsList.add(postModel)
-                            Log.i(TAG, "rewind: " + postModel.placeName)
                         }
                         recyclerAdapterStructure.postModelList = postModelsList
                         recyclerAdapterStructure.notifyDataSetChanged()

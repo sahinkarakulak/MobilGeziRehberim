@@ -10,9 +10,9 @@ import android.text.method.PasswordTransformationMethod
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.mrcaracal.activity.AccountCreateActivity
+import com.mrcaracal.activity.accountCreate.AccountCreateActivity
 import com.mrcaracal.activity.HomePageActivity
-import com.mrcaracal.activity.ResetPassActivity
+import com.mrcaracal.activity.resetPass.ResetPassActivity
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.databinding.ActivityLoginBinding
 
