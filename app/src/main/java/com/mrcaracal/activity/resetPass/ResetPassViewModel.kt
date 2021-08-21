@@ -1,30 +1,32 @@
 package com.mrcaracal.activity.resetPass
 
-import android.content.Context
-import android.content.Intent
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.mrcaracal.mobilgezirehberim.Login
-import com.mrcaracal.mobilgezirehberim.R
 
-class ResetPassViewModel: ViewModel() {
+class ResetPassViewModel : ViewModel() {
 
+    var resetPassState: MutableLiveData<ResetPassViewState> = MutableLiveData<ResetPassViewState>()
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun sendRequest(email: String, context: Context){
+    fun sendRequest(email: String) {
         if (email == "") {
-            Toast.makeText(context, R.string.fill_in_the_required_fields, Toast.LENGTH_SHORT).show()
+            resetPassState.value = ResetPassViewState.ShowRequiredFieldsMessage
         } else {
             firebaseAuth.sendPasswordResetEmail(email)
                 .addOnSuccessListener {
-                    Toast.makeText(context, R.string.check_your_e_mail, Toast.LENGTH_SHORT).show()
-                    val intent = Intent(context, Login::class.java)
-                    startActivity(context, intent, null)
+                    resetPassState.value = ResetPassViewState.ShowCheckEmailMessage
+                    resetPassState.value = ResetPassViewState.OpenLoginActivity
                 }.addOnFailureListener { e ->
-                    Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
+                    resetPassState.value = ResetPassViewState.ShowErrorMessage(e = e)
                 }
         }
     }
+}
+
+sealed class ResetPassViewState {
+    object ShowRequiredFieldsMessage : ResetPassViewState()
+    object ShowCheckEmailMessage : ResetPassViewState()
+    object OpenLoginActivity : ResetPassViewState()
+    data class ShowErrorMessage(val e: Exception) : ResetPassViewState()
 }

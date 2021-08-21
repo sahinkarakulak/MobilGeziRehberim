@@ -19,7 +19,6 @@ class ContactViewModel : ViewModel() {
       )
     }
   }
-
 }
 
 sealed class ContactViewState {

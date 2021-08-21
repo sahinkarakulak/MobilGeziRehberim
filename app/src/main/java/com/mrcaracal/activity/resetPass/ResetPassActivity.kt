@@ -1,8 +1,11 @@
 package com.mrcaracal.activity.resetPass
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.mrcaracal.extensions.toast
+import com.mrcaracal.mobilgezirehberim.Login
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.ActivityParolaSifirlamaBinding
 
@@ -14,14 +17,39 @@ class ResetPassActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityParolaSifirlamaBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-        title = getString(R.string.reset_pass)
-        viewModel = ViewModelProvider(this).get(ResetPassViewModel::class.java)
+        setContentView(binding.root)
+        initViewModel()
+        initClickListeners()
+        observeContactState()
+    }
 
+    fun initViewModel(){
+        viewModel = ViewModelProvider(this).get(ResetPassViewModel::class.java)
+    }
+
+    fun initClickListeners(){
         binding.btnSendRequest.setOnClickListener {
             val email = binding.edtResetPass.text.toString()
-            viewModel.sendRequest(email, it.context)
+            viewModel.sendRequest(email)
+        }
+    }
+
+    fun observeContactState(){
+        viewModel.resetPassState.observe(this) { resetPassViewState ->
+            when(resetPassViewState){
+                is ResetPassViewState.ShowRequiredFieldsMessage -> {
+                    toast(R.string.fill_in_the_required_fields)
+                }
+                is ResetPassViewState.ShowErrorMessage -> {
+                    toast(resetPassViewState.e.toString())
+                }
+                is ResetPassViewState.ShowCheckEmailMessage -> {
+                    toast(R.string.check_your_e_mail)
+                }
+                is ResetPassViewState.OpenLoginActivity -> {
+                    startActivity(Intent(applicationContext, Login::class.java))
+                }
+            }
         }
     }
 }

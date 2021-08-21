@@ -55,7 +55,8 @@
         <activity android:name="com.mrcaracal.activity.HomePageActivity" />
         <activity
             android:name="com.mrcaracal.activity.resetPass.ResetPassActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:label="@string/reset_pass"></activity>
         <activity
             android:name="com.mrcaracal.activity.accountCreate.AccountCreateActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"

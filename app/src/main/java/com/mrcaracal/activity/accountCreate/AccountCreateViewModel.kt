@@ -67,7 +67,7 @@ class AccountCreateViewModel : ViewModel() {
             } else {
                 //accountCreateState.value = AccountCreateViewState.ThePassIsNotTheSame(R.string.passwords_are_not_the_same)
                 accountCreateState.value =
-                    AccountCreateViewState.ThePassIsNotTheSame("Parolalar aynı değil")
+                    AccountCreateViewState.ThePassIsNotTheSame
             }
         }
     }
@@ -76,6 +76,6 @@ class AccountCreateViewModel : ViewModel() {
         object ShowRequiredFieldsMessage : AccountCreateViewState()
         object CreateAccountAndSignOut : AccountCreateViewState()
         data class ShowErrorMessage(val e: Exception) : AccountCreateViewState()
-        data class ThePassIsNotTheSame(val message: String) : AccountCreateViewState()
+        object ThePassIsNotTheSame : AccountCreateViewState()
     }
 }

@@ -62,8 +62,6 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
 
-        selectionOptions = UserAccountStore()
-
         firebaseOperationForSearch = FirebaseOperationForSearch()
     }
 
@@ -99,7 +97,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         })
 
         sp_adapterAccordingToWhat =
-            ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, selectionOptions.accordingToWhat)
+            ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, UserAccountStore.accordingToWhat)
         sp_adapterAccordingToWhat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spSearchByWhat.adapter = sp_adapterAccordingToWhat
         binding.spSearchByWhat.onItemSelectedListener = object : OnItemSelectedListener {
@@ -109,28 +107,28 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                 position: Int,
                 id: Long
             ) {
-                if ((parent.selectedItem.toString() == selectionOptions.accordingToWhat[0])) {
+                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[0])) {
                     binding.edtKeyValueSearch.visibility = View.VISIBLE
                     binding.spCities.visibility = View.INVISIBLE
                     firebaseOperationForSearch.clearList()
                     binding.recyclerViewSearch.scrollToPosition(0)
                     keyValue = "yerIsmi"
                 }
-                if ((parent.selectedItem.toString() == selectionOptions.accordingToWhat[1].toString())) {
+                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[1].toString())) {
                     binding.edtKeyValueSearch.visibility = View.VISIBLE
                     binding.spCities.visibility = View.INVISIBLE
                     firebaseOperationForSearch.clearList()
                     binding.recyclerViewSearch.scrollToPosition(0)
                     keyValue = "taglar"
                 }
-                if ((parent.selectedItem.toString() == selectionOptions.accordingToWhat[2].toString())) {
+                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[2].toString())) {
                     binding.edtKeyValueSearch.visibility = View.INVISIBLE
                     binding.spCities.visibility = View.VISIBLE
                     firebaseOperationForSearch.clearList()
                     binding.recyclerViewSearch.scrollToPosition(0)
                     keyValue = "sehir"
                 }
-                if ((parent.selectedItem.toString() == selectionOptions.accordingToWhat[3].toString())) {
+                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[3].toString())) {
                     binding.edtKeyValueSearch.visibility = View.VISIBLE
                     binding.spCities.visibility = View.INVISIBLE
                     firebaseOperationForSearch.clearList()
@@ -278,9 +276,8 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                         Toast.makeText(activity, getString(R.string.you_already_shared_this), Toast.LENGTH_SHORT)
                             .show()
                     } else {
-                        val contactInfo = UserAccountStore()
                         val intent = Intent(Intent.ACTION_SEND)
-                        intent.putExtra(Intent.EXTRA_EMAIL, contactInfo.adminAccountEmails)
+                        intent.putExtra(Intent.EXTRA_EMAIL, UserAccountStore.adminAccountEmails)
                         intent.putExtra(Intent.EXTRA_SUBJECT, "")
                         intent.putExtra(Intent.EXTRA_TEXT, "")
                         intent.type = "plain/text"

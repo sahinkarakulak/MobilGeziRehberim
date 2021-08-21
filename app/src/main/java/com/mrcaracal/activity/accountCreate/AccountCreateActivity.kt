@@ -53,7 +53,10 @@ class AccountCreateActivity : AppCompatActivity() {
                     startActivity(Intent(this, Login::class.java))
                 }
                 is AccountCreateViewModel.AccountCreateViewState.ThePassIsNotTheSame -> {
-
+                    toast(R.string.passwords_are_not_the_same)
+                }
+                is AccountCreateViewModel.AccountCreateViewState.ShowErrorMessage -> {
+                    toast(accountCreateViewState.e.toString())
                 }
             }
         }
