@@ -65,7 +65,6 @@ class AccountCreateViewModel : ViewModel() {
                             }
                     }
             } else {
-                //accountCreateState.value = AccountCreateViewState.ThePassIsNotTheSame(R.string.passwords_are_not_the_same)
                 accountCreateState.value =
                     AccountCreateViewState.ThePassIsNotTheSame
             }

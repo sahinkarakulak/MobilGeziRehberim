@@ -36,8 +36,6 @@ class RecyclerAdapterStructure(
 
     override fun onBindViewHolder(holder: GonderiHolder, position: Int) {
 
-        // Kullanıcıya gösterilen kısım
-        /*holder.row_epostasi.setText(kullaniciEpostalariListesi.get(position));*/
         holder.row_placeName.text = postModelList[position].placeName
         holder.row_comment.text = postModelList[position].comment
         Picasso.get()
@@ -58,12 +56,10 @@ class RecyclerAdapterStructure(
         }
     }
 
-    // kaç tane row olduğunu ayarlar - listemizde
     override fun getItemCount(): Int {
         return postModelList.size
     }
 
-    //
     inner class GonderiHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var row_picturePath: ImageView
         var row_placeName: TextView
@@ -71,33 +67,10 @@ class RecyclerAdapterStructure(
         var ll_otherOperations: LinearLayout
 
         init {
-
-            /*row_epostasi = itemView.findViewById(R.id.row_epostasi);*/
             row_picturePath = itemView.findViewById(R.id.row_picturePath)
             row_placeName = itemView.findViewById(R.id.row_placeName)
             row_comment = itemView.findViewById(R.id.row_comment)
             ll_otherOperations = itemView.findViewById(R.id.ll_otherOperations)
-
-
-            // position'a göre hangisine tıklandıysa position'u bunun için oluşturulan RecyclerViewClickInterface'e göndersin.
-            // RecyclerViewClickInterface'i hangi sınıf impelements edecekse orada kullanılsın.
-            /*itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    recyclerViewClickInterface.onItemClick(getAdapterPosition());
-                }
-            });*/
-
-            /*itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    recyclerViewClickInterface.onLongItemClick(getAdapterPosition());
-                    return false;
-                }
-            });*/
-
-
         }
     }
-
 }
