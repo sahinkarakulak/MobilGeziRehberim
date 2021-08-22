@@ -17,7 +17,7 @@ import com.mrcaracal.fragment.account.MyAccountFragment
 import com.mrcaracal.fragment.home.HomePageFragment
 import com.mrcaracal.fragment.search.SearchFragment
 import com.mrcaracal.fragment.share.ShareFragment
-import com.mrcaracal.mobilgezirehberim.Login
+import com.mrcaracal.mobilgezirehberim.login.Login
 import com.mrcaracal.mobilgezirehberim.R
 
 class HomePageActivity : AppCompatActivity() {

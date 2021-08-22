@@ -1,4 +1,4 @@
-package com.mrcaracal.mobilgezirehberim
+package com.mrcaracal.mobilgezirehberim.login
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,29 +7,28 @@ import android.os.Handler
 import android.os.Looper
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
+import androidx.lifecycle.ViewModelProvider
 import com.mrcaracal.activity.accountCreate.AccountCreateActivity
 import com.mrcaracal.activity.HomePageActivity
 import com.mrcaracal.activity.resetPass.ResetPassActivity
 import com.mrcaracal.extensions.toast
+import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.ActivityLoginBinding
 
 class Login : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var viewModel: LoginViewModel
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
 
-    var doubleBackToExitPressedOnce = false
-    var status = false
     var hide_show = false
-    private var firebaseAuth: FirebaseAuth? = null
+    var status = false
+    var doubleBackToExitPressedOnce = false
 
     fun init() {
-        firebaseAuth = FirebaseAuth.getInstance()
         GET = getSharedPreferences(packageName, MODE_PRIVATE)
         SET = GET.edit()
     }
@@ -37,14 +36,42 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
         init()
-        title = getString(R.string.login)
+        initViewModel()
+        viewModel.init()
+        initClickListeners()
+        observeContactState()
+        rememberMe()
+        viewModel.userIsAlreadyLoggedIn()
+    }
 
-        // Remember me!
-        val rememverInfo = GET.getBoolean("boolean_key", false)
-        if (rememverInfo == true) {
+    private fun initViewModel(){
+        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+    }
+
+    private fun initClickListeners(){
+        binding.txtIForgotMyPass.setOnClickListener {
+            val intent = Intent(this@Login, ResetPassActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.txtCreateAccount.setOnClickListener {
+            val intent = Intent(this@Login, AccountCreateActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnLogin.setOnClickListener {
+            // Her şey tamam ise giriş yapılsın
+            val email = binding.edtEmailLogin.text.toString()
+            val pass = binding.edtPassLogin.text.toString()
+            viewModel.login(email, pass)
+        }
+    }
+
+    private fun rememberMe(){
+        val rememberInfo = GET.getBoolean("boolean_key", false)
+        if (rememberInfo == true) {
             binding.chbLoginInfosRemember.isChecked = true
             binding.edtEmailLogin.setText(GET.getString("keyPosta", ""))
             binding.edtPassLogin.setText(GET.getString("keyParola", ""))
@@ -53,42 +80,26 @@ class Login : AppCompatActivity() {
             binding.edtEmailLogin.setText("")
             binding.edtPassLogin.setText("")
         }
-
-        // Kullanıcı daha önceden giriş yapmış ise otomatik olarak giriş yapıp Ana sayfaya yönelendirilecektir.
-        val firebaseUser = firebaseAuth?.currentUser
-        if (firebaseUser != null) {
-            val intent = Intent(this@Login, HomePageActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
     }
 
-    // Kullanıcı hesap oluşturma sayfasına yönlendirilecektir.
-    fun txt_createAccount(view: View?) {
-        val intent = Intent(this@Login, AccountCreateActivity::class.java)
-        startActivity(intent)
-    }
-
-    // Kullanıcının girdiği bilgiler doğrultusunda giriş yapma işlemleri...
-    fun btn_login(view: View?) {
-        // Her şey tamam ise giriş yapılsın
-        val email = binding.edtEmailLogin.text.toString()
-        val pass = binding.edtPassLogin.text.toString()
-        if (email == "" || pass == "") {
-            toast(getString(R.string.fill_in_the_required_fields))
-        } else {
-            firebaseAuth!!.signInWithEmailAndPassword(email, pass)
-                .addOnSuccessListener {
-                    if (firebaseAuth?.currentUser!!.isEmailVerified) {
-                        val intent = Intent(this, HomePageActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    } else {
-                        toast(getString(R.string.confirm_your_account_from_the_link_in_your_e_mail))
-                    }
-                }.addOnFailureListener { e ->
-                    toast(e.localizedMessage)
+    private fun observeContactState(){
+        viewModel.loginState.observe(this) { loginViewState ->
+            when(loginViewState){
+                is LoginViewSate.ShowRequiredFieldsMessage -> {
+                    toast(R.string.fill_in_the_required_fields)
                 }
+                is LoginViewSate.OpenHomePageActivity -> {
+                    val intent = Intent(this, HomePageActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                is LoginViewSate.ConfirmEmail -> {
+                    toast(getString(R.string.confirm_your_account_from_the_link_in_your_e_mail))
+                }
+                is LoginViewSate.ShowExceptionMessage -> {
+                    toast(loginViewState.exception.toString())
+                }
+            }
         }
     }
 
@@ -105,12 +116,6 @@ class Login : AppCompatActivity() {
                 hide_show = false
             }
         }
-    }
-
-    // Kullanıcı parola sıfırlama sayfasına yönlendirilecektir.
-    fun txt_iForgotMyPass(view: View?) {
-        val intent = Intent(this@Login, ResetPassActivity::class.java)
-        startActivity(intent)
     }
 
     // Beni hatırla işlemi - onResume durumunda yapılacaklar
@@ -141,7 +146,7 @@ class Login : AppCompatActivity() {
             return
         }
         doubleBackToExitPressedOnce = true
-        toast(getString(R.string.press_again_to_exit))
+        toast(R.string.press_again_to_exit)
 
         Handler(Looper.myLooper() ?: return).postDelayed({
             doubleBackToExitPressedOnce = false

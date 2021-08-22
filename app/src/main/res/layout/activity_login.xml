@@ -8,7 +8,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".Login">
+    tools:context=".login.Login">
 
     <androidx.cardview.widget.CardView
         android:backgroundTint="#E8161717"
@@ -78,11 +78,11 @@
                 android:text="Beni Hatırla" />
 
             <Button
+                android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/bg_button"
-                android:onClick="btn_login"
                 android:text="giriş yap" />
 
             <LinearLayout
@@ -91,21 +91,21 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/txt_iForgotMyPass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:onClick="txt_iForgotMyPass"
                     android:padding="5dp"
                     android:text="Parolamı Unuttum!"
                     android:textAlignment="center" />
 
                 <TextView
+                    android:id="@+id/txt_createAccount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
-                    android:onClick="txt_createAccount"
                     android:padding="5dp"
                     android:text="Hesap Oluştur!"
                     android:textAlignment="center" />

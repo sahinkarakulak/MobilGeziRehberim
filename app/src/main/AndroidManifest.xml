@@ -72,8 +72,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Login"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:name=".login.Login"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:label="@string/login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.mrcaracal.extensions.toast
-import com.mrcaracal.mobilgezirehberim.Login
+import com.mrcaracal.mobilgezirehberim.login.Login
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.ActivityParolaSifirlamaBinding
 

@@ -8,6 +8,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.mrcaracal.mobilgezirehberim.login.Login
 
 class SplashScreen : AppCompatActivity() {
 

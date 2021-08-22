@@ -2,11 +2,10 @@ package com.mrcaracal.activity.accountCreate
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.mrcaracal.extensions.toast
-import com.mrcaracal.mobilgezirehberim.Login
+import com.mrcaracal.mobilgezirehberim.login.Login
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.ActivityAccountCreateBinding
 
