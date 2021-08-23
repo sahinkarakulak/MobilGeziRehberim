@@ -46,7 +46,6 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
-    lateinit var viewGroup: ViewGroup
 
     private lateinit var firebaseOperationForAccount: FirebaseOperationForAccount
 
@@ -189,7 +188,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         val bottomSheetView = LayoutInflater.from(activity)
             .inflate(
                 R.layout.layout_bottom_sheet_hesabim,
-                viewGroup.findViewById(R.id.bottomSheetContainer_hesabim)
+                view?.findViewById(R.id.bottomSheetContainer_hesabim)
             )
         val title = bottomSheetView.findViewById<TextView>(R.id.bs_baslik)
         title.text = postModel.placeName
