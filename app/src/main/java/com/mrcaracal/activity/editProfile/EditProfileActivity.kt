@@ -60,7 +60,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun observeEditProfileState() {
         viewModel.editProfileViewState.observe(this) { editProfileViewState ->
-            when(editProfileViewState){
+            when (editProfileViewState) {
                 is EditProfileViewState.OpenHomePageActivity -> {
                     startActivity(Intent(this@EditProfileActivity, HomePageActivity::class.java))
                 }
@@ -71,7 +71,8 @@ class EditProfileActivity : AppCompatActivity() {
                     toast(editProfileViewState.exception.toString())
                 }
                 is EditProfileViewState.PicassoPross -> {
-                    Picasso.get().load(editProfileViewState.documentSnapshot.getString(editProfileViewState.firebaseDocValueUserPic))
+                    Picasso.get()
+                        .load(editProfileViewState.documentSnapshot.getString(editProfileViewState.firebaseDocValueUserPic))
                         .into(binding.imgUserPicture)
                 }
                 is EditProfileViewState.BindingTvUserEmailChangeText -> {
