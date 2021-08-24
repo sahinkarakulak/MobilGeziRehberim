@@ -10,31 +10,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.content.contentValuesOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
-import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
-import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragHomePageBinding
-import com.mrcaracal.modul.Posts
-import com.mrcaracal.modul.UserAccountStore
 import com.mrcaracal.utils.IntentProcessor
 import java.text.DateFormat
-import java.util.ArrayList
+import java.util.*
 
 class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
@@ -51,6 +39,8 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
     val postModelsList: ArrayList<PostModel> = arrayListOf()
 
+    private lateinit var container: ViewGroup
+
     private fun init() {
         GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
@@ -62,7 +52,10 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         savedInstanceState: Bundle?
     ): View {
         init()
-        _binding = FragHomePageBinding.inflate(inflater, container,false)
+        if (container != null) {
+            this.container = container
+        }
+        _binding = FragHomePageBinding.inflate(inflater, container, false)
         val view = binding.root
         initViewModel()
         viewModel.init()
@@ -75,13 +68,13 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         return view
     }
 
-    fun initViewModel(){
+    fun initViewModel() {
         viewModel = ViewModelProvider(this).get(HomePageViewModel::class.java)
     }
 
-    fun observeHomePageState(){
+    fun observeHomePageState() {
         viewModel.homePageState.observe(viewLifecycleOwner) { homePageViewState ->
-            when(homePageViewState){
+            when (homePageViewState) {
                 is HomePageViewState.OpenEmail -> {
                     context?.let {
                         IntentProcessor.process(
@@ -119,7 +112,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
     override fun onLongItemClick(postModel: PostModel) {
 
         val mDialogView =
-            LayoutInflater.from(activity).inflate(R.layout.custom_dialog_window, view, false)
+            LayoutInflater.from(activity).inflate(R.layout.custom_dialog_window, container, false)
 
         val dateAndTime = DateFormat.getDateTimeInstance().format(
             postModel.time.toDate()
