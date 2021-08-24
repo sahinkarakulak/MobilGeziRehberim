@@ -1,6 +1,5 @@
 package com.mrcaracal.fragment.home
 
-import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -11,15 +10,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.adapter.RecyclerAdapterStructure
-import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
-import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.Posts
 import com.mrcaracal.modul.UserAccountStore
 
-class HomePageViewModel: ViewModel() {
-    var homePageState : MutableLiveData<HomePageViewState> = MutableLiveData<HomePageViewState>()
+class HomePageViewModel : ViewModel() {
+    var homePageState: MutableLiveData<HomePageViewState> = MutableLiveData<HomePageViewState>()
 
     lateinit var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null
@@ -30,7 +27,7 @@ class HomePageViewModel: ViewModel() {
     private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
     private val COLLECTION_NAME_POST = "Gonderiler"
 
-    fun init(){
+    fun init() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser
         firebaseFirestore = FirebaseFirestore.getInstance()
@@ -55,7 +52,6 @@ class HomePageViewModel: ViewModel() {
                         }
                         recyclerAdapterStructure.postModelList = postModelsList
                         recyclerAdapterStructure.notifyDataSetChanged()
-
                     }
                 }
             }
@@ -63,7 +59,7 @@ class HomePageViewModel: ViewModel() {
 
     fun saveOperations(postModel: PostModel) {
         if ((postModel.userEmail == firebaseUser!!.email)) {
-            //activity?.let { toast(it, "Bunu zaten siz paylaştınız") }
+            homePageState.value = HomePageViewState.ShowAlreadySharedToastMessage
         } else {
             val MGonderiler = Posts(
                 postModel.postId,
@@ -106,13 +102,13 @@ class HomePageViewModel: ViewModel() {
         return taggg
     }
 
-    fun getSaveOperations(postModel: PostModel){
+    fun getSaveOperations(postModel: PostModel) {
         firebaseUser?.let { it1 ->
             saveOperations(postModel)
         }
     }
 
-    fun reportPost(postModel: PostModel){
+    fun reportPost(postModel: PostModel) {
         if ((postModel.userEmail == firebaseUser?.email)) {
             homePageState.value = HomePageViewState.ShowAlreadySharedToastMessage
         } else {
@@ -124,7 +120,7 @@ class HomePageViewModel: ViewModel() {
         }
     }
 
-    fun recyclerAdapterProccese(thisClick : RecyclerViewClickInterface){
+    fun recyclerAdapterProccese(thisClick: RecyclerViewClickInterface) {
         recyclerAdapterStructure = RecyclerAdapterStructure(thisClick)
         homePageState.value = HomePageViewState.SendRecyclerAdapter(recyclerAdapterStructure)
     }
@@ -132,8 +128,11 @@ class HomePageViewModel: ViewModel() {
 }
 
 sealed class HomePageViewState {
-    object ShowAlreadySharedToastMessage: HomePageViewState()
+    object ShowAlreadySharedToastMessage : HomePageViewState()
 
-    data class OpenEmail(val subject: String, val message: String, val emails: ArrayList<String>) : HomePageViewState()
-    data class SendRecyclerAdapter(val recyclerAdapterStructure: RecyclerAdapterStructure) : HomePageViewState()
+    data class OpenEmail(val subject: String, val message: String, val emails: ArrayList<String>) :
+        HomePageViewState()
+
+    data class SendRecyclerAdapter(val recyclerAdapterStructure: RecyclerAdapterStructure) :
+        HomePageViewState()
 }
