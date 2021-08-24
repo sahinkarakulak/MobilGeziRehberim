@@ -25,7 +25,7 @@ class AccountCreateActivity : AppCompatActivity() {
         setContentView(binding.root)
         initViewModel()
         initClickListeners()
-        observeContactState()
+        observeAccountCreateState()
     }
 
     private fun initViewModel(){
@@ -42,7 +42,7 @@ class AccountCreateActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeContactState(){
+    private fun observeAccountCreateState(){
         viewModel.accountCreateState.observe(this){ accountCreateViewState ->
             when(accountCreateViewState){
                 is AccountCreateViewModel.AccountCreateViewState.ShowRequiredFieldsMessage -> {

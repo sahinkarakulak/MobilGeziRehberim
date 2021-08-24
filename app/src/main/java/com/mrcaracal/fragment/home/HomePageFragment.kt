@@ -10,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.contentValuesOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -30,35 +32,26 @@ import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragHomePageBinding
 import com.mrcaracal.modul.Posts
 import com.mrcaracal.modul.UserAccountStore
+import com.mrcaracal.utils.IntentProcessor
 import java.text.DateFormat
 import java.util.ArrayList
 
 class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
+    private lateinit var viewModel: HomePageViewModel
+
     private var _binding: FragHomePageBinding? = null
     private val binding get() = _binding!!
     private lateinit var view: ViewGroup
 
-    lateinit var firebaseAuth: FirebaseAuth
-    var firebaseUser: FirebaseUser? = null
-    lateinit var firebaseFirestore: FirebaseFirestore
-    lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
     var latitude = 0.0
     var longitude = 0.0
 
-    private val COLLECTION_NAME_SAVED = "Kaydedilenler"
-    private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
-    private val COLLECTION_NAME_POST = "Gonderiler"
-
     val postModelsList: ArrayList<PostModel> = arrayListOf()
 
     private fun init() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser
-        firebaseFirestore = FirebaseFirestore.getInstance()
-
         GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
     }
@@ -71,83 +64,42 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         init()
         _binding = FragHomePageBinding.inflate(inflater, container,false)
         val view = binding.root
+        initViewModel()
+        viewModel.init()
+        observeHomePageState()
 
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerAdapterStructure = RecyclerAdapterStructure(this)
-        binding.recyclerView.adapter = recyclerAdapterStructure
-        rewind()
+        viewModel.recyclerAdapterProccese(thisClick = this)
+        viewModel.rewind(postModelsList = postModelsList)
 
         return view
     }
 
-    fun rewind() {
-        val collectionReference = firebaseFirestore
-            .collection(COLLECTION_NAME_POST)
+    fun initViewModel(){
+        viewModel = ViewModelProvider(this).get(HomePageViewModel::class.java)
+    }
 
-        // VT'ye kaydedilme zamanına göre verileri çek
-        collectionReference
-            .orderBy("zaman", Query.Direction.DESCENDING)
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val querySnapshot = (task.result)
-                    for (snapshot: DocumentSnapshot in querySnapshot) {
-
-                        snapshot.data?.let {
-                            val postModel = PostModelProvider.provide(it)
-                            postModelsList.add(postModel)
-                        }
-                        recyclerAdapterStructure.postModelList = postModelsList
-                        recyclerAdapterStructure.notifyDataSetChanged()
-
+    fun observeHomePageState(){
+        viewModel.homePageState.observe(viewLifecycleOwner) { homePageViewState ->
+            when(homePageViewState){
+                is HomePageViewState.OpenEmail -> {
+                    context?.let {
+                        IntentProcessor.process(
+                            context = it,
+                            emails = homePageViewState.emails,
+                            subject = homePageViewState.subject,
+                            text = homePageViewState.message
+                        )
                     }
                 }
+                is HomePageViewState.ShowAlreadySharedToastMessage -> {
+                    toast(activity!!, getString(R.string.you_already_shared_this))
+                }
+                is HomePageViewState.SendRecyclerAdapter -> {
+                    binding.recyclerView.adapter = homePageViewState.recyclerAdapterStructure
+                }
             }
-    }
-
-    fun saveOperations(postModel: PostModel) {
-        if ((postModel.userEmail == firebaseUser!!.email)) {
-            //activity?.let { toast(it, "Bunu zaten siz paylaştınız") }
-        } else {
-            val MGonderiler = Posts(
-                postModel.postId,
-                postModel.userEmail,
-                postModel.pictureLink,
-                postModel.placeName,
-                postModel.location,
-                postModel.address,
-                postModel.city,
-                postModel.comment,
-                postModel.postCode,
-                listOf(postModel.tag),
-                FieldValue.serverTimestamp()
-            )
-            val documentReference = firebaseFirestore
-                .collection(COLLECTION_NAME_THEY_SAVED)
-                .document((firebaseUser!!.email)!!)
-                .collection(COLLECTION_NAME_SAVED)
-                .document(postModel.postId)
-            documentReference
-                .set(MGonderiler)
-                .addOnSuccessListener {
-                    //
-                }
-                .addOnFailureListener { e ->
-                    //
-                }
         }
-    }
-
-    fun showTag(postModel: PostModel): String {
-        var taggg = ""
-        val al_taglar = postModel.tag
-        val tag_uzunluk = al_taglar.length
-        val alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
-        val a_t = alinan_taglar.split(",").toTypedArray()
-        for (tags: String in a_t) {
-            taggg += "#" + tags.trim { it <= ' ' } + " "
-        }
-        return taggg
     }
 
     fun goToLocationOperations(postModel: PostModel) {
@@ -187,23 +139,16 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         sharing.text = postModel.userEmail
         date.text = dateAndTime
         addres.text = postModel.address
-        labels.text = showTag(postModel)
+        labels.text = viewModel.showTag(postModel)
 
         val mAlertDialog = mBuilder.create()
         mDialogView.findViewById<Button>(R.id.dw_ok).setOnClickListener {
             mAlertDialog.dismiss()
         }
-
         mAlertDialog.show()
-
-
     }
 
     override fun onOtherOperationsClick(postModel: PostModel) {
-        onOpenDialogWindow(postModel)
-    }
-
-    fun onOpenDialogWindow(postModel: PostModel) {
         val bottomSheetDialog = BottomSheetDialog((activity)!!, R.style.BottomSheetDialogTheme)
         val bottomSheetView = LayoutInflater.from(activity)
             .inflate(
@@ -215,11 +160,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         // Gönderiyi Kaydet
         bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
-                firebaseUser?.let { it1 ->
-                    saveOperations(
-                        postModel
-                    )
-                }
+                viewModel.getSaveOperations(postModel = postModel)
                 bottomSheetDialog.dismiss()
             })
 
@@ -236,21 +177,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    if ((postModel.userEmail == firebaseUser?.email)) {
-                        toast(activity!!, getString(R.string.you_already_shared_this))
-                    } else {
-                        val intent = Intent(Intent.ACTION_SEND)
-                        intent.putExtra(Intent.EXTRA_EMAIL, UserAccountStore.adminAccountEmails)
-                        intent.putExtra(Intent.EXTRA_SUBJECT, "")
-                        intent.putExtra(Intent.EXTRA_TEXT, "")
-                        intent.type = "plain/text"
-                        startActivity(
-                            Intent.createChooser(
-                                intent,
-                                getString(R.string.what_would_u_like_to_send_with)
-                            )
-                        )
-                    }
+                    viewModel.reportPost(postModel = postModel)
                     bottomSheetDialog.dismiss()
                 }
             })
@@ -259,7 +186,6 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_cancel)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    //
                     bottomSheetDialog.dismiss()
                 }
             })

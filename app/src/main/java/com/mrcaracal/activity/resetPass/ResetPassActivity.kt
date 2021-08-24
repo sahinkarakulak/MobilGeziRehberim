@@ -20,7 +20,7 @@ class ResetPassActivity : AppCompatActivity() {
         setContentView(binding.root)
         initViewModel()
         initClickListeners()
-        observeContactState()
+        observeRestPassState()
     }
 
     fun initViewModel(){
@@ -34,7 +34,7 @@ class ResetPassActivity : AppCompatActivity() {
         }
     }
 
-    fun observeContactState(){
+    fun observeRestPassState(){
         viewModel.resetPassState.observe(this) { resetPassViewState ->
             when(resetPassViewState){
                 is ResetPassViewState.ShowRequiredFieldsMessage -> {

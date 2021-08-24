@@ -6,7 +6,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.tasks.*
-import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.activity.HomePageActivity
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
@@ -28,7 +27,7 @@ class EditProfileActivity : AppCompatActivity() {
         initViewModel()
         viewModel.initialize()
         initClickListeners()
-        observeContactState()
+        observeEditProfileState()
         viewModel.getProfileData()
     }
 
@@ -59,7 +58,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeContactState() {
+    private fun observeEditProfileState() {
         viewModel.editProfileViewState.observe(this) { editProfileViewState ->
             when(editProfileViewState){
                 is EditProfileViewState.OpenHomePageActivity -> {
