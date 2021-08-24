@@ -122,7 +122,7 @@ class HomePageViewModel : ViewModel() {
 
     fun recyclerAdapterProccese(thisClick: RecyclerViewClickInterface) {
         recyclerAdapterStructure = RecyclerAdapterStructure(thisClick)
-        homePageState.value = HomePageViewState.SendRecyclerAdapter(recyclerAdapterStructure)
+        homePageState.value = HomePageViewState.SendRecyclerAdapter(recyclerAdapterStructure = recyclerAdapterStructure)
     }
 
 }
