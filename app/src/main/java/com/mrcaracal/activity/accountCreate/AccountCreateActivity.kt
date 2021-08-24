@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.mrcaracal.extensions.toast
-import com.mrcaracal.mobilgezirehberim.login.Login
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.ActivityAccountCreateBinding
+import com.mrcaracal.mobilgezirehberim.login.Login
 
 class AccountCreateActivity : AppCompatActivity() {
 
@@ -28,11 +28,11 @@ class AccountCreateActivity : AppCompatActivity() {
         observeAccountCreateState()
     }
 
-    private fun initViewModel(){
+    private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(AccountCreateViewModel::class.java)
     }
 
-    private fun initClickListeners(){
+    private fun initClickListeners() {
         binding.btnCreateAccount.setOnClickListener {
             userName = binding.edtUserName.text.toString()
             email = binding.edtUserEmail.text.toString()
@@ -42,9 +42,9 @@ class AccountCreateActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeAccountCreateState(){
-        viewModel.accountCreateState.observe(this){ accountCreateViewState ->
-            when(accountCreateViewState){
+    private fun observeAccountCreateState() {
+        viewModel.accountCreateState.observe(this) { accountCreateViewState ->
+            when (accountCreateViewState) {
                 is AccountCreateViewModel.AccountCreateViewState.ShowRequiredFieldsMessage -> {
                     toast(R.string.fill_in_the_required_fields)
                 }
