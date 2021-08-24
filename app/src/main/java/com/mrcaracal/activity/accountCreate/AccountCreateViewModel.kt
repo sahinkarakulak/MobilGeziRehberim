@@ -11,7 +11,6 @@ class AccountCreateViewModel : ViewModel() {
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseFirestore: FirebaseFirestore
-
     var accountCreateState: MutableLiveData<AccountCreateViewState> =
         MutableLiveData<AccountCreateViewState>()
 
