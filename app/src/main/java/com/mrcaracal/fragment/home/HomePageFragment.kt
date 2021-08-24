@@ -23,17 +23,20 @@ import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.mobilgezirehberim.databinding.FragHomePageBinding
 import com.mrcaracal.modul.UserAccountStore
 import java.text.DateFormat
 
 class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
+    private var _binding: FragHomePageBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var view: ViewGroup
+
     lateinit var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null
     lateinit var firebaseFirestore: FirebaseFirestore
-    private lateinit var recyclerView: RecyclerView
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
-    lateinit var viewGroup: ViewGroup
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
     var latitude = 0.0
@@ -58,21 +61,20 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewGroup = inflater.inflate(R.layout.frag_home_page, container, false) as ViewGroup
         init()
+        _binding = FragHomePageBinding.inflate(inflater, container,false)
+        val view = binding.root
 
-        // RecyclerView Tanımlama İşlemi
-        recyclerView = viewGroup.findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerAdapterStructure = RecyclerAdapterStructure(
             this
         )
-        recyclerView.adapter = recyclerAdapterStructure
+        binding.recyclerView.adapter = recyclerAdapterStructure
 
         // Yeniden eskiye çekme
         firebaseOperationForHome.rewind(FirebaseFirestore.getInstance(), recyclerAdapterStructure)
 
-        return viewGroup
+        return view
     }
 
     fun goToLocationOperations(postModel: PostModel) {
@@ -92,7 +94,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
     override fun onLongItemClick(postModel: PostModel) {
 
         val mDialogView =
-            LayoutInflater.from(activity).inflate(R.layout.custom_dialog_window, viewGroup, false)
+            LayoutInflater.from(activity).inflate(R.layout.custom_dialog_window, view, false)
 
         val dateAndTime = DateFormat.getDateTimeInstance().format(
             postModel.time.toDate()
@@ -132,8 +134,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         val bottomSheetDialog = BottomSheetDialog((activity)!!, R.style.BottomSheetDialogTheme)
         val bottomSheetView = LayoutInflater.from(activity)
             .inflate(
-                R.layout.layout_bottom_sheet,
-                viewGroup.findViewById(R.id.bottomSheetContainer)
+                R.layout.layout_bottom_sheet, view.findViewById(R.id.bottomSheetContainer)
             )
         val title = bottomSheetView.findViewById<TextView>(R.id.bs_baslik)
         title.text = postModel.placeName
@@ -192,6 +193,11 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
             })
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
