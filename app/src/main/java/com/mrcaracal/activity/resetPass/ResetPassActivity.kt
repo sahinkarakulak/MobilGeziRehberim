@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.mrcaracal.extensions.toast
-import com.mrcaracal.mobilgezirehberim.login.Login
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.ActivityParolaSifirlamaBinding
+import com.mrcaracal.mobilgezirehberim.login.Login
 
 class ResetPassActivity : AppCompatActivity() {
 
@@ -23,20 +23,20 @@ class ResetPassActivity : AppCompatActivity() {
         observeRestPassState()
     }
 
-    fun initViewModel(){
+    fun initViewModel() {
         viewModel = ViewModelProvider(this).get(ResetPassViewModel::class.java)
     }
 
-    fun initClickListeners(){
+    fun initClickListeners() {
         binding.btnSendRequest.setOnClickListener {
             val email = binding.edtResetPass.text.toString()
             viewModel.sendRequest(email)
         }
     }
 
-    fun observeRestPassState(){
+    fun observeRestPassState() {
         viewModel.resetPassState.observe(this) { resetPassViewState ->
-            when(resetPassViewState){
+            when (resetPassViewState) {
                 is ResetPassViewState.ShowRequiredFieldsMessage -> {
                     toast(R.string.fill_in_the_required_fields)
                 }

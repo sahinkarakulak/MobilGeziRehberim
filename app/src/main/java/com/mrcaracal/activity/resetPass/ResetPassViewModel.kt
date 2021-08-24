@@ -28,5 +28,6 @@ sealed class ResetPassViewState {
     object ShowRequiredFieldsMessage : ResetPassViewState()
     object ShowCheckEmailMessage : ResetPassViewState()
     object OpenLoginActivity : ResetPassViewState()
+
     data class ShowErrorMessage(val e: Exception) : ResetPassViewState()
 }
