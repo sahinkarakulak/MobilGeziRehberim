@@ -14,12 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.editProfile.EditProfileActivity
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.fragment.model.PostModel
+import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragMyAccountBinding
 import com.squareup.picasso.Picasso
@@ -44,10 +47,16 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     var LATITUDE = 0.0
     var LONGITUDE = 0.0
 
+    private val COLLECTION_NAME_SHARED = "Paylasilanlar"
+    private val COLLECTION_NAME_THEY_SHARED = "Paylastiklari"
+    private val COLLECTION_NAME_SAVED = "Kaydedilenler"
+    private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
+    private val COLLECTION_NAME_POST = "Gonderiler"
+
+    val postModelsList: ArrayList<PostModel> = arrayListOf()
+
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
-
-    private lateinit var firebaseOperationForAccount: FirebaseOperationForAccount
 
     private fun init() {
         firebaseAuth = FirebaseAuth.getInstance()
@@ -55,8 +64,6 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         firebaseUser = firebaseAuth.currentUser
         GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
-
-        firebaseOperationForAccount = FirebaseOperationForAccount()
     }
 
     override fun onCreateView(
@@ -76,10 +83,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         )
 
         firebaseUser?.let {
-            firebaseOperationForAccount.pullTheShared(
-                firebaseFirestore,
-                it, recyclerAdapterStructure
-            )
+            pullTheShared()
         }
 
         binding.recyclerViewAccount.adapter = recyclerAdapterStructure
@@ -113,26 +117,155 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
             when (item.itemId) {
                 R.id.shared -> {
                     TAB_CONTROL = "paylasilanlar"
-                    firebaseOperationForAccount.clearList()
-                    firebaseOperationForAccount.pullTheShared(
-                        firebaseFirestore,
-                        firebaseUser!!, recyclerAdapterStructure
-                    )
+                    clearList()
+                    pullTheShared()
                     binding.recyclerViewAccount.scrollToPosition(0)
                 }
                 R.id.recorded -> {
                     TAB_CONTROL = "kaydedilenler"
-                    firebaseOperationForAccount.clearList()
-                    firebaseOperationForAccount.pullTheRecorded(
-                        firebaseFirestore,
-                        firebaseUser!!, recyclerAdapterStructure
-                    )
+                    clearList()
+                    pullTheRecorded()
                     binding.recyclerViewAccount.scrollToPosition(0)
                 }
             }
             true
         }
         return view
+    }
+
+    fun clearList() {
+        postModelsList.clear()
+    }
+
+    fun pullTheShared() {
+        val collectionReference = firebaseFirestore
+            .collection(COLLECTION_NAME_SHARED)
+            .document((firebaseUser?.email)!!)
+            .collection(COLLECTION_NAME_THEY_SHARED)
+        collectionReference
+            .orderBy("zaman", Query.Direction.DESCENDING)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val querySnapshot = (task.result)
+                    for (documentSnapshot: DocumentSnapshot in querySnapshot) {
+
+                        documentSnapshot.data?.let {
+                            val postModel = PostModelProvider.provide(it)
+                            postModelsList.add(postModel)
+                        }
+                        recyclerAdapterStructure.postModelList = postModelsList
+                        recyclerAdapterStructure.notifyDataSetChanged()
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                //
+            }
+    }
+
+    fun pullTheRecorded() {
+        val collectionReference = firebaseFirestore
+            .collection(COLLECTION_NAME_THEY_SAVED)
+            .document((firebaseUser?.email)!!)
+            .collection(COLLECTION_NAME_SAVED)
+        collectionReference
+            .orderBy("zaman", Query.Direction.DESCENDING)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val querySnapshot = (task.result)
+                    for (documentSnapshot: DocumentSnapshot in querySnapshot) {
+                        documentSnapshot.data?.let {
+                            val postModel = PostModelProvider.provide(it)
+                            postModelsList.add(postModel)
+
+                        }
+                        recyclerAdapterStructure.postModelList = postModelsList
+                        recyclerAdapterStructure.notifyDataSetChanged()
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                //
+            }
+    }
+
+    fun removeFromShared(positionValue: Int) {
+
+        // ÖNEMLİ
+        // ALERTDIALOG İLE EMİN MİSİN DİYE KULLANICIYA SORULSUN. VERİLEN CEVABA GÖRE İŞLEM YAPILSIN!
+
+        //1. Adım
+        firebaseFirestore
+            .collection(COLLECTION_NAME_SHARED)
+            .document(postModelsList[positionValue].userEmail)
+            .collection(COLLECTION_NAME_THEY_SHARED)
+            .document(postModelsList[positionValue].postId)
+            .delete()
+            .addOnSuccessListener {
+                //
+            }
+            .addOnFailureListener {
+                //
+            }
+
+        //2. Adım
+        firebaseFirestore
+            .collection(COLLECTION_NAME_POST)
+            .document(postModelsList[positionValue].postId)
+            .delete()
+            .addOnSuccessListener {
+                //
+            }
+            .addOnFailureListener {
+                //
+            }
+    }
+
+    fun removeFromSaved(
+        positionValue: Int
+    ) {
+
+        // ÖNEMLİ
+        // ALERTDIALOG İLE EMİN MİSİN DİYE KULLANICIYA SORULSUN. VERİLEN CEVABA GÖRE İŞLEM YAPILSIN!
+        firebaseFirestore
+            .collection(COLLECTION_NAME_THEY_SAVED)
+            .document((firebaseUser?.email)!!)
+            .collection(COLLECTION_NAME_SAVED)
+            .document(postModelsList[positionValue].postId)
+            .delete()
+            .addOnSuccessListener {
+                //
+            }
+            .addOnFailureListener {
+                //
+            }
+    }
+
+    fun showTag(postModel: PostModel, tabControl: String): String {
+        var taggg = ""
+        val al_taglar = postModel.tag
+        val tag_uzunluk = al_taglar.length
+        val alinan_taglar: String
+        val a_t: Array<String>
+        when (tabControl) {
+            "paylasilanlar" -> {
+                alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
+                a_t = alinan_taglar.split(",").toTypedArray()
+                for (tags: String in a_t) {
+                    taggg += "#" + tags.trim { it <= ' ' } + " "
+                }
+            }
+            "kaydedilenler" -> {
+                alinan_taglar = al_taglar.substring(2, tag_uzunluk - 2)
+                a_t = alinan_taglar.split(",").toTypedArray()
+                for (tags: String in a_t) {
+                    taggg += "#" + tags.trim { it <= ' ' } + " "
+                }
+            }
+        }
+        return taggg
     }
 
     fun goToLocationFromShared(postModel: PostModel) {
@@ -172,7 +305,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                     "\n\n${getString(R.string.sharing)}: " + postModel.userEmail +
                     "\n${getString(R.string.date)}: " + dateAndTime +
                     "\n${getString(R.string.addres)}: " + postModel.address +
-                    "\n\n" + firebaseOperationForAccount.showTag(postModel, TAB_CONTROL))
+                    "\n\n" + showTag(postModel, TAB_CONTROL))
         val alert = AlertDialog.Builder(activity)
         alert
             .setTitle(postModel.placeName)
@@ -209,32 +342,23 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                 override fun onClick(v: View) {
                     when (TAB_CONTROL) {
                         "paylasilanlar" -> {
-                            firebaseOperationForAccount.removeFromShared(
-                                firebaseFirestore,
+                            removeFromShared(
                                 POSITION_VALUE
                             )
-                            firebaseOperationForAccount.clearList()
+                            clearList()
                             firebaseUser?.let {
-                                firebaseOperationForAccount.pullTheShared(
-                                    firebaseFirestore,
-                                    it, recyclerAdapterStructure
-                                )
+                                pullTheShared()
                             }
                             binding.recyclerViewAccount.scrollToPosition(0)
                         }
                         "kaydedilenler" -> {
                             firebaseUser?.let {
-                                firebaseOperationForAccount.removeFromSaved(
-                                    firebaseFirestore,
-                                    it, POSITION_VALUE
+                                removeFromSaved(POSITION_VALUE
                                 )
                             }
-                            firebaseOperationForAccount.clearList()
+                            clearList()
                             firebaseUser?.let {
-                                firebaseOperationForAccount.pullTheRecorded(
-                                    firebaseFirestore,
-                                    it, recyclerAdapterStructure
-                                )
+                                pullTheRecorded()
                             }
                             binding.recyclerViewAccount.scrollToPosition(0)
                         }
