@@ -23,26 +23,17 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
-import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
-import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragSearchBinding
 import com.mrcaracal.modul.Cities
-import com.mrcaracal.modul.Posts
 import com.mrcaracal.modul.UserAccountStore
 import com.mrcaracal.utils.IntentProcessor
 import java.text.DateFormat
@@ -55,7 +46,6 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
     private var _binding: FragSearchBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var selectionOptions: UserAccountStore
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
     var keyValue = "yerIsmi"
@@ -94,11 +84,11 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         return view
     }
 
-    fun initViewModel(){
+    fun initViewModel() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
     }
 
-    fun initClickListener(){
+    fun initClickListener() {
         binding.imgFinfByLocation.setOnClickListener(View.OnClickListener {
             if (ContextCompat.checkSelfPermission(
                     (activity)!!,
@@ -118,7 +108,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         })
     }
 
-    fun initSelectListener(){
+    fun initSelectListener() {
         binding.spCities.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
@@ -138,7 +128,6 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
-                        // VT'de Gonderiler bölümünde posta kodu alınan değerle başlayan tüm gonderileri çeken bir algoritma geliştir.
                         if (selectedCityCode != null) {
                             viewModel.searchForCity(selectedCityCode)
                         }
@@ -147,6 +136,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
         binding.spSearchByWhat.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
@@ -187,7 +177,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         }
     }
 
-    fun initChangedListener(){
+    fun initChangedListener() {
         binding.edtKeyValueSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -202,7 +192,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         })
     }
 
-    fun initSpinnerMethod(){
+    fun initSpinnerMethod() {
         sp_adapterAccordingToWhat =
             ArrayAdapter(
                 (activity)!!,
@@ -213,7 +203,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         binding.spSearchByWhat.adapter = sp_adapterAccordingToWhat
     }
 
-    fun initSpinnerCity(){
+    fun initSpinnerCity() {
         val cities_al = Cities()
         sp_adapterCities =
             ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, cities_al.cities)
@@ -221,9 +211,9 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         binding.spCities.adapter = sp_adapterCities
     }
 
-    fun observeSearchState(){
+    fun observeSearchState() {
         viewModel.searchState.observe(viewLifecycleOwner) { searchViewState ->
-            when(searchViewState){
+            when (searchViewState) {
                 is SearchViewState.ShowAlreadySharedToastMessage -> {
                     context?.let { toast(it, R.string.you_already_shared_this) }
                 }
@@ -239,6 +229,9 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                 }
                 is SearchViewState.SendRecyclerAdapter -> {
                     binding.recyclerViewSearch.adapter = searchViewState.recyclerAdapterStructure
+                }
+                is SearchViewState.ShowExceptionMessage -> {
+                    context?.let { toast(it, searchViewState.exception.toString()) }
                 }
             }
         }
@@ -340,14 +333,14 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                 viewGroup.findViewById(R.id.bottomSheetContainer)
             )
 
-        // Gönderiyi Kaydet
+        // Save Post
         bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
                 viewModel.saveOperations(postModel)
                 bottomSheetDialog.dismiss()
             })
 
-        // Konuma Git
+        // Go To Location
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
@@ -356,7 +349,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                 }
             })
 
-        // Detaylı Şikayet Bildir
+        // Report Post
         bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
@@ -365,7 +358,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                 }
             })
 
-        // İPTAL butonu
+        // Cancel
         bottomSheetView.findViewById<View>(R.id.bs_cancel)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {

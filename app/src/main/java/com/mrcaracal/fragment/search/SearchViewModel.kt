@@ -1,7 +1,5 @@
 package com.mrcaracal.fragment.search
 
-import android.content.Intent
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -13,7 +11,6 @@ import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
-import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.Posts
 import com.mrcaracal.modul.UserAccountStore
 import java.util.*
@@ -67,8 +64,8 @@ class SearchViewModel : ViewModel() {
                         recyclerAdapterStructure.notifyDataSetChanged()
                     }
                 }
-            }.addOnFailureListener { e ->
-                //
+            }.addOnFailureListener { exception ->
+                searchState.value = SearchViewState.ShowExceptionMessage(exception = exception)
             }
     }
 
@@ -89,8 +86,8 @@ class SearchViewModel : ViewModel() {
                     }
                 }
             }
-            .addOnFailureListener {
-
+            .addOnFailureListener { exception ->
+                searchState.value = SearchViewState.ShowExceptionMessage(exception = exception)
             }
     }
 
@@ -111,14 +108,14 @@ class SearchViewModel : ViewModel() {
                         recyclerAdapterStructure.notifyDataSetChanged()
                     }
                 }
-            }.addOnFailureListener { e ->
-                //
+            }.addOnFailureListener { exception ->
+                searchState.value = SearchViewState.ShowExceptionMessage(exception = exception)
             }
     }
 
     fun saveOperations(postModel: PostModel) {
         if ((postModel.userEmail == firebaseUser.email)) {
-            //
+            searchState.value = SearchViewState.ShowAlreadySharedToastMessage
         } else {
             val MGonderiler = Posts(
                 postModel.postId,
@@ -143,8 +140,8 @@ class SearchViewModel : ViewModel() {
                 .addOnSuccessListener {
                     //
                 }
-                .addOnFailureListener { e ->
-                    //
+                .addOnFailureListener { exception ->
+                    searchState.value = SearchViewState.ShowExceptionMessage(exception = exception)
                 }
         }
     }
@@ -161,7 +158,7 @@ class SearchViewModel : ViewModel() {
         return taggg
     }
 
-    fun reportPost(postModel: PostModel){
+    fun reportPost(postModel: PostModel) {
         if ((postModel.userEmail == firebaseUser.email)) {
             searchState.value = SearchViewState.ShowAlreadySharedToastMessage
         } else {
@@ -175,7 +172,8 @@ class SearchViewModel : ViewModel() {
 
     fun recyclerAdapterProccese(thisClick: RecyclerViewClickInterface) {
         recyclerAdapterStructure = RecyclerAdapterStructure(thisClick)
-        searchState.value = SearchViewState.SendRecyclerAdapter(recyclerAdapterStructure = recyclerAdapterStructure)
+        searchState.value =
+            SearchViewState.SendRecyclerAdapter(recyclerAdapterStructure = recyclerAdapterStructure)
     }
 
 
@@ -184,9 +182,11 @@ class SearchViewModel : ViewModel() {
 sealed class SearchViewState {
     object ShowAlreadySharedToastMessage : SearchViewState()
 
+    data class ShowExceptionMessage(val exception: Exception): SearchViewState()
+
     data class OpenEmail(val subject: String, val message: String, val emails: ArrayList<String>) :
         SearchViewState()
 
     data class SendRecyclerAdapter(val recyclerAdapterStructure: RecyclerAdapterStructure) :
-            SearchViewState()
+        SearchViewState()
 }
