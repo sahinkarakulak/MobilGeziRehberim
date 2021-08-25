@@ -276,7 +276,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                                     )
                                 }
                             } catch (e: Exception) {
-                                e.printStackTrace()
+                                context?.let { toast(it, e.toString()) }
                             }
                         }
                     }
@@ -286,6 +286,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                 }, Looper.getMainLooper())
         } catch (e: Exception) {
             e.printStackTrace()
+            context?.let { toast(it, e.toString()) }
         }
     }
 
