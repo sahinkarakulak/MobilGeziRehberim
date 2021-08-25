@@ -23,6 +23,8 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -34,6 +36,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.mobilgezirehberim.R
@@ -41,19 +44,17 @@ import com.mrcaracal.mobilgezirehberim.databinding.FragSearchBinding
 import com.mrcaracal.modul.Cities
 import com.mrcaracal.modul.Posts
 import com.mrcaracal.modul.UserAccountStore
+import com.mrcaracal.utils.IntentProcessor
 import java.text.DateFormat
 import java.util.*
 
 class
 SearchFragment : Fragment(), RecyclerViewClickInterface {
 
+    private lateinit var viewModel: SearchViewModel
     private var _binding: FragSearchBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var firebaseAuth: FirebaseAuth
-    lateinit var firebaseUser: FirebaseUser
-    lateinit var firebaseFirestore: FirebaseFirestore
-    lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
     private lateinit var selectionOptions: UserAccountStore
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
@@ -64,16 +65,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
     private lateinit var sp_adapterAccordingToWhat: ArrayAdapter<String>
     private lateinit var sp_adapterCities: ArrayAdapter<String>
 
-    private val COLLECTION_NAME_SAVED = "Kaydedilenler"
-    private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
-    private val COLLECTION_NAME_POST = "Gonderiler"
-
-    val postModelsList: ArrayList<PostModel> = arrayListOf()
-
     private fun init() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser!!
-        firebaseFirestore = FirebaseFirestore.getInstance()
         GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
     }
@@ -87,7 +79,26 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         _binding = FragSearchBinding.inflate(inflater, container, false)
         val view = binding.root
         init()
+        initViewModel()
+        viewModel.init()
+        initClickListener()
+        initSelectListener()
+        initChangedListener()
+        observeSearchState()
+        initSpinnerMethod()
+        initSpinnerCity()
 
+        binding.recyclerViewSearch.layoutManager = LinearLayoutManager(activity)
+        viewModel.recyclerAdapterProccese(thisClick = this)
+
+        return view
+    }
+
+    fun initViewModel(){
+        viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+    }
+
+    fun initClickListener(){
         binding.imgFinfByLocation.setOnClickListener(View.OnClickListener {
             if (ContextCompat.checkSelfPermission(
                     (activity)!!,
@@ -100,64 +111,14 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                     REQUEST_CODE_LOCATION_PERMISSON
                 )
             } else {
-                clearList()
+                viewModel.clearList()
                 binding.recyclerViewSearch.scrollToPosition(0)
                 listNearbyPlaces()
             }
         })
+    }
 
-        sp_adapterAccordingToWhat =
-            ArrayAdapter(
-                (activity)!!,
-                android.R.layout.simple_spinner_item,
-                UserAccountStore.accordingToWhat
-            )
-        sp_adapterAccordingToWhat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spSearchByWhat.adapter = sp_adapterAccordingToWhat
-        binding.spSearchByWhat.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[0])) {
-                    binding.edtKeyValueSearch.visibility = View.VISIBLE
-                    binding.spCities.visibility = View.INVISIBLE
-                    clearList()
-                    binding.recyclerViewSearch.scrollToPosition(0)
-                    keyValue = "yerIsmi"
-                }
-                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[1].toString())) {
-                    binding.edtKeyValueSearch.visibility = View.VISIBLE
-                    binding.spCities.visibility = View.INVISIBLE
-                    clearList()
-                    binding.recyclerViewSearch.scrollToPosition(0)
-                    keyValue = "taglar"
-                }
-                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[2].toString())) {
-                    binding.edtKeyValueSearch.visibility = View.INVISIBLE
-                    binding.spCities.visibility = View.VISIBLE
-                    clearList()
-                    binding.recyclerViewSearch.scrollToPosition(0)
-                    keyValue = "sehir"
-                }
-                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[3].toString())) {
-                    binding.edtKeyValueSearch.visibility = View.VISIBLE
-                    binding.spCities.visibility = View.INVISIBLE
-                    clearList()
-                    binding.recyclerViewSearch.scrollToPosition(0)
-                    keyValue = "kullaniciEposta"
-                }
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        val cities_al = Cities()
-        sp_adapterCities =
-            ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, cities_al.cities)
-        sp_adapterCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spCities.adapter = sp_adapterCities
+    fun initSelectListener(){
         binding.spCities.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
@@ -165,7 +126,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                 position: Int,
                 id: Long
             ) {
-                clearList()
+                viewModel.clearList()
                 binding.recyclerViewSearch.scrollToPosition(0)
                 if ((keyValue == "sehir")) {
                     val cities = Cities()
@@ -179,45 +140,111 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                     } else {
                         // VT'de Gonderiler bölümünde posta kodu alınan değerle başlayan tüm gonderileri çeken bir algoritma geliştir.
                         if (selectedCityCode != null) {
-                            searchForCity(selectedCityCode)
+                            viewModel.searchForCity(selectedCityCode)
                         }
                     }
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+        binding.spSearchByWhat.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[0])) {
+                    binding.edtKeyValueSearch.visibility = View.VISIBLE
+                    binding.spCities.visibility = View.INVISIBLE
+                    viewModel.clearList()
+                    binding.recyclerViewSearch.scrollToPosition(0)
+                    keyValue = "yerIsmi"
+                }
+                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[1].toString())) {
+                    binding.edtKeyValueSearch.visibility = View.VISIBLE
+                    binding.spCities.visibility = View.INVISIBLE
+                    viewModel.clearList()
+                    binding.recyclerViewSearch.scrollToPosition(0)
+                    keyValue = "taglar"
+                }
+                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[2].toString())) {
+                    binding.edtKeyValueSearch.visibility = View.INVISIBLE
+                    binding.spCities.visibility = View.VISIBLE
+                    viewModel.clearList()
+                    binding.recyclerViewSearch.scrollToPosition(0)
+                    keyValue = "sehir"
+                }
+                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[3].toString())) {
+                    binding.edtKeyValueSearch.visibility = View.VISIBLE
+                    binding.spCities.visibility = View.INVISIBLE
+                    viewModel.clearList()
+                    binding.recyclerViewSearch.scrollToPosition(0)
+                    keyValue = "kullaniciEposta"
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
 
+    fun initChangedListener(){
         binding.edtKeyValueSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                clearList()
+                viewModel.clearList()
                 if ((keyValue == "taglar")) {
-                    searchForTag(keyValue, s.toString().lowercase())
+                    viewModel.searchForTag(keyValue, s.toString().lowercase())
                 } else {
-                    search(keyValue, s.toString().lowercase())
+                    viewModel.search(keyValue, s.toString().lowercase())
                 }
             }
             override fun afterTextChanged(s: Editable) {}
         })
-        binding.recyclerViewSearch.layoutManager = LinearLayoutManager(activity)
-        recyclerAdapterStructure = RecyclerAdapterStructure(
-            recyclerViewClickInterface = this
-        )
-        binding.recyclerViewSearch.adapter = recyclerAdapterStructure
-        return view
     }
 
-    fun clearList() {
-        postModelsList.clear()
+    fun initSpinnerMethod(){
+        sp_adapterAccordingToWhat =
+            ArrayAdapter(
+                (activity)!!,
+                android.R.layout.simple_spinner_item,
+                UserAccountStore.accordingToWhat
+            )
+        sp_adapterAccordingToWhat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spSearchByWhat.adapter = sp_adapterAccordingToWhat
     }
 
-    fun getData(data: Map<String, Any>?) {
-        data?.let {
-            val postModel = PostModelProvider.provide(it)
-            postModelsList.add(postModel)
+    fun initSpinnerCity(){
+        val cities_al = Cities()
+        sp_adapterCities =
+            ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, cities_al.cities)
+        sp_adapterCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spCities.adapter = sp_adapterCities
+    }
+
+    fun observeSearchState(){
+        viewModel.searchState.observe(viewLifecycleOwner) { searchViewState ->
+            when(searchViewState){
+                is SearchViewState.ShowAlreadySharedToastMessage -> {
+                    context?.let { toast(it, R.string.you_already_shared_this) }
+                }
+                is SearchViewState.OpenEmail -> {
+                    context?.let {
+                        IntentProcessor.process(
+                            context = it,
+                            emails = searchViewState.emails,
+                            subject = searchViewState.subject,
+                            text = searchViewState.message
+                        )
+                    }
+                }
+                is SearchViewState.SendRecyclerAdapter -> {
+                    binding.recyclerViewSearch.adapter = searchViewState.recyclerAdapterStructure
+                }
+            }
         }
     }
 
+    //There are problems converting to ViewModel
     fun listNearbyPlaces() {
         val locationRequest = LocationRequest()
         locationRequest.interval = 10000
@@ -253,7 +280,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                                 addressList = geocoder.getFromLocation(latitude, longitude, 1)
                                 if (addressList != null) {
                                     val postaKodumuz = addressList[0].postalCode
-                                    searchForCity(
+                                    viewModel.searchForCity(
                                         postaKodumuz.substring(0, 2)
                                     )
                                 }
@@ -269,118 +296,6 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    fun search(relevantField: String?, keywordWrited: String) {
-        clearList()
-        val collectionReference = firebaseFirestore
-            .collection(COLLECTION_NAME_POST)
-        collectionReference
-            .orderBy((relevantField)!!)
-            .startAt(keywordWrited)
-            .endAt(keywordWrited + "\uf8ff")
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val querySnapshot = (task.result)
-                    for (snapshot: DocumentSnapshot in querySnapshot) {
-                        getData(snapshot.data)
-                        recyclerAdapterStructure.postModelList = postModelsList
-                        recyclerAdapterStructure.notifyDataSetChanged()
-                    }
-                }
-            }.addOnFailureListener { e ->
-                //
-            }
-    }
-
-    fun searchForTag(relevantField: String?, keywordWrited: String?) {
-        clearList()
-        val collectionReference = firebaseFirestore
-            .collection(COLLECTION_NAME_POST)
-        collectionReference
-            .whereArrayContains((relevantField)!!, (keywordWrited)!!)
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val querySnapshot = (task.result)
-                    for (documentSnapshot: DocumentSnapshot in querySnapshot) {
-                        getData(documentSnapshot.data)
-                        recyclerAdapterStructure.postModelList = postModelsList
-                        recyclerAdapterStructure.notifyDataSetChanged()
-                    }
-                }
-            }
-            .addOnFailureListener {
-
-            }
-    }
-
-    fun searchForCity(postCode: String) {
-        val collectionReference = firebaseFirestore
-            .collection(COLLECTION_NAME_POST)
-        collectionReference
-            .orderBy("postaKodu")
-            .startAt(postCode)
-            .endAt(postCode + "\uf8ff")
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val querySnapshot = (task.result)
-                    for (snapshot: DocumentSnapshot in querySnapshot) {
-                        getData(snapshot.data)
-                        recyclerAdapterStructure.postModelList = postModelsList
-                        recyclerAdapterStructure.notifyDataSetChanged()
-                    }
-                }
-            }.addOnFailureListener { e ->
-                //
-            }
-    }
-
-    fun saveOperations(postModel: PostModel) {
-        if ((postModel.userEmail == firebaseUser.email)) {
-            //
-        } else {
-            val MGonderiler = Posts(
-                postModel.postId,
-                postModel.userEmail,
-                postModel.pictureLink,
-                postModel.placeName,
-                postModel.location,
-                postModel.address,
-                postModel.city,
-                postModel.comment,
-                postModel.postCode,
-                listOf(postModel.tag),
-                FieldValue.serverTimestamp()
-            )
-            val documentReference = firebaseFirestore
-                .collection(COLLECTION_NAME_THEY_SAVED)
-                .document((firebaseUser.email)!!)
-                .collection(COLLECTION_NAME_SAVED)
-                .document(postModel.postId)
-            documentReference
-                .set(MGonderiler)
-                .addOnSuccessListener {
-                    //
-                }
-                .addOnFailureListener { e ->
-                    //
-                }
-        }
-    }
-
-    fun showTag(postModel: PostModel): String {
-        var taggg = ""
-        val al_taglar = postModel.tag
-        val tag_uzunluk = al_taglar.length
-        val alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
-        val a_t = alinan_taglar.split(",").toTypedArray()
-        for (tags: String in a_t) {
-            taggg += "#" + tags.trim { it <= ' ' } + " "
-        }
-        return taggg
     }
 
     fun goToLocationOperations(postModel: PostModel) {
@@ -406,7 +321,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                     "\n\n${getString(R.string.sharing)}: " + postModel.userEmail +
                     "\n${getString(R.string.date)}: " + dateAndTime +
                     "\n${getString(R.string.addres)}: " + postModel.address +
-                    "\n\n" + showTag(postModel))
+                    "\n\n" + viewModel.showTag(postModel))
         val alert = AlertDialog.Builder(activity)
         alert
             .setTitle(postModel.placeName)
@@ -428,7 +343,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         // Gönderiyi Kaydet
         bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
-                saveOperations(postModel)
+                viewModel.saveOperations(postModel)
                 bottomSheetDialog.dismiss()
             })
 
@@ -445,26 +360,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    if ((postModel.userEmail == firebaseUser.email)) {
-                        Toast.makeText(
-                            activity,
-                            getString(R.string.you_already_shared_this),
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    } else {
-                        val intent = Intent(Intent.ACTION_SEND)
-                        intent.putExtra(Intent.EXTRA_EMAIL, UserAccountStore.adminAccountEmails)
-                        intent.putExtra(Intent.EXTRA_SUBJECT, "")
-                        intent.putExtra(Intent.EXTRA_TEXT, "")
-                        intent.type = "plain/text"
-                        startActivity(
-                            Intent.createChooser(
-                                intent,
-                                getString(R.string.what_would_u_like_to_send_with)
-                            )
-                        )
-                    }
+                    viewModel.reportPost(postModel = postModel)
                     bottomSheetDialog.dismiss()
                 }
             })
