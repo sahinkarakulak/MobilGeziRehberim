@@ -145,7 +145,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         val bottomSheetDialog = BottomSheetDialog((activity)!!, R.style.BottomSheetDialogTheme)
         val bottomSheetView = LayoutInflater.from(activity)
             .inflate(
-                R.layout.layout_bottom_sheet, view.findViewById(R.id.bottomSheetContainer)
+                R.layout.layout_bottom_sheet, container.findViewById(R.id.bottomSheetContainer)
             )
         val title = bottomSheetView.findViewById<TextView>(R.id.bs_baslik)
         title.text = postModel.placeName
