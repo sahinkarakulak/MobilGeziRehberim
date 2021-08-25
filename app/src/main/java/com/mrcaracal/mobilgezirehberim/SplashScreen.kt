@@ -30,7 +30,7 @@ class SplashScreen : AppCompatActivity() {
         Handler(Looper.myLooper() ?: return).postDelayed({
             val intent = Intent(this@SplashScreen, Login::class.java)
             startActivity(intent)
-        }, 3000)
+        }, 2000)
 
     }
 
