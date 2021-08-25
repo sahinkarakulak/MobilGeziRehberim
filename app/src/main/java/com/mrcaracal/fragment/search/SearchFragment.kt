@@ -145,17 +145,11 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                 id: Long
             ) {
                 if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[0])) {
-                    binding.edtKeyValueSearch.visibility = View.VISIBLE
-                    binding.spCities.visibility = View.INVISIBLE
-                    viewModel.clearList()
-                    binding.recyclerViewSearch.scrollToPosition(0)
+                    searchViewVisibilityState()
                     keyValue = "yerIsmi"
                 }
                 if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[1].toString())) {
-                    binding.edtKeyValueSearch.visibility = View.VISIBLE
-                    binding.spCities.visibility = View.INVISIBLE
-                    viewModel.clearList()
-                    binding.recyclerViewSearch.scrollToPosition(0)
+                    searchViewVisibilityState()
                     keyValue = "taglar"
                 }
                 if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[2].toString())) {
@@ -166,15 +160,19 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                     keyValue = "sehir"
                 }
                 if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[3].toString())) {
-                    binding.edtKeyValueSearch.visibility = View.VISIBLE
-                    binding.spCities.visibility = View.INVISIBLE
-                    viewModel.clearList()
-                    binding.recyclerViewSearch.scrollToPosition(0)
+                    searchViewVisibilityState()
                     keyValue = "kullaniciEposta"
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+    }
+
+    fun searchViewVisibilityState(){
+        binding.edtKeyValueSearch.visibility = View.VISIBLE
+        binding.spCities.visibility = View.INVISIBLE
+        viewModel.clearList()
+        binding.recyclerViewSearch.scrollToPosition(0)
     }
 
     fun initChangedListener() {
