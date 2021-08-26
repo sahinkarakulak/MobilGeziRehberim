@@ -20,6 +20,7 @@ import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragMyAccountBinding
+import com.mrcaracal.utils.DialogViewCustomize
 import com.squareup.picasso.Picasso
 import java.text.DateFormat
 
@@ -37,6 +38,8 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
 
+    private lateinit var container: ViewGroup
+
     private fun init() {
         GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
@@ -48,6 +51,9 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         savedInstanceState: Bundle?
     ): View {
         init()
+        if (container != null) {
+            this.container = container
+        }
 
         _binding = FragMyAccountBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -148,23 +154,14 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     }
 
     override fun onLongItemClick(postModel: PostModel) {
-        val dateAndTime = DateFormat.getDateTimeInstance().format(
-            postModel.time.toDate()
+        var postTags = viewModel.showTag(postModel, TAB_CONTROL)
+
+        DialogViewCustomize.dialogViewCustomize(
+            activity = activity,
+            container = container,
+            postModel = postModel,
+            postTags = postTags
         )
-        val showDetailPost =
-            (postModel.comment +
-                    "\n\n${getString(R.string.sharing)}: " + postModel.userEmail +
-                    "\n${getString(R.string.date)}: " + dateAndTime +
-                    "\n${getString(R.string.addres)}: " + postModel.address +
-                    "\n\n" + viewModel.showTag(postModel, TAB_CONTROL))
-        val alert = AlertDialog.Builder(activity)
-        alert
-            .setTitle(postModel.placeName)
-            .setMessage(showDetailPost)
-            .setNegativeButton(getString(R.string.ok)) { _dialog, which ->
-                //
-            }
-            .show()
     }
 
     override fun onOtherOperationsClick(postModel: PostModel) {
