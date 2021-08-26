@@ -1,6 +1,5 @@
 package com.mrcaracal.fragment.home
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -8,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -20,8 +18,8 @@ import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragHomePageBinding
+import com.mrcaracal.utils.DialogViewCustomize
 import com.mrcaracal.utils.IntentProcessor
-import java.text.DateFormat
 import java.util.*
 
 class HomePageFragment : Fragment(), RecyclerViewClickInterface {
@@ -111,34 +109,15 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
     override fun onLongItemClick(postModel: PostModel) {
 
-        val mDialogView =
-            LayoutInflater.from(activity).inflate(R.layout.custom_dialog_window, container, false)
+        var postTags = viewModel.showTag(postModel)
 
-        val dateAndTime = DateFormat.getDateTimeInstance().format(
-            postModel.time.toDate()
+        DialogViewCustomize.dialogViewCustomize(
+            activity = activity,
+            container = container,
+            postModel = postModel,
+            postTags = postTags
         )
 
-        val mBuilder = AlertDialog.Builder(activity)
-            .setView(mDialogView)
-
-        var title = mDialogView.findViewById<TextView>(R.id.dw_title)
-        var comment = mDialogView.findViewById<TextView>(R.id.dw_comment)
-        var sharing = mDialogView.findViewById<TextView>(R.id.dw_sharing)
-        var date = mDialogView.findViewById<TextView>(R.id.dw_date)
-        var addres = mDialogView.findViewById<TextView>(R.id.dw_addres)
-        var labels = mDialogView.findViewById<TextView>(R.id.dw_labels)
-        title.text = postModel.placeName
-        comment.text = postModel.comment
-        sharing.text = postModel.userEmail
-        date.text = dateAndTime
-        addres.text = postModel.address
-        labels.text = viewModel.showTag(postModel)
-
-        val mAlertDialog = mBuilder.create()
-        mDialogView.findViewById<Button>(R.id.dw_ok).setOnClickListener {
-            mAlertDialog.dismiss()
-        }
-        mAlertDialog.show()
     }
 
     override fun onOtherOperationsClick(postModel: PostModel) {
