@@ -128,11 +128,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                     val cities = Cities()
                     val selectedCityCode = cities.selectedCity(parent.selectedItem.toString())
                     if ((selectedCityCode == "Şehir Seçin!")) {
-                        Toast.makeText(
-                            activity,
-                            getString(R.string.please_select_city),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        toast(container.context, R.string.please_select_city)
                     } else {
                         if (selectedCityCode != null) {
                             viewModel.searchForCity(selectedCityCode)
@@ -219,7 +215,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         viewModel.searchState.observe(viewLifecycleOwner) { searchViewState ->
             when (searchViewState) {
                 is SearchViewState.ShowAlreadySharedToastMessage -> {
-                    context?.let { toast(it, R.string.you_already_shared_this) }
+                    toast(container.context, R.string.you_already_shared_this)
                 }
                 is SearchViewState.OpenEmail -> {
                     context?.let {
@@ -235,7 +231,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                     binding.recyclerViewSearch.adapter = searchViewState.recyclerAdapterStructure
                 }
                 is SearchViewState.ShowExceptionMessage -> {
-                    context?.let { toast(it, searchViewState.exception.toString()) }
+                    toast(container.context, searchViewState.exception.toString())
                 }
             }
         }
@@ -282,7 +278,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                                     )
                                 }
                             } catch (e: Exception) {
-                                context?.let { toast(it, e.toString()) }
+                                toast(container.context, e.toString())
                             }
                         }
                     }
@@ -291,8 +287,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
                     }
                 }, Looper.getMainLooper())
         } catch (e: Exception) {
-            e.printStackTrace()
-            context?.let { toast(it, e.toString()) }
+            toast(container.context, e.toString())
         }
     }
 
