@@ -126,20 +126,14 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     }
 
     fun goToLocationFromShared(postModel: PostModel) {
-        val postLocation = postModel.location.split(",").toTypedArray()
-        var adverb = 0
-        for (locationXY: String in postLocation) {
-            adverb++
-            if (adverb == 1) LATITUDE = locationXY.toDouble()
-            if (adverb == 2) LONGITUDE = locationXY.toDouble()
-        }
-        SET.putFloat("konum_git_enlem", LATITUDE.toFloat())
-        SET.putFloat("konum_git_boylam", LONGITUDE.toFloat())
-        SET.commit()
-        startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
+        goToLocation(postModel = postModel)
     }
 
     fun goToLocationFromSaved(postModel: PostModel) {
+        goToLocation(postModel = postModel)
+    }
+
+    private fun goToLocation(postModel: PostModel){
         val postLocation = postModel.location.split(",").toTypedArray()
         var adverb = 0
         for (locationXY: String in postLocation) {
