@@ -37,18 +37,10 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun initClickListeners() {
         binding.tvUserChangePicture.setOnClickListener {
-            CropImage
-                .activity()
-                .setAspectRatio(1, 1)
-                .setCropShape(CropImageView.CropShape.OVAL)
-                .start(this@EditProfileActivity)
+            changePicture()
         }
         binding.imgUserPicture.setOnClickListener {
-            CropImage
-                .activity()
-                .setAspectRatio(1, 1)
-                .setCropShape(CropImageView.CropShape.OVAL)
-                .start(this@EditProfileActivity)
+            changePicture()
         }
         binding.btnUpdate.setOnClickListener {
             viewModel.updateUser(
@@ -56,6 +48,14 @@ class EditProfileActivity : AppCompatActivity() {
                 binding.edtGetBiography.text.toString()
             )
         }
+    }
+
+    private fun changePicture(){
+        CropImage
+            .activity()
+            .setAspectRatio(1, 1)
+            .setCropShape(CropImageView.CropShape.OVAL)
+            .start(this@EditProfileActivity)
     }
 
     private fun observeEditProfileState() {
