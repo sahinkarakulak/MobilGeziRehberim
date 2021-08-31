@@ -14,11 +14,6 @@ class AccountCreateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAccountCreateBinding
     private lateinit var viewModel: AccountCreateViewModel
 
-    lateinit var userName: String
-    lateinit var email: String
-    lateinit var passOne: String
-    lateinit var passTwo: String
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAccountCreateBinding.inflate(layoutInflater)
@@ -34,10 +29,10 @@ class AccountCreateActivity : AppCompatActivity() {
 
     private fun initClickListeners() {
         binding.btnCreateAccount.setOnClickListener {
-            userName = binding.edtUserName.text.toString()
-            email = binding.edtUserEmail.text.toString()
-            passOne = binding.edtUserPassOne.text.toString()
-            passTwo = binding.edtUserPassTwo.text.toString()
+            val userName = binding.edtUserName.text.toString()
+            val email = binding.edtUserEmail.text.toString()
+            val passOne = binding.edtUserPassOne.text.toString()
+            val passTwo = binding.edtUserPassTwo.text.toString()
             viewModel.createAccount(userName, email, passOne, passTwo)
         }
     }
