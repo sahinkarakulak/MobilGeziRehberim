@@ -11,7 +11,7 @@ class UserInfo {
         kullaniciAdi: String?,
         kullaniciEposta: String?,
         kulaniciParola: String?,
-        bio: String,
+        bio: String?,
         kullaniciResmi: String?
     ) {
         this.kullaniciAdi = kullaniciAdi
