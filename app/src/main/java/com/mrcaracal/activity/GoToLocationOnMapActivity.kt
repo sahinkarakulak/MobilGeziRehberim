@@ -12,16 +12,13 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.utils.ConstantsMap
 
 class GoToLocationOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
     private lateinit var mMap: GoogleMap
-
-    private var GO_TO_LOCATION_LATITUDE = "konum_git_enlem"
-    private var GO_TO_LOCATION_LONGITUDE = "konum_git_boylam"
-    private var POST_LOCATION = "Gönderi Konumu"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +34,11 @@ class GoToLocationOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val latitude = GET.getFloat(GO_TO_LOCATION_LATITUDE, 0f).toDouble()
-        val longitude = GET.getFloat(GO_TO_LOCATION_LONGITUDE, 0f).toDouble()
+        val latitude = GET.getFloat(ConstantsMap.GO_TO_LOCATION_LATITUDE, 0f).toDouble()
+        val longitude = GET.getFloat(ConstantsMap.GO_TO_LOCATION_LONGITUDE, 0f).toDouble()
 
         val postLocation = LatLng(latitude, longitude)
-        mMap.addMarker(MarkerOptions().position(postLocation).title(POST_LOCATION))
+        mMap.addMarker(MarkerOptions().position(postLocation).title(ConstantsMap.POST_LOCATION))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(postLocation, 16f))
     }
 

@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.utils.ConstantsMap
 import java.io.IOException
 import java.util.*
 
@@ -32,10 +33,6 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
     var latitude = 0.0.toFloat()
     var longitude = 0.0.toFloat()
     var addres = ""
-    private val LATITUDE = "enlem"
-    private val LONGITUDE = "boylam"
-    private val ADDRES = "adres"
-    private val POST_CODE = "postaKodu"
     lateinit var postCode: String
 
     private lateinit var GET: SharedPreferences
@@ -87,10 +84,10 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
                     /*Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();*/
                     e.printStackTrace()
                 }
-                SET.putFloat(LATITUDE, latitude)
-                SET.putFloat(LONGITUDE, longitude)
-                SET.putString(ADDRES, addres)
-                SET.putString(POST_CODE, postCode)
+                SET.putFloat(ConstantsMap.LATITUDE, latitude)
+                SET.putFloat(ConstantsMap.LONGITUDE, longitude)
+                SET.putString(ConstantsMap.ADDRES, addres)
+                SET.putString(ConstantsMap.POST_CODE, postCode)
                 SET.commit()
 
                 /*Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: "
@@ -229,10 +226,10 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
                 .draggable(true)
                 .visible(true)
         )
-        SET.putFloat(LATITUDE, latitude)
-        SET.putFloat(LONGITUDE, longitude)
-        SET.putString(ADDRES, addres)
-        SET.putString(POST_CODE, postCode)
+        SET.putFloat(ConstantsMap.LATITUDE, latitude)
+        SET.putFloat(ConstantsMap.LONGITUDE, longitude)
+        SET.putString(ConstantsMap.ADDRES, addres)
+        SET.putString(ConstantsMap.POST_CODE, postCode)
         SET.commit()
     }
 
