@@ -11,6 +11,7 @@ import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
+import com.mrcaracal.utils.ConstantsFirebase
 
 class MyAccountViewModel : ViewModel() {
     var myAccountState: MutableLiveData<MyAccountViewState> = MutableLiveData<MyAccountViewState>()
@@ -19,16 +20,6 @@ class MyAccountViewModel : ViewModel() {
     var firebaseUser: FirebaseUser? = null
     lateinit var firebaseFirestore: FirebaseFirestore
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
-
-    private val COLLECTION_NAME_SHARED = "Paylasilanlar"
-    private val COLLECTION_NAME_THEY_SHARED = "Paylastiklari"
-    private val COLLECTION_NAME_SAVED = "Kaydedilenler"
-    private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
-    private val COLLECTION_NAME_POST = "Gonderiler"
-    private val FIREBASE_COLLECTION_NAME = "Kullanicilar"
-    private val FIREBASE_DOC_VAL_USERNAME = "kullaniciAdi"
-    private val FIREBASE_DOC_VAL_BIO = "bio"
-    private val FIREBASE_DOC_VAL_USERPIC = "kullaniciResmi"
 
     val postModelsList: ArrayList<PostModel> = arrayListOf()
 
@@ -41,7 +32,7 @@ class MyAccountViewModel : ViewModel() {
     fun getData() {
         val documentReference = FirebaseFirestore
             .getInstance()
-            .collection(FIREBASE_COLLECTION_NAME)
+            .collection(ConstantsFirebase.FIREBASE_COLLECTION_NAME)
             .document((firebaseUser?.email)!!)
         documentReference
             .get()
@@ -50,15 +41,15 @@ class MyAccountViewModel : ViewModel() {
                     val documentSnapshot = (task.result)
                     if (documentSnapshot.exists()) {
                         myAccountState.value = MyAccountViewState.ShowUserNameAndBio(
-                            userName = documentSnapshot.getString(FIREBASE_DOC_VAL_USERNAME)
+                            userName = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERNAME)
                                 .toString(),
-                            bio = documentSnapshot.getString(FIREBASE_DOC_VAL_BIO).toString()
+                            bio = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_BIO).toString()
                         )
                         myAccountState.value = MyAccountViewState.PicassoProccese(
-                            loadData = documentSnapshot.getString(FIREBASE_DOC_VAL_USERPIC)
+                            loadData = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC)
                                 .toString()
                         )
-                        if (documentSnapshot.getString(FIREBASE_DOC_VAL_USERPIC) == null) {
+                        if (documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC) == null) {
                             myAccountState.value = MyAccountViewState.PicassoProcceseDefault
                         }
                     }
@@ -68,9 +59,9 @@ class MyAccountViewModel : ViewModel() {
 
     fun pullTheShared() {
         val collectionReference = firebaseFirestore
-            .collection(COLLECTION_NAME_SHARED)
+            .collection(ConstantsFirebase.COLLECTION_NAME_SHARED)
             .document((firebaseUser?.email)!!)
-            .collection(COLLECTION_NAME_THEY_SHARED)
+            .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SHARED)
         collectionReference
             .orderBy("zaman", Query.Direction.DESCENDING)
             .get()
@@ -95,9 +86,9 @@ class MyAccountViewModel : ViewModel() {
 
     fun pullTheRecorded() {
         val collectionReference = firebaseFirestore
-            .collection(COLLECTION_NAME_THEY_SAVED)
+            .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
             .document((firebaseUser?.email)!!)
-            .collection(COLLECTION_NAME_SAVED)
+            .collection(ConstantsFirebase.COLLECTION_NAME_SAVED)
         collectionReference
             .orderBy("zaman", Query.Direction.DESCENDING)
             .get()
@@ -131,9 +122,9 @@ class MyAccountViewModel : ViewModel() {
 
         //1. Adım
         firebaseFirestore
-            .collection(COLLECTION_NAME_SHARED)
+            .collection(ConstantsFirebase.COLLECTION_NAME_SHARED)
             .document(postModelsList[positionValue].userEmail)
-            .collection(COLLECTION_NAME_THEY_SHARED)
+            .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SHARED)
             .document(postModelsList[positionValue].postId)
             .delete()
             .addOnSuccessListener {
@@ -146,7 +137,7 @@ class MyAccountViewModel : ViewModel() {
 
         //2. Adım
         firebaseFirestore
-            .collection(COLLECTION_NAME_POST)
+            .collection(ConstantsFirebase.COLLECTION_NAME_POST)
             .document(postModelsList[positionValue].postId)
             .delete()
             .addOnSuccessListener {
@@ -165,9 +156,9 @@ class MyAccountViewModel : ViewModel() {
         // ÖNEMLİ
         // ALERTDIALOG İLE EMİN MİSİN DİYE KULLANICIYA SORULSUN. VERİLEN CEVABA GÖRE İŞLEM YAPILSIN!
         firebaseFirestore
-            .collection(COLLECTION_NAME_THEY_SAVED)
+            .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
             .document((firebaseUser?.email)!!)
-            .collection(COLLECTION_NAME_SAVED)
+            .collection(ConstantsFirebase.COLLECTION_NAME_SAVED)
             .document(postModelsList[positionValue].postId)
             .delete()
             .addOnSuccessListener {

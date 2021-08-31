@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.mrcaracal.modul.Posts
+import com.mrcaracal.utils.ConstantsFirebase
 import java.util.*
 
 class ShareViewModel : ViewModel() {
@@ -22,11 +23,6 @@ class ShareViewModel : ViewModel() {
     private lateinit var firebaseStorage: FirebaseStorage
     private lateinit var storageReference: StorageReference
     private lateinit var picturePath: Uri
-
-    private val STORAGE_NAME = "Resimler"
-    private val COLLECTION_NAME_SHARED = "Paylasilanlar"
-    private val COLLECTION_NAME_THEY_SHARED = "Paylastiklari"
-    private val COLLECTION_NAME_POST = "Gonderiler"
 
     var postCode: String? = null
     lateinit var postID: String
@@ -54,12 +50,12 @@ class ShareViewModel : ViewModel() {
             val placeName = firebaseUser!!.email + "--" + getPlaceName + "--" + uuid
             try {
                 storageReference
-                    .child(STORAGE_NAME)
+                    .child(ConstantsFirebase.STORAGE_NAME)
                     .child(placeName)
                     .putFile(picturePath)
                     .addOnSuccessListener {
                         val storageReference1 =
-                            FirebaseStorage.getInstance().getReference(STORAGE_NAME + "/$placeName")
+                            FirebaseStorage.getInstance().getReference(ConstantsFirebase.STORAGE_NAME + "/$placeName")
                         storageReference1
                             .downloadUrl
                             .addOnSuccessListener { uri ->
@@ -79,15 +75,15 @@ class ShareViewModel : ViewModel() {
                                     city, comment, postCode, tags, FieldValue.serverTimestamp()
                                 )
                                 val documentReference1 = firebaseFirestore
-                                    .collection(COLLECTION_NAME_SHARED)
+                                    .collection(ConstantsFirebase.COLLECTION_NAME_SHARED)
                                     .document(firebaseUser.email!!)
-                                    .collection(COLLECTION_NAME_THEY_SHARED)
+                                    .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SHARED)
                                     .document(postID)
                                 documentReference1
                                     .set(MGonderiler)
                                     .addOnSuccessListener {
                                         val documentReference2 = firebaseFirestore
-                                            .collection(COLLECTION_NAME_POST)
+                                            .collection(ConstantsFirebase.COLLECTION_NAME_POST)
                                             .document(postID)
                                         documentReference2
                                             .set(MGonderiler)

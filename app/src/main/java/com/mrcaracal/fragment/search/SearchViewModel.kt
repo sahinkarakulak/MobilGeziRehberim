@@ -13,6 +13,7 @@ import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.modul.Posts
 import com.mrcaracal.modul.UserAccountStore
+import com.mrcaracal.utils.ConstantsFirebase
 import java.util.*
 
 class SearchViewModel : ViewModel() {
@@ -22,10 +23,6 @@ class SearchViewModel : ViewModel() {
     lateinit var firebaseUser: FirebaseUser
     lateinit var firebaseFirestore: FirebaseFirestore
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
-
-    private val COLLECTION_NAME_SAVED = "Kaydedilenler"
-    private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
-    private val COLLECTION_NAME_POST = "Gonderiler"
 
     val postModelsList: ArrayList<PostModel> = arrayListOf()
 
@@ -49,7 +46,7 @@ class SearchViewModel : ViewModel() {
     fun search(relevantField: String?, keywordWrited: String) {
         clearList()
         val collectionReference = firebaseFirestore
-            .collection(COLLECTION_NAME_POST)
+            .collection(ConstantsFirebase.COLLECTION_NAME_POST)
         collectionReference
             .orderBy((relevantField)!!)
             .startAt(keywordWrited)
@@ -72,7 +69,7 @@ class SearchViewModel : ViewModel() {
     fun searchForTag(relevantField: String?, keywordWrited: String?) {
         clearList()
         val collectionReference = firebaseFirestore
-            .collection(COLLECTION_NAME_POST)
+            .collection(ConstantsFirebase.COLLECTION_NAME_POST)
         collectionReference
             .whereArrayContains((relevantField)!!, (keywordWrited)!!)
             .get()
@@ -93,7 +90,7 @@ class SearchViewModel : ViewModel() {
 
     fun searchForCity(postCode: String) {
         val collectionReference = firebaseFirestore
-            .collection(COLLECTION_NAME_POST)
+            .collection(ConstantsFirebase.COLLECTION_NAME_POST)
         collectionReference
             .orderBy("postaKodu")
             .startAt(postCode)
@@ -131,9 +128,9 @@ class SearchViewModel : ViewModel() {
                 FieldValue.serverTimestamp()
             )
             val documentReference = firebaseFirestore
-                .collection(COLLECTION_NAME_THEY_SAVED)
+                .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
                 .document((firebaseUser.email)!!)
-                .collection(COLLECTION_NAME_SAVED)
+                .collection(ConstantsFirebase.COLLECTION_NAME_SAVED)
                 .document(postModel.postId)
             documentReference
                 .set(MGonderiler)

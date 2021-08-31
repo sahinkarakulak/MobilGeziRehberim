@@ -12,6 +12,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.mrcaracal.utils.ConstantsFirebase
 import java.util.*
 
 class EditProfileViewModel : ViewModel() {
@@ -24,24 +25,18 @@ class EditProfileViewModel : ViewModel() {
     lateinit var documentReference: DocumentReference
     lateinit var mImageUri: Uri
 
-    private val STORAGE_NAME = "Resimler"
-    private val FIREBASE_COLLECTION_NAME = "Kullanicilar"
-    private val FIREBASE_DOC_VAL_USERNAME = "kullaniciAdi"
-    private val FIREBASE_DOC_VAL_BIO = "bio"
-    private val FIREBASE_DOC_VAL_USERPIC = "kullaniciResmi"
-
     fun initialize() {
         firebaseUser = FirebaseAuth.getInstance().currentUser
-        storageReference = FirebaseStorage.getInstance().getReference(STORAGE_NAME)
+        storageReference = FirebaseStorage.getInstance().getReference(ConstantsFirebase.STORAGE_NAME)
     }
 
     fun updateUser(u_name: String, u_bio: String) {
         val documentReference2 = FirebaseFirestore.getInstance()
-            .collection(FIREBASE_COLLECTION_NAME)
+            .collection(ConstantsFirebase.FIREBASE_COLLECTION_NAME)
             .document(firebaseUser?.email!!)
         val currentDatas: MutableMap<String, Any> = HashMap()
-        currentDatas[FIREBASE_DOC_VAL_USERNAME] = u_name
-        currentDatas[FIREBASE_DOC_VAL_BIO] = u_bio
+        currentDatas[ConstantsFirebase.FIREBASE_DOC_VAL_USERNAME] = u_name
+        currentDatas[ConstantsFirebase.FIREBASE_DOC_VAL_BIO] = u_bio
         documentReference2
             .update(currentDatas)
             .addOnSuccessListener {
@@ -55,7 +50,7 @@ class EditProfileViewModel : ViewModel() {
         }
         documentReference = FirebaseFirestore
             .getInstance()
-            .collection(FIREBASE_COLLECTION_NAME)
+            .collection(ConstantsFirebase.FIREBASE_COLLECTION_NAME)
             .document(firebaseUser?.email!!)
         documentReference
             .get()
@@ -65,15 +60,15 @@ class EditProfileViewModel : ViewModel() {
                     if (documentSnapshot.exists()) {
                         editProfileViewState.value = EditProfileViewState.GetFirebaseDocValUserName(
                             documentSnapshot = documentSnapshot,
-                            firebaseDocValUserName = FIREBASE_DOC_VAL_USERNAME
+                            firebaseDocValUserName = ConstantsFirebase.FIREBASE_DOC_VAL_USERNAME
                         )
                         editProfileViewState.value = EditProfileViewState.GetFirebaseDocValBio(
                             documentSnapshot = documentSnapshot,
-                            firebaseDocValBio = FIREBASE_DOC_VAL_BIO
+                            firebaseDocValBio = ConstantsFirebase.FIREBASE_DOC_VAL_BIO
                         )
                         editProfileViewState.value = EditProfileViewState.PicassoPross(
                             documentSnapshot = documentSnapshot,
-                            firebaseDocValueUserPic = FIREBASE_DOC_VAL_USERPIC
+                            firebaseDocValueUserPic = ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC
                         )
                     }
                 }
@@ -106,9 +101,9 @@ class EditProfileViewModel : ViewModel() {
                 val downloadUri = task.result
                 val myUrl = downloadUri.toString()
                 val hasmap: MutableMap<String, Any> = HashMap()
-                hasmap[FIREBASE_DOC_VAL_USERPIC] = "" + myUrl
+                hasmap[ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC] = "" + myUrl
                 FirebaseFirestore.getInstance()
-                    .collection(FIREBASE_COLLECTION_NAME)
+                    .collection(ConstantsFirebase.FIREBASE_COLLECTION_NAME)
                     .document(firebaseUser?.email!!)
                     .update(hasmap)
                     .addOnSuccessListener {
@@ -121,7 +116,7 @@ class EditProfileViewModel : ViewModel() {
                                         editProfileViewState.value =
                                             EditProfileViewState.PicassoPross(
                                                 documentSnapshot = documentSnapshot,
-                                                firebaseDocValueUserPic = FIREBASE_DOC_VAL_USERPIC
+                                                firebaseDocValueUserPic = ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC
                                             )
                                     }
                                 }

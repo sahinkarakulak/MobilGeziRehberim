@@ -14,6 +14,7 @@ import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.modul.Posts
 import com.mrcaracal.modul.UserAccountStore
+import com.mrcaracal.utils.ConstantsFirebase
 
 class HomePageViewModel : ViewModel() {
     var homePageState: MutableLiveData<HomePageViewState> = MutableLiveData<HomePageViewState>()
@@ -23,10 +24,6 @@ class HomePageViewModel : ViewModel() {
     lateinit var firebaseFirestore: FirebaseFirestore
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
 
-    private val COLLECTION_NAME_SAVED = "Kaydedilenler"
-    private val COLLECTION_NAME_THEY_SAVED = "Kaydedenler"
-    private val COLLECTION_NAME_POST = "Gonderiler"
-
     fun init() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser
@@ -35,7 +32,7 @@ class HomePageViewModel : ViewModel() {
 
     fun rewind(postModelsList: ArrayList<PostModel>) {
         val collectionReference = firebaseFirestore
-            .collection(COLLECTION_NAME_POST)
+            .collection(ConstantsFirebase.COLLECTION_NAME_POST)
 
         // VT'ye kaydedilme zamanına göre verileri çek
         collectionReference
@@ -75,9 +72,9 @@ class HomePageViewModel : ViewModel() {
                 FieldValue.serverTimestamp()
             )
             val documentReference = firebaseFirestore
-                .collection(COLLECTION_NAME_THEY_SAVED)
+                .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
                 .document((firebaseUser!!.email)!!)
-                .collection(COLLECTION_NAME_SAVED)
+                .collection(ConstantsFirebase.COLLECTION_NAME_SAVED)
                 .document(postModel.postId)
             documentReference
                 .set(MGonderiler)
