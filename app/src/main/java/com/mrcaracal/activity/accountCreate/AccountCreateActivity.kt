@@ -19,6 +19,7 @@ class AccountCreateActivity : AppCompatActivity() {
         binding = ActivityAccountCreateBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initViewModel()
+        viewModel.init()
         initClickListeners()
         observeAccountCreateState()
     }
@@ -50,7 +51,7 @@ class AccountCreateActivity : AppCompatActivity() {
                     toast(R.string.passwords_are_not_the_same)
                 }
                 is AccountCreateViewModel.AccountCreateViewState.ShowErrorMessage -> {
-                    toast(accountCreateViewState.e.toString())
+                    toast(accountCreateViewState.exception.toString())
                 }
             }
         }

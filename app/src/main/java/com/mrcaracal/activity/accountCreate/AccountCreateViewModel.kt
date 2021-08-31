@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.UserInfo
+import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsFirebase
 
 class AccountCreateViewModel : ViewModel() {
@@ -14,6 +15,11 @@ class AccountCreateViewModel : ViewModel() {
     private lateinit var firebaseFirestore: FirebaseFirestore
     var accountCreateState: MutableLiveData<AccountCreateViewState> =
         MutableLiveData<AccountCreateViewState>()
+
+    fun init(){
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseFirestore = FirebaseFirestore.getInstance()
+    }
 
     fun createAccount(
         userName: String,
@@ -32,12 +38,11 @@ class AccountCreateViewModel : ViewModel() {
                             .currentUser
                             ?.sendEmailVerification()
                             ?.addOnSuccessListener {
-                                //
                                 val userInfo = UserInfo(
                                     userName,
                                     email,
                                     pass1,
-                                    R.string.ı_love_mgr.toString(),
+                                    Constants.I_LOVE_MGR,
                                     ConstantsFirebase.DEFAULT_PP_LINK
                                 )
                                 val documentReference = firebaseFirestore
@@ -50,15 +55,18 @@ class AccountCreateViewModel : ViewModel() {
                                             AccountCreateViewState.CreateAccountAndSignOut
                                         firebaseAuth.signOut()
                                     }
-                                    .addOnFailureListener { e ->
+                                    .addOnFailureListener { exception ->
                                         accountCreateState.value =
-                                            AccountCreateViewState.ShowErrorMessage(e = e)
+                                            AccountCreateViewState.ShowErrorMessage(exception = exception)
                                     }
                             }
-                            ?.addOnFailureListener { e ->
+                            ?.addOnFailureListener { exception ->
                                 accountCreateState.value =
-                                    AccountCreateViewState.ShowErrorMessage(e = e)
+                                    AccountCreateViewState.ShowErrorMessage(exception = exception)
                             }
+                    }
+                    .addOnFailureListener { exception ->
+                        AccountCreateViewState.ShowErrorMessage(exception = exception)
                     }
             } else {
                 accountCreateState.value =
@@ -70,7 +78,7 @@ class AccountCreateViewModel : ViewModel() {
     sealed class AccountCreateViewState {
         object ShowRequiredFieldsMessage : AccountCreateViewState()
         object CreateAccountAndSignOut : AccountCreateViewState()
-        data class ShowErrorMessage(val e: Exception) : AccountCreateViewState()
+        data class ShowErrorMessage(val exception: Exception) : AccountCreateViewState()
         object ThePassIsNotTheSame : AccountCreateViewState()
     }
 }
