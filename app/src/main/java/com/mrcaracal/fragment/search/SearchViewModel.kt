@@ -179,7 +179,7 @@ class SearchViewModel : ViewModel() {
 sealed class SearchViewState {
     object ShowAlreadySharedToastMessage : SearchViewState()
 
-    data class ShowExceptionMessage(val exception: Exception): SearchViewState()
+    data class ShowExceptionMessage(val exception: Exception) : SearchViewState()
 
     data class OpenEmail(val subject: String, val message: String, val emails: ArrayList<String>) :
         SearchViewState()

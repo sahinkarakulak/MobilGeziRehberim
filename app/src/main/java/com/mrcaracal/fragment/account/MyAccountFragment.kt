@@ -1,6 +1,5 @@
 package com.mrcaracal.fragment.account
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -23,7 +22,6 @@ import com.mrcaracal.mobilgezirehberim.databinding.FragMyAccountBinding
 import com.mrcaracal.utils.ConstantsMap
 import com.mrcaracal.utils.DialogViewCustomize
 import com.squareup.picasso.Picasso
-import java.text.DateFormat
 
 class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
 
@@ -63,7 +61,6 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         initClickListeners()
         observeMyAccountState()
 
-        // RecyclerView Tanımlama İşlemi
         binding.recyclerViewAccount.layoutManager = LinearLayoutManager(activity)
         viewModel.recyclerAdapterProccese(thisClick = this)
         viewModel.pullTheShared()
@@ -134,7 +131,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         goToLocation(postModel = postModel)
     }
 
-    private fun goToLocation(postModel: PostModel){
+    private fun goToLocation(postModel: PostModel) {
         val postLocation = postModel.location.split(",").toTypedArray()
         var adverb = 0
         for (locationXY: String in postLocation) {
@@ -169,7 +166,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         val title = bottomSheetView.findViewById<TextView>(R.id.bs_baslik)
         title.text = postModel.placeName
 
-        // KONUMA GİT
+        // Go to locaiton
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation).setOnClickListener(
             View.OnClickListener {
                 when (TAB_CONTROL) {
@@ -179,7 +176,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                 bottomSheetDialog.dismiss()
             })
 
-        // KALDIR
+        // Remove
         bottomSheetView.findViewById<View>(R.id.bs_remove)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
@@ -205,7 +202,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                 }
             })
 
-        // İPTAL
+        // cancel
         bottomSheetView.findViewById<View>(R.id.bs_cancel)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {

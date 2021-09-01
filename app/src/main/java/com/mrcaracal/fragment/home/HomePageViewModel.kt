@@ -34,7 +34,6 @@ class HomePageViewModel : ViewModel() {
         val collectionReference = firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_POST)
 
-        // VT'ye kaydedilme zamanına göre verileri çek
         collectionReference
             .orderBy("zaman", Query.Direction.DESCENDING)
             .get()
@@ -119,7 +118,8 @@ class HomePageViewModel : ViewModel() {
 
     fun recyclerAdapterProccese(thisClick: RecyclerViewClickInterface) {
         recyclerAdapterStructure = RecyclerAdapterStructure(thisClick)
-        homePageState.value = HomePageViewState.SendRecyclerAdapter(recyclerAdapterStructure = recyclerAdapterStructure)
+        homePageState.value =
+            HomePageViewState.SendRecyclerAdapter(recyclerAdapterStructure = recyclerAdapterStructure)
     }
 
 }

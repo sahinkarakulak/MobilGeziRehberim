@@ -10,22 +10,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.activity.contact.ContactActivity
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.account.MyAccountFragment
 import com.mrcaracal.fragment.home.HomePageFragment
-import com.mrcaracal.fragment.home.HomePageViewState
 import com.mrcaracal.fragment.search.SearchFragment
 import com.mrcaracal.fragment.share.ShareFragment
-import com.mrcaracal.mobilgezirehberim.login.Login
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.mobilgezirehberim.login.Login
 
 class HomePageActivity : AppCompatActivity() {
 
     private lateinit var viewModel: HomePageViewModelActivity
-    private var doubleBackToExitPressedOnce= false
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,13 +60,13 @@ class HomePageActivity : AppCompatActivity() {
         }
     }
 
-    private fun initViewModel(){
+    private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(HomePageViewModelActivity::class.java)
     }
 
-    private fun observeHomePageActivityState(){
+    private fun observeHomePageActivityState() {
         viewModel.homePageActivityState.observe(this) { homePageActivityViewState ->
-            when(homePageActivityViewState){
+            when (homePageActivityViewState) {
 
             }
         }

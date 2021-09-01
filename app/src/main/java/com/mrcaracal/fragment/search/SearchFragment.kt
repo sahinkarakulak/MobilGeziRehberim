@@ -134,6 +134,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                     }
                 }
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
@@ -164,6 +165,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                     keyValue = "kullaniciEposta"
                 }
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
@@ -186,6 +188,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                     viewModel.search(keyValue, s.toString().lowercase())
                 }
             }
+
             override fun afterTextChanged(s: Editable) {}
         })
     }
@@ -280,6 +283,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                             }
                         }
                     }
+
                     override fun onLocationAvailability(locationAvailability: LocationAvailability) {
                         super.onLocationAvailability(locationAvailability)
                     }

@@ -4,9 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.modul.UserInfo
-import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsFirebase
 
 class AccountCreateViewModel : ViewModel() {
@@ -16,7 +14,7 @@ class AccountCreateViewModel : ViewModel() {
     var accountCreateState: MutableLiveData<AccountCreateViewState> =
         MutableLiveData<AccountCreateViewState>()
 
-    fun init(){
+    fun init() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
     }

@@ -55,7 +55,8 @@ class ShareViewModel : ViewModel() {
                     .putFile(picturePath)
                     .addOnSuccessListener {
                         val storageReference1 =
-                            FirebaseStorage.getInstance().getReference(ConstantsFirebase.STORAGE_NAME + "/$placeName")
+                            FirebaseStorage.getInstance()
+                                .getReference(ConstantsFirebase.STORAGE_NAME + "/$placeName")
                         storageReference1
                             .downloadUrl
                             .addOnSuccessListener { uri ->
@@ -106,11 +107,6 @@ class ShareViewModel : ViewModel() {
                                 shareState.value =
                                     ShareViewState.ShowExceptionAndBtnState(exception = e)
                             }
-                        /*val myToast =
-                            Toast.makeText(activity, getString(R.string.sended), Toast.LENGTH_SHORT)
-                        myToast.show()
-                        val handler = Handler()
-                        handler.postDelayed({ myToast.cancel() }, 400)*/
                     }
                     .addOnFailureListener { e ->
                         shareState.value = ShareViewState.ShowExceptionAndBtnState(exception = e)
@@ -138,7 +134,7 @@ class ShareViewModel : ViewModel() {
         shareState.value = ShareViewState.PicassoPross(picturePath = picturePath)
     }
 
-    fun sendPostCode(postCode: String){
+    fun sendPostCode(postCode: String) {
         this.postCode = postCode
     }
 }

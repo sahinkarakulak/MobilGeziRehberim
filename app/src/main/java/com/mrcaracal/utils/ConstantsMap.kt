@@ -8,6 +8,6 @@ object ConstantsMap {
 
     const val LATITUDE = "enlem"
     const val LONGITUDE = "boylam"
-    const val ADDRES = "adres"
+    const val ADDRESS = "adres"
     const val POST_CODE = "postaKodu"
 }

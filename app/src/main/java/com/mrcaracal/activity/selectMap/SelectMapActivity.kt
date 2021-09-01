@@ -56,7 +56,7 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         SET = GET.edit()
     }
 
-    private fun initViewModel(){
+    private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(SelectMapViewModel::class.java)
     }
 
@@ -80,7 +80,12 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-                processSet(latitude = latitude, longitude = longitude, address = addres, postCode = postCode)
+                processSet(
+                    latitude = latitude,
+                    longitude = longitude,
+                    address = addres,
+                    postCode = postCode
+                )
             }
 
             override fun onProviderDisabled(provider: String) {
@@ -196,13 +201,18 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
                 .draggable(true)
                 .visible(true)
         )
-        processSet(latitude = latitude, longitude = longitude, address = addres, postCode = postCode)
+        processSet(
+            latitude = latitude,
+            longitude = longitude,
+            address = addres,
+            postCode = postCode
+        )
     }
 
-    private fun processSet(latitude: Float, longitude: Float, address: String, postCode: String){
+    private fun processSet(latitude: Float, longitude: Float, address: String, postCode: String) {
         SET.putFloat(ConstantsMap.LATITUDE, latitude)
         SET.putFloat(ConstantsMap.LONGITUDE, longitude)
-        SET.putString(ConstantsMap.ADDRES, address)
+        SET.putString(ConstantsMap.ADDRESS, address)
         SET.putString(ConstantsMap.POST_CODE, postCode)
         SET.commit()
     }

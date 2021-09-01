@@ -9,11 +9,9 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -40,8 +38,7 @@ class ShareFragment : Fragment() {
 
     var latitude = 0f
     var longitude = 0f
-    private lateinit var picturePath : Uri
-
+    private lateinit var picturePath: Uri
 
     private fun init() {
         GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
@@ -91,16 +88,9 @@ class ShareFragment : Fragment() {
             when (shareViewState) {
                 is ShareViewState.ShowToastMessageAndBtnState -> {
                     activity?.let { toast(it, getString(R.string.fill_in_the_required_fields)) }
-                    //binding.btnShareSend.isEnabled = false
                 }
                 is ShareViewState.ShowExceptionAndBtnState -> {
-                    Toast.makeText(
-                        activity,
-                        shareViewState.exception.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    //binding.btnShareSend.isEnabled = false
-                    Log.i(TAG, "observeContactState: " + shareViewState.exception.toString())
+                    context?.let { toast(it, shareViewState.exception.toString()) }
                 }
                 is ShareViewState.OpenHomePage -> {
                     val intent =
@@ -185,7 +175,7 @@ class ShareFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 2 && resultCode == Activity.RESULT_OK && data != null) {
             picturePath = data.data!!
-            viewModel.picturePath(picturePath = picturePath!!)
+            viewModel.picturePath(picturePath = picturePath)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

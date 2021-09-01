@@ -43,7 +43,8 @@ class MyAccountViewModel : ViewModel() {
                         myAccountState.value = MyAccountViewState.ShowUserNameAndBio(
                             userName = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERNAME)
                                 .toString(),
-                            bio = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_BIO).toString()
+                            bio = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_BIO)
+                                .toString()
                         )
                         myAccountState.value = MyAccountViewState.PicassoProccese(
                             loadData = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC)
@@ -117,10 +118,7 @@ class MyAccountViewModel : ViewModel() {
 
     fun removeFromShared(positionValue: Int) {
 
-        // ÖNEMLİ
-        // ALERTDIALOG İLE EMİN MİSİN DİYE KULLANICIYA SORULSUN. VERİLEN CEVABA GÖRE İŞLEM YAPILSIN!
-
-        //1. Adım
+        // Step-1
         firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_SHARED)
             .document(postModelsList[positionValue].userEmail)
@@ -135,7 +133,7 @@ class MyAccountViewModel : ViewModel() {
                     MyAccountViewState.ShowExceptionMessage(exception = exception)
             }
 
-        //2. Adım
+        // Step-2
         firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_POST)
             .document(postModelsList[positionValue].postId)
@@ -152,9 +150,6 @@ class MyAccountViewModel : ViewModel() {
     fun removeFromSaved(
         positionValue: Int
     ) {
-
-        // ÖNEMLİ
-        // ALERTDIALOG İLE EMİN MİSİN DİYE KULLANICIYA SORULSUN. VERİLEN CEVABA GÖRE İŞLEM YAPILSIN!
         firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
             .document((firebaseUser?.email)!!)

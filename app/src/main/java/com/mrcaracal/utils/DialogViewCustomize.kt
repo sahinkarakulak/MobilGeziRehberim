@@ -6,9 +6,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.mrcaracal.fragment.home.HomePageViewModel
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import java.text.DateFormat
@@ -20,7 +17,7 @@ object DialogViewCustomize {
         container: ViewGroup,
         postModel: PostModel,
         postTags: String
-    ){
+    ) {
 
         val mDialogView =
             LayoutInflater.from(activity).inflate(R.layout.custom_dialog_window, container, false)
