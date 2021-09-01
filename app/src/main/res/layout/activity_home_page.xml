@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.mrcaracal.activity.HomePageActivity">
+    tools:context="com.mrcaracal.activity.homePage.HomePageActivity">
 
     <FrameLayout
         android:id="@+id/frame_layout"
