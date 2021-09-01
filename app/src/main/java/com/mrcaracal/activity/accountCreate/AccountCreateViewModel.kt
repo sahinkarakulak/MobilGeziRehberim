@@ -42,7 +42,7 @@ class AccountCreateViewModel : ViewModel() {
                                     userName,
                                     email,
                                     pass1,
-                                    Constants.I_LOVE_MGR,
+                                    ConstantsFirebase.I_LOVE_MGR,
                                     ConstantsFirebase.DEFAULT_PP_LINK
                                 )
                                 val documentReference = firebaseFirestore
