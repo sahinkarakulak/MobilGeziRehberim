@@ -45,7 +45,7 @@
             android:name="com.mrcaracal.activity.GoToLocationOnMapActivity"
             android:label="@string/title_activity_harita_konuma_git" />
         <activity
-            android:name="com.mrcaracal.activity.MyMapActivity"
+            android:name="com.mrcaracal.activity.selectMap.SelectMapActivity"
             android:label="@string/title_activity_a__harita" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <activity android:name="com.mrcaracal.activity.contact.ContactActivity"

@@ -1,4 +1,4 @@
-package com.mrcaracal.activity
+package com.mrcaracal.activity.selectMap
 
 import android.Manifest
 import android.content.SharedPreferences
@@ -13,6 +13,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener
@@ -26,7 +27,9 @@ import com.mrcaracal.utils.ConstantsMap
 import java.io.IOException
 import java.util.*
 
-class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListener {
+class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListener {
+    private lateinit var viewModel: SelectMapViewModel
+
     lateinit var locationManager: LocationManager
     lateinit var locationListener: LocationListener
 
@@ -44,12 +47,17 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_map)
+        initViewModel()
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
         title = getString(R.string.map)
         GET = getSharedPreferences(getString(R.string.map_key), MODE_PRIVATE)
         SET = GET.edit()
+    }
+
+    private fun initViewModel(){
+        viewModel = ViewModelProvider(this).get(SelectMapViewModel::class.java)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

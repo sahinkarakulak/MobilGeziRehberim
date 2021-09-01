@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.mrcaracal.activity.HomePageActivity
-import com.mrcaracal.activity.MyMapActivity
+import com.mrcaracal.activity.selectMap.SelectMapActivity
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragShareBinding
@@ -78,7 +78,7 @@ class ShareFragment : Fragment() {
         })
 
         binding.selectLocation.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(activity, MyMapActivity::class.java))
+            startActivity(Intent(activity, SelectMapActivity::class.java))
         })
 
         binding.btnShareSend.setOnClickListener(View.OnClickListener {
