@@ -50,7 +50,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun changePicture(){
+    private fun changePicture() {
         CropImage
             .activity()
             .setAspectRatio(1, 1)

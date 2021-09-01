@@ -27,7 +27,8 @@ class EditProfileViewModel : ViewModel() {
 
     fun initialize() {
         firebaseUser = FirebaseAuth.getInstance().currentUser
-        storageReference = FirebaseStorage.getInstance().getReference(ConstantsFirebase.STORAGE_NAME)
+        storageReference =
+            FirebaseStorage.getInstance().getReference(ConstantsFirebase.STORAGE_NAME)
     }
 
     fun updateUser(u_name: String, u_bio: String) {
@@ -41,6 +42,10 @@ class EditProfileViewModel : ViewModel() {
             .update(currentDatas)
             .addOnSuccessListener {
                 editProfileViewState.value = EditProfileViewState.OpenHomePageActivity
+            }
+            .addOnFailureListener { exception ->
+                editProfileViewState.value =
+                    EditProfileViewState.ShowExceptionErrorMessage(exception = exception)
             }
     }
 
@@ -72,6 +77,10 @@ class EditProfileViewModel : ViewModel() {
                         )
                     }
                 }
+            }
+            .addOnFailureListener { exception ->
+                editProfileViewState.value =
+                    EditProfileViewState.ShowExceptionErrorMessage(exception = exception)
             }
     }
 
@@ -121,6 +130,14 @@ class EditProfileViewModel : ViewModel() {
                                     }
                                 }
                             }
+                            .addOnFailureListener { exception ->
+                                editProfileViewState.value =
+                                    EditProfileViewState.ShowExceptionErrorMessage(exception = exception)
+                            }
+                    }
+                    .addOnFailureListener { exception ->
+                        editProfileViewState.value =
+                            EditProfileViewState.ShowExceptionErrorMessage(exception = exception)
                     }
             } else {
                 editProfileViewState.value = EditProfileViewState.ShowErrorOccuredMessage
