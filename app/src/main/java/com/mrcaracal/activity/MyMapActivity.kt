@@ -55,10 +55,8 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
         locationListener = object : LocationListener {
-            // KULLANICININ KONUM VE ADRES BİLGİLERİ ANLIK OLARAK ALINSIN VE PAYLAŞ EKRANINDA YAZDIRILSIN
             override fun onLocationChanged(location: Location) {
                 latitude = location.latitude.toFloat()
                 longitude = location.longitude.toFloat()
@@ -68,41 +66,21 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
                     val addressList =
                         geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
                     if (addressList != null && addressList.size > 0) {
-                        /*if (addressList.get(0).getCountryName() != null) {
-                            adres += addressList.get(0).getCountryName();
-                        }
-                        if (addressList.get(0).getThoroughfare() != null) {
-                            adres += "\t" + addressList.get(0).getThoroughfare();
-                        }
-                        if (addressList.get(0).getSubThoroughfare() != null) {
-                            adres += "\t" + addressList.get(0).getSubThoroughfare();
-                        }*/
                         addres += addressList[0].getAddressLine(0)
                         postCode = addressList[0].postalCode
                     }
                 } catch (e: IOException) {
-                    /*Toast.makeText(Harita.this, "Adres Alınamadı. Hata;\n" + e.getMessage(), Toast.LENGTH_SHORT).show();*/
                     e.printStackTrace()
                 }
-                SET.putFloat(ConstantsMap.LATITUDE, latitude)
-                SET.putFloat(ConstantsMap.LONGITUDE, longitude)
-                SET.putString(ConstantsMap.ADDRES, addres)
-                SET.putString(ConstantsMap.POST_CODE, postCode)
-                SET.commit()
-
-                /*Toast.makeText(getApplicationContext(), "Anlık Konum;\n\nEnlem: " + enlem + "\nBoylam: "
-                        + boylam + "\nPosta Kodu: " + posta_kodu + "\nAdres: " + adres, Toast.LENGTH_SHORT).show();*/findLocation()
+                processSet(latitude = latitude, longitude = longitude, address = addres, postCode = postCode)
             }
 
-            // Bazı cihazlarda çökmeler yaşandığından aşağıdaki 2 metodu da kullanmak gerekti.
             override fun onProviderDisabled(provider: String) {
                 val str_provider = provider
-                /*Toast.makeText(Harita.this, str_provider + " Kapalı", Toast.LENGTH_SHORT).show();*/
             }
 
             override fun onProviderEnabled(provider: String) {
                 val str_provider = provider
-                /*Toast.makeText(Harita.this, str_provider + " Açık", Toast.LENGTH_SHORT).show();*/
             }
         }
         if (ContextCompat.checkSelfPermission(
@@ -110,14 +88,12 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // İzin işlemleri
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 4
             )
         } else {
-            // Lokasyon işlemleri
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 15000,
@@ -131,22 +107,18 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
         val location = LatLng(
             latitude.toDouble(), longitude.toDouble()
         )
-        //mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         mMap.addMarker(MarkerOptions().position(location).title(getString(R.string.my_locaiton)))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16f))
         mMap.setOnMapClickListener(this)
     }
 
-    // FARKLI HARİTA TÜRLERİ İÇİN MENÜLEİR LİSTELEDİK
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.map_menu, menu)
         return true
     }
 
-    // FARKLI HARİTA TÜRLERİNE TIKLANDIĞINDA YAPILACAK İŞLEMLERİ BELİRLEDİK
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Change the map type based on the user's selection.
         return when (item.itemId) {
             R.id.normal_map -> {
                 mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
@@ -193,7 +165,6 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    //  KULLANICI YENİ KONUM SEÇERSE PAYLAŞ EKRANINDA KONUM VE ADRES BİLGİLERİ YAZDIRILSIN
     override fun onMapClick(latLng: LatLng) {
         latitude = latLng.latitude.toFloat()
         longitude = latLng.longitude.toFloat()
@@ -202,15 +173,6 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
         try {
             val addressList = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
             if (addressList != null && addressList.size > 0) {
-                /*if (addressList.get(0).getCountryName() != null) {
-                    adres += addressList.get(0).getCountryName();
-                }
-                if (addressList.get(0).getThoroughfare() != null) {
-                    adres += "\t" + addressList.get(0).getThoroughfare();
-                }
-                if (addressList.get(0).getSubThoroughfare() != null) {
-                    adres += "\t" + addressList.get(0).getSubThoroughfare();
-                }*/
                 addres += addressList[0].getAddressLine(0)
                 postCode = addressList[0].postalCode
             }
@@ -226,11 +188,14 @@ class MyMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListene
                 .draggable(true)
                 .visible(true)
         )
+        processSet(latitude = latitude, longitude = longitude, address = addres, postCode = postCode)
+    }
+
+    private fun processSet(latitude: Float, longitude: Float, address: String, postCode: String){
         SET.putFloat(ConstantsMap.LATITUDE, latitude)
         SET.putFloat(ConstantsMap.LONGITUDE, longitude)
-        SET.putString(ConstantsMap.ADDRES, addres)
+        SET.putString(ConstantsMap.ADDRES, address)
         SET.putString(ConstantsMap.POST_CODE, postCode)
         SET.commit()
     }
-
 }

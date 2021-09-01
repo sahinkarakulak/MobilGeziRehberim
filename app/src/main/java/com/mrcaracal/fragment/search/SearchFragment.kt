@@ -2,7 +2,6 @@ package com.mrcaracal.fragment.search
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -35,13 +34,12 @@ import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragSearchBinding
 import com.mrcaracal.modul.Cities
 import com.mrcaracal.modul.UserAccountStore
+import com.mrcaracal.utils.ConstantsMap
 import com.mrcaracal.utils.DialogViewCustomize
 import com.mrcaracal.utils.IntentProcessor
-import java.text.DateFormat
 import java.util.*
 
-class
-SearchFragment : Fragment(), RecyclerViewClickInterface {
+class SearchFragment : Fragment(), RecyclerViewClickInterface {
 
     private lateinit var viewModel: SearchViewModel
     private var _binding: FragSearchBinding? = null
@@ -170,7 +168,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         }
     }
 
-    fun searchViewVisibilityState(){
+    fun searchViewVisibilityState() {
         binding.edtKeyValueSearch.visibility = View.VISIBLE
         binding.spCities.visibility = View.INVISIBLE
         viewModel.clearList()
@@ -294,13 +292,13 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
     fun goToLocationOperations(postModel: PostModel) {
         val postLocation = postModel.location.split(",").toTypedArray()
         var adverb = 0
-        for (konumxy: String in postLocation) {
+        for (locationXY: String in postLocation) {
             adverb++
-            if (adverb == 1) latitude = konumxy.toDouble()
-            if (adverb == 2) longitude = konumxy.toDouble()
+            if (adverb == 1) latitude = locationXY.toDouble()
+            if (adverb == 2) longitude = locationXY.toDouble()
         }
-        SET.putFloat("konum_git_enlem", latitude.toFloat())
-        SET.putFloat("konum_git_boylam", longitude.toFloat())
+        SET.putFloat(ConstantsMap.GO_TO_LOCATION_LATITUDE, latitude.toFloat())
+        SET.putFloat(ConstantsMap.GO_TO_LOCATION_LONGITUDE, longitude.toFloat())
         SET.commit()
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
@@ -320,7 +318,7 @@ SearchFragment : Fragment(), RecyclerViewClickInterface {
         val bottomSheetView = LayoutInflater.from(activity)
             .inflate(
                 R.layout.layout_bottom_sheet,
-                viewGroup.findViewById(R.id.bottomSheetContainer)
+                view?.findViewById(R.id.bottomSheetContainer)
             )
 
         // Save Post

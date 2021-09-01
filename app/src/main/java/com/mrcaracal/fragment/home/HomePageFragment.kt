@@ -18,6 +18,7 @@ import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragHomePageBinding
+import com.mrcaracal.utils.ConstantsMap
 import com.mrcaracal.utils.DialogViewCustomize
 import com.mrcaracal.utils.IntentProcessor
 import java.util.*
@@ -101,8 +102,8 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
             if (adverb == 1) latitude = locationXY.toDouble()
             if (adverb == 2) longitude = locationXY.toDouble()
         }
-        SET.putFloat("konum_git_enlem", latitude.toFloat())
-        SET.putFloat("konum_git_boylam", longitude.toFloat())
+        SET.putFloat(ConstantsMap.GO_TO_LOCATION_LATITUDE, latitude.toFloat())
+        SET.putFloat(ConstantsMap.GO_TO_LOCATION_LONGITUDE, longitude.toFloat())
         SET.commit()
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
@@ -129,14 +130,14 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         val title = bottomSheetView.findViewById<TextView>(R.id.bs_baslik)
         title.text = postModel.placeName
 
-        // Gönderiyi Kaydet
+        // Save Post
         bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
                 viewModel.getSaveOperations(postModel = postModel)
                 bottomSheetDialog.dismiss()
             })
 
-        // Konuma Git
+        // Go to locaiton
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
@@ -145,7 +146,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
                 }
             })
 
-        // Detaylı Şikayet Bildir (Mail)
+        // Report Post
         bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
@@ -154,7 +155,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
                 }
             })
 
-        // İPTAL butonu
+        // Cancel
         bottomSheetView.findViewById<View>(R.id.bs_cancel)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {

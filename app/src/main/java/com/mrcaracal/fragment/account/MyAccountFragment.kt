@@ -20,6 +20,7 @@ import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragMyAccountBinding
+import com.mrcaracal.utils.ConstantsMap
 import com.mrcaracal.utils.DialogViewCustomize
 import com.squareup.picasso.Picasso
 import java.text.DateFormat
@@ -141,8 +142,8 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
             if (adverb == 1) LATITUDE = locationXY.toDouble()
             if (adverb == 2) LONGITUDE = locationXY.toDouble()
         }
-        SET.putFloat("konum_git_enlem", LATITUDE.toFloat())
-        SET.putFloat("konum_git_boylam", LONGITUDE.toFloat())
+        SET.putFloat(ConstantsMap.GO_TO_LOCATION_LATITUDE, LATITUDE.toFloat())
+        SET.putFloat(ConstantsMap.GO_TO_LOCATION_LONGITUDE, LONGITUDE.toFloat())
         SET.commit()
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
