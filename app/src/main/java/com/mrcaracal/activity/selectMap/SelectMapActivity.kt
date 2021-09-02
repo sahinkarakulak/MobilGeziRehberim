@@ -1,6 +1,7 @@
 package com.mrcaracal.activity.selectMap
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.utils.ConstantsMap
 import java.io.IOException
@@ -60,6 +62,7 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         viewModel = ViewModelProvider(this).get(SelectMapViewModel::class.java)
     }
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -89,11 +92,11 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
             }
 
             override fun onProviderDisabled(provider: String) {
-                val str_provider = provider
+                toast(provider)
             }
 
             override fun onProviderEnabled(provider: String) {
-                val str_provider = provider
+                toast(provider)
             }
         }
         if (ContextCompat.checkSelfPermission(
@@ -153,6 +156,7 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         }
     }
 
+    @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
