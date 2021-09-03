@@ -19,7 +19,7 @@ class MyAccountViewModel : ViewModel() {
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     var firebaseUser: FirebaseUser? = null
     var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
+
 
     val postModelsList: ArrayList<PostModel> = arrayListOf()
 
@@ -72,8 +72,7 @@ class MyAccountViewModel : ViewModel() {
                             val postModel = PostModelProvider.provide(it)
                             postModelsList.add(postModel)
                         }
-                        recyclerAdapterStructure.postModelList = postModelsList
-                        recyclerAdapterStructure.notifyDataSetChanged()
+                        myAccountState.value = MyAccountViewState.SendRecyclerAdapter(postModelList = postModelsList)
                     }
                 }
             }
@@ -99,8 +98,7 @@ class MyAccountViewModel : ViewModel() {
                             val postModel = PostModelProvider.provide(it)
                             postModelsList.add(postModel)
                         }
-                        recyclerAdapterStructure.postModelList = postModelsList
-                        recyclerAdapterStructure.notifyDataSetChanged()
+                        myAccountState.value = MyAccountViewState.SendRecyclerAdapter(postModelList = postModelsList)
                     }
                 }
             }
@@ -163,12 +161,6 @@ class MyAccountViewModel : ViewModel() {
             }
     }
 
-    fun recyclerAdapterProccese(thisClick: RecyclerViewClickInterface) {
-        recyclerAdapterStructure = RecyclerAdapterStructure(thisClick)
-        myAccountState.value =
-            MyAccountViewState.SendRecyclerAdapter(recyclerAdapterStructure = recyclerAdapterStructure)
-    }
-
     fun showTag(postModel: PostModel, tabControl: String): String {
         var taggg = ""
         val al_taglar = postModel.tag
@@ -202,6 +194,6 @@ sealed class MyAccountViewState {
     data class ShowExceptionMessage(val exception: Exception) : MyAccountViewState()
     data class PicassoProccese(val loadData: String) : MyAccountViewState()
     data class ShowUserNameAndBio(val userName: String, val bio: String) : MyAccountViewState()
-    data class SendRecyclerAdapter(val recyclerAdapterStructure: RecyclerAdapterStructure) :
+    data class SendRecyclerAdapter(val postModelList: ArrayList<PostModel>) :
         MyAccountViewState()
 }

@@ -157,6 +157,7 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         }
     }
 
+    @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,

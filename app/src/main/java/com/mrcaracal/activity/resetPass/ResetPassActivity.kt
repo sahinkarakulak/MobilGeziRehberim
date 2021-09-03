@@ -41,7 +41,7 @@ class ResetPassActivity : AppCompatActivity() {
                     toast(R.string.fill_in_the_required_fields)
                 }
                 is ResetPassViewState.ShowErrorMessage -> {
-                    toast(resetPassViewState.e.toString())
+                    toast(resetPassViewState.exception.toString())
                 }
                 is ResetPassViewState.ShowCheckEmailMessage -> {
                     toast(R.string.check_your_e_mail)

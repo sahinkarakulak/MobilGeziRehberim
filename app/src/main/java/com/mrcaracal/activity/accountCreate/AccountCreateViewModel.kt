@@ -76,7 +76,8 @@ class AccountCreateViewModel : ViewModel() {
     sealed class AccountCreateViewState {
         object ShowRequiredFieldsMessage : AccountCreateViewState()
         object CreateAccountAndSignOut : AccountCreateViewState()
-        data class ShowExceptionMessage(val exception: Exception) : AccountCreateViewState()
         object ThePassIsNotTheSame : AccountCreateViewState()
+
+        data class ShowExceptionMessage(val exception: Exception) : AccountCreateViewState()
     }
 }

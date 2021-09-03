@@ -10,15 +10,15 @@ class ResetPassViewModel : ViewModel() {
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun sendRequest(email: String) {
-        if (email == "") {
+        if (email.isEmpty()) {
             resetPassState.value = ResetPassViewState.ShowRequiredFieldsMessage
         } else {
             firebaseAuth.sendPasswordResetEmail(email)
                 .addOnSuccessListener {
                     resetPassState.value = ResetPassViewState.ShowCheckEmailMessage
                     resetPassState.value = ResetPassViewState.OpenLoginActivity
-                }.addOnFailureListener { e ->
-                    resetPassState.value = ResetPassViewState.ShowErrorMessage(e = e)
+                }.addOnFailureListener { exception ->
+                    resetPassState.value = ResetPassViewState.ShowErrorMessage(exception = exception)
                 }
         }
     }
@@ -29,5 +29,5 @@ sealed class ResetPassViewState {
     object ShowCheckEmailMessage : ResetPassViewState()
     object OpenLoginActivity : ResetPassViewState()
 
-    data class ShowErrorMessage(val e: Exception) : ResetPassViewState()
+    data class ShowErrorMessage(val exception: Exception) : ResetPassViewState()
 }

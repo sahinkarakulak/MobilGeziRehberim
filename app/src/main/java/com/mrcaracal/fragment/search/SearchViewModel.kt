@@ -22,7 +22,7 @@ class SearchViewModel : ViewModel() {
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     var firebaseUser: FirebaseUser
     var firebaseFirestore: FirebaseFirestore
-    lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
+
 
     val postModelsList: ArrayList<PostModel> = arrayListOf()
 
@@ -56,8 +56,7 @@ class SearchViewModel : ViewModel() {
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
                         getData(snapshot.data)
-                        recyclerAdapterStructure.postModelList = postModelsList
-                        recyclerAdapterStructure.notifyDataSetChanged()
+                        searchState.value = SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
                     }
                 }
             }.addOnFailureListener { exception ->
@@ -77,8 +76,7 @@ class SearchViewModel : ViewModel() {
                     val querySnapshot = (task.result)
                     for (documentSnapshot: DocumentSnapshot in querySnapshot) {
                         getData(documentSnapshot.data)
-                        recyclerAdapterStructure.postModelList = postModelsList
-                        recyclerAdapterStructure.notifyDataSetChanged()
+                        searchState.value = SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
                     }
                 }
             }
@@ -100,8 +98,8 @@ class SearchViewModel : ViewModel() {
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
                         getData(snapshot.data)
-                        recyclerAdapterStructure.postModelList = postModelsList
-                        recyclerAdapterStructure.notifyDataSetChanged()
+                        searchState.value = SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
+
                     }
                 }
             }.addOnFailureListener { exception ->
@@ -166,13 +164,6 @@ class SearchViewModel : ViewModel() {
         }
     }
 
-    fun recyclerAdapterProccese(thisClick: RecyclerViewClickInterface) {
-        recyclerAdapterStructure = RecyclerAdapterStructure(thisClick)
-        searchState.value =
-            SearchViewState.SendRecyclerAdapter(recyclerAdapterStructure = recyclerAdapterStructure)
-    }
-
-
 }
 
 sealed class SearchViewState {
@@ -183,6 +174,6 @@ sealed class SearchViewState {
     data class OpenEmail(val subject: String, val message: String, val emails: ArrayList<String>) :
         SearchViewState()
 
-    data class SendRecyclerAdapter(val recyclerAdapterStructure: RecyclerAdapterStructure) :
+    data class SendRecyclerAdapter(val postModelsList: ArrayList<PostModel>) :
         SearchViewState()
 }

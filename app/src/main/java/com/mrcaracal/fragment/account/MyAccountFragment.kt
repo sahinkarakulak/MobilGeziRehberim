@@ -15,6 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.activity.editProfile.EditProfileActivity
+import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
@@ -28,6 +29,8 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     private lateinit var viewModel: MyAccountViewModel
     private var _binding: FragMyAccountBinding? = null
     private val binding get() = _binding!!
+
+    lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
 
     var POSITION_VALUE = 0
     var TAB_CONTROL = "paylasilanlar"
@@ -61,7 +64,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         observeMyAccountState()
 
         binding.recyclerViewAccount.layoutManager = LinearLayoutManager(activity)
-        viewModel.recyclerAdapterProccese(thisClick = this)
+        recyclerAdapterStructure = RecyclerAdapterStructure(this)
         viewModel.pullTheShared()
         viewModel.getData()
 
@@ -115,8 +118,9 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                         .into(binding.imgProfileProfilePicture)
                 }
                 is MyAccountViewState.SendRecyclerAdapter -> {
-                    binding.recyclerViewAccount.adapter =
-                        myAccountViewState.recyclerAdapterStructure
+                    recyclerAdapterStructure.postModelList = myAccountViewState.postModelList
+                    recyclerAdapterStructure.notifyDataSetChanged()
+                    binding.recyclerViewAccount.adapter = recyclerAdapterStructure
                 }
             }
         }

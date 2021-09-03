@@ -22,7 +22,6 @@ class HomePageViewModel : ViewModel() {
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     var firebaseUser: FirebaseUser? = null
     var firebaseFirestore: FirebaseFirestore
-    lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
 
     init {
         firebaseUser = firebaseAuth.currentUser
@@ -45,8 +44,9 @@ class HomePageViewModel : ViewModel() {
                             val postModel = PostModelProvider.provide(it)
                             postModelsList.add(postModel)
                         }
-                        recyclerAdapterStructure.postModelList = postModelsList
-                        recyclerAdapterStructure.notifyDataSetChanged()
+                        homePageState.value = HomePageViewState.SendRecyclerAdapter(postModelsList = postModelsList)
+
+
                     }
                 }
             }
@@ -114,13 +114,6 @@ class HomePageViewModel : ViewModel() {
             )
         }
     }
-
-    fun recyclerAdapterProccese(thisClick: RecyclerViewClickInterface) {
-        recyclerAdapterStructure = RecyclerAdapterStructure(thisClick)
-        homePageState.value =
-            HomePageViewState.SendRecyclerAdapter(recyclerAdapterStructure = recyclerAdapterStructure)
-    }
-
 }
 
 sealed class HomePageViewState {
@@ -129,6 +122,6 @@ sealed class HomePageViewState {
     data class OpenEmail(val subject: String, val message: String, val emails: ArrayList<String>) :
         HomePageViewState()
 
-    data class SendRecyclerAdapter(val recyclerAdapterStructure: RecyclerAdapterStructure) :
+    data class SendRecyclerAdapter(val postModelsList: ArrayList<PostModel>) :
         HomePageViewState()
 }

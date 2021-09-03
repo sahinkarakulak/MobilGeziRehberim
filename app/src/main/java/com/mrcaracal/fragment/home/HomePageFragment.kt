@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
+import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
@@ -34,6 +35,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
     var longitude = 0.0
     val postModelsList: ArrayList<PostModel> = arrayListOf()
     private lateinit var container: ViewGroup
+    lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
 
     private fun init() {
         GET = requireActivity().getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
@@ -55,7 +57,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         observeHomePageState()
 
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        viewModel.recyclerAdapterProccese(thisClick = this)
+        recyclerAdapterStructure = RecyclerAdapterStructure(this)
         viewModel.rewind(postModelsList = postModelsList)
 
         return view
@@ -82,7 +84,9 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
                     toast(requireActivity(), getString(R.string.you_already_shared_this))
                 }
                 is HomePageViewState.SendRecyclerAdapter -> {
-                    binding.recyclerView.adapter = homePageViewState.recyclerAdapterStructure
+                    recyclerAdapterStructure.postModelList = postModelsList
+                    recyclerAdapterStructure.notifyDataSetChanged()
+                    binding.recyclerView.adapter = recyclerAdapterStructure
                 }
             }
         }
