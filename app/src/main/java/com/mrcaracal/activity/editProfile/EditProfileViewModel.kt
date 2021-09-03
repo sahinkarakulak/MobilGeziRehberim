@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -21,11 +20,11 @@ class EditProfileViewModel : ViewModel() {
         MutableLiveData<EditProfileViewState>()
 
     var firebaseUser: FirebaseUser? = null
-    lateinit var storageReference: StorageReference
+    var storageReference: StorageReference
     lateinit var documentReference: DocumentReference
     lateinit var mImageUri: Uri
 
-    fun initialize() {
+    init {
         firebaseUser = FirebaseAuth.getInstance().currentUser
         storageReference =
             FirebaseStorage.getInstance().getReference(ConstantsFirebase.STORAGE_NAME)
@@ -63,17 +62,12 @@ class EditProfileViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     val documentSnapshot = task.result
                     if (documentSnapshot.exists()) {
-                        editProfileViewState.value = EditProfileViewState.GetFirebaseDocValUserName(
-                            documentSnapshot = documentSnapshot,
-                            firebaseDocValUserName = ConstantsFirebase.FIREBASE_DOC_VAL_USERNAME
+                        editProfileViewState.value = EditProfileViewState.OnUserInfo(
+                            userName = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERNAME),
+                            userBio = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_BIO)
                         )
-                        editProfileViewState.value = EditProfileViewState.GetFirebaseDocValBio(
-                            documentSnapshot = documentSnapshot,
-                            firebaseDocValBio = ConstantsFirebase.FIREBASE_DOC_VAL_BIO
-                        )
-                        editProfileViewState.value = EditProfileViewState.PicassoPross(
-                            documentSnapshot = documentSnapshot,
-                            firebaseDocValueUserPic = ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC
+                        editProfileViewState.value = EditProfileViewState.OnUserImage(
+                            documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC).orEmpty()
                         )
                     }
                 }
@@ -123,9 +117,8 @@ class EditProfileViewModel : ViewModel() {
                                     val documentSnapshot = task.result
                                     if (documentSnapshot.exists()) {
                                         editProfileViewState.value =
-                                            EditProfileViewState.PicassoPross(
-                                                documentSnapshot = documentSnapshot,
-                                                firebaseDocValueUserPic = ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC
+                                            EditProfileViewState.OnUserImage(
+                                                documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC).orEmpty()
                                             )
                                     }
                                 }
@@ -154,21 +147,11 @@ sealed class EditProfileViewState {
     object ShowErrorOccuredMessage : EditProfileViewState()
     object GetContentResolver : EditProfileViewState()
 
-    data class GetFirebaseDocValUserName(
-        val documentSnapshot: DocumentSnapshot,
-        val firebaseDocValUserName: String
-    ) : EditProfileViewState()
-
-    data class GetFirebaseDocValBio(
-        val documentSnapshot: DocumentSnapshot,
-        val firebaseDocValBio: String
-    ) : EditProfileViewState()
-
-    data class PicassoPross(
-        val documentSnapshot: DocumentSnapshot,
-        val firebaseDocValueUserPic: String
+    data class OnUserImage(
+        val userImageUrl: String
     ) : EditProfileViewState()
 
     data class ShowExceptionErrorMessage(val exception: Exception) : EditProfileViewState()
     data class BindingTvUserEmailChangeText(val firebaseUserName: String) : EditProfileViewState()
+    data class OnUserInfo(val userName: String?, val userBio: String?): EditProfileViewState()
 }

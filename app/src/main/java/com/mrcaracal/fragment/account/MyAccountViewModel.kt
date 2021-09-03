@@ -16,16 +16,14 @@ import com.mrcaracal.utils.ConstantsFirebase
 class MyAccountViewModel : ViewModel() {
     var myAccountState: MutableLiveData<MyAccountViewState> = MutableLiveData<MyAccountViewState>()
 
-    lateinit var firebaseAuth: FirebaseAuth
+    var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     var firebaseUser: FirebaseUser? = null
-    lateinit var firebaseFirestore: FirebaseFirestore
+    var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
 
     val postModelsList: ArrayList<PostModel> = arrayListOf()
 
-    fun init() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseFirestore = FirebaseFirestore.getInstance()
+    init {
         firebaseUser = firebaseAuth.currentUser
     }
 

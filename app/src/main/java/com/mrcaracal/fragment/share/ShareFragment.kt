@@ -41,7 +41,7 @@ class ShareFragment : Fragment() {
     private lateinit var picturePath: Uri
 
     private fun init() {
-        GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
+        GET = requireActivity().getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
     }
 
@@ -54,7 +54,6 @@ class ShareFragment : Fragment() {
         _binding = FragShareBinding.inflate(inflater, container, false)
         val view = binding.root
         initViewModel()
-        viewModel.init()
         initClickListeners()
         observeContactState()
 
@@ -129,12 +128,12 @@ class ShareFragment : Fragment() {
 
     private fun choosePictureFromGallery() {
         if (ContextCompat.checkSelfPermission(
-                activity!!,
+                requireActivity(),
                 Manifest.permission.READ_EXTERNAL_STORAGE
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                activity!!,
+                requireActivity(),
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
                 1
             )

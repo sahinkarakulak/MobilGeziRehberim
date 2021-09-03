@@ -17,20 +17,18 @@ class ShareViewModel : ViewModel() {
     var shareState: MutableLiveData<ShareViewState> = MutableLiveData<ShareViewState>()
 
     private lateinit var MGonderiler: Posts
-    private lateinit var firebaseAuth: FirebaseAuth
+    private var firebaseAuth: FirebaseAuth
     var firebaseUser: FirebaseUser? = null
-    private lateinit var firebaseFirestore: FirebaseFirestore
-    private lateinit var firebaseStorage: FirebaseStorage
-    private lateinit var storageReference: StorageReference
+    private var firebaseFirestore: FirebaseFirestore
+    private var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
+    private var storageReference: StorageReference = firebaseStorage.reference
     private lateinit var picturePath: Uri
 
     var postCode: String? = null
     lateinit var postID: String
     lateinit var tags: List<String>
 
-    fun init() {
-        firebaseStorage = FirebaseStorage.getInstance()
-        storageReference = firebaseStorage.reference
+    init {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser
         firebaseFirestore = FirebaseFirestore.getInstance()

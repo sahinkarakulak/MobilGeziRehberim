@@ -50,7 +50,7 @@ class AccountCreateActivity : AppCompatActivity() {
                 is AccountCreateViewModel.AccountCreateViewState.ThePassIsNotTheSame -> {
                     toast(R.string.passwords_are_not_the_same)
                 }
-                is AccountCreateViewModel.AccountCreateViewState.ShowErrorMessage -> {
+                is AccountCreateViewModel.AccountCreateViewState.ShowExceptionMessage -> {
                     toast(accountCreateViewState.exception.toString())
                 }
             }

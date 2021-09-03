@@ -57,7 +57,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
     private lateinit var container: ViewGroup
 
     private fun init() {
-        GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
+        GET = requireActivity().getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
     }
 
@@ -74,7 +74,6 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
             this.container = container
         }
         initViewModel()
-        viewModel.init()
         initClickListener()
         initSelectListener()
         initChangedListener()
@@ -220,7 +219,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                 }
                 is SearchViewState.OpenEmail -> {
                     context?.let {
-                        IntentProcessor.process(
+                        IntentProcessor.processForEmail(
                             context = it,
                             emails = searchViewState.emails,
                             subject = searchViewState.subject,

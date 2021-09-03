@@ -38,7 +38,7 @@ class ContactActivity : AppCompatActivity() {
         viewModel.contactState.observe(this) { contactViewState ->
             when (contactViewState) {
                 is ContactViewState.OpenEmail -> {
-                    IntentProcessor.process(
+                    IntentProcessor.processForEmail(
                         context = this,
                         emails = contactViewState.emails,
                         subject = contactViewState.subject,

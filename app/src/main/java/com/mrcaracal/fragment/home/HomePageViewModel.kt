@@ -19,13 +19,12 @@ import com.mrcaracal.utils.ConstantsFirebase
 class HomePageViewModel : ViewModel() {
     var homePageState: MutableLiveData<HomePageViewState> = MutableLiveData<HomePageViewState>()
 
-    lateinit var firebaseAuth: FirebaseAuth
+    var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     var firebaseUser: FirebaseUser? = null
-    lateinit var firebaseFirestore: FirebaseFirestore
+    var firebaseFirestore: FirebaseFirestore
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
 
-    fun init() {
-        firebaseAuth = FirebaseAuth.getInstance()
+    init {
         firebaseUser = firebaseAuth.currentUser
         firebaseFirestore = FirebaseFirestore.getInstance()
     }

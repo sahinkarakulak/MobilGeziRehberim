@@ -19,15 +19,14 @@ import java.util.*
 class SearchViewModel : ViewModel() {
     var searchState: MutableLiveData<SearchViewState> = MutableLiveData<SearchViewState>()
 
-    lateinit var firebaseAuth: FirebaseAuth
-    lateinit var firebaseUser: FirebaseUser
-    lateinit var firebaseFirestore: FirebaseFirestore
+    var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    var firebaseUser: FirebaseUser
+    var firebaseFirestore: FirebaseFirestore
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
 
     val postModelsList: ArrayList<PostModel> = arrayListOf()
 
-    fun init() {
-        firebaseAuth = FirebaseAuth.getInstance()
+    init {
         firebaseUser = firebaseAuth.currentUser!!
         firebaseFirestore = FirebaseFirestore.getInstance()
     }

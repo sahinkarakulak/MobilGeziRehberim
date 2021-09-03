@@ -6,7 +6,7 @@ import com.mrcaracal.mobilgezirehberim.R
 
 object IntentProcessor {
 
-    fun process(
+    fun processForEmail(
         context: Context,
         emails: ArrayList<String>,
         subject: String,

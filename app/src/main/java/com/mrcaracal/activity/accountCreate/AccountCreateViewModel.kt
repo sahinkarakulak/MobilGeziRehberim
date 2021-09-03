@@ -55,16 +55,16 @@ class AccountCreateViewModel : ViewModel() {
                                     }
                                     .addOnFailureListener { exception ->
                                         accountCreateState.value =
-                                            AccountCreateViewState.ShowErrorMessage(exception = exception)
+                                            AccountCreateViewState.ShowExceptionMessage(exception = exception)
                                     }
                             }
                             ?.addOnFailureListener { exception ->
                                 accountCreateState.value =
-                                    AccountCreateViewState.ShowErrorMessage(exception = exception)
+                                    AccountCreateViewState.ShowExceptionMessage(exception = exception)
                             }
                     }
                     .addOnFailureListener { exception ->
-                        AccountCreateViewState.ShowErrorMessage(exception = exception)
+                        AccountCreateViewState.ShowExceptionMessage(exception = exception)
                     }
             } else {
                 accountCreateState.value =
@@ -76,7 +76,7 @@ class AccountCreateViewModel : ViewModel() {
     sealed class AccountCreateViewState {
         object ShowRequiredFieldsMessage : AccountCreateViewState()
         object CreateAccountAndSignOut : AccountCreateViewState()
-        data class ShowErrorMessage(val exception: Exception) : AccountCreateViewState()
+        data class ShowExceptionMessage(val exception: Exception) : AccountCreateViewState()
         object ThePassIsNotTheSame : AccountCreateViewState()
     }
 }

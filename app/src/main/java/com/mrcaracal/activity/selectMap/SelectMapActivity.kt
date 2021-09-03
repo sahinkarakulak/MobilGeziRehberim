@@ -8,6 +8,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -156,12 +157,24 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         }
     }
 
-    @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray
-    ) {
+    ) {/*
+        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 0)
+        } else{
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                15000,
+                3f,
+                locationListener
+            )
+        }*/
+
+
+
         if (grantResults.size > 0) {
             if (requestCode == 4) {
                 if (ContextCompat.checkSelfPermission(

@@ -39,7 +39,6 @@ class Login : AppCompatActivity() {
         setContentView(binding.root)
         init()
         initViewModel()
-        viewModel.init()
         initClickListeners()
         observeContactState()
         rememberMe()

@@ -28,8 +28,11 @@ class HomePageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
         initViewModel()
-        viewModel.init()
         observeHomePageActivityState()
+        selectFragment()
+    }
+
+    private fun selectFragment(){
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout, HomePageFragment())
             .commit()
 
@@ -101,7 +104,6 @@ class HomePageActivity : AppCompatActivity() {
         }
         doubleBackToExitPressedOnce = true
         toast(getString(R.string.press_again_to_exit))
-        /*Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)*/
         Handler(Looper.myLooper() ?: return).postDelayed({
             doubleBackToExitPressedOnce = false
         }, 2000)

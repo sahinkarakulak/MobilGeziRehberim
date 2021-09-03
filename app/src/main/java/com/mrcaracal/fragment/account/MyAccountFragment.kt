@@ -40,7 +40,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     private lateinit var container: ViewGroup
 
     private fun init() {
-        GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
+        GET = requireActivity().getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
     }
 
@@ -57,7 +57,6 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         _binding = FragMyAccountBinding.inflate(inflater, container, false)
         val view = binding.root
         initViewModel()
-        viewModel.init()
         initClickListeners()
         observeMyAccountState()
 

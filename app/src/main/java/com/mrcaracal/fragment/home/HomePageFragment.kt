@@ -26,22 +26,17 @@ import java.util.*
 class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
     private lateinit var viewModel: HomePageViewModel
-
     private var _binding: FragHomePageBinding? = null
     private val binding get() = _binding!!
-    private lateinit var view: ViewGroup
-
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
     var latitude = 0.0
     var longitude = 0.0
-
     val postModelsList: ArrayList<PostModel> = arrayListOf()
-
     private lateinit var container: ViewGroup
 
     private fun init() {
-        GET = activity!!.getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
+        GET = requireActivity().getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
         SET = GET.edit()
     }
 
@@ -57,7 +52,6 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         _binding = FragHomePageBinding.inflate(inflater, container, false)
         val view = binding.root
         initViewModel()
-        viewModel.init()
         observeHomePageState()
 
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -76,7 +70,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
             when (homePageViewState) {
                 is HomePageViewState.OpenEmail -> {
                     context?.let {
-                        IntentProcessor.process(
+                        IntentProcessor.processForEmail(
                             context = it,
                             emails = homePageViewState.emails,
                             subject = homePageViewState.subject,
@@ -85,7 +79,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
                     }
                 }
                 is HomePageViewState.ShowAlreadySharedToastMessage -> {
-                    toast(activity!!, getString(R.string.you_already_shared_this))
+                    toast(requireActivity(), getString(R.string.you_already_shared_this))
                 }
                 is HomePageViewState.SendRecyclerAdapter -> {
                     binding.recyclerView.adapter = homePageViewState.recyclerAdapterStructure

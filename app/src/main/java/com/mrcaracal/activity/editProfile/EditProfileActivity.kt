@@ -25,7 +25,6 @@ class EditProfileActivity : AppCompatActivity() {
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initViewModel()
-        viewModel.initialize()
         initClickListeners()
         observeEditProfileState()
         viewModel.getProfileData()
@@ -70,26 +69,20 @@ class EditProfileActivity : AppCompatActivity() {
                 is EditProfileViewState.ShowExceptionErrorMessage -> {
                     toast(editProfileViewState.exception.toString())
                 }
-                is EditProfileViewState.PicassoPross -> {
+                is EditProfileViewState.OnUserImage -> {
                     Picasso.get()
-                        .load(editProfileViewState.documentSnapshot.getString(editProfileViewState.firebaseDocValueUserPic))
+                        .load(editProfileViewState.userImageUrl)
                         .into(binding.imgUserPicture)
                 }
                 is EditProfileViewState.BindingTvUserEmailChangeText -> {
                     binding.tvUserEmail.text = editProfileViewState.firebaseUserName
                 }
-                is EditProfileViewState.GetFirebaseDocValUserName -> {
+                is EditProfileViewState.OnUserInfo -> {
                     binding.edtGetUserName.setText(
-                        editProfileViewState.documentSnapshot.getString(
-                            editProfileViewState.firebaseDocValUserName
-                        )
+                        editProfileViewState.userName
                     )
-                }
-                is EditProfileViewState.GetFirebaseDocValBio -> {
                     binding.edtGetBiography.setText(
-                        editProfileViewState.documentSnapshot.getString(
-                            editProfileViewState.firebaseDocValBio
-                        )
+                        editProfileViewState.userBio
                     )
                 }
             }

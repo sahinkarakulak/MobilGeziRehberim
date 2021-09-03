@@ -8,11 +8,7 @@ class HomePageViewModelActivity : ViewModel() {
 
     var homePageActivityState: MutableLiveData<HomePageActivityViewState> =
         MutableLiveData<HomePageActivityViewState>()
-    lateinit var firebaseAuth: FirebaseAuth
-
-    fun init() {
-        firebaseAuth = FirebaseAuth.getInstance()
-    }
+    var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun signOut() {
         firebaseAuth.signOut()

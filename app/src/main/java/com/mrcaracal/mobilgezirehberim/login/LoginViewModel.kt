@@ -8,8 +8,7 @@ class LoginViewModel : ViewModel() {
 
     var loginState: MutableLiveData<LoginViewSate> = MutableLiveData<LoginViewSate>()
     private var firebaseAuth: FirebaseAuth? = null
-
-    fun init() {
+    init {
         firebaseAuth = FirebaseAuth.getInstance()
     }
 
