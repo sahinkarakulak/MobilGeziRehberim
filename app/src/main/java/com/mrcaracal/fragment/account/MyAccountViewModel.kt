@@ -10,6 +10,7 @@ import com.google.firebase.firestore.Query
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.utils.ConstantsFirebase
+import com.mrcaracal.utils.ShowTags
 
 class MyAccountViewModel : ViewModel() {
     var myAccountState: MutableLiveData<MyAccountViewState> = MutableLiveData<MyAccountViewState>()
@@ -160,28 +161,7 @@ class MyAccountViewModel : ViewModel() {
     }
 
     fun showTagsOnPost(postModel: PostModel, tabControl: String): String {
-        var tagsToReturn = ""
-        val tagsTakenByEditText = postModel.tag
-        val tagLength = tagsTakenByEditText.length
-        val tagTaken: String
-        val tagShredding: Array<String>
-        when (tabControl) {
-            "paylasilanlar" -> {
-                tagTaken = tagsTakenByEditText.substring(1, tagLength - 1)
-                tagShredding = tagTaken.split(",").toTypedArray()
-                for (tags: String in tagShredding) {
-                    tagsToReturn += "#" + tags.trim { it <= ' ' } + " "
-                }
-            }
-            "kaydedilenler" -> {
-                tagTaken = tagsTakenByEditText.substring(2, tagLength - 2)
-                tagShredding = tagTaken.split(",").toTypedArray()
-                for (tags: String in tagShredding) {
-                    tagsToReturn += "#" + tags.trim { it <= ' ' } + " "
-                }
-            }
-        }
-        return tagsToReturn
+        return ShowTags.showPostTagsForAccount(postModel = postModel, tabControl = tabControl)
     }
 
 }

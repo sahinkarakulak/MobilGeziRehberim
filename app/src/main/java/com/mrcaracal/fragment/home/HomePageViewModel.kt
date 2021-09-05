@@ -13,6 +13,7 @@ import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.modul.Posts
 import com.mrcaracal.modul.UserAccountStore
 import com.mrcaracal.utils.ConstantsFirebase
+import com.mrcaracal.utils.ShowTags
 
 class HomePageViewModel : ViewModel() {
     var homePageState: MutableLiveData<HomePageViewState> = MutableLiveData<HomePageViewState>()
@@ -84,15 +85,7 @@ class HomePageViewModel : ViewModel() {
     }
 
     fun showTagsOnPost(postModel: PostModel): String {
-        var tagsToReturn = ""
-        val tagsTakenByEditText = postModel.tag
-        val tagLength = tagsTakenByEditText.length
-        val tagTaken = tagsTakenByEditText.substring(1, tagLength - 1)
-        val tagShredding = tagTaken.split(",").toTypedArray()
-        for (tags: String in tagShredding) {
-            tagsToReturn += "#" + tags.trim { it <= ' ' } + " "
-        }
-        return tagsToReturn
+        return ShowTags.showPostTags(postModel = postModel)
     }
 
     fun saveOperations(postModel: PostModel) {
