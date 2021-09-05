@@ -43,8 +43,8 @@ class EditProfileActivity : AppCompatActivity() {
         }
         binding.btnUpdate.setOnClickListener {
             viewModel.updateUser(
-                binding.edtGetUserName.text.toString(),
-                binding.edtGetBiography.text.toString()
+                u_name = binding.edtGetUserName.text.toString(),
+                u_bio = binding.edtGetBiography.text.toString()
             )
         }
     }
@@ -94,7 +94,7 @@ class EditProfileActivity : AppCompatActivity() {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             val result = CropImage.getActivityResult(data)
             viewModel.mImageUri = result.uri
-            viewModel.uploadImage(contentResolver)
+            viewModel.uploadImage(contentResolver = contentResolver)
             toast(getString(R.string.updated))
         } else {
             toast(getString(R.string.did_you_give_up))

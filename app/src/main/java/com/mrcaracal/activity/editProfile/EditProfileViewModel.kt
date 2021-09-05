@@ -67,7 +67,7 @@ class EditProfileViewModel : ViewModel() {
                             userBio = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_BIO)
                         )
                         editProfileViewState.value = EditProfileViewState.OnUserImage(
-                            documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC).orEmpty()
+                            userImageUrl = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC).orEmpty()
                         )
                     }
                 }
@@ -88,7 +88,7 @@ class EditProfileViewModel : ViewModel() {
     fun uploadImage(contentResolver: ContentResolver) {
         val storageReference2 = storageReference.child(firebaseUser!!.email!!).child(
             System.currentTimeMillis()
-                .toString() + "." + getFileExtension(mImageUri, contentResolver)
+                .toString() + "." + getFileExtension(uri = mImageUri, contentResolver = contentResolver)
         )
 
         val uploadTask = storageReference2.putFile(mImageUri)
@@ -117,7 +117,7 @@ class EditProfileViewModel : ViewModel() {
                                     val documentSnapshot = task.result
                                     if (documentSnapshot.exists()) {
                                         editProfileViewState.value =
-                                            EditProfileViewState.OnUserImage(
+                                            EditProfileViewState.OnUserImage( userImageUrl =
                                                 documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC).orEmpty()
                                             )
                                     }

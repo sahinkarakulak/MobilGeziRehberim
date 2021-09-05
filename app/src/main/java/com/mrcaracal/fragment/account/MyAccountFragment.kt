@@ -53,26 +53,26 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         savedInstanceState: Bundle?
     ): View {
         init()
-        if (container != null) {
-            this.container = container
-        }
-
+        if (container != null) { this.container = container }
         _binding = FragMyAccountBinding.inflate(inflater, container, false)
         val view = binding.root
         initViewModel()
         initClickListeners()
         observeMyAccountState()
-
-        binding.recyclerViewAccount.layoutManager = LinearLayoutManager(activity)
-        recyclerAdapterStructure = RecyclerAdapterStructure(this)
-        viewModel.pullTheShared()
-        viewModel.getData()
+        recyclerViewManager()
+        viewModel.pullTheSharedOnMyAccount()
+        viewModel.getPostData()
 
         return view
     }
 
     fun initViewModel() {
         viewModel = ViewModelProvider(this).get(MyAccountViewModel::class.java)
+    }
+
+    fun recyclerViewManager(){
+        binding.recyclerViewAccount.layoutManager = LinearLayoutManager(activity)
+        recyclerAdapterStructure = RecyclerAdapterStructure(recyclerViewClickInterface = this)
     }
 
     fun initClickListeners() {
@@ -85,13 +85,13 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                 R.id.shared -> {
                     TAB_CONTROL = "paylasilanlar"
                     viewModel.clearList()
-                    viewModel.pullTheShared()
+                    viewModel.pullTheSharedOnMyAccount()
                     binding.recyclerViewAccount.scrollToPosition(0)
                 }
                 R.id.recorded -> {
                     TAB_CONTROL = "kaydedilenler"
                     viewModel.clearList()
-                    viewModel.pullTheRecorded()
+                    viewModel.pullTheRecordedOnMyAccount()
                     binding.recyclerViewAccount.scrollToPosition(0)
                 }
             }
@@ -149,7 +149,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     }
 
     override fun onLongItemClick(postModel: PostModel) {
-        var postTags = viewModel.showTag(postModel, TAB_CONTROL)
+        var postTags = viewModel.showTagsOnPost(postModel = postModel, tabControl = TAB_CONTROL)
 
         DialogViewCustomize.dialogViewCustomize(
             activity = activity,
@@ -173,8 +173,8 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation).setOnClickListener(
             View.OnClickListener {
                 when (TAB_CONTROL) {
-                    "paylasilanlar" -> goToLocationFromShared(postModel)
-                    "kaydedilenler" -> goToLocationFromSaved(postModel)
+                    "paylasilanlar" -> goToLocationFromShared(postModel = postModel)
+                    "kaydedilenler" -> goToLocationFromSaved(postModel = postModel)
                 }
                 bottomSheetDialog.dismiss()
             })
@@ -185,19 +185,19 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                 override fun onClick(v: View) {
                     when (TAB_CONTROL) {
                         "paylasilanlar" -> {
-                            viewModel.removeFromShared(
-                                POSITION_VALUE
+                            viewModel.removePostFromShared(
+                                positionValue = POSITION_VALUE
                             )
                             viewModel.clearList()
-                            viewModel.pullTheShared()
+                            viewModel.pullTheSharedOnMyAccount()
                             binding.recyclerViewAccount.scrollToPosition(0)
                         }
                         "kaydedilenler" -> {
-                            viewModel.removeFromSaved(
-                                POSITION_VALUE
+                            viewModel.removePostFromSaved(
+                                positionValue = POSITION_VALUE
                             )
                             viewModel.clearList()
-                            viewModel.pullTheRecorded()
+                            viewModel.pullTheRecordedOnMyAccount()
                             binding.recyclerViewAccount.scrollToPosition(0)
                         }
                     }

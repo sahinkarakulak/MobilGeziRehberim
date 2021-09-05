@@ -8,8 +8,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.mrcaracal.Interface.RecyclerViewClickInterface
-import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.modul.Posts
@@ -28,7 +26,7 @@ class HomePageViewModel : ViewModel() {
         firebaseFirestore = FirebaseFirestore.getInstance()
     }
 
-    fun rewind(postModelsList: ArrayList<PostModel>) {
+    fun getPostByPostTime(postModelsList: ArrayList<PostModel>) {
         val collectionReference = firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_POST)
 
@@ -52,7 +50,7 @@ class HomePageViewModel : ViewModel() {
             }
     }
 
-    fun saveOperations(postModel: PostModel) {
+    fun savePostOnHomePage(postModel: PostModel) {
         if ((postModel.userEmail == firebaseUser!!.email)) {
             homePageState.value = HomePageViewState.ShowAlreadySharedToastMessage
         } else {
@@ -85,25 +83,25 @@ class HomePageViewModel : ViewModel() {
         }
     }
 
-    fun showTag(postModel: PostModel): String {
-        var taggg = ""
-        val al_taglar = postModel.tag
-        val tag_uzunluk = al_taglar.length
-        val alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
-        val a_t = alinan_taglar.split(",").toTypedArray()
-        for (tags: String in a_t) {
-            taggg += "#" + tags.trim { it <= ' ' } + " "
+    fun showTagsOnPost(postModel: PostModel): String {
+        var tagsToReturn = ""
+        val tagsTakenByEditText = postModel.tag
+        val tagLength = tagsTakenByEditText.length
+        val tagTaken = tagsTakenByEditText.substring(1, tagLength - 1)
+        val tagShredding = tagTaken.split(",").toTypedArray()
+        for (tags: String in tagShredding) {
+            tagsToReturn += "#" + tags.trim { it <= ' ' } + " "
         }
-        return taggg
+        return tagsToReturn
     }
 
-    fun getSaveOperations(postModel: PostModel) {
+    fun saveOperations(postModel: PostModel) {
         firebaseUser?.let { it1 ->
-            saveOperations(postModel)
+            savePostOnHomePage(postModel = postModel)
         }
     }
 
-    fun reportPost(postModel: PostModel) {
+    fun reportPostFromHomePage(postModel: PostModel) {
         if ((postModel.userEmail == firebaseUser?.email)) {
             homePageState.value = HomePageViewState.ShowAlreadySharedToastMessage
         } else {

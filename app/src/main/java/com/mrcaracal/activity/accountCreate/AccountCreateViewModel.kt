@@ -9,15 +9,10 @@ import com.mrcaracal.utils.ConstantsFirebase
 
 class AccountCreateViewModel : ViewModel() {
 
-    private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var firebaseFirestore: FirebaseFirestore
+    private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     var accountCreateState: MutableLiveData<AccountCreateViewState> =
         MutableLiveData<AccountCreateViewState>()
-
-    fun init() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseFirestore = FirebaseFirestore.getInstance()
-    }
 
     fun createAccount(
         userName: String,
@@ -37,11 +32,11 @@ class AccountCreateViewModel : ViewModel() {
                             ?.sendEmailVerification()
                             ?.addOnSuccessListener {
                                 val userInfo = UserInfo(
-                                    userName,
-                                    email,
-                                    pass1,
-                                    ConstantsFirebase.I_LOVE_MGR,
-                                    ConstantsFirebase.DEFAULT_PP_LINK
+                                    kullaniciAdi = userName,
+                                    kullaniciEposta = email,
+                                    kulaniciParola = pass1,
+                                    bio = ConstantsFirebase.I_LOVE_MGR,
+                                    kullaniciResmi = ConstantsFirebase.DEFAULT_PP_LINK
                                 )
                                 val documentReference = firebaseFirestore
                                     .collection(ConstantsFirebase.FIREBASE_COLLECTION_NAME)

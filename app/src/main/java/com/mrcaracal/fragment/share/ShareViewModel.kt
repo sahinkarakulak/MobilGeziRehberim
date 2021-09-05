@@ -34,7 +34,7 @@ class ShareViewModel : ViewModel() {
         firebaseFirestore = FirebaseFirestore.getInstance()
     }
 
-    fun shareSend(
+    fun shareThePost(
         getPlaceName: String,
         getComment: String,
         getLocation: String,
@@ -65,13 +65,22 @@ class ShareViewModel : ViewModel() {
                                 val location = getLocation
                                 val comment = getComment
                                 val address = getAddress
-                                var city = getCity
+                                val city = getCity
 
                                 val uuid1 = UUID.randomUUID()
                                 postID = "" + uuid1
                                 MGonderiler = Posts(
-                                    postID, userEmail, pictureLink, placeName, location, address,
-                                    city, comment, postCode, tags, FieldValue.serverTimestamp()
+                                    gonderiID = postID,
+                                    kullaniciEposta = userEmail,
+                                    resimAdresi = pictureLink,
+                                    yerIsmi = placeName,
+                                    konum = location,
+                                    adres = address,
+                                    sehir = city,
+                                    yorum = comment,
+                                    postaKodu = postCode,
+                                    taglar = tags,
+                                    zaman = FieldValue.serverTimestamp()
                                 )
                                 val documentReference1 = firebaseFirestore
                                     .collection(ConstantsFirebase.COLLECTION_NAME_SHARED)
@@ -89,45 +98,45 @@ class ShareViewModel : ViewModel() {
                                             .addOnSuccessListener {
                                                 shareState.value = ShareViewState.OpenHomePage
                                             }
-                                            .addOnFailureListener { e ->
+                                            .addOnFailureListener { exception ->
                                                 shareState.value =
                                                     ShareViewState.ShowExceptionAndBtnState(
-                                                        exception = e
+                                                        exception = exception
                                                     )
                                             }
                                     }
-                                    .addOnFailureListener { e ->
+                                    .addOnFailureListener { exception ->
                                         shareState.value =
-                                            ShareViewState.ShowExceptionAndBtnState(exception = e)
+                                            ShareViewState.ShowExceptionAndBtnState(exception = exception)
                                     }
                             }
-                            .addOnFailureListener { e ->
+                            .addOnFailureListener { exception ->
                                 shareState.value =
-                                    ShareViewState.ShowExceptionAndBtnState(exception = e)
+                                    ShareViewState.ShowExceptionAndBtnState(exception = exception)
                             }
                     }
-                    .addOnFailureListener { e ->
-                        shareState.value = ShareViewState.ShowExceptionAndBtnState(exception = e)
+                    .addOnFailureListener { exception ->
+                        shareState.value = ShareViewState.ShowExceptionAndBtnState(exception = exception)
                     }
-            } catch (e: Exception) {
-                shareState.value = ShareViewState.ShowExceptionAndBtnState(exception = e)
+            } catch (exception: Exception) {
+                shareState.value = ShareViewState.ShowExceptionAndBtnState(exception = exception)
             }
         }
     }
 
-    fun createTag(tagler: Array<String>) {
-        var etiket_sayisi = 0
-        var taggg = ""
-        for (tags in tagler) {
-            etiket_sayisi++
-            this.tags = Arrays.asList(*tagler)
-            taggg += "#$tags   "
-            shareState.value = ShareViewState.GetTags(taggg)
-            if (etiket_sayisi == 5) break
+    fun createTagForPost(tagsTakenByEditText: Array<String>) {
+        var numberOfTags = 0
+        var tagsToReturn = ""
+        for (tags in tagsTakenByEditText) {
+            numberOfTags++
+            this.tags = Arrays.asList(*tagsTakenByEditText)
+            tagsToReturn += "#$tags   "
+            shareState.value = ShareViewState.GetTags(tagsToReturn)
+            if (numberOfTags == 5) break
         }
     }
 
-    fun picturePath(picturePath: Uri) {
+    fun imagePathForPostToBeShared(picturePath: Uri) {
         this.picturePath = picturePath
         shareState.value = ShareViewState.PicassoPross(picturePath = picturePath)
     }

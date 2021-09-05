@@ -7,8 +7,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.mrcaracal.Interface.RecyclerViewClickInterface
-import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.modul.Posts
@@ -35,14 +33,14 @@ class SearchViewModel : ViewModel() {
         postModelsList.clear()
     }
 
-    fun getData(data: Map<String, Any>?) {
+    fun getPostData(data: Map<String, Any>?) {
         data?.let {
             val postModel = PostModelProvider.provide(it)
             postModelsList.add(postModel)
         }
     }
 
-    fun search(relevantField: String?, keywordWrited: String) {
+    fun searchOnPost(relevantField: String?, keywordWrited: String) {
         clearList()
         val collectionReference = firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_POST)
@@ -55,7 +53,7 @@ class SearchViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
-                        getData(snapshot.data)
+                        getPostData(snapshot.data)
                         searchState.value = SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
                     }
                 }
@@ -64,7 +62,7 @@ class SearchViewModel : ViewModel() {
             }
     }
 
-    fun searchForTag(relevantField: String?, keywordWrited: String?) {
+    fun searchByTag(relevantField: String?, keywordWrited: String?) {
         clearList()
         val collectionReference = firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_POST)
@@ -75,7 +73,7 @@ class SearchViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     val querySnapshot = (task.result)
                     for (documentSnapshot: DocumentSnapshot in querySnapshot) {
-                        getData(documentSnapshot.data)
+                        getPostData(documentSnapshot.data)
                         searchState.value = SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
                     }
                 }
@@ -85,7 +83,7 @@ class SearchViewModel : ViewModel() {
             }
     }
 
-    fun searchForCity(postCode: String) {
+    fun searchByCity(postCode: String) {
         val collectionReference = firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_POST)
         collectionReference
@@ -97,7 +95,7 @@ class SearchViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
-                        getData(snapshot.data)
+                        getPostData(snapshot.data)
                         searchState.value = SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
 
                     }
@@ -107,22 +105,22 @@ class SearchViewModel : ViewModel() {
             }
     }
 
-    fun saveOperations(postModel: PostModel) {
+    fun savePostOnSearchFragment(postModel: PostModel) {
         if ((postModel.userEmail == firebaseUser.email)) {
             searchState.value = SearchViewState.ShowAlreadySharedToastMessage
         } else {
             val MGonderiler = Posts(
-                postModel.postId,
-                postModel.userEmail,
-                postModel.pictureLink,
-                postModel.placeName,
-                postModel.location,
-                postModel.address,
-                postModel.city,
-                postModel.comment,
-                postModel.postCode,
-                listOf(postModel.tag),
-                FieldValue.serverTimestamp()
+                gonderiID = postModel.postId,
+                kullaniciEposta = postModel.userEmail,
+                resimAdresi = postModel.pictureLink,
+                yerIsmi = postModel.placeName,
+                konum = postModel.location,
+                adres = postModel.address,
+                sehir = postModel.city,
+                yorum = postModel.comment,
+                postaKodu = postModel.postCode,
+                taglar = listOf(postModel.tag),
+                zaman = FieldValue.serverTimestamp()
             )
             val documentReference = firebaseFirestore
                 .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
@@ -140,19 +138,19 @@ class SearchViewModel : ViewModel() {
         }
     }
 
-    fun showTag(postModel: PostModel): String {
-        var taggg = ""
-        val al_taglar = postModel.tag
-        val tag_uzunluk = al_taglar.length
-        val alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
-        val a_t = alinan_taglar.split(",").toTypedArray()
-        for (tags: String in a_t) {
-            taggg += "#" + tags.trim { it <= ' ' } + " "
+    fun showTagsOnPost(postModel: PostModel): String {
+        var tagsToReturn = ""
+        val tagsTakenByEditText = postModel.tag
+        val tagLength = tagsTakenByEditText.length
+        val tagTaken = tagsTakenByEditText.substring(1, tagLength - 1)
+        val tagShredding = tagTaken.split(",").toTypedArray()
+        for (tags: String in tagShredding) {
+            tagsToReturn += "#" + tags.trim { it <= ' ' } + " "
         }
-        return taggg
+        return tagsToReturn
     }
 
-    fun reportPost(postModel: PostModel) {
+    fun reportPostFromSearchFragment(postModel: PostModel) {
         if ((postModel.userEmail == firebaseUser.email)) {
             searchState.value = SearchViewState.ShowAlreadySharedToastMessage
         } else {

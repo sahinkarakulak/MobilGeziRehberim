@@ -48,23 +48,24 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         savedInstanceState: Bundle?
     ): View {
         init()
-        if (container != null) {
-            this.container = container
-        }
+        if (container != null) { this.container = container }
         _binding = FragHomePageBinding.inflate(inflater, container, false)
         val view = binding.root
         initViewModel()
         observeHomePageState()
-
-        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerAdapterStructure = RecyclerAdapterStructure(this)
-        viewModel.rewind(postModelsList = postModelsList)
+        recyclerViewManager()
+        viewModel.getPostByPostTime(postModelsList = postModelsList)
 
         return view
     }
 
     fun initViewModel() {
         viewModel = ViewModelProvider(this).get(HomePageViewModel::class.java)
+    }
+
+    fun recyclerViewManager(){
+        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerAdapterStructure = RecyclerAdapterStructure(recyclerViewClickInterface = this)
     }
 
     fun observeHomePageState() {
@@ -108,7 +109,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
     override fun onLongItemClick(postModel: PostModel) {
 
-        var postTags = viewModel.showTag(postModel)
+        var postTags = viewModel.showTagsOnPost(postModel = postModel)
 
         DialogViewCustomize.dialogViewCustomize(
             activity = activity,
@@ -131,7 +132,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         // Save Post
         bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
-                viewModel.getSaveOperations(postModel = postModel)
+                viewModel.saveOperations(postModel = postModel)
                 bottomSheetDialog.dismiss()
             })
 
@@ -139,7 +140,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    goToLocationOperations(postModel)
+                    goToLocationOperations(postModel = postModel)
                     bottomSheetDialog.dismiss()
                 }
             })
@@ -148,7 +149,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    viewModel.reportPost(postModel = postModel)
+                    viewModel.reportPostFromHomePage(postModel = postModel)
                     bottomSheetDialog.dismiss()
                 }
             })

@@ -64,7 +64,7 @@ class Login : AppCompatActivity() {
             // Her şey tamam ise giriş yapılsın
             val email = binding.edtEmailLogin.text.toString()
             val pass = binding.edtPassLogin.text.toString()
-            viewModel.login(email, pass)
+            viewModel.login(email = email, pass = pass)
         }
     }
 

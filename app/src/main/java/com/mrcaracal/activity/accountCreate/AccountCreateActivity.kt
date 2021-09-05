@@ -19,7 +19,6 @@ class AccountCreateActivity : AppCompatActivity() {
         binding = ActivityAccountCreateBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initViewModel()
-        viewModel.init()
         initClickListeners()
         observeAccountCreateState()
     }
@@ -34,7 +33,11 @@ class AccountCreateActivity : AppCompatActivity() {
             val email = binding.edtUserEmail.text.toString()
             val passOne = binding.edtUserPassOne.text.toString()
             val passTwo = binding.edtUserPassTwo.text.toString()
-            viewModel.createAccount(userName, email, passOne, passTwo)
+            viewModel.createAccount(
+                userName = userName,
+                email = email,
+                pass1 = passOne,
+                pass2 = passTwo)
         }
     }
 

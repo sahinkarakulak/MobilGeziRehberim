@@ -7,8 +7,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.mrcaracal.Interface.RecyclerViewClickInterface
-import com.mrcaracal.adapter.RecyclerAdapterStructure
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.utils.ConstantsFirebase
@@ -27,7 +25,7 @@ class MyAccountViewModel : ViewModel() {
         firebaseUser = firebaseAuth.currentUser
     }
 
-    fun getData() {
+    fun getPostData() {
         val documentReference = FirebaseFirestore
             .getInstance()
             .collection(ConstantsFirebase.FIREBASE_COLLECTION_NAME)
@@ -56,7 +54,7 @@ class MyAccountViewModel : ViewModel() {
             }
     }
 
-    fun pullTheShared() {
+    fun pullTheSharedOnMyAccount() {
         val collectionReference = firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_SHARED)
             .document((firebaseUser?.email)!!)
@@ -82,7 +80,7 @@ class MyAccountViewModel : ViewModel() {
             }
     }
 
-    fun pullTheRecorded() {
+    fun pullTheRecordedOnMyAccount() {
         val collectionReference = firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
             .document((firebaseUser?.email)!!)
@@ -112,7 +110,7 @@ class MyAccountViewModel : ViewModel() {
         postModelsList.clear()
     }
 
-    fun removeFromShared(positionValue: Int) {
+    fun removePostFromShared(positionValue: Int) {
 
         // Step-1
         firebaseFirestore
@@ -143,7 +141,7 @@ class MyAccountViewModel : ViewModel() {
             }
     }
 
-    fun removeFromSaved(
+    fun removePostFromSaved(
         positionValue: Int
     ) {
         firebaseFirestore
@@ -161,29 +159,29 @@ class MyAccountViewModel : ViewModel() {
             }
     }
 
-    fun showTag(postModel: PostModel, tabControl: String): String {
-        var taggg = ""
-        val al_taglar = postModel.tag
-        val tag_uzunluk = al_taglar.length
-        val alinan_taglar: String
-        val a_t: Array<String>
+    fun showTagsOnPost(postModel: PostModel, tabControl: String): String {
+        var tagsToReturn = ""
+        val tagsTakenByEditText = postModel.tag
+        val tagLength = tagsTakenByEditText.length
+        val tagTaken: String
+        val tagShredding: Array<String>
         when (tabControl) {
             "paylasilanlar" -> {
-                alinan_taglar = al_taglar.substring(1, tag_uzunluk - 1)
-                a_t = alinan_taglar.split(",").toTypedArray()
-                for (tags: String in a_t) {
-                    taggg += "#" + tags.trim { it <= ' ' } + " "
+                tagTaken = tagsTakenByEditText.substring(1, tagLength - 1)
+                tagShredding = tagTaken.split(",").toTypedArray()
+                for (tags: String in tagShredding) {
+                    tagsToReturn += "#" + tags.trim { it <= ' ' } + " "
                 }
             }
             "kaydedilenler" -> {
-                alinan_taglar = al_taglar.substring(2, tag_uzunluk - 2)
-                a_t = alinan_taglar.split(",").toTypedArray()
-                for (tags: String in a_t) {
-                    taggg += "#" + tags.trim { it <= ' ' } + " "
+                tagTaken = tagsTakenByEditText.substring(2, tagLength - 2)
+                tagShredding = tagTaken.split(",").toTypedArray()
+                for (tags: String in tagShredding) {
+                    tagsToReturn += "#" + tags.trim { it <= ' ' } + " "
                 }
             }
         }
-        return taggg
+        return tagsToReturn
     }
 
 }

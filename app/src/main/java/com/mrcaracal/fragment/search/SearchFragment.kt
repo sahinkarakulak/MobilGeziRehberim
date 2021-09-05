@@ -72,9 +72,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         _binding = FragSearchBinding.inflate(inflater, container, false)
         val view = binding.root
         init()
-        if (container != null) {
-            this.container = container
-        }
+        if (container != null) { this.container = container }
         initViewModel()
         initClickListener()
         initSelectListener()
@@ -82,15 +80,18 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         observeSearchState()
         initSpinnerMethod()
         initSpinnerCity()
-
-        binding.recyclerViewSearch.layoutManager = LinearLayoutManager(activity)
-        recyclerAdapterStructure = RecyclerAdapterStructure(this)
+        recyclerViewManager()
 
         return view
     }
 
     fun initViewModel() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+    }
+
+    fun recyclerViewManager(){
+        binding.recyclerViewSearch.layoutManager = LinearLayoutManager(activity)
+        recyclerAdapterStructure = RecyclerAdapterStructure(recyclerViewClickInterface = this)
     }
 
     fun initClickListener() {
@@ -130,7 +131,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                         toast(container.context, R.string.please_select_city)
                     } else {
                         if (selectedCityCode != null) {
-                            viewModel.searchForCity(selectedCityCode)
+                            viewModel.searchByCity(postCode = selectedCityCode)
                         }
                     }
                 }
@@ -184,9 +185,9 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 viewModel.clearList()
                 if ((keyValue == "taglar")) {
-                    viewModel.searchForTag(keyValue, s.toString().lowercase())
+                    viewModel.searchByTag(relevantField = keyValue, keywordWrited = s.toString().lowercase())
                 } else {
-                    viewModel.search(keyValue, s.toString().lowercase())
+                    viewModel.searchOnPost(relevantField = keyValue, keywordWrited = s.toString().lowercase())
                 }
             }
 
@@ -242,6 +243,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
     }
 
     //There are problems converting to ViewModel
+    @SuppressLint("MissingPermission")
     fun listNearbyPlaces() {
         val locationRequest = LocationRequest()
         locationRequest.interval = 10000
@@ -277,8 +279,8 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                                 addressList = geocoder.getFromLocation(latitude, longitude, 1)
                                 if (addressList != null) {
                                     val postaKodumuz = addressList[0].postalCode
-                                    viewModel.searchForCity(
-                                        postaKodumuz.substring(0, 2)
+                                    viewModel.searchByCity(
+                                        postCode = postaKodumuz.substring(0, 2)
                                     )
                                 }
                             } catch (e: Exception) {
@@ -311,7 +313,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
     }
 
     override fun onLongItemClick(postModel: PostModel) {
-        var postTags = viewModel.showTag(postModel)
+        var postTags = viewModel.showTagsOnPost(postModel = postModel)
         DialogViewCustomize.dialogViewCustomize(
             activity = activity,
             container = container,
@@ -331,7 +333,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         // Save Post
         bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
             View.OnClickListener {
-                viewModel.saveOperations(postModel)
+                viewModel.savePostOnSearchFragment(postModel = postModel)
                 bottomSheetDialog.dismiss()
             })
 
@@ -339,7 +341,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    goToLocationOperations(postModel)
+                    goToLocationOperations(postModel = postModel)
                     bottomSheetDialog.dismiss()
                 }
             })
@@ -348,7 +350,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
             .setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View) {
-                    viewModel.reportPost(postModel = postModel)
+                    viewModel.reportPostFromSearchFragment(postModel = postModel)
                     bottomSheetDialog.dismiss()
                 }
             })

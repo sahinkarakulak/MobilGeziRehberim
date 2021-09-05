@@ -30,7 +30,7 @@ class ResetPassActivity : AppCompatActivity() {
     fun initClickListeners() {
         binding.btnSendRequest.setOnClickListener {
             val email = binding.edtResetPass.text.toString()
-            viewModel.sendRequest(email)
+            viewModel.sendRequest(email = email)
         }
     }
 

@@ -118,12 +118,17 @@ class ShareFragment : Fragment() {
         val strLocation = binding.edtLocation.text.toString()
         val strAddress = binding.edtAddres.text.toString()
         val strCity = binding.edtCity.text.toString()
-        viewModel.shareSend(strPlaceName, strComment, strLocation, strAddress, strCity)
+        viewModel.shareThePost(
+            getPlaceName = strPlaceName,
+            getComment = strComment,
+            getLocation = strLocation,
+            getAddress = strAddress,
+            getCity = strCity)
     }
 
     fun createTag() {
-        val tagler = binding.edtShareTag.text.toString().lowercase().split(" ").toTypedArray()
-        viewModel.createTag(tagler)
+        val tagsTakenByEditText = binding.edtShareTag.text.toString().lowercase().split(" ").toTypedArray()
+        viewModel.createTagForPost(tagsTakenByEditText = tagsTakenByEditText)
     }
 
     private fun choosePictureFromGallery() {
@@ -152,7 +157,7 @@ class ShareFragment : Fragment() {
         postCode = GET.getString("postaKodu", "12000")!!
         binding.edtLocation.setText("$latitude,$longitude")
         binding.edtAddres.setText("" + addres)
-        viewModel.sendPostCode(postCode)
+        viewModel.sendPostCode(postCode = postCode)
 
     }
 
@@ -174,7 +179,7 @@ class ShareFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 2 && resultCode == Activity.RESULT_OK && data != null) {
             picturePath = data.data!!
-            viewModel.picturePath(picturePath = picturePath)
+            viewModel.imagePathForPostToBeShared(picturePath = picturePath)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

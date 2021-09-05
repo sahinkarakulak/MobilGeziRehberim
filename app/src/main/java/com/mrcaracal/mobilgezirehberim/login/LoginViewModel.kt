@@ -23,8 +23,8 @@ class LoginViewModel : ViewModel() {
                     } else {
                         loginState.value = LoginViewSate.ConfirmEmail
                     }
-                }.addOnFailureListener { e ->
-                    loginState.value = LoginViewSate.ShowExceptionMessage(exception = e)
+                }.addOnFailureListener { exception ->
+                    loginState.value = LoginViewSate.ShowExceptionMessage(exception = exception)
                 }
         }
     }
