@@ -41,7 +41,10 @@ class ShareFragment : Fragment() {
     private lateinit var picturePath: Uri
 
     private fun init() {
-        GET = requireActivity().getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
+        GET = requireActivity().getSharedPreferences(
+            getString(R.string.map_key),
+            Context.MODE_PRIVATE
+        )
         SET = GET.edit()
     }
 
@@ -82,7 +85,7 @@ class ShareFragment : Fragment() {
         })
     }
 
-    fun observeContactState() {
+    private fun observeContactState() {
         viewModel.shareState.observe(viewLifecycleOwner) { shareViewState ->
             when (shareViewState) {
                 is ShareViewState.ShowToastMessageAndBtnState -> {
@@ -111,7 +114,7 @@ class ShareFragment : Fragment() {
         }
     }
 
-    fun shareSend() {
+    private fun shareSend() {
         binding.btnShareSend.isEnabled = true
         val strPlaceName = binding.edtSharePlaceName.text.toString()
         val strComment = binding.edtShareComment.text.toString()
@@ -123,11 +126,13 @@ class ShareFragment : Fragment() {
             getComment = strComment,
             getLocation = strLocation,
             getAddress = strAddress,
-            getCity = strCity)
+            getCity = strCity
+        )
     }
 
-    fun createTag() {
-        val tagsTakenByEditText = binding.edtShareTag.text.toString().lowercase().split(" ").toTypedArray()
+    private fun createTag() {
+        val tagsTakenByEditText =
+            binding.edtShareTag.text.toString().lowercase().split(" ").toTypedArray()
         viewModel.createTagForPost(tagsTakenByEditText = tagsTakenByEditText)
     }
 

@@ -38,7 +38,10 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
     lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
 
     private fun init() {
-        GET = requireActivity().getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
+        GET = requireActivity().getSharedPreferences(
+            getString(R.string.map_key),
+            Context.MODE_PRIVATE
+        )
         SET = GET.edit()
     }
 
@@ -48,7 +51,9 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         savedInstanceState: Bundle?
     ): View {
         init()
-        if (container != null) { this.container = container }
+        if (container != null) {
+            this.container = container
+        }
         _binding = FragHomePageBinding.inflate(inflater, container, false)
         val view = binding.root
         initViewModel()
@@ -63,7 +68,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         viewModel = ViewModelProvider(this).get(HomePageViewModel::class.java)
     }
 
-    fun recyclerViewManager(){
+    fun recyclerViewManager() {
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerAdapterStructure = RecyclerAdapterStructure(recyclerViewClickInterface = this)
     }

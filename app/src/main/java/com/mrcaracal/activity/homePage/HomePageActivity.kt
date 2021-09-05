@@ -32,7 +32,7 @@ class HomePageActivity : AppCompatActivity() {
         selectFragment()
     }
 
-    private fun selectFragment(){
+    private fun selectFragment() {
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout, HomePageFragment())
             .commit()
 
@@ -81,8 +81,7 @@ class HomePageActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
+        when (item.itemId) {
             R.id.contact -> {
                 val contact = Intent(this@HomePageActivity, ContactActivity::class.java)
                 startActivity(contact)

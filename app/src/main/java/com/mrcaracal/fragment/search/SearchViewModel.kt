@@ -19,22 +19,16 @@ class SearchViewModel : ViewModel() {
     var searchState: MutableLiveData<SearchViewState> = MutableLiveData<SearchViewState>()
 
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    var firebaseUser: FirebaseUser
-    var firebaseFirestore: FirebaseFirestore
+    private var firebaseUser: FirebaseUser = firebaseAuth.currentUser!!
+    private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-
-    val postModelsList: ArrayList<PostModel> = arrayListOf()
-
-    init {
-        firebaseUser = firebaseAuth.currentUser!!
-        firebaseFirestore = FirebaseFirestore.getInstance()
-    }
+    private val postModelsList: ArrayList<PostModel> = arrayListOf()
 
     fun clearList() {
         postModelsList.clear()
     }
 
-    fun getPostData(data: Map<String, Any>?) {
+    private fun getPostData(data: Map<String, Any>?) {
         data?.let {
             val postModel = PostModelProvider.provide(it)
             postModelsList.add(postModel)
@@ -55,7 +49,8 @@ class SearchViewModel : ViewModel() {
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
                         getPostData(snapshot.data)
-                        searchState.value = SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
+                        searchState.value =
+                            SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
                     }
                 }
             }.addOnFailureListener { exception ->
@@ -75,7 +70,8 @@ class SearchViewModel : ViewModel() {
                     val querySnapshot = (task.result)
                     for (documentSnapshot: DocumentSnapshot in querySnapshot) {
                         getPostData(documentSnapshot.data)
-                        searchState.value = SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
+                        searchState.value =
+                            SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
                     }
                 }
             }
@@ -97,7 +93,8 @@ class SearchViewModel : ViewModel() {
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
                         getPostData(snapshot.data)
-                        searchState.value = SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
+                        searchState.value =
+                            SearchViewState.SendRecyclerAdapter(postModelsList = postModelsList)
 
                     }
                 }
@@ -110,7 +107,7 @@ class SearchViewModel : ViewModel() {
         if ((postModel.userEmail == firebaseUser.email)) {
             searchState.value = SearchViewState.ShowAlreadySharedToastMessage
         } else {
-            val MGonderiler = Posts(
+            val mGonderiler = Posts(
                 gonderiID = postModel.postId,
                 kullaniciEposta = postModel.userEmail,
                 resimAdresi = postModel.pictureLink,
@@ -129,7 +126,7 @@ class SearchViewModel : ViewModel() {
                 .collection(ConstantsFirebase.COLLECTION_NAME_SAVED)
                 .document(postModel.postId)
             documentReference
-                .set(MGonderiler)
+                .set(mGonderiler)
                 .addOnSuccessListener {
                     //
                 }

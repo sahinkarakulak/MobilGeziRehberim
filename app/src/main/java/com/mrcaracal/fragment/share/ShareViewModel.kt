@@ -16,10 +16,10 @@ import java.util.*
 class ShareViewModel : ViewModel() {
     var shareState: MutableLiveData<ShareViewState> = MutableLiveData<ShareViewState>()
 
-    private lateinit var MGonderiler: Posts
-    private var firebaseAuth: FirebaseAuth
-    var firebaseUser: FirebaseUser? = null
-    private var firebaseFirestore: FirebaseFirestore
+    private lateinit var mGonderiler: Posts
+    private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var firebaseUser: FirebaseUser = firebaseAuth.currentUser!!
+    private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private var storageReference: StorageReference = firebaseStorage.reference
     private lateinit var picturePath: Uri
@@ -27,12 +27,6 @@ class ShareViewModel : ViewModel() {
     var postCode: String? = null
     lateinit var postID: String
     lateinit var tags: List<String>
-
-    init {
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser
-        firebaseFirestore = FirebaseFirestore.getInstance()
-    }
 
     fun shareThePost(
         getPlaceName: String,
@@ -45,7 +39,7 @@ class ShareViewModel : ViewModel() {
             shareState.value = ShareViewState.ShowToastMessageAndBtnState
         } else {
             val uuid = UUID.randomUUID()
-            val placeName = firebaseUser!!.email + "--" + getPlaceName + "--" + uuid
+            val placeName = firebaseUser.email + "--" + getPlaceName + "--" + uuid
             try {
                 storageReference
                     .child(ConstantsFirebase.STORAGE_NAME)
@@ -69,7 +63,7 @@ class ShareViewModel : ViewModel() {
 
                                 val uuid1 = UUID.randomUUID()
                                 postID = "" + uuid1
-                                MGonderiler = Posts(
+                                mGonderiler = Posts(
                                     gonderiID = postID,
                                     kullaniciEposta = userEmail,
                                     resimAdresi = pictureLink,
@@ -88,13 +82,13 @@ class ShareViewModel : ViewModel() {
                                     .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SHARED)
                                     .document(postID)
                                 documentReference1
-                                    .set(MGonderiler)
+                                    .set(mGonderiler)
                                     .addOnSuccessListener {
                                         val documentReference2 = firebaseFirestore
                                             .collection(ConstantsFirebase.COLLECTION_NAME_POST)
                                             .document(postID)
                                         documentReference2
-                                            .set(MGonderiler)
+                                            .set(mGonderiler)
                                             .addOnSuccessListener {
                                                 shareState.value = ShareViewState.OpenHomePage
                                             }
@@ -116,7 +110,8 @@ class ShareViewModel : ViewModel() {
                             }
                     }
                     .addOnFailureListener { exception ->
-                        shareState.value = ShareViewState.ShowExceptionAndBtnState(exception = exception)
+                        shareState.value =
+                            ShareViewState.ShowExceptionAndBtnState(exception = exception)
                     }
             } catch (exception: Exception) {
                 shareState.value = ShareViewState.ShowExceptionAndBtnState(exception = exception)

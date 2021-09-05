@@ -4,7 +4,7 @@ import com.mrcaracal.fragment.model.PostModel
 
 object ShowTags {
 
-    fun showPostTags(postModel: PostModel) : String{
+    fun showPostTags(postModel: PostModel): String {
         var tagsToReturn = ""
         val tagsTakenByEditText = postModel.tag
         val tagLength = tagsTakenByEditText.length
@@ -16,7 +16,7 @@ object ShowTags {
         return tagsToReturn
     }
 
-    fun showPostTagsForAccount(postModel: PostModel, tabControl: String) : String{
+    fun showPostTagsForAccount(postModel: PostModel, tabControl: String): String {
         var tagsToReturn = ""
         val tagsTakenByEditText = postModel.tag
         val tagLength = tagsTakenByEditText.length

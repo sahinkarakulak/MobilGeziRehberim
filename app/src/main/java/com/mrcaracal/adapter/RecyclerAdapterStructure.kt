@@ -22,14 +22,14 @@ class RecyclerAdapterStructure(
 ) : RecyclerView.Adapter<GonderiHolder>() {
 
     lateinit var firebaseAuth: FirebaseAuth
-    var firebaseUser: FirebaseUser? = null
-    lateinit var firebaseFirestore: FirebaseFirestore
+    lateinit var firebaseUser: FirebaseUser
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GonderiHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.recycler_row, parent, false)
         firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser
+        firebaseUser = firebaseAuth.currentUser!!
         firebaseFirestore = FirebaseFirestore.getInstance()
         return GonderiHolder(view)
     }
@@ -46,12 +46,12 @@ class RecyclerAdapterStructure(
 
         holder.ll_otherOperations.setOnClickListener {
             recyclerViewClickInterface.onOtherOperationsClick(
-                postModelList.get(position)
+                postModelList[position]
             )
         }
 
         holder.row_picturePath.setOnLongClickListener {
-            recyclerViewClickInterface.onLongItemClick(postModelList.get(position))
+            recyclerViewClickInterface.onLongItemClick(postModelList[position])
             false
         }
     }
@@ -61,16 +61,10 @@ class RecyclerAdapterStructure(
     }
 
     inner class GonderiHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var row_picturePath: ImageView
-        var row_placeName: TextView
-        var row_comment: TextView
-        var ll_otherOperations: LinearLayout
+        var row_picturePath: ImageView = itemView.findViewById(R.id.row_picturePath)
+        var row_placeName: TextView = itemView.findViewById(R.id.row_placeName)
+        var row_comment: TextView = itemView.findViewById(R.id.row_comment)
+        var ll_otherOperations: LinearLayout = itemView.findViewById(R.id.ll_otherOperations)
 
-        init {
-            row_picturePath = itemView.findViewById(R.id.row_picturePath)
-            row_placeName = itemView.findViewById(R.id.row_placeName)
-            row_comment = itemView.findViewById(R.id.row_comment)
-            ll_otherOperations = itemView.findViewById(R.id.ll_otherOperations)
-        }
     }
 }

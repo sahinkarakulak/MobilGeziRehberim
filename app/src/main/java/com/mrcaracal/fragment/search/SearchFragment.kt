@@ -59,7 +59,10 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
     private lateinit var container: ViewGroup
 
     private fun init() {
-        GET = requireActivity().getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
+        GET = requireActivity().getSharedPreferences(
+            getString(R.string.map_key),
+            Context.MODE_PRIVATE
+        )
         SET = GET.edit()
     }
 
@@ -72,7 +75,9 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         _binding = FragSearchBinding.inflate(inflater, container, false)
         val view = binding.root
         init()
-        if (container != null) { this.container = container }
+        if (container != null) {
+            this.container = container
+        }
         initViewModel()
         initClickListener()
         initSelectListener()
@@ -89,7 +94,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
     }
 
-    fun recyclerViewManager(){
+    fun recyclerViewManager() {
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(activity)
         recyclerAdapterStructure = RecyclerAdapterStructure(recyclerViewClickInterface = this)
     }
@@ -185,9 +190,15 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 viewModel.clearList()
                 if ((keyValue == "taglar")) {
-                    viewModel.searchByTag(relevantField = keyValue, keywordWrited = s.toString().lowercase())
+                    viewModel.searchByTag(
+                        relevantField = keyValue,
+                        keywordWrited = s.toString().lowercase()
+                    )
                 } else {
-                    viewModel.searchOnPost(relevantField = keyValue, keywordWrited = s.toString().lowercase())
+                    viewModel.searchOnPost(
+                        relevantField = keyValue,
+                        keywordWrited = s.toString().lowercase()
+                    )
                 }
             }
 
@@ -242,8 +253,6 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         }
     }
 
-    //There are problems converting to ViewModel
-    @SuppressLint("MissingPermission")
     fun listNearbyPlaces() {
         val locationRequest = LocationRequest()
         locationRequest.interval = 10000
@@ -263,6 +272,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
             ) {
                 return
             }
+
             LocationServices.getFusedLocationProviderClient(activity)
                 .requestLocationUpdates(locationRequest, object : LocationCallback() {
                     override fun onLocationResult(locationResult: LocationResult) {

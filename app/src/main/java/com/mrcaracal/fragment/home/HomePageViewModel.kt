@@ -19,13 +19,8 @@ class HomePageViewModel : ViewModel() {
     var homePageState: MutableLiveData<HomePageViewState> = MutableLiveData<HomePageViewState>()
 
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    var firebaseUser: FirebaseUser? = null
-    var firebaseFirestore: FirebaseFirestore
-
-    init {
-        firebaseUser = firebaseAuth.currentUser
-        firebaseFirestore = FirebaseFirestore.getInstance()
-    }
+    private var firebaseUser: FirebaseUser = firebaseAuth.currentUser!!
+    private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     fun getPostByPostTime(postModelsList: ArrayList<PostModel>) {
         val collectionReference = firebaseFirestore
@@ -38,48 +33,50 @@ class HomePageViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     val querySnapshot = (task.result)
                     for (snapshot: DocumentSnapshot in querySnapshot) {
-
                         snapshot.data?.let {
                             val postModel = PostModelProvider.provide(it)
                             postModelsList.add(postModel)
                         }
-                        homePageState.value = HomePageViewState.SendRecyclerAdapter(postModelsList = postModelsList)
-
-
+                        homePageState.value =
+                            HomePageViewState.SendRecyclerAdapter(postModelsList = postModelsList)
                     }
                 }
+            }
+            .addOnFailureListener { exception ->
+                homePageState.value = HomePageViewState.ShowExceptionMessage(exception = exception)
             }
     }
 
     fun savePostOnHomePage(postModel: PostModel) {
-        if ((postModel.userEmail == firebaseUser!!.email)) {
+        if ((postModel.userEmail == firebaseUser.email)) {
             homePageState.value = HomePageViewState.ShowAlreadySharedToastMessage
         } else {
-            val MGonderiler = Posts(
-                postModel.postId,
-                postModel.userEmail,
-                postModel.pictureLink,
-                postModel.placeName,
-                postModel.location,
-                postModel.address,
-                postModel.city,
-                postModel.comment,
-                postModel.postCode,
-                listOf(postModel.tag),
-                FieldValue.serverTimestamp()
+            val mGonderiler = Posts(
+                gonderiID = postModel.postId,
+                kullaniciEposta = postModel.userEmail,
+                resimAdresi = postModel.pictureLink,
+                yerIsmi = postModel.placeName,
+                konum = postModel.location,
+                adres = postModel.address,
+                sehir = postModel.city,
+                yorum = postModel.comment,
+                postaKodu = postModel.postCode,
+                taglar = listOf(postModel.tag),
+                zaman = FieldValue.serverTimestamp()
             )
             val documentReference = firebaseFirestore
                 .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
-                .document((firebaseUser!!.email)!!)
+                .document((firebaseUser.email)!!)
                 .collection(ConstantsFirebase.COLLECTION_NAME_SAVED)
                 .document(postModel.postId)
             documentReference
-                .set(MGonderiler)
+                .set(mGonderiler)
                 .addOnSuccessListener {
                     //
                 }
-                .addOnFailureListener { e ->
-                    //
+                .addOnFailureListener { exception ->
+                    homePageState.value =
+                        HomePageViewState.ShowExceptionMessage(exception = exception)
                 }
         }
     }
@@ -89,13 +86,13 @@ class HomePageViewModel : ViewModel() {
     }
 
     fun saveOperations(postModel: PostModel) {
-        firebaseUser?.let { it1 ->
+        firebaseUser.let {
             savePostOnHomePage(postModel = postModel)
         }
     }
 
     fun reportPostFromHomePage(postModel: PostModel) {
-        if ((postModel.userEmail == firebaseUser?.email)) {
+        if ((postModel.userEmail == firebaseUser.email)) {
             homePageState.value = HomePageViewState.ShowAlreadySharedToastMessage
         } else {
             homePageState.value = HomePageViewState.OpenEmail(
@@ -115,4 +112,6 @@ sealed class HomePageViewState {
 
     data class SendRecyclerAdapter(val postModelsList: ArrayList<PostModel>) :
         HomePageViewState()
+
+    data class ShowExceptionMessage(val exception: Exception) : HomePageViewState()
 }

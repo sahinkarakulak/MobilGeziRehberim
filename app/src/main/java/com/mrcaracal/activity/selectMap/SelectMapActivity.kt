@@ -1,14 +1,12 @@
 package com.mrcaracal.activity.selectMap
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -33,12 +31,12 @@ import java.util.*
 class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListener {
     private lateinit var viewModel: SelectMapViewModel
 
-    lateinit var locationManager: LocationManager
-    lateinit var locationListener: LocationListener
+    private lateinit var locationManager: LocationManager
+    private lateinit var locationListener: LocationListener
 
     var latitude = 0.0.toFloat()
     var longitude = 0.0.toFloat()
-    var addres = ""
+    var address = ""
     lateinit var postCode: String
 
     private lateinit var GET: SharedPreferences
@@ -63,7 +61,6 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         viewModel = ViewModelProvider(this).get(SelectMapViewModel::class.java)
     }
 
-    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -72,13 +69,22 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
             override fun onLocationChanged(location: Location) {
                 latitude = location.latitude.toFloat()
                 longitude = location.longitude.toFloat()
+
+                val userLatLng = LatLng(location.latitude, location.longitude)
+                mMap.clear()
+                mMap.addMarker(
+                    MarkerOptions().position(userLatLng).title(getString(R.string.my_locaiton))
+                )
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15f))
+
+
                 val geocoder = Geocoder(applicationContext, Locale.getDefault())
-                addres = ""
+                address = ""
                 try {
                     val addressList =
                         geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
                     if (addressList != null && addressList.size > 0) {
-                        addres += addressList[0].getAddressLine(0)
+                        address += addressList[0].getAddressLine(0)
                         postCode = addressList[0].postalCode
                     }
                 } catch (e: IOException) {
@@ -87,9 +93,13 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
                 processSet(
                     latitude = latitude,
                     longitude = longitude,
-                    address = addres,
+                    address = address,
                     postCode = postCode
                 )
+            }
+
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                super.onStatusChanged(provider, status, extras)
             }
 
             override fun onProviderDisabled(provider: String) {
@@ -100,6 +110,7 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
                 toast(provider)
             }
         }
+
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -157,26 +168,13 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         }
     }
 
-    @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray
-    ) {/*
-        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 0)
-        } else{
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                15000,
-                3f,
-                locationListener
-            )
-        }*/
+    ) {
 
-
-
-        if (grantResults.size > 0) {
+        if (grantResults.isNotEmpty()) {
             if (requestCode == 4) {
                 if (ContextCompat.checkSelfPermission(
                         this,
@@ -200,11 +198,11 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         latitude = latLng.latitude.toFloat()
         longitude = latLng.longitude.toFloat()
         val geocoder = Geocoder(applicationContext, Locale.getDefault())
-        addres = ""
+        address = ""
         try {
             val addressList = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
             if (addressList != null && addressList.size > 0) {
-                addres += addressList[0].getAddressLine(0)
+                address += addressList[0].getAddressLine(0)
                 postCode = addressList[0].postalCode
             }
         } catch (e: IOException) {
@@ -222,7 +220,7 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         processSet(
             latitude = latitude,
             longitude = longitude,
-            address = addres,
+            address = address,
             postCode = postCode
         )
     }

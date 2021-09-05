@@ -18,7 +18,8 @@ class ResetPassViewModel : ViewModel() {
                     resetPassState.value = ResetPassViewState.ShowCheckEmailMessage
                     resetPassState.value = ResetPassViewState.OpenLoginActivity
                 }.addOnFailureListener { exception ->
-                    resetPassState.value = ResetPassViewState.ShowErrorMessage(exception = exception)
+                    resetPassState.value =
+                        ResetPassViewState.ShowErrorMessage(exception = exception)
                 }
         }
     }

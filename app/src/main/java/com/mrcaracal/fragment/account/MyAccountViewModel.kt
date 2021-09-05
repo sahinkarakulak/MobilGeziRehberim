@@ -16,21 +16,17 @@ class MyAccountViewModel : ViewModel() {
     var myAccountState: MutableLiveData<MyAccountViewState> = MutableLiveData<MyAccountViewState>()
 
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    var firebaseUser: FirebaseUser? = null
-    var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private var firebaseUser: FirebaseUser = firebaseAuth.currentUser!!
+    private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
 
-    val postModelsList: ArrayList<PostModel> = arrayListOf()
-
-    init {
-        firebaseUser = firebaseAuth.currentUser
-    }
+    private val postModelsList: ArrayList<PostModel> = arrayListOf()
 
     fun getPostData() {
         val documentReference = FirebaseFirestore
             .getInstance()
             .collection(ConstantsFirebase.FIREBASE_COLLECTION_NAME)
-            .document((firebaseUser?.email)!!)
+            .document((firebaseUser.email)!!)
         documentReference
             .get()
             .addOnCompleteListener { task ->
@@ -58,7 +54,7 @@ class MyAccountViewModel : ViewModel() {
     fun pullTheSharedOnMyAccount() {
         val collectionReference = firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_SHARED)
-            .document((firebaseUser?.email)!!)
+            .document((firebaseUser.email)!!)
             .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SHARED)
         collectionReference
             .orderBy("zaman", Query.Direction.DESCENDING)
@@ -71,7 +67,8 @@ class MyAccountViewModel : ViewModel() {
                             val postModel = PostModelProvider.provide(it)
                             postModelsList.add(postModel)
                         }
-                        myAccountState.value = MyAccountViewState.SendRecyclerAdapter(postModelList = postModelsList)
+                        myAccountState.value =
+                            MyAccountViewState.SendRecyclerAdapter(postModelList = postModelsList)
                     }
                 }
             }
@@ -84,7 +81,7 @@ class MyAccountViewModel : ViewModel() {
     fun pullTheRecordedOnMyAccount() {
         val collectionReference = firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
-            .document((firebaseUser?.email)!!)
+            .document((firebaseUser.email)!!)
             .collection(ConstantsFirebase.COLLECTION_NAME_SAVED)
         collectionReference
             .orderBy("zaman", Query.Direction.DESCENDING)
@@ -97,7 +94,8 @@ class MyAccountViewModel : ViewModel() {
                             val postModel = PostModelProvider.provide(it)
                             postModelsList.add(postModel)
                         }
-                        myAccountState.value = MyAccountViewState.SendRecyclerAdapter(postModelList = postModelsList)
+                        myAccountState.value =
+                            MyAccountViewState.SendRecyclerAdapter(postModelList = postModelsList)
                     }
                 }
             }
@@ -147,7 +145,7 @@ class MyAccountViewModel : ViewModel() {
     ) {
         firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
-            .document((firebaseUser?.email)!!)
+            .document((firebaseUser.email)!!)
             .collection(ConstantsFirebase.COLLECTION_NAME_SAVED)
             .document(postModelsList[positionValue].postId)
             .delete()

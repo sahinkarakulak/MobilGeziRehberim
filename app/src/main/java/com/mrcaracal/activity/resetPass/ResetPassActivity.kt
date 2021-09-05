@@ -34,7 +34,7 @@ class ResetPassActivity : AppCompatActivity() {
         }
     }
 
-    fun observeRestPassState() {
+    private fun observeRestPassState() {
         viewModel.resetPassState.observe(this) { resetPassViewState ->
             when (resetPassViewState) {
                 is ResetPassViewState.ShowRequiredFieldsMessage -> {

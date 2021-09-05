@@ -45,11 +45,11 @@ class Login : AppCompatActivity() {
         viewModel.userIsAlreadyLoggedIn()
     }
 
-    private fun initViewModel(){
+    private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
     }
 
-    private fun initClickListeners(){
+    private fun initClickListeners() {
         binding.txtIForgotMyPass.setOnClickListener {
             val intent = Intent(this@Login, ResetPassActivity::class.java)
             startActivity(intent)
@@ -68,7 +68,7 @@ class Login : AppCompatActivity() {
         }
     }
 
-    private fun rememberMe(){
+    private fun rememberMe() {
         val rememberInfo = GET.getBoolean("boolean_key", false)
         if (rememberInfo == true) {
             binding.chbLoginInfosRemember.isChecked = true
@@ -81,9 +81,9 @@ class Login : AppCompatActivity() {
         }
     }
 
-    private fun observeContactState(){
+    private fun observeContactState() {
         viewModel.loginState.observe(this) { loginViewState ->
-            when(loginViewState){
+            when (loginViewState) {
                 is LoginViewSate.ShowRequiredFieldsMessage -> {
                     toast(R.string.fill_in_the_required_fields)
                 }

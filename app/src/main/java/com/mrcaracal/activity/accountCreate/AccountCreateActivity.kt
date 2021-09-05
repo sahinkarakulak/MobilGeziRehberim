@@ -37,7 +37,8 @@ class AccountCreateActivity : AppCompatActivity() {
                 userName = userName,
                 email = email,
                 pass1 = passOne,
-                pass2 = passTwo)
+                pass2 = passTwo
+            )
         }
     }
 

@@ -43,7 +43,10 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     private lateinit var container: ViewGroup
 
     private fun init() {
-        GET = requireActivity().getSharedPreferences(getString(R.string.map_key), Context.MODE_PRIVATE)
+        GET = requireActivity().getSharedPreferences(
+            getString(R.string.map_key),
+            Context.MODE_PRIVATE
+        )
         SET = GET.edit()
     }
 
@@ -53,7 +56,9 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         savedInstanceState: Bundle?
     ): View {
         init()
-        if (container != null) { this.container = container }
+        if (container != null) {
+            this.container = container
+        }
         _binding = FragMyAccountBinding.inflate(inflater, container, false)
         val view = binding.root
         initViewModel()
@@ -70,7 +75,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         viewModel = ViewModelProvider(this).get(MyAccountViewModel::class.java)
     }
 
-    fun recyclerViewManager(){
+    fun recyclerViewManager() {
         binding.recyclerViewAccount.layoutManager = LinearLayoutManager(activity)
         recyclerAdapterStructure = RecyclerAdapterStructure(recyclerViewClickInterface = this)
     }

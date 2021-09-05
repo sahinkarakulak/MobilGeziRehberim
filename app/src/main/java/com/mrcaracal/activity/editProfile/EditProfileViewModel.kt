@@ -67,7 +67,8 @@ class EditProfileViewModel : ViewModel() {
                             userBio = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_BIO)
                         )
                         editProfileViewState.value = EditProfileViewState.OnUserImage(
-                            userImageUrl = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC).orEmpty()
+                            userImageUrl = documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC)
+                                .orEmpty()
                         )
                     }
                 }
@@ -88,7 +89,10 @@ class EditProfileViewModel : ViewModel() {
     fun uploadImage(contentResolver: ContentResolver) {
         val storageReference2 = storageReference.child(firebaseUser!!.email!!).child(
             System.currentTimeMillis()
-                .toString() + "." + getFileExtension(uri = mImageUri, contentResolver = contentResolver)
+                .toString() + "." + getFileExtension(
+                uri = mImageUri,
+                contentResolver = contentResolver
+            )
         )
 
         val uploadTask = storageReference2.putFile(mImageUri)
@@ -117,8 +121,10 @@ class EditProfileViewModel : ViewModel() {
                                     val documentSnapshot = task.result
                                     if (documentSnapshot.exists()) {
                                         editProfileViewState.value =
-                                            EditProfileViewState.OnUserImage( userImageUrl =
-                                                documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC).orEmpty()
+                                            EditProfileViewState.OnUserImage(
+                                                userImageUrl =
+                                                documentSnapshot.getString(ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC)
+                                                    .orEmpty()
                                             )
                                     }
                                 }
@@ -153,5 +159,5 @@ sealed class EditProfileViewState {
 
     data class ShowExceptionErrorMessage(val exception: Exception) : EditProfileViewState()
     data class BindingTvUserEmailChangeText(val firebaseUserName: String) : EditProfileViewState()
-    data class OnUserInfo(val userName: String?, val userBio: String?): EditProfileViewState()
+    data class OnUserInfo(val userName: String?, val userBio: String?) : EditProfileViewState()
 }
