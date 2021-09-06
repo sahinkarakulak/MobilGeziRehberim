@@ -34,8 +34,8 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
 
     var POSITION_VALUE = 0
     var TAB_CONTROL = "paylasilanlar"
-    var LATITUDE = 0.0
-    var LONGITUDE = 0.0
+    private var LATITUDE = 0.0
+    private var LONGITUDE = 0.0
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
@@ -81,10 +81,10 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     }
 
     fun initClickListeners() {
-        binding.btnEditProfile.setOnClickListener(View.OnClickListener {
+        binding.btnEditProfile.setOnClickListener {
             val editProfile = Intent(activity, EditProfileActivity::class.java)
             startActivity(editProfile)
-        })
+        }
         binding.bnAccountMenu.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.shared -> {
@@ -104,7 +104,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         }
     }
 
-    fun observeMyAccountState() {
+    private fun observeMyAccountState() {
         viewModel.myAccountState.observe(viewLifecycleOwner) { myAccountViewState ->
             when (myAccountViewState) {
                 is MyAccountViewState.ShowExceptionMessage -> {
@@ -135,7 +135,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         goToLocation(postModel = postModel)
     }
 
-    fun goToLocationFromSaved(postModel: PostModel) {
+    private fun goToLocationFromSaved(postModel: PostModel) {
         goToLocation(postModel = postModel)
     }
 
@@ -154,7 +154,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     }
 
     override fun onLongItemClick(postModel: PostModel) {
-        var postTags = viewModel.showTagsOnPost(postModel = postModel, tabControl = TAB_CONTROL)
+        val postTags = viewModel.showTagsOnPost(postModel = postModel, tabControl = TAB_CONTROL)
 
         DialogViewCustomize.dialogViewCustomize(
             activity = activity,
@@ -175,48 +175,41 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         title.text = postModel.placeName
 
         // Go to locaiton
-        bottomSheetView.findViewById<View>(R.id.bs_goToLocation).setOnClickListener(
-            View.OnClickListener {
-                when (TAB_CONTROL) {
-                    "paylasilanlar" -> goToLocationFromShared(postModel = postModel)
-                    "kaydedilenler" -> goToLocationFromSaved(postModel = postModel)
-                }
-                bottomSheetDialog.dismiss()
-            })
+        bottomSheetView.findViewById<View>(R.id.bs_goToLocation).setOnClickListener {
+            when (TAB_CONTROL) {
+                "paylasilanlar" -> goToLocationFromShared(postModel = postModel)
+                "kaydedilenler" -> goToLocationFromSaved(postModel = postModel)
+            }
+            bottomSheetDialog.dismiss()
+        }
 
         // Remove
         bottomSheetView.findViewById<View>(R.id.bs_remove)
-            .setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View) {
-                    when (TAB_CONTROL) {
-                        "paylasilanlar" -> {
-                            viewModel.removePostFromShared(
-                                positionValue = POSITION_VALUE
-                            )
-                            viewModel.clearList()
-                            viewModel.pullTheSharedOnMyAccount()
-                            binding.recyclerViewAccount.scrollToPosition(0)
-                        }
-                        "kaydedilenler" -> {
-                            viewModel.removePostFromSaved(
-                                positionValue = POSITION_VALUE
-                            )
-                            viewModel.clearList()
-                            viewModel.pullTheRecordedOnMyAccount()
-                            binding.recyclerViewAccount.scrollToPosition(0)
-                        }
+            .setOnClickListener {
+                when (TAB_CONTROL) {
+                    "paylasilanlar" -> {
+                        viewModel.removePostFromShared(
+                            positionValue = POSITION_VALUE
+                        )
+                        viewModel.clearList()
+                        viewModel.pullTheSharedOnMyAccount()
+                        binding.recyclerViewAccount.scrollToPosition(0)
                     }
-                    bottomSheetDialog.dismiss()
+                    "kaydedilenler" -> {
+                        viewModel.removePostFromSaved(
+                            positionValue = POSITION_VALUE
+                        )
+                        viewModel.clearList()
+                        viewModel.pullTheRecordedOnMyAccount()
+                        binding.recyclerViewAccount.scrollToPosition(0)
+                    }
                 }
-            })
+                bottomSheetDialog.dismiss()
+            }
 
         // cancel
         bottomSheetView.findViewById<View>(R.id.bs_cancel)
-            .setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View) {
-                    bottomSheetDialog.dismiss()
-                }
-            })
+            .setOnClickListener { bottomSheetDialog.dismiss() }
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
     }

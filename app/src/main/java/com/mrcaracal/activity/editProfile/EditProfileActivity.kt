@@ -85,6 +85,8 @@ class EditProfileActivity : AppCompatActivity() {
                         editProfileViewState.userBio
                     )
                 }
+                else -> {
+                }
             }
         }
     }

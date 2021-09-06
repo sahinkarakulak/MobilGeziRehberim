@@ -73,7 +73,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         recyclerAdapterStructure = RecyclerAdapterStructure(recyclerViewClickInterface = this)
     }
 
-    fun observeHomePageState() {
+    private fun observeHomePageState() {
         viewModel.homePageState.observe(viewLifecycleOwner) { homePageViewState ->
             when (homePageViewState) {
                 is HomePageViewState.OpenEmail -> {
@@ -94,6 +94,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
                     recyclerAdapterStructure.notifyDataSetChanged()
                     binding.recyclerView.adapter = recyclerAdapterStructure
                 }
+                else -> {}
             }
         }
     }
@@ -114,7 +115,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
     override fun onLongItemClick(postModel: PostModel) {
 
-        var postTags = viewModel.showTagsOnPost(postModel = postModel)
+        val postTags = viewModel.showTagsOnPost(postModel = postModel)
 
         DialogViewCustomize.dialogViewCustomize(
             activity = activity,
@@ -135,11 +136,10 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         title.text = postModel.placeName
 
         // Save Post
-        bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
-            View.OnClickListener {
-                viewModel.saveOperations(postModel = postModel)
-                bottomSheetDialog.dismiss()
-            })
+        bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener {
+            viewModel.saveOperations(postModel = postModel)
+            bottomSheetDialog.dismiss()
+        }
 
         // Go to locaiton
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation)

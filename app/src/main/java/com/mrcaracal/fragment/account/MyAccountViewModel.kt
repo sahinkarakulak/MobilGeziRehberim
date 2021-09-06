@@ -10,16 +10,13 @@ import com.google.firebase.firestore.Query
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.utils.ConstantsFirebase
-import com.mrcaracal.utils.ShowTags
+import com.mrcaracal.utils.FirebaseSimilarActions
 
 class MyAccountViewModel : ViewModel() {
     var myAccountState: MutableLiveData<MyAccountViewState> = MutableLiveData<MyAccountViewState>()
-
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private var firebaseUser: FirebaseUser = firebaseAuth.currentUser!!
     private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-
-
     private val postModelsList: ArrayList<PostModel> = arrayListOf()
 
     fun getPostData() {
@@ -140,9 +137,7 @@ class MyAccountViewModel : ViewModel() {
             }
     }
 
-    fun removePostFromSaved(
-        positionValue: Int
-    ) {
+    fun removePostFromSaved(positionValue: Int) {
         firebaseFirestore
             .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
             .document((firebaseUser.email)!!)
@@ -159,7 +154,7 @@ class MyAccountViewModel : ViewModel() {
     }
 
     fun showTagsOnPost(postModel: PostModel, tabControl: String): String {
-        return ShowTags.showPostTagsForAccount(postModel = postModel, tabControl = tabControl)
+        return FirebaseSimilarActions.showPostTagsForAccount(postModel = postModel, tabControl = tabControl)
     }
 
 }

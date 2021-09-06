@@ -19,21 +19,15 @@ class EditProfileViewModel : ViewModel() {
     var editProfileViewState: MutableLiveData<EditProfileViewState> =
         MutableLiveData<EditProfileViewState>()
 
-    var firebaseUser: FirebaseUser? = null
-    var storageReference: StorageReference
-    lateinit var documentReference: DocumentReference
+    private var firebaseUser: FirebaseUser = FirebaseAuth.getInstance().currentUser!!
+    private var storageReference: StorageReference = FirebaseStorage.getInstance().getReference(ConstantsFirebase.STORAGE_NAME)
+    private lateinit var documentReference: DocumentReference
     lateinit var mImageUri: Uri
-
-    init {
-        firebaseUser = FirebaseAuth.getInstance().currentUser
-        storageReference =
-            FirebaseStorage.getInstance().getReference(ConstantsFirebase.STORAGE_NAME)
-    }
 
     fun updateUser(u_name: String, u_bio: String) {
         val documentReference2 = FirebaseFirestore.getInstance()
             .collection(ConstantsFirebase.FIREBASE_COLLECTION_NAME)
-            .document(firebaseUser?.email!!)
+            .document(firebaseUser.email!!)
         val currentDatas: MutableMap<String, Any> = HashMap()
         currentDatas[ConstantsFirebase.FIREBASE_DOC_VAL_USERNAME] = u_name
         currentDatas[ConstantsFirebase.FIREBASE_DOC_VAL_BIO] = u_bio
@@ -49,13 +43,13 @@ class EditProfileViewModel : ViewModel() {
     }
 
     fun getProfileData() {
-        editProfileViewState.value = firebaseUser?.email?.let {
+        editProfileViewState.value = firebaseUser.email?.let {
             EditProfileViewState.BindingTvUserEmailChangeText(it)
         }
         documentReference = FirebaseFirestore
             .getInstance()
             .collection(ConstantsFirebase.FIREBASE_COLLECTION_NAME)
-            .document(firebaseUser?.email!!)
+            .document(firebaseUser.email!!)
         documentReference
             .get()
             .addOnCompleteListener { task ->
@@ -79,7 +73,7 @@ class EditProfileViewModel : ViewModel() {
             }
     }
 
-    fun getFileExtension(uri: Uri, contentResolver: ContentResolver): String? {
+    private fun getFileExtension(uri: Uri, contentResolver: ContentResolver): String? {
         editProfileViewState.value = EditProfileViewState.GetContentResolver
         val contentResolver = contentResolver
         val mimeTypeMap = MimeTypeMap.getSingleton()
@@ -87,7 +81,7 @@ class EditProfileViewModel : ViewModel() {
     }
 
     fun uploadImage(contentResolver: ContentResolver) {
-        val storageReference2 = storageReference.child(firebaseUser!!.email!!).child(
+        val storageReference2 = storageReference.child(firebaseUser.email!!).child(
             System.currentTimeMillis()
                 .toString() + "." + getFileExtension(
                 uri = mImageUri,
@@ -111,7 +105,7 @@ class EditProfileViewModel : ViewModel() {
                 hasmap[ConstantsFirebase.FIREBASE_DOC_VAL_USERPIC] = "" + myUrl
                 FirebaseFirestore.getInstance()
                     .collection(ConstantsFirebase.FIREBASE_COLLECTION_NAME)
-                    .document(firebaseUser?.email!!)
+                    .document(firebaseUser.email!!)
                     .update(hasmap)
                     .addOnSuccessListener {
                         documentReference

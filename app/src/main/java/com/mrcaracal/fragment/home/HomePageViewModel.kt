@@ -13,11 +13,10 @@ import com.mrcaracal.fragment.model.PostModelProvider
 import com.mrcaracal.modul.Posts
 import com.mrcaracal.modul.UserAccountStore
 import com.mrcaracal.utils.ConstantsFirebase
-import com.mrcaracal.utils.ShowTags
+import com.mrcaracal.utils.FirebaseSimilarActions
 
 class HomePageViewModel : ViewModel() {
     var homePageState: MutableLiveData<HomePageViewState> = MutableLiveData<HomePageViewState>()
-
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private var firebaseUser: FirebaseUser = firebaseAuth.currentUser!!
     private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -52,17 +51,17 @@ class HomePageViewModel : ViewModel() {
             homePageState.value = HomePageViewState.ShowAlreadySharedToastMessage
         } else {
             val mGonderiler = Posts(
-                gonderiID = postModel.postId,
-                kullaniciEposta = postModel.userEmail,
-                resimAdresi = postModel.pictureLink,
-                yerIsmi = postModel.placeName,
-                konum = postModel.location,
-                adres = postModel.address,
-                sehir = postModel.city,
-                yorum = postModel.comment,
-                postaKodu = postModel.postCode,
-                taglar = listOf(postModel.tag),
-                zaman = FieldValue.serverTimestamp()
+                postId = postModel.postId,
+                userEmail = postModel.userEmail,
+                pictureLink = postModel.pictureLink,
+                placeName = postModel.placeName,
+                location = postModel.location,
+                address = postModel.address,
+                city = postModel.city,
+                comment = postModel.comment,
+                postCode = postModel.postCode,
+                tags = listOf(postModel.tag),
+                time = FieldValue.serverTimestamp()
             )
             val documentReference = firebaseFirestore
                 .collection(ConstantsFirebase.COLLECTION_NAME_THEY_SAVED)
@@ -82,13 +81,11 @@ class HomePageViewModel : ViewModel() {
     }
 
     fun showTagsOnPost(postModel: PostModel): String {
-        return ShowTags.showPostTags(postModel = postModel)
+        return FirebaseSimilarActions.showPostTags(postModel = postModel)
     }
 
     fun saveOperations(postModel: PostModel) {
-        firebaseUser.let {
-            savePostOnHomePage(postModel = postModel)
-        }
+        savePostOnHomePage(postModel = postModel)
     }
 
     fun reportPostFromHomePage(postModel: PostModel) {

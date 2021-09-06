@@ -13,7 +13,7 @@ import com.mrcaracal.mobilgezirehberim.login.Login
 class SplashScreen : AppCompatActivity() {
 
     private lateinit var txt_giris_yazisi: TextView
-    var animation: Animation? = null
+    private var animation: Animation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

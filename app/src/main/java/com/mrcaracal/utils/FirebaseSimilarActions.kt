@@ -1,8 +1,11 @@
 package com.mrcaracal.utils
 
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.mrcaracal.fragment.model.PostModel
+import com.mrcaracal.modul.Posts
 
-object ShowTags {
+object FirebaseSimilarActions {
 
     fun showPostTags(postModel: PostModel): String {
         var tagsToReturn = ""
@@ -40,4 +43,5 @@ object ShowTags {
         }
         return tagsToReturn
     }
+
 }

@@ -69,8 +69,8 @@ class Login : AppCompatActivity() {
     }
 
     private fun rememberMe() {
-        val rememberInfo = GET.getBoolean("boolean_key", false)
-        if (rememberInfo == true) {
+        val rememberInfo = this.GET.getBoolean("boolean_key", false)
+        if (rememberInfo) {
             binding.chbLoginInfosRemember.isChecked = true
             binding.edtEmailLogin.setText(GET.getString("keyPosta", ""))
             binding.edtPassLogin.setText(GET.getString("keyParola", ""))
@@ -102,9 +102,9 @@ class Login : AppCompatActivity() {
         }
     }
 
-    fun passHideAndShow() {
+    private fun passHideAndShow() {
         binding.imgPassHideShow.setOnClickListener {
-            if (hide_show == false) {
+            if (!hide_show) {
                 binding.edtPassLogin.inputType = InputType.TYPE_CLASS_TEXT
                 binding.edtPassLogin.transformationMethod = null
                 hide_show = true
@@ -123,7 +123,7 @@ class Login : AppCompatActivity() {
         passHideAndShow()
         binding.chbLoginInfosRemember.setOnClickListener {
             status = binding.chbLoginInfosRemember.isChecked
-            if (status == true) {
+            if (status) {
                 SET.putBoolean("boolean_key", true)
                 SET.putString("keyPosta", binding.edtEmailLogin.text.toString())
                 SET.putString("keyParola", binding.edtPassLogin.text.toString())

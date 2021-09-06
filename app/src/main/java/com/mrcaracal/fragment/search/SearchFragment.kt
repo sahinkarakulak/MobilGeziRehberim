@@ -99,8 +99,8 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         recyclerAdapterStructure = RecyclerAdapterStructure(recyclerViewClickInterface = this)
     }
 
-    fun initClickListener() {
-        binding.imgFinfByLocation.setOnClickListener(View.OnClickListener {
+    private fun initClickListener() {
+        binding.imgFinfByLocation.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     (activity)!!,
                     Manifest.permission.ACCESS_FINE_LOCATION
@@ -116,10 +116,10 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                 binding.recyclerViewSearch.scrollToPosition(0)
                 listNearbyPlaces()
             }
-        })
+        }
     }
 
-    fun initSelectListener() {
+    private fun initSelectListener() {
         binding.spCities.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
@@ -156,18 +156,18 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                     searchViewVisibilityState()
                     keyValue = "yerIsmi"
                 }
-                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[1].toString())) {
+                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[1])) {
                     searchViewVisibilityState()
                     keyValue = "taglar"
                 }
-                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[2].toString())) {
+                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[2])) {
                     binding.edtKeyValueSearch.visibility = View.INVISIBLE
                     binding.spCities.visibility = View.VISIBLE
                     viewModel.clearList()
                     binding.recyclerViewSearch.scrollToPosition(0)
                     keyValue = "sehir"
                 }
-                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[3].toString())) {
+                if ((parent.selectedItem.toString() == UserAccountStore.accordingToWhat[3])) {
                     searchViewVisibilityState()
                     keyValue = "kullaniciEposta"
                 }
@@ -184,7 +184,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         binding.recyclerViewSearch.scrollToPosition(0)
     }
 
-    fun initChangedListener() {
+    private fun initChangedListener() {
         binding.edtKeyValueSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -206,7 +206,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         })
     }
 
-    fun initSpinnerMethod() {
+    private fun initSpinnerMethod() {
         sp_adapterAccordingToWhat =
             ArrayAdapter(
                 (activity)!!,
@@ -217,15 +217,15 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         binding.spSearchByWhat.adapter = sp_adapterAccordingToWhat
     }
 
-    fun initSpinnerCity() {
-        val cities_al = Cities()
+    private fun initSpinnerCity() {
+        val citiesAl = Cities()
         sp_adapterCities =
-            ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, cities_al.cities)
+            ArrayAdapter((activity)!!, android.R.layout.simple_spinner_item, citiesAl.cities)
         sp_adapterCities.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spCities.adapter = sp_adapterCities
     }
 
-    fun observeSearchState() {
+    private fun observeSearchState() {
         viewModel.searchState.observe(viewLifecycleOwner) { searchViewState ->
             when (searchViewState) {
                 is SearchViewState.ShowAlreadySharedToastMessage -> {
@@ -253,7 +253,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         }
     }
 
-    fun listNearbyPlaces() {
+    private fun listNearbyPlaces() {
         val locationRequest = LocationRequest()
         locationRequest.interval = 10000
         locationRequest.fastestInterval = 3000
@@ -284,7 +284,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                             val latitude = locationResult.locations[lastestLocationIndex].latitude
                             val longitude = locationResult.locations[lastestLocationIndex].longitude
                             val geocoder = Geocoder(activity, Locale.getDefault())
-                            var addressList: List<Address>
+                            val addressList: List<Address>
                             try {
                                 addressList = geocoder.getFromLocation(latitude, longitude, 1)
                                 if (addressList != null) {
@@ -323,7 +323,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
     }
 
     override fun onLongItemClick(postModel: PostModel) {
-        var postTags = viewModel.showTagsOnPost(postModel = postModel)
+        val postTags = viewModel.showTagsOnPost(postModel = postModel)
         DialogViewCustomize.dialogViewCustomize(
             activity = activity,
             container = container,
@@ -341,37 +341,28 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
             )
 
         // Save Post
-        bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener(
-            View.OnClickListener {
-                viewModel.savePostOnSearchFragment(postModel = postModel)
-                bottomSheetDialog.dismiss()
-            })
+        bottomSheetView.findViewById<View>(R.id.bs_postSave).setOnClickListener {
+            viewModel.savePostOnSearchFragment(postModel = postModel)
+            bottomSheetDialog.dismiss()
+        }
 
         // Go To Location
         bottomSheetView.findViewById<View>(R.id.bs_goToLocation)
-            .setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View) {
-                    goToLocationOperations(postModel = postModel)
-                    bottomSheetDialog.dismiss()
-                }
-            })
+            .setOnClickListener {
+                goToLocationOperations(postModel = postModel)
+                bottomSheetDialog.dismiss()
+            }
 
         // Report Post
         bottomSheetView.findViewById<View>(R.id.bs_reportAComplaint)
-            .setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View) {
-                    viewModel.reportPostFromSearchFragment(postModel = postModel)
-                    bottomSheetDialog.dismiss()
-                }
-            })
+            .setOnClickListener {
+                viewModel.reportPostFromSearchFragment(postModel = postModel)
+                bottomSheetDialog.dismiss()
+            }
 
         // Cancel
         bottomSheetView.findViewById<View>(R.id.bs_cancel)
-            .setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View) {
-                    bottomSheetDialog.dismiss()
-                }
-            })
+            .setOnClickListener { bottomSheetDialog.dismiss() }
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
     }
@@ -382,7 +373,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_LOCATION_PERMISSON && grantResults.size > 0) {
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSON && grantResults.isNotEmpty()) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //listNearbyPlaces()
                 activity?.let {
@@ -400,7 +391,6 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
     }
 
     companion object {
-        private val TAG = "SearchFragment"
-        private val REQUEST_CODE_LOCATION_PERMISSON = 203
+        private const val REQUEST_CODE_LOCATION_PERMISSON = 203
     }
 }

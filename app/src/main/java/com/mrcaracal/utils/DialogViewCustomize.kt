@@ -29,12 +29,12 @@ object DialogViewCustomize {
         val mBuilder = AlertDialog.Builder(activity)
             .setView(mDialogView)
 
-        var title = mDialogView.findViewById<TextView>(R.id.dw_title)
-        var comment = mDialogView.findViewById<TextView>(R.id.dw_comment)
-        var sharing = mDialogView.findViewById<TextView>(R.id.dw_sharing)
-        var date = mDialogView.findViewById<TextView>(R.id.dw_date)
-        var addres = mDialogView.findViewById<TextView>(R.id.dw_addres)
-        var labels = mDialogView.findViewById<TextView>(R.id.dw_labels)
+        val title = mDialogView.findViewById<TextView>(R.id.dw_title)
+        val comment = mDialogView.findViewById<TextView>(R.id.dw_comment)
+        val sharing = mDialogView.findViewById<TextView>(R.id.dw_sharing)
+        val date = mDialogView.findViewById<TextView>(R.id.dw_date)
+        val addres = mDialogView.findViewById<TextView>(R.id.dw_addres)
+        val labels = mDialogView.findViewById<TextView>(R.id.dw_labels)
         title.text = postModel.placeName
         comment.text = postModel.comment
         sharing.text = postModel.userEmail

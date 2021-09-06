@@ -68,21 +68,21 @@ class ShareFragment : Fragment() {
     }
 
     fun initClickListeners() {
-        binding.imgSharePictureSelected.setOnClickListener(View.OnClickListener {
+        binding.imgSharePictureSelected.setOnClickListener {
             choosePictureFromGallery()
-        })
+        }
 
-        binding.btnAddTag.setOnClickListener(View.OnClickListener {
+        binding.btnAddTag.setOnClickListener {
             createTag()
-        })
+        }
 
-        binding.selectLocation.setOnClickListener(View.OnClickListener {
+        binding.selectLocation.setOnClickListener {
             startActivity(Intent(activity, SelectMapActivity::class.java))
-        })
+        }
 
-        binding.btnShareSend.setOnClickListener(View.OnClickListener {
+        binding.btnShareSend.setOnClickListener {
             shareSend()
-        })
+        }
     }
 
     private fun observeContactState() {
@@ -172,7 +172,7 @@ class ShareFragment : Fragment() {
         grantResults: IntArray
     ) {
         if (requestCode == 1) {
-            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 val intentGallery =
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 startActivityForResult(intentGallery, 2)

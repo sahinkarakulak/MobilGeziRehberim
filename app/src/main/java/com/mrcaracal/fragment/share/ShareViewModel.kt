@@ -25,8 +25,8 @@ class ShareViewModel : ViewModel() {
     private lateinit var picturePath: Uri
 
     var postCode: String? = null
-    lateinit var postID: String
-    lateinit var tags: List<String>
+    private lateinit var postID: String
+    private lateinit var tags: List<String>
 
     fun shareThePost(
         getPlaceName: String,
@@ -64,17 +64,17 @@ class ShareViewModel : ViewModel() {
                                 val uuid1 = UUID.randomUUID()
                                 postID = "" + uuid1
                                 mGonderiler = Posts(
-                                    gonderiID = postID,
-                                    kullaniciEposta = userEmail,
-                                    resimAdresi = pictureLink,
-                                    yerIsmi = placeName,
-                                    konum = location,
-                                    adres = address,
-                                    sehir = city,
-                                    yorum = comment,
-                                    postaKodu = postCode,
-                                    taglar = tags,
-                                    zaman = FieldValue.serverTimestamp()
+                                    postId = postID,
+                                    userEmail = userEmail,
+                                    pictureLink = pictureLink,
+                                    placeName = placeName,
+                                    location = location,
+                                    address = address,
+                                    city = city,
+                                    comment = comment,
+                                    postCode = postCode,
+                                    tags = tags,
+                                    time = FieldValue.serverTimestamp()
                                 )
                                 val documentReference1 = firebaseFirestore
                                     .collection(ConstantsFirebase.COLLECTION_NAME_SHARED)
@@ -124,7 +124,7 @@ class ShareViewModel : ViewModel() {
         var tagsToReturn = ""
         for (tags in tagsTakenByEditText) {
             numberOfTags++
-            this.tags = Arrays.asList(*tagsTakenByEditText)
+            this.tags = listOf(*tagsTakenByEditText)
             tagsToReturn += "#$tags   "
             shareState.value = ShareViewState.GetTags(tagsToReturn)
             if (numberOfTags == 5) break

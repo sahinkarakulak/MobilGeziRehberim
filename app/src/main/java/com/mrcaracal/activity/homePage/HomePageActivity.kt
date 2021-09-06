@@ -71,6 +71,7 @@ class HomePageActivity : AppCompatActivity() {
         viewModel.homePageActivityState.observe(this) { homePageActivityViewState ->
             when (homePageActivityViewState) {
 
+                else -> {}
             }
         }
     }
