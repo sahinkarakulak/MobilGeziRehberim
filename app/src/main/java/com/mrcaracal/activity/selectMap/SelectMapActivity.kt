@@ -8,6 +8,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -24,9 +25,12 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsMap
 import java.io.IOException
 import java.util.*
+
+private const val TAG = "SelectMapActivity"
 
 class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListener {
     private lateinit var viewModel: SelectMapViewModel
@@ -64,20 +68,39 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            //Location permission already granted
+            //Get user location
+            locationManagerAndListener()
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                10000,
+                5f,
+                locationListener
+            )
+        } else {
+            //Request location permission
+            checkLocationPermission()
+        }
+    }
+
+    private fun locationManagerAndListener(){
         locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
         locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
                 latitude = location.latitude.toFloat()
                 longitude = location.longitude.toFloat()
 
-                val userLatLng = LatLng(location.latitude, location.longitude)
-                mMap.clear()
-                mMap.addMarker(
-                    MarkerOptions().position(userLatLng).title(getString(R.string.my_locaiton))
-                )
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15f))
+                toast(location.latitude.toString())
 
-
+                findLocation()
                 val geocoder = Geocoder(applicationContext, Locale.getDefault())
                 address = ""
                 try {
@@ -99,7 +122,7 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
             }
 
             override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-                super.onStatusChanged(provider, status, extras)
+                provider?.let { toast(it) }
             }
 
             override fun onProviderDisabled(provider: String) {
@@ -110,33 +133,24 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
                 toast(provider)
             }
         }
-
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                4
-            )
-        } else {
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                15000,
-                3f,
-                locationListener
-            )
-        }
     }
+
+    private fun checkLocationPermission() {
+        ActivityCompat.requestPermissions(
+            this, arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ), Constants.LOCATION_PERMISSON_CODE
+        )
+    }
+
 
     private fun findLocation() {
         val location = LatLng(
             latitude.toDouble(), longitude.toDouble()
         )
         mMap.addMarker(MarkerOptions().position(location).title(getString(R.string.my_locaiton)))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
         mMap.setOnMapClickListener(this)
     }
 
@@ -175,7 +189,7 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
     ) {
 
         if (grantResults.isNotEmpty()) {
-            if (requestCode == 4) {
+            if (requestCode == Constants.LOCATION_PERMISSON_CODE) {
                 if (ContextCompat.checkSelfPermission(
                         this,
                         Manifest.permission.ACCESS_FINE_LOCATION
@@ -184,8 +198,8 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
                 ) {
                     locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
-                        15000,
-                        3f,
+                        10000,
+                        5f,
                         locationListener
                     )
                 }
