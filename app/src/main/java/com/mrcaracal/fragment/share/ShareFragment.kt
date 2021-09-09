@@ -31,9 +31,9 @@ class ShareFragment : Fragment() {
     private var _binding: FragShareBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var GET: SharedPreferences
-    lateinit var SET: SharedPreferences.Editor
-    lateinit var addres: String
+    private lateinit var GET: SharedPreferences
+    private lateinit var SET: SharedPreferences.Editor
+    private lateinit var addres: String
     lateinit var postCode: String
 
     var latitude = 0f
@@ -59,7 +59,6 @@ class ShareFragment : Fragment() {
         initViewModel()
         initClickListeners()
         observeContactState()
-
         return view
     }
 

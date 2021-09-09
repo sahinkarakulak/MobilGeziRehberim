@@ -23,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.common.collect.MapMaker
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.utils.Constants
@@ -32,7 +33,7 @@ import java.util.*
 
 private const val TAG = "SelectMapActivity"
 
-class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickListener {
+class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var viewModel: SelectMapViewModel
 
     private lateinit var locationManager: LocationManager
@@ -41,7 +42,7 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
     var latitude = 0.0.toFloat()
     var longitude = 0.0.toFloat()
     var address = ""
-    lateinit var postCode: String
+    var postCode: String = ""
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
@@ -97,9 +98,6 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
             override fun onLocationChanged(location: Location) {
                 latitude = location.latitude.toFloat()
                 longitude = location.longitude.toFloat()
-
-                toast(location.latitude.toString())
-
                 findLocation()
                 val geocoder = Geocoder(applicationContext, Locale.getDefault())
                 address = ""
@@ -149,9 +147,14 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         val location = LatLng(
             latitude.toDouble(), longitude.toDouble()
         )
+        mMap.clear()
         mMap.addMarker(MarkerOptions().position(location).title(getString(R.string.my_locaiton)))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
-        mMap.setOnMapClickListener(this)
+        mMap.setOnMapClickListener { latlng ->
+            locationUserClicked(latLng = latlng)
+            Log.i(TAG, "findLocation: " + latlng.latitude.toString())
+            Log.i(TAG, "findLocation: " + latlng.longitude.toString())
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -187,43 +190,26 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-
-        if (grantResults.isNotEmpty()) {
-            if (requestCode == Constants.LOCATION_PERMISSON_CODE) {
-                if (ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    )
-                    == PackageManager.PERMISSION_GRANTED
-                ) {
-                    locationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        10000,
-                        5f,
-                        locationListener
-                    )
-                }
-            }
-        }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    override fun onMapClick(latLng: LatLng) {
+    private fun locationUserClicked(latLng: LatLng){
         latitude = latLng.latitude.toFloat()
         longitude = latLng.longitude.toFloat()
         val geocoder = Geocoder(applicationContext, Locale.getDefault())
         address = ""
         try {
             val addressList = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
-            if (addressList != null && addressList.size > 0) {
+            if (addressList != null && addressList.size > 0){
                 address += addressList[0].getAddressLine(0)
                 postCode = addressList[0].postalCode
+            }else{
+                Log.i(TAG, "locationUserClicked: Else runned!")
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
+        }catch (exception : Exception){
+            exception.printStackTrace()
         }
-
-        marker.remove()
+        mMap.clear()
         marker = mMap.addMarker(
             MarkerOptions()
                 .position(latLng)
@@ -239,7 +225,7 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback, OnMapClickLis
         )
     }
 
-    private fun processSet(latitude: Float, longitude: Float, address: String, postCode: String) {
+    private fun processSet(latitude: Float, longitude: Float, address: String, postCode: String?) {
         SET.putFloat(ConstantsMap.LATITUDE, latitude)
         SET.putFloat(ConstantsMap.LONGITUDE, longitude)
         SET.putString(ConstantsMap.ADDRESS, address)
