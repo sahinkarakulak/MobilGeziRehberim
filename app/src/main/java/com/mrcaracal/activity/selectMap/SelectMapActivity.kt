@@ -12,21 +12,17 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.common.collect.MapMaker
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
-import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsMap
 import java.io.IOException
 import java.util.*
@@ -71,11 +67,9 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-            == PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             //Location permission already granted
             //Get user location
@@ -88,11 +82,11 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
             )
         } else {
             //Request location permission
-            checkLocationPermission()
+            viewModel.checkLocationPermission(activity = this)
         }
     }
 
-    private fun locationManagerAndListener(){
+    private fun locationManagerAndListener() {
         locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
         locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
@@ -132,16 +126,6 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-
-    private fun checkLocationPermission() {
-        ActivityCompat.requestPermissions(
-            this, arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ), Constants.LOCATION_PERMISSON_CODE
-        )
-    }
-
 
     private fun findLocation() {
         val location = LatLng(
@@ -193,20 +177,20 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    private fun locationUserClicked(latLng: LatLng){
+    private fun locationUserClicked(latLng: LatLng) {
         latitude = latLng.latitude.toFloat()
         longitude = latLng.longitude.toFloat()
         val geocoder = Geocoder(applicationContext, Locale.getDefault())
         address = ""
         try {
             val addressList = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
-            if (addressList != null && addressList.size > 0){
+            if (addressList != null && addressList.size > 0) {
                 address += addressList[0].getAddressLine(0)
                 postCode = addressList[0].postalCode
-            }else{
-                Log.i(TAG, "locationUserClicked: Else runned!")
+            } else {
+                Log.i(TAG, "locationUserClicked: Else worked!")
             }
-        }catch (exception : Exception){
+        } catch (exception: Exception) {
             exception.printStackTrace()
         }
         mMap.clear()
@@ -216,7 +200,7 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
                 .title(getString(R.string.selected_new_location))
                 .draggable(true)
                 .visible(true)
-        )
+        )!!
         processSet(
             latitude = latitude,
             longitude = longitude,
