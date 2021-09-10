@@ -42,6 +42,7 @@
     <string name="my_account">Hesabım</string>
     <string name="reset_pass">Parola Sıfırla</string>
     <string name="my_locaiton">Konumum</string>
+    <string name="gps_on">GPS Açık</string>
     <string name="map">Harita</string>
     <string name="map_key">harita</string>
     <string name="selected_new_location">Seçilen Yeni Konum</string>

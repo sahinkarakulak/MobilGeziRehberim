@@ -1,8 +1,15 @@
 package com.mrcaracal.fragment.share
 
+import android.app.Activity
+import android.content.Context
+import android.content.IntentSender
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
@@ -10,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.mrcaracal.modul.Posts
+import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsFirebase
 import java.util.*
 
@@ -139,11 +147,54 @@ class ShareViewModel : ViewModel() {
     fun sendPostCode(postCode: String) {
         this.postCode = postCode
     }
+
+    fun turnOnOrOffLocation(context: Context) {
+        val locationRequest = LocationRequest.create()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 5000
+        locationRequest.fastestInterval = 2000
+
+        val builder: LocationSettingsRequest.Builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+        builder.setAlwaysShow(true)
+
+        val result: Task<LocationSettingsResponse> = LocationServices.getSettingsClient(context)
+            .checkLocationSettings(builder.build())
+
+        result.addOnCompleteListener { task ->
+            try {
+                var response: LocationSettingsResponse = task.getResult(ApiException::class.java)
+                shareState.value = ShareViewState.ShowToastMessage
+            } catch (exception: ApiException) {
+                when (exception.statusCode) {
+                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
+                        try {
+                            val resolvableApiException: ResolvableApiException =
+                                exception as ResolvableApiException
+                            resolvableApiException.startResolutionForResult(
+                                context as Activity,
+                                Constants.REQUEST_CHECK_SETTING
+                            )
+                        } catch (ex: IntentSender.SendIntentException) {
+                            //
+                        }
+                    }
+
+                    LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+                        //
+                    }
+                }
+            }
+        }
+
+    }
+
 }
 
 sealed class ShareViewState {
     object ShowToastMessageAndBtnState : ShareViewState()
     object OpenHomePage : ShareViewState()
+    object ShowToastMessage : ShareViewState()
 
     data class ShowExceptionAndBtnState(val exception: Exception) : ShareViewState()
     data class GetTags(val tags: String) : ShareViewState()

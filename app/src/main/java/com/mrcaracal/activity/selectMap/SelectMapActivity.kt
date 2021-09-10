@@ -21,7 +21,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.utils.ConstantsMap
 import java.io.IOException
@@ -31,7 +30,6 @@ private const val TAG = "SelectMapActivity"
 
 class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var viewModel: SelectMapViewModel
-
     private lateinit var locationManager: LocationManager
     private lateinit var locationListener: LocationListener
 
@@ -100,7 +98,11 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
                         geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
                     if (addressList != null && addressList.size > 0) {
                         address += addressList[0].getAddressLine(0)
-                        postCode = addressList[0].postalCode
+                        if (addressList[0].postalCode != null) {
+                            postCode = addressList[0].postalCode
+                            Log.i(TAG, "onLocationChanged: $postCode")
+                        } else
+                            postCode = ""
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -114,15 +116,15 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
             override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-                provider?.let { toast(it) }
+                //provider?.let { toast(it) }
             }
 
             override fun onProviderDisabled(provider: String) {
-                toast(provider)
+                //toast(provider)
             }
 
             override fun onProviderEnabled(provider: String) {
-                toast(provider)
+                //toast(provider)
             }
         }
     }
@@ -186,9 +188,11 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
             val addressList = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
             if (addressList != null && addressList.size > 0) {
                 address += addressList[0].getAddressLine(0)
-                postCode = addressList[0].postalCode
-            } else {
-                Log.i(TAG, "locationUserClicked: Else worked!")
+                if (addressList[0].postalCode != null) {
+                    postCode = addressList[0].postalCode
+                    Log.i(TAG, "locationUserClicked: $postCode")
+                } else
+                    postCode = ""
             }
         } catch (exception: Exception) {
             exception.printStackTrace()

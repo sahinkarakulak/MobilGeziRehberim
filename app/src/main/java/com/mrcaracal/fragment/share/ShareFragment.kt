@@ -21,12 +21,10 @@ import com.mrcaracal.activity.selectMap.SelectMapActivity
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragShareBinding
+import com.mrcaracal.utils.Constants
 import com.squareup.picasso.Picasso
 
-private const val TAG = "ShareFragment"
-
 class ShareFragment : Fragment() {
-
     private lateinit var viewModel: ShareViewModel
     private var _binding: FragShareBinding? = null
     private val binding get() = _binding!!
@@ -76,6 +74,7 @@ class ShareFragment : Fragment() {
         }
 
         binding.selectLocation.setOnClickListener {
+            viewModel.turnOnOrOffLocation(context = requireContext())
             startActivity(Intent(activity, SelectMapActivity::class.java))
         }
 
@@ -88,10 +87,13 @@ class ShareFragment : Fragment() {
         viewModel.shareState.observe(viewLifecycleOwner) { shareViewState ->
             when (shareViewState) {
                 is ShareViewState.ShowToastMessageAndBtnState -> {
-                    activity?.let { toast(it, getString(R.string.fill_in_the_required_fields)) }
+                    toast(requireContext(), getString(R.string.fill_in_the_required_fields))
                 }
                 is ShareViewState.ShowExceptionAndBtnState -> {
-                    context?.let { toast(it, shareViewState.exception.toString()) }
+                    toast(requireContext(), shareViewState.exception.toString())
+                }
+                is ShareViewState.ShowToastMessage -> {
+                    toast(requireContext(), getString(R.string.gps_on))
                 }
                 is ShareViewState.OpenHomePage -> {
                     val intent =
@@ -162,7 +164,6 @@ class ShareFragment : Fragment() {
         binding.edtLocation.setText("$latitude,$longitude")
         binding.edtAddres.setText("" + addres)
         viewModel.sendPostCode(postCode = postCode)
-
     }
 
     override fun onRequestPermissionsResult(
@@ -185,6 +186,18 @@ class ShareFragment : Fragment() {
             picturePath = data.data!!
             viewModel.imagePathForPostToBeShared(picturePath = picturePath)
         }
+
+        if (requestCode == Constants.REQUEST_CHECK_SETTING) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    toast(requireContext(), "GPS is turned on")
+                }
+                Activity.RESULT_CANCELED -> {
+                    toast(requireContext(), "GPS is required to be turned on")
+                }
+            }
+        }
+
         super.onActivityResult(requestCode, resultCode, data)
     }
 
