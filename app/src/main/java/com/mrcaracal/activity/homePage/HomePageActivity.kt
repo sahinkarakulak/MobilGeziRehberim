@@ -12,10 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mrcaracal.activity.contact.ContactActivity
 import com.mrcaracal.extensions.toast
-import com.mrcaracal.fragment.account.MyAccountFragment
 import com.mrcaracal.fragment.home.HomePageFragment
-import com.mrcaracal.fragment.search.SearchFragment
-import com.mrcaracal.fragment.share.ShareFragment
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.login.Login
 import com.mrcaracal.utils.SelectFragment
@@ -40,7 +37,8 @@ class HomePageActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomN)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             val selectedFragment = SelectFragment.selectFragment(menuItemId = menuItem.itemId)
-            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, selectedFragment).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, selectedFragment)
+                .commit()
             true
         }
     }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -35,26 +35,26 @@
 
             <EditText
                 android:id="@+id/edt_sharePlaceName"
-                android:background="@drawable/bg_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:background="@drawable/bg_edit_text"
                 android:hint="@string/paylas_yer_ismi"
                 android:inputType="text"
-                android:textSize="15sp"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/edt_shareComment"
-                android:background="@drawable/bg_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:background="@drawable/bg_edit_text"
                 android:gravity="top"
                 android:hint="@string/paylas_yorum"
-                android:textSize="15sp"
                 android:maxLength="4000"
-                android:maxLines="5"/>
+                android:maxLines="5"
+                android:textSize="15sp" />
 
             <!--<LinearLayout
                 android:layout_width="match_parent"
@@ -83,33 +83,33 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:layout_weight="1"
                     android:id="@+id/edt_shareTag"
-                    android:background="@drawable/bg_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_edit_text"
                     android:hint="@string/paylas_tag"
                     android:inputType="text"
-                    android:textSize="15sp"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:textSize="15sp" />
 
                 <Button
                     android:id="@+id/btn_addTag"
-                    android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
                     android:background="@drawable/bg_button"
-                    android:text="@string/paylas_ekle"/>
+                    android:text="@string/paylas_ekle" />
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_printTags"
-                android:text="@string/paylas_taglar"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/paylas_taglar" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -120,14 +120,14 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_contact_support_24"/>
+                    android:src="@drawable/ic_baseline_contact_support_24" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Bilinen son koordinat ve adres bilgisi aşağıdadır."
-                    android:padding="5dp"/>
+                    android:padding="5dp"
+                    android:text="Bilinen son koordinat ve adres bilgisi aşağıdadır." />
 
             </LinearLayout>
 
@@ -138,9 +138,9 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -150,43 +150,43 @@
 
                         <EditText
                             android:id="@+id/edt_location"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_edit_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_edit_text"
                             android:hint="@string/paylas_koordinat"
                             android:inputType="text"
-                            android:textSize="15sp"
                             android:maxLength="140"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:textSize="15sp" />
 
                         <EditText
                             android:id="@+id/edt_city"
-                            android:layout_weight="1"
-                            android:layout_marginLeft="5dp"
-                            android:background="@drawable/bg_edit_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
                             android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_edit_text"
                             android:hint="@string/paylas_sehir"
-                            android:textSize="15sp"
                             android:inputType="text"
                             android:maxLength="140"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:textSize="15sp" />
 
                     </LinearLayout>
 
                     <EditText
                         android:id="@+id/edt_addres"
-                        android:background="@drawable/bg_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/bg_edit_text"
                         android:hint="@string/paylas_adres"
-                        android:textSize="15sp"
                         android:inputType="text"
                         android:maxLength="140"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -195,8 +195,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
-                    android:text="@string/paylas_konum_sec"
-                    android:background="@drawable/bg_button"/>
+                    android:background="@drawable/bg_button"
+                    android:text="@string/paylas_konum_sec" />
 
             </LinearLayout>
 
@@ -214,3 +214,4 @@
     </ScrollView>
 
 </LinearLayout>
+
