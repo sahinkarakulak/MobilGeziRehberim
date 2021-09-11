@@ -7,34 +7,24 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 import com.mrcaracal.Interface.RecyclerViewClickInterface
-import com.mrcaracal.adapter.RecyclerAdapterStructure.GonderiHolder
+import com.mrcaracal.adapter.PostAdapter.PostHolder
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.squareup.picasso.Picasso
 
-class RecyclerAdapterStructure(
+class PostAdapter(
     val recyclerViewClickInterface: RecyclerViewClickInterface,
     var postModelList: ArrayList<PostModel> = arrayListOf()
-) : RecyclerView.Adapter<GonderiHolder>() {
+) : RecyclerView.Adapter<PostHolder>() {
 
-    lateinit var firebaseAuth: FirebaseAuth
-    lateinit var firebaseUser: FirebaseUser
-    private lateinit var firebaseFirestore: FirebaseFirestore
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GonderiHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.recycler_row, parent, false)
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser!!
-        firebaseFirestore = FirebaseFirestore.getInstance()
-        return GonderiHolder(view)
+        return PostHolder(view)
     }
 
-    override fun onBindViewHolder(holder: GonderiHolder, position: Int) {
+    override fun onBindViewHolder(holder: PostHolder, position: Int) {
 
         holder.row_placeName.text = postModelList[position].placeName
         holder.row_comment.text = postModelList[position].comment
@@ -60,7 +50,7 @@ class RecyclerAdapterStructure(
         return postModelList.size
     }
 
-    inner class GonderiHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class PostHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var row_picturePath: ImageView = itemView.findViewById(R.id.row_picturePath)
         var row_placeName: TextView = itemView.findViewById(R.id.row_placeName)
         var row_comment: TextView = itemView.findViewById(R.id.row_comment)

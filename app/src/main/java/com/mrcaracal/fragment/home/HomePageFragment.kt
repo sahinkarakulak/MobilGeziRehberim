@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
-import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.adapter.PostAdapter
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
@@ -35,7 +35,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
     var longitude = 0.0
     val postModelsList: ArrayList<PostModel> = arrayListOf()
     private lateinit var container: ViewGroup
-    lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
+    lateinit var postAdapter: PostAdapter
 
     private fun init() {
         GET = requireActivity().getSharedPreferences(
@@ -70,7 +70,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
     fun recyclerViewManager() {
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerAdapterStructure = RecyclerAdapterStructure(recyclerViewClickInterface = this)
+        postAdapter = PostAdapter(recyclerViewClickInterface = this)
     }
 
     private fun observeHomePageState() {
@@ -90,11 +90,12 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
                     toast(requireActivity(), getString(R.string.you_already_shared_this))
                 }
                 is HomePageViewState.SendRecyclerAdapter -> {
-                    recyclerAdapterStructure.postModelList = postModelsList
-                    recyclerAdapterStructure.notifyDataSetChanged()
-                    binding.recyclerView.adapter = recyclerAdapterStructure
+                    postAdapter.postModelList = postModelsList
+                    postAdapter.notifyDataSetChanged()
+                    binding.recyclerView.adapter = postAdapter
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }

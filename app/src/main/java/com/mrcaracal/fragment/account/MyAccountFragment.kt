@@ -15,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.activity.editProfile.EditProfileActivity
-import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.adapter.PostAdapter
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
@@ -30,7 +30,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     private var _binding: FragMyAccountBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
+    lateinit var postAdapter: PostAdapter
 
     var POSITION_VALUE = 0
     var TAB_CONTROL = "paylasilanlar"
@@ -77,7 +77,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
 
     fun recyclerViewManager() {
         binding.recyclerViewAccount.layoutManager = LinearLayoutManager(activity)
-        recyclerAdapterStructure = RecyclerAdapterStructure(recyclerViewClickInterface = this)
+        postAdapter = PostAdapter(recyclerViewClickInterface = this)
     }
 
     fun initClickListeners() {
@@ -123,9 +123,9 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                         .into(binding.imgProfileProfilePicture)
                 }
                 is MyAccountViewState.SendRecyclerAdapter -> {
-                    recyclerAdapterStructure.postModelList = myAccountViewState.postModelList
-                    recyclerAdapterStructure.notifyDataSetChanged()
-                    binding.recyclerViewAccount.adapter = recyclerAdapterStructure
+                    postAdapter.postModelList = myAccountViewState.postModelList
+                    postAdapter.notifyDataSetChanged()
+                    binding.recyclerViewAccount.adapter = postAdapter
                 }
             }
         }

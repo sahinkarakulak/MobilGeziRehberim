@@ -28,7 +28,7 @@ import com.google.android.gms.location.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
-import com.mrcaracal.adapter.RecyclerAdapterStructure
+import com.mrcaracal.adapter.PostAdapter
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
@@ -45,7 +45,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
     private lateinit var viewModel: SearchViewModel
     private var _binding: FragSearchBinding? = null
     private val binding get() = _binding!!
-    lateinit var recyclerAdapterStructure: RecyclerAdapterStructure
+    lateinit var postAdapter: PostAdapter
 
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
@@ -96,7 +96,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
 
     fun recyclerViewManager() {
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(activity)
-        recyclerAdapterStructure = RecyclerAdapterStructure(recyclerViewClickInterface = this)
+        postAdapter = PostAdapter(recyclerViewClickInterface = this)
     }
 
     private fun initClickListener() {
@@ -242,9 +242,9 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
                     }
                 }
                 is SearchViewState.SendRecyclerAdapter -> {
-                    recyclerAdapterStructure.postModelList = searchViewState.postModelsList
-                    recyclerAdapterStructure.notifyDataSetChanged()
-                    binding.recyclerViewSearch.adapter = recyclerAdapterStructure
+                    postAdapter.postModelList = searchViewState.postModelsList
+                    postAdapter.notifyDataSetChanged()
+                    binding.recyclerViewSearch.adapter = postAdapter
                 }
                 is SearchViewState.ShowExceptionMessage -> {
                     toast(container.context, searchViewState.exception.toString())
