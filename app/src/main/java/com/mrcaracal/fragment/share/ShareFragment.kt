@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.mrcaracal.activity.homePage.HomePageActivity
-import com.mrcaracal.activity.selectMap.SelectMapActivity
+import com.mrcaracal.utils.SelectFragment
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragShareBinding
@@ -74,8 +74,11 @@ class ShareFragment : Fragment() {
         }
 
         binding.selectLocation.setOnClickListener {
+            val selectedFragment = SelectFragment.selectFragment(Constants.SELECT_MAP_FRAGMENT)
+            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_layout, selectedFragment)
+                .commit()
             viewModel.turnOnOrOffLocation(context = requireContext())
-            startActivity(Intent(activity, SelectMapActivity::class.java))
+            //startActivity(Intent(activity, SelectMapActivity::class.java))
         }
 
         binding.btnShareSend.setOnClickListener {
