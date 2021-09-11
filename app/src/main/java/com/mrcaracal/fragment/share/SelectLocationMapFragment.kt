@@ -1,6 +1,8 @@
-package com.mrcaracal.activity.selectMap
+package com.mrcaracal.fragment.share
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -9,11 +11,13 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -22,14 +26,15 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsMap
 import java.io.IOException
 import java.util.*
 
-private const val TAG = "SelectMapActivity"
+private const val TAG = "SelectLocationMapFragme"
 
-class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
-    private lateinit var viewModel: SelectMapViewModel
+class SelectLocationMapFragment : Fragment() {
+
     private lateinit var locationManager: LocationManager
     private lateinit var locationListener: LocationListener
 
@@ -44,33 +49,18 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var marker: Marker
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_my_map)
-        initViewModel()
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment!!.getMapAsync(this)
-        title = getString(R.string.map)
-        GET = getSharedPreferences(getString(R.string.map_key), MODE_PRIVATE)
-        SET = GET.edit()
-    }
-
-    private fun initViewModel() {
-        viewModel = ViewModelProvider(this).get(SelectMapViewModel::class.java)
-    }
-
-    override fun onMapReady(googleMap: GoogleMap) {
+    @SuppressLint("MissingPermission")
+    private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
 
         if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
-            //Location permission already granted
-            //Get user location
+            checkLocationPermission()
+        } else {
             locationManagerAndListener()
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
@@ -78,25 +68,41 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
                 5f,
                 locationListener
             )
-        } else {
-            //Request location permission
-            viewModel.checkLocationPermission(activity = this)
         }
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        GET = requireActivity().applicationContext.getSharedPreferences(
+            getString(R.string.map_key),
+            AppCompatActivity.MODE_PRIVATE
+        )
+        SET = GET.edit()
+        return inflater.inflate(R.layout.fragment_select_location_map, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment?.getMapAsync(callback)
+    }
+
     private fun locationManagerAndListener() {
-        locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
+        locationManager = requireActivity().getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
         locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
                 latitude = location.latitude.toFloat()
                 longitude = location.longitude.toFloat()
                 findLocation()
-                val geocoder = Geocoder(applicationContext, Locale.getDefault())
+                val geocoder = Geocoder(requireContext(), Locale.getDefault())
                 address = ""
                 try {
                     val addressList =
                         geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
-                    if (addressList != null && addressList.size > 0) {
+                    if (!(addressList == null || addressList.size <= 0)) {
                         address += addressList[0].getAddressLine(0)
                         if (addressList[0].postalCode != null) {
                             postCode = addressList[0].postalCode
@@ -143,46 +149,10 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.map_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.normal_map -> {
-                mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-                true
-            }
-            R.id.hybrid_map -> {
-                mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
-                true
-            }
-            R.id.satellite_map -> {
-                mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
-                true
-            }
-            R.id.terrain_map -> {
-                mMap.mapType = GoogleMap.MAP_TYPE_TERRAIN
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
     private fun locationUserClicked(latLng: LatLng) {
         latitude = latLng.latitude.toFloat()
         longitude = latLng.longitude.toFloat()
-        val geocoder = Geocoder(applicationContext, Locale.getDefault())
+        val geocoder = Geocoder(requireContext(), Locale.getDefault())
         address = ""
         try {
             val addressList = geocoder.getFromLocation(latitude.toDouble(), longitude.toDouble(), 1)
@@ -213,6 +183,16 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
+    fun checkLocationPermission() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ), Constants.LOCATION_PERMISSON_CODE
+        )
+    }
+
     private fun processSet(latitude: Float, longitude: Float, address: String, postCode: String?) {
         SET.putFloat(ConstantsMap.LATITUDE, latitude)
         SET.putFloat(ConstantsMap.LONGITUDE, longitude)
@@ -220,4 +200,5 @@ class SelectMapActivity : AppCompatActivity(), OnMapReadyCallback {
         SET.putString(ConstantsMap.POST_CODE, postCode)
         SET.commit()
     }
+
 }
