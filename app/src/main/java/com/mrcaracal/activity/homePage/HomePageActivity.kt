@@ -18,6 +18,7 @@ import com.mrcaracal.fragment.search.SearchFragment
 import com.mrcaracal.fragment.share.ShareFragment
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.login.Login
+import com.mrcaracal.utils.SelectFragment
 
 class HomePageActivity : AppCompatActivity() {
 
@@ -38,27 +39,8 @@ class HomePageActivity : AppCompatActivity() {
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomN)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
-            var selectedFragment: Fragment? = null
-            when (menuItem.itemId) {
-                R.id.homepage -> {
-                    selectedFragment = HomePageFragment()
-                    title = getString(R.string.app_name_home)
-                }
-                R.id.search -> {
-                    selectedFragment = SearchFragment()
-                    title = getString(R.string.search)
-                }
-                R.id.share -> {
-                    selectedFragment = ShareFragment()
-                    title = getString(R.string.share)
-                }
-                R.id.profile -> {
-                    selectedFragment = MyAccountFragment()
-                    title = getString(R.string.my_account)
-                }
-            }
-            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, selectedFragment!!)
-                .commit()
+            val selectedFragment = SelectFragment.selectFragment(menuItemId = menuItem.itemId)
+            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, selectedFragment).commit()
             true
         }
     }
