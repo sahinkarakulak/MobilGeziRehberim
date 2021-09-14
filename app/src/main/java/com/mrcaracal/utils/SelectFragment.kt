@@ -3,6 +3,7 @@ package com.mrcaracal.utils
 import androidx.fragment.app.Fragment
 import com.mrcaracal.fragment.account.MyAccountFragment
 import com.mrcaracal.fragment.home.HomePageFragment
+import com.mrcaracal.fragment.postDetail.PostDetailFragment
 import com.mrcaracal.fragment.search.SearchFragment
 import com.mrcaracal.fragment.share.SelectLocationMapFragment
 import com.mrcaracal.fragment.share.ShareFragment
@@ -27,6 +28,9 @@ object SelectFragment {
             }
             Constants.SELECT_MAP_FRAGMENT -> {
                 return SelectLocationMapFragment()
+            }
+            Constants.SELECT_DETAIL_FRAGMENT -> {
+                return PostDetailFragment()
             }
             else -> {
                 return HomePageFragment()

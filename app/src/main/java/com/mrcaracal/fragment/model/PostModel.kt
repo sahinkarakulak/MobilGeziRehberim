@@ -1,5 +1,7 @@
 package com.mrcaracal.fragment.model
 
+import java.io.Serializable
+
 data class PostModel(
 
     val postId: String,
@@ -14,4 +16,4 @@ data class PostModel(
     val city: String,
     val time: com.google.firebase.Timestamp
 
-)
+) : Serializable

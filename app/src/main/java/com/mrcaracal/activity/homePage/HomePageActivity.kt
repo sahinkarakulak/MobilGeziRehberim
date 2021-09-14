@@ -37,8 +37,16 @@ class HomePageActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomN)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             val selectedFragment = SelectFragment.selectFragment(menuItemId = menuItem.itemId)
+            //Search BackStack
+            // -> add
+            // -> replace
+            // -> addToBackStack
+            // -> findFragmentByTag
+            // -> hide :)
+            // https://medium.com/@tugcekolcu/android-backstack-kavramı-b1804d6c2439
             supportFragmentManager.beginTransaction().replace(R.id.frame_layout, selectedFragment)
                 .commit()
+
             true
         }
     }
@@ -78,7 +86,7 @@ class HomePageActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
+        /*if (doubleBackToExitPressedOnce) {
             finish()
             super.onBackPressed()
         }
@@ -86,7 +94,7 @@ class HomePageActivity : AppCompatActivity() {
         toast(getString(R.string.press_again_to_exit))
         Handler(Looper.myLooper() ?: return).postDelayed({
             doubleBackToExitPressedOnce = false
-        }, 2000)
+        }, 2000)*/
     }
 
 }
