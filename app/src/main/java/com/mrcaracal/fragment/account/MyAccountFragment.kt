@@ -166,7 +166,8 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         val selectedFragment = SelectFragment.selectFragment(Constants.SELECT_DETAIL_FRAGMENT)
         selectedFragment.arguments = bundle
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.frame_layout, selectedFragment)
+            .add(R.id.frame_layout, selectedFragment)
+            .addToBackStack("MyAccountFragmentBack")
             .commit()
 
         /*DialogViewCustomize.dialogViewCustomize(

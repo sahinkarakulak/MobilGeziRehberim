@@ -85,8 +85,8 @@ class HomePageActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        /*if (doubleBackToExitPressedOnce) {
+    /*override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
             finish()
             super.onBackPressed()
         }
@@ -94,7 +94,7 @@ class HomePageActivity : AppCompatActivity() {
         toast(getString(R.string.press_again_to_exit))
         Handler(Looper.myLooper() ?: return).postDelayed({
             doubleBackToExitPressedOnce = false
-        }, 2000)*/
-    }
+        }, 2000)
+    }*/
 
 }
