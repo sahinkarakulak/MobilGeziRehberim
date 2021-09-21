@@ -17,9 +17,13 @@ import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.PostAdapter
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
+import com.mrcaracal.fragment.postDetail.PostDetailFragment
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragHomePageBinding
-import com.mrcaracal.utils.*
+import com.mrcaracal.utils.Constants
+import com.mrcaracal.utils.ConstantsMap
+import com.mrcaracal.utils.IntentProcessor
+import com.mrcaracal.utils.SelectFragmentOnHomePageActivity
 import java.util.*
 
 class HomePageFragment : Fragment(), RecyclerViewClickInterface {
@@ -62,7 +66,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         // Swipe Refresh ...
         /*binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.getPostByPostTime(postModelsList = postModelsList)
-            binding.swipeRefreshLayout.isRefreshing = true
+            binding.swipeRefreshLayout.isRefreshing = false
         }*/
 
         return view
@@ -121,33 +125,19 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
     override fun onLongItemClick(postModel: PostModel) {
         val postTags = viewModel.showTagsOnPost(postModel = postModel)
 
-        // Data send to PostDetailFragment()
         val bundle = Bundle()
-        bundle.putString("postTags", postTags)
+        bundle.putString(PostDetailFragment.KEY_POST_TAG, postTags)
         bundle.putSerializable("postModel", postModel)
 
-        val selectedFragment = SelectFragment.selectFragment(Constants.SELECT_DETAIL_FRAGMENT)
+        val selectedFragment = SelectFragmentOnHomePageActivity.selectFragmentOnHomePage(Constants.SELECT_DETAIL_FRAGMENT)
         selectedFragment.arguments = bundle
         requireActivity().supportFragmentManager.beginTransaction()
             .add(R.id.frame_layout, selectedFragment)
             .addToBackStack("HomePageFragmentBack")
             .commit()
-
-        /*DialogViewCustomize.dialogViewCustomize(
-            activity = activity,
-            container = container,
-            postModel = postModel,
-            postTags = postTags
-        )*/
-
     }
 
     override fun onOtherOperationsClick(postModel: PostModel) {
-        /*PostDetailBottomSheet.ShowPostDataDetails(
-            context = requireContext(),
-            postModel = postModel,
-            container = container
-        )*/
         val bottomSheetDialog = BottomSheetDialog((activity)!!, R.style.BottomSheetDialogTheme)
         val bottomSheetView = LayoutInflater.from(activity)
             .inflate(

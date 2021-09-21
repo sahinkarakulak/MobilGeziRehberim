@@ -2,20 +2,16 @@ package com.mrcaracal.activity.homePage
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mrcaracal.activity.contact.ContactActivity
-import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.home.HomePageFragment
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.login.Login
-import com.mrcaracal.utils.SelectFragment
+import com.mrcaracal.utils.SelectFragmentOnHomePageActivity
 
 class HomePageActivity : AppCompatActivity() {
 
@@ -36,17 +32,9 @@ class HomePageActivity : AppCompatActivity() {
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomN)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
-            val selectedFragment = SelectFragment.selectFragment(menuItemId = menuItem.itemId)
-            //Search BackStack
-            // -> add
-            // -> replace
-            // -> addToBackStack
-            // -> findFragmentByTag
-            // -> hide :)
-            // https://medium.com/@tugcekolcu/android-backstack-kavramı-b1804d6c2439
+            val selectedFragment = SelectFragmentOnHomePageActivity.selectFragmentOnHomePage(menuItemId = menuItem.itemId)
             supportFragmentManager.beginTransaction().replace(R.id.frame_layout, selectedFragment)
                 .commit()
-
             true
         }
     }
@@ -59,7 +47,8 @@ class HomePageActivity : AppCompatActivity() {
         viewModel.homePageActivityState.observe(this) { homePageActivityViewState ->
             when (homePageActivityViewState) {
 
-                else -> {}
+                else -> {
+                }
             }
         }
     }
@@ -84,17 +73,4 @@ class HomePageActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    /*override fun onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            finish()
-            super.onBackPressed()
-        }
-        doubleBackToExitPressedOnce = true
-        toast(getString(R.string.press_again_to_exit))
-        Handler(Looper.myLooper() ?: return).postDelayed({
-            doubleBackToExitPressedOnce = false
-        }, 2000)
-    }*/
-
 }

@@ -9,9 +9,9 @@ import com.mrcaracal.fragment.share.SelectLocationMapFragment
 import com.mrcaracal.fragment.share.ShareFragment
 import com.mrcaracal.mobilgezirehberim.R
 
-object SelectFragment {
+object SelectFragmentOnHomePageActivity {
 
-    fun selectFragment(menuItemId: Int): Fragment{
+    fun selectFragmentOnHomePage(menuItemId: Int): Fragment{
         when(menuItemId){
             R.id.homepage -> {
                 return HomePageFragment()
@@ -25,9 +25,6 @@ object SelectFragment {
             R.id.profile -> {
 
                 return MyAccountFragment()
-            }
-            Constants.SELECT_MAP_FRAGMENT -> {
-                return SelectLocationMapFragment()
             }
             Constants.SELECT_DETAIL_FRAGMENT -> {
                 return PostDetailFragment()

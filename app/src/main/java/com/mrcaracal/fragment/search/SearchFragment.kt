@@ -35,7 +35,10 @@ import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragSearchBinding
 import com.mrcaracal.modul.Cities
 import com.mrcaracal.modul.UserAccountStore
-import com.mrcaracal.utils.*
+import com.mrcaracal.utils.Constants
+import com.mrcaracal.utils.ConstantsMap
+import com.mrcaracal.utils.IntentProcessor
+import com.mrcaracal.utils.SelectFragmentOnHomePageActivity
 import java.util.*
 
 class SearchFragment : Fragment(), RecyclerViewClickInterface {
@@ -104,7 +107,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         }
     }
 
-    private fun getPosts(){
+    private fun getPosts() {
         if (ContextCompat.checkSelfPermission(
                 (activity)!!,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -328,24 +331,17 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
     override fun onLongItemClick(postModel: PostModel) {
         val postTags = viewModel.showTagsOnPost(postModel = postModel)
 
-        // Data send to PostDetailFragment()
         val bundle = Bundle()
         bundle.putString("postTags", postTags)
         bundle.putSerializable("postModel", postModel)
 
-        val selectedFragment = SelectFragment.selectFragment(Constants.SELECT_DETAIL_FRAGMENT)
+        val selectedFragment =
+            SelectFragmentOnHomePageActivity.selectFragmentOnHomePage(Constants.SELECT_DETAIL_FRAGMENT)
         selectedFragment.arguments = bundle
         requireActivity().supportFragmentManager.beginTransaction()
             .add(R.id.frame_layout, selectedFragment)
             .addToBackStack("SearchFragmentBack")
             .commit()
-
-        /*DialogViewCustomize.dialogViewCustomize(
-            activity = activity,
-            container = container,
-            postModel = postModel,
-            postTags = postTags
-        )*/
     }
 
     override fun onOtherOperationsClick(postModel: PostModel) {

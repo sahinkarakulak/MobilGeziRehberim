@@ -21,7 +21,6 @@ import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragShareBinding
 import com.mrcaracal.utils.Constants
-import com.mrcaracal.utils.SelectFragment
 import com.squareup.picasso.Picasso
 
 class ShareFragment : Fragment() {
@@ -75,8 +74,9 @@ class ShareFragment : Fragment() {
 
         binding.selectLocation.setOnClickListener {
 
-            val selectedFragment = SelectFragment.selectFragment(Constants.SELECT_MAP_FRAGMENT)
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_layout, selectedFragment)
+            //val selectedFragment = SelectFragmentOnHomePageActivity.selectFragment(Constants.SELECT_MAP_FRAGMENT)
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, SelectLocationMapFragment())
                 .commit()
             viewModel.turnOnOrOffLocation(context = requireContext())
             //startActivity(Intent(activity, SelectMapActivity::class.java))

@@ -22,8 +22,7 @@ import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragMyAccountBinding
 import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsMap
-import com.mrcaracal.utils.DialogViewCustomize
-import com.mrcaracal.utils.SelectFragment
+import com.mrcaracal.utils.SelectFragmentOnHomePageActivity
 import com.squareup.picasso.Picasso
 
 class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
@@ -158,24 +157,17 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     override fun onLongItemClick(postModel: PostModel) {
         val postTags = viewModel.showTagsOnPost(postModel = postModel, tabControl = TAB_CONTROL)
 
-        // Data send to PostDetailFragment()
         val bundle = Bundle()
         bundle.putString("postTags", postTags)
         bundle.putSerializable("postModel", postModel)
 
-        val selectedFragment = SelectFragment.selectFragment(Constants.SELECT_DETAIL_FRAGMENT)
+        val selectedFragment =
+            SelectFragmentOnHomePageActivity.selectFragmentOnHomePage(Constants.SELECT_DETAIL_FRAGMENT)
         selectedFragment.arguments = bundle
         requireActivity().supportFragmentManager.beginTransaction()
             .add(R.id.frame_layout, selectedFragment)
             .addToBackStack("MyAccountFragmentBack")
             .commit()
-
-        /*DialogViewCustomize.dialogViewCustomize(
-            activity = activity,
-            container = container,
-            postModel = postModel,
-            postTags = postTags
-        )*/
     }
 
     override fun onOtherOperationsClick(postModel: PostModel) {
