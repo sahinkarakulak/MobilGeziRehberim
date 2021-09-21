@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.tasks.*
 import com.mrcaracal.activity.homePage.HomePageActivity
+import com.mrcaracal.extensions.loadUrl
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.ActivityEditProfileBinding
@@ -70,9 +71,10 @@ class EditProfileActivity : AppCompatActivity() {
                     toast(editProfileViewState.exception.toString())
                 }
                 is EditProfileViewState.OnUserImage -> {
-                    Picasso.get()
+                    binding.imgUserPicture.loadUrl(editProfileViewState.userImageUrl)
+                    /*Picasso.get()
                         .load(editProfileViewState.userImageUrl)
-                        .into(binding.imgUserPicture)
+                        .into(binding.imgUserPicture)*/
                 }
                 is EditProfileViewState.BindingTvUserEmailChangeText -> {
                     binding.tvUserEmail.text = editProfileViewState.firebaseUserName

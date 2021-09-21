@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.activity.editProfile.EditProfileActivity
 import com.mrcaracal.adapter.PostAdapter
+import com.mrcaracal.extensions.loadUrl
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
@@ -24,6 +26,8 @@ import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsMap
 import com.mrcaracal.utils.SelectFragmentOnHomePageActivity
 import com.squareup.picasso.Picasso
+
+private const val TAG = "MyAccountFragment"
 
 class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
 
@@ -116,12 +120,16 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                     binding.tvUserBio.text = myAccountViewState.bio
                 }
                 is MyAccountViewState.PicassoProccese -> {
-                    Picasso.get().load(myAccountViewState.loadData)
-                        .into(binding.imgProfileProfilePicture)
+                    binding.imgProfileProfilePicture.loadUrl(myAccountViewState.loadData)
+
+                    /*Picasso.get().load(myAccountViewState.loadData)
+                        .into(binding.imgProfileProfilePicture)*/
                 }
                 is MyAccountViewState.PicassoProcceseDefault -> {
-                    Picasso.get().load(R.drawable.defaultpp)
-                        .into(binding.imgProfileProfilePicture)
+                    binding.imgProfileProfilePicture.loadUrl(R.drawable.defaultpp)
+
+                    /*Picasso.get().load(R.drawable.defaultpp)
+                        .into(binding.imgProfileProfilePicture)*/
                 }
                 is MyAccountViewState.SendRecyclerAdapter -> {
                     postAdapter.postModelList = myAccountViewState.postModelList

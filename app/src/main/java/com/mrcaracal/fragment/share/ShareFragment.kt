@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.mrcaracal.activity.homePage.HomePageActivity
+import com.mrcaracal.extensions.loadUrl
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragShareBinding
@@ -109,11 +110,13 @@ class ShareFragment : Fragment() {
                     binding.tvPrintTags.text = shareViewState.tags
                 }
                 is ShareViewState.PicassoPross -> {
-                    Picasso.get()
+                    binding.imgSharePictureSelected.loadUrl(shareViewState.picturePath)
+
+                    /*Picasso.get()
                         .load(shareViewState.picturePath)
                         .centerCrop()
                         .fit()
-                        .into(binding.imgSharePictureSelected)
+                        .into(binding.imgSharePictureSelected)*/
                 }
             }
         }

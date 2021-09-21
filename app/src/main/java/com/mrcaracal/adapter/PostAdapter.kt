@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mrcaracal.Interface.RecyclerViewClickInterface
 import com.mrcaracal.adapter.PostAdapter.PostHolder
+import com.mrcaracal.extensions.loadUrl
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
 import com.squareup.picasso.Picasso
@@ -28,11 +29,13 @@ class PostAdapter(
 
         holder.row_placeName.text = postModelList[position].placeName
         holder.row_comment.text = postModelList[position].comment
-        Picasso.get()
+        holder.row_picturePath.loadUrl(postModelList[position].pictureLink)
+
+        /*Picasso.get()
             .load(postModelList[position].pictureLink)
             .centerCrop()
             .fit()
-            .into(holder.row_picturePath)
+            .into(holder.row_picturePath)*/
 
         holder.ll_otherOperations.setOnClickListener {
             recyclerViewClickInterface.onOtherOperationsClick(

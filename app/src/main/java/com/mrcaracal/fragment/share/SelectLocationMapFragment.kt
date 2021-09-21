@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mrcaracal.mobilgezirehberim.R
+import com.mrcaracal.mobilgezirehberim.databinding.FragmentSelectLocationMapBinding
 import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsMap
 import java.io.IOException
@@ -34,6 +35,9 @@ import java.util.*
 private const val TAG = "SelectLocationMapFragme"
 
 class SelectLocationMapFragment : Fragment() {
+
+    private var _binding: FragmentSelectLocationMapBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var locationManager: LocationManager
     private lateinit var locationListener: LocationListener
@@ -75,13 +79,15 @@ class SelectLocationMapFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        _binding = FragmentSelectLocationMapBinding.inflate(inflater, container, false)
+        val view = binding.root
         GET = requireActivity().applicationContext.getSharedPreferences(
             getString(R.string.map_key),
             AppCompatActivity.MODE_PRIVATE
         )
         SET = GET.edit()
-        return inflater.inflate(R.layout.fragment_select_location_map, container, false)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -117,7 +123,8 @@ class SelectLocationMapFragment : Fragment() {
                     latitude = latitude,
                     longitude = longitude,
                     address = address,
-                    postCode = postCode
+                    postCode = postCode,
+                    clickStatus = false
                 )
             }
 
@@ -179,7 +186,8 @@ class SelectLocationMapFragment : Fragment() {
             latitude = latitude,
             longitude = longitude,
             address = address,
-            postCode = postCode
+            postCode = postCode,
+            clickStatus = true
         )
     }
 
@@ -193,12 +201,30 @@ class SelectLocationMapFragment : Fragment() {
         )
     }
 
-    private fun processSet(latitude: Float, longitude: Float, address: String, postCode: String?) {
+    private fun processSet(latitude: Float, longitude: Float, address: String, postCode: String?, clickStatus: Boolean) {
         SET.putFloat(ConstantsMap.LATITUDE, latitude)
         SET.putFloat(ConstantsMap.LONGITUDE, longitude)
         SET.putString(ConstantsMap.ADDRESS, address)
         SET.putString(ConstantsMap.POST_CODE, postCode)
         SET.commit()
+
+        val latitudeLocationData = latitude.toString()
+        val longitudeLocationData = longitude.toString()
+
+        binding.txtXyLocationData.text = "${latitudeLocationData},${longitudeLocationData} "
+        binding.txtAddressData.text = address
+
+        if (clickStatus){
+            binding.txtOldNewLocationInfo.text = "Yeni Konum Seçildi"
+        }else{
+            binding.txtOldNewLocationInfo.text = "Konumun"
+        }
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
