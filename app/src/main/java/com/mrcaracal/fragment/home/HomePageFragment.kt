@@ -23,11 +23,10 @@ import com.mrcaracal.mobilgezirehberim.databinding.FragHomePageBinding
 import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsMap
 import com.mrcaracal.utils.IntentProcessor
-import com.mrcaracal.utils.SelectFragmentOnHomePageActivity
+import com.mrcaracal.utils.SelectFragmentHomePageProvider
 import java.util.*
 
 class HomePageFragment : Fragment(), RecyclerViewClickInterface {
-
     lateinit var viewModel: HomePageViewModel
     private var _binding: FragHomePageBinding? = null
     private val binding get() = _binding!!
@@ -62,12 +61,7 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
         observeHomePageState()
         recyclerViewManager()
         viewModel.getPostByPostTime(postModelsList = postModelsList)
-
-        // Swipe Refresh ...
-        /*binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getPostByPostTime(postModelsList = postModelsList)
-            binding.swipeRefreshLayout.isRefreshing = false
-        }*/
+        swipeRefresh()
 
         return view
     }
@@ -79,6 +73,13 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
     fun recyclerViewManager() {
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         postAdapter = PostAdapter(recyclerViewClickInterface = this)
+    }
+
+    fun swipeRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.getPostByPostTime(postModelsList = postModelsList)
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun observeHomePageState() {
@@ -127,9 +128,10 @@ class HomePageFragment : Fragment(), RecyclerViewClickInterface {
 
         val bundle = Bundle()
         bundle.putString(PostDetailFragment.KEY_POST_TAG, postTags)
-        bundle.putSerializable("postModel", postModel)
+        bundle.putSerializable(PostDetailFragment.KEY_POST_MODEL, postModel)
 
-        val selectedFragment = SelectFragmentOnHomePageActivity.selectFragmentOnHomePage(Constants.SELECT_DETAIL_FRAGMENT)
+        val selectedFragment =
+            SelectFragmentHomePageProvider.selectFragmentOnHomePage(Constants.SELECT_DETAIL_FRAGMENT)
         selectedFragment.arguments = bundle
         requireActivity().supportFragmentManager.beginTransaction()
             .add(R.id.frame_layout, selectedFragment)

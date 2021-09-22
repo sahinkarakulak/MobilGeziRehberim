@@ -31,6 +31,7 @@ import com.mrcaracal.activity.GoToLocationOnMapActivity
 import com.mrcaracal.adapter.PostAdapter
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
+import com.mrcaracal.fragment.postDetail.PostDetailFragment
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragSearchBinding
 import com.mrcaracal.modul.Cities
@@ -38,25 +39,21 @@ import com.mrcaracal.modul.UserAccountStore
 import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsMap
 import com.mrcaracal.utils.IntentProcessor
-import com.mrcaracal.utils.SelectFragmentOnHomePageActivity
+import com.mrcaracal.utils.SelectFragmentHomePageProvider
 import java.util.*
 
 class SearchFragment : Fragment(), RecyclerViewClickInterface {
-
     private lateinit var viewModel: SearchViewModel
     private var _binding: FragSearchBinding? = null
     private val binding get() = _binding!!
     lateinit var postAdapter: PostAdapter
-
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
     var keyValue = "yerIsmi"
     var latitude = 0.0
     var longitude = 0.0
-    lateinit var viewGroup: ViewGroup
     private lateinit var sp_adapterAccordingToWhat: ArrayAdapter<String>
     private lateinit var sp_adapterCities: ArrayAdapter<String>
-
     private lateinit var container: ViewGroup
 
     private fun init() {
@@ -88,6 +85,7 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         initSpinnerCity()
         recyclerViewManager()
         getPosts()
+        swipeRefresh()
 
         return view
     }
@@ -99,6 +97,13 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
     fun recyclerViewManager() {
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(activity)
         postAdapter = PostAdapter(recyclerViewClickInterface = this)
+    }
+
+    fun swipeRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            getPosts()
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun initClickListener() {
@@ -332,11 +337,11 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
         val postTags = viewModel.showTagsOnPost(postModel = postModel)
 
         val bundle = Bundle()
-        bundle.putString("postTags", postTags)
-        bundle.putSerializable("postModel", postModel)
+        bundle.putString(PostDetailFragment.KEY_POST_TAG, postTags)
+        bundle.putSerializable(PostDetailFragment.KEY_POST_MODEL, postModel)
 
         val selectedFragment =
-            SelectFragmentOnHomePageActivity.selectFragmentOnHomePage(Constants.SELECT_DETAIL_FRAGMENT)
+            SelectFragmentHomePageProvider.selectFragmentOnHomePage(Constants.SELECT_DETAIL_FRAGMENT)
         selectedFragment.arguments = bundle
         requireActivity().supportFragmentManager.beginTransaction()
             .add(R.id.frame_layout, selectedFragment)

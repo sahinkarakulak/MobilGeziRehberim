@@ -11,12 +11,10 @@ import com.mrcaracal.activity.contact.ContactActivity
 import com.mrcaracal.fragment.home.HomePageFragment
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.login.Login
-import com.mrcaracal.utils.SelectFragmentOnHomePageActivity
+import com.mrcaracal.utils.SelectFragmentHomePageProvider
 
 class HomePageActivity : AppCompatActivity() {
-
     private lateinit var viewModel: HomePageViewModelActivity
-    private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +30,8 @@ class HomePageActivity : AppCompatActivity() {
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomN)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
-            val selectedFragment = SelectFragmentOnHomePageActivity.selectFragmentOnHomePage(menuItemId = menuItem.itemId)
+            val selectedFragment =
+                SelectFragmentHomePageProvider.selectFragmentOnHomePage(menuItemId = menuItem.itemId)
             supportFragmentManager.beginTransaction().replace(R.id.frame_layout, selectedFragment)
                 .commit()
             true
@@ -47,8 +46,7 @@ class HomePageActivity : AppCompatActivity() {
         viewModel.homePageActivityState.observe(this) { homePageActivityViewState ->
             when (homePageActivityViewState) {
 
-                else -> {
-                }
+                else -> {}
             }
         }
     }

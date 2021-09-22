@@ -22,18 +22,15 @@ import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragShareBinding
 import com.mrcaracal.utils.Constants
-import com.squareup.picasso.Picasso
 
 class ShareFragment : Fragment() {
     private lateinit var viewModel: ShareViewModel
     private var _binding: FragShareBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
     private lateinit var addres: String
     lateinit var postCode: String
-
     var latitude = 0f
     var longitude = 0f
     private lateinit var picturePath: Uri
@@ -74,13 +71,10 @@ class ShareFragment : Fragment() {
         }
 
         binding.selectLocation.setOnClickListener {
-
-            //val selectedFragment = SelectFragmentOnHomePageActivity.selectFragment(Constants.SELECT_MAP_FRAGMENT)
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, SelectLocationMapFragment())
                 .commit()
             viewModel.turnOnOrOffLocation(context = requireContext())
-            //startActivity(Intent(activity, SelectMapActivity::class.java))
         }
 
         binding.btnShareSend.setOnClickListener {
@@ -111,12 +105,6 @@ class ShareFragment : Fragment() {
                 }
                 is ShareViewState.PicassoPross -> {
                     binding.imgSharePictureSelected.loadUrl(shareViewState.picturePath)
-
-                    /*Picasso.get()
-                        .load(shareViewState.picturePath)
-                        .centerCrop()
-                        .fit()
-                        .into(binding.imgSharePictureSelected)*/
                 }
             }
         }
@@ -204,7 +192,6 @@ class ShareFragment : Fragment() {
                 }
             }
         }
-
         super.onActivityResult(requestCode, resultCode, data)
     }
 

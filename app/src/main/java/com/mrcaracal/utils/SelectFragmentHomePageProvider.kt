@@ -5,14 +5,13 @@ import com.mrcaracal.fragment.account.MyAccountFragment
 import com.mrcaracal.fragment.home.HomePageFragment
 import com.mrcaracal.fragment.postDetail.PostDetailFragment
 import com.mrcaracal.fragment.search.SearchFragment
-import com.mrcaracal.fragment.share.SelectLocationMapFragment
 import com.mrcaracal.fragment.share.ShareFragment
 import com.mrcaracal.mobilgezirehberim.R
 
-object SelectFragmentOnHomePageActivity {
+object SelectFragmentHomePageProvider {
 
-    fun selectFragmentOnHomePage(menuItemId: Int): Fragment{
-        when(menuItemId){
+    fun selectFragmentOnHomePage(menuItemId: Int): Fragment {
+        when (menuItemId) {
             R.id.homepage -> {
                 return HomePageFragment()
             }

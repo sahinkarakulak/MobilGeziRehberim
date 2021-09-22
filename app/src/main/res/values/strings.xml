@@ -56,6 +56,8 @@
     <string name="press_again_to_exit">Çıkmak için tekarar basın</string>
     <string name="check_your_e_mail">E-postanızı kontrol ediniz</string>
     <string name="please_select_city">Lütfen şehir seçin</string>
+    <string name="location_status_new">Yeni Konum Seçildi</string>
+    <string name="location_status_now">Konumun</string>
     <string name="not_allowed">İzin verilmedi</string>
     <string name="confirm_your_account_from_the_link_in_your_e_mail">E-postanızdaki bağlantıdan hesabınızı onaylayın</string>
     <string name="loremIpsum">Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500\'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. Beşyüz yıl boyunca varlığını sürdürmekle kalmamış, aynı zamanda pek değişmeden elektronik dizgiye de sıçramıştır. 1960\'larda Lorem Ipsum pasajları da içeren Letraset yapraklarının yayınlanması ile ve yakın zamanda Aldus PageMaker gibi Lorem Ipsum sürümleri içeren masaüstü yayıncılık yazılımları ile popüler olmuştur.</string>

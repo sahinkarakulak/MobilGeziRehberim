@@ -13,9 +13,7 @@ import java.text.DateFormat
 private const val TAG = "PostDetailFragment"
 
 class PostDetailFragment : Fragment() {
-
     private lateinit var binding: FragmentPostDetailBinding
-
     lateinit var postModel: PostModel
     var tags: String = ""
     var dateAndTime: String = ""
@@ -37,7 +35,7 @@ class PostDetailFragment : Fragment() {
     private fun initArgs() {
         val bundle = this.arguments
         tags = bundle?.getString(KEY_POST_TAG, "").orEmpty()
-        postModel = bundle?.getSerializable("postModel") as PostModel
+        postModel = bundle?.getSerializable(KEY_POST_MODEL) as PostModel
         dateAndTime = DateFormat.getDateTimeInstance().format(
             postModel.time.toDate()
         )
@@ -51,11 +49,11 @@ class PostDetailFragment : Fragment() {
         postDetailDate.text = dateAndTime
         postDetailAddress.text = postModel.address
         postDetailLabels.text = tags.toString()
-
     }
 
     companion object {
         const val KEY_POST_TAG = "postTags"
+        const val KEY_POST_MODEL = "postModel"
     }
 
 }

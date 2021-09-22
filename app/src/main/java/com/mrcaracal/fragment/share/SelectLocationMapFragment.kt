@@ -35,21 +35,16 @@ import java.util.*
 private const val TAG = "SelectLocationMapFragme"
 
 class SelectLocationMapFragment : Fragment() {
-
     private var _binding: FragmentSelectLocationMapBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var locationManager: LocationManager
     private lateinit var locationListener: LocationListener
-
     var latitude = 0.0.toFloat()
     var longitude = 0.0.toFloat()
     var address = ""
     var postCode: String = ""
-
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
-
     private lateinit var mMap: GoogleMap
     private lateinit var marker: Marker
 
@@ -215,9 +210,9 @@ class SelectLocationMapFragment : Fragment() {
         binding.txtAddressData.text = address
 
         if (clickStatus){
-            binding.txtOldNewLocationInfo.text = "Yeni Konum Seçildi"
+            binding.txtOldNewLocationInfo.text = getString(R.string.location_status_new)
         }else{
-            binding.txtOldNewLocationInfo.text = "Konumun"
+            binding.txtOldNewLocationInfo.text = getString(R.string.location_status_now)
         }
 
     }

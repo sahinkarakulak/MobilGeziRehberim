@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,31 +19,24 @@ import com.mrcaracal.adapter.PostAdapter
 import com.mrcaracal.extensions.loadUrl
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.fragment.model.PostModel
+import com.mrcaracal.fragment.postDetail.PostDetailFragment
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragMyAccountBinding
 import com.mrcaracal.utils.Constants
 import com.mrcaracal.utils.ConstantsMap
-import com.mrcaracal.utils.SelectFragmentOnHomePageActivity
-import com.squareup.picasso.Picasso
-
-private const val TAG = "MyAccountFragment"
+import com.mrcaracal.utils.SelectFragmentHomePageProvider
 
 class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
-
     private lateinit var viewModel: MyAccountViewModel
     private var _binding: FragMyAccountBinding? = null
     private val binding get() = _binding!!
-
     lateinit var postAdapter: PostAdapter
-
     var POSITION_VALUE = 0
     var TAB_CONTROL = "paylasilanlar"
     private var LATITUDE = 0.0
     private var LONGITUDE = 0.0
-
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
-
     private lateinit var container: ViewGroup
 
     private fun init() {
@@ -72,6 +64,7 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         recyclerViewManager()
         viewModel.pullTheSharedOnMyAccount()
         viewModel.getPostData()
+        swipeRefresh()
 
         return view
     }
@@ -83,6 +76,23 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
     fun recyclerViewManager() {
         binding.recyclerViewAccount.layoutManager = LinearLayoutManager(activity)
         postAdapter = PostAdapter(recyclerViewClickInterface = this)
+    }
+
+    fun swipeRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            when (TAB_CONTROL) {
+                "paylasilanlar" -> {
+                    viewModel.clearList()
+                    viewModel.pullTheSharedOnMyAccount()
+                    binding.swipeRefreshLayout.isRefreshing = false
+                }
+                "kaydedilenler" -> {
+                    viewModel.clearList()
+                    viewModel.pullTheRecordedOnMyAccount()
+                    binding.swipeRefreshLayout.isRefreshing = false
+                }
+            }
+        }
     }
 
     fun initClickListeners() {
@@ -121,15 +131,9 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
                 }
                 is MyAccountViewState.PicassoProccese -> {
                     binding.imgProfileProfilePicture.loadUrl(myAccountViewState.loadData)
-
-                    /*Picasso.get().load(myAccountViewState.loadData)
-                        .into(binding.imgProfileProfilePicture)*/
                 }
                 is MyAccountViewState.PicassoProcceseDefault -> {
                     binding.imgProfileProfilePicture.loadUrl(R.drawable.defaultpp)
-
-                    /*Picasso.get().load(R.drawable.defaultpp)
-                        .into(binding.imgProfileProfilePicture)*/
                 }
                 is MyAccountViewState.SendRecyclerAdapter -> {
                     postAdapter.postModelList = myAccountViewState.postModelList
@@ -166,11 +170,11 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
         val postTags = viewModel.showTagsOnPost(postModel = postModel, tabControl = TAB_CONTROL)
 
         val bundle = Bundle()
-        bundle.putString("postTags", postTags)
-        bundle.putSerializable("postModel", postModel)
+        bundle.putString(PostDetailFragment.KEY_POST_TAG, postTags)
+        bundle.putSerializable(PostDetailFragment.KEY_POST_MODEL, postModel)
 
         val selectedFragment =
-            SelectFragmentOnHomePageActivity.selectFragmentOnHomePage(Constants.SELECT_DETAIL_FRAGMENT)
+            SelectFragmentHomePageProvider.selectFragmentOnHomePage(Constants.SELECT_DETAIL_FRAGMENT)
         selectedFragment.arguments = bundle
         requireActivity().supportFragmentManager.beginTransaction()
             .add(R.id.frame_layout, selectedFragment)

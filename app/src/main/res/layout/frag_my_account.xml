@@ -70,10 +70,18 @@
         app:itemTextColor="@drawable/tab_color"
         app:menu="@menu/account_menu" />
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAccount"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewAccount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
 </LinearLayout>
