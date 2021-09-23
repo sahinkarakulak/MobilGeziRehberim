@@ -23,7 +23,6 @@ import java.util.*
 
 class ShareViewModel : ViewModel() {
     var shareState: MutableLiveData<ShareViewState> = MutableLiveData<ShareViewState>()
-
     private lateinit var mGonderiler: Posts
     private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private var firebaseUser: FirebaseUser = firebaseAuth.currentUser!!
@@ -31,7 +30,6 @@ class ShareViewModel : ViewModel() {
     private var firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private var storageReference: StorageReference = firebaseStorage.reference
     private lateinit var picturePath: Uri
-
     var postCode: String? = null
     private lateinit var postID: String
     private lateinit var tags: List<String>
@@ -150,9 +148,11 @@ class ShareViewModel : ViewModel() {
 
     fun turnOnOrOffLocation(context: Context) {
         val locationRequest = LocationRequest.create()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 5000
-        locationRequest.fastestInterval = 2000
+        with(locationRequest) {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 5000
+            fastestInterval = 2000
+        }
 
         val builder: LocationSettingsRequest.Builder = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)

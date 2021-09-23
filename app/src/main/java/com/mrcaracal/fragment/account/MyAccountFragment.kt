@@ -160,9 +160,12 @@ class MyAccountFragment : Fragment(), RecyclerViewClickInterface {
             if (adverb == 1) LATITUDE = locationXY.toDouble()
             if (adverb == 2) LONGITUDE = locationXY.toDouble()
         }
-        SET.putFloat(ConstantsMap.GO_TO_LOCATION_LATITUDE, LATITUDE.toFloat())
-        SET.putFloat(ConstantsMap.GO_TO_LOCATION_LONGITUDE, LONGITUDE.toFloat())
-        SET.commit()
+        with(SET) {
+            putFloat(ConstantsMap.GO_TO_LOCATION_LATITUDE, LATITUDE.toFloat())
+            putFloat(ConstantsMap.GO_TO_LOCATION_LONGITUDE, LONGITUDE.toFloat())
+            commit()
+        }
+
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
 

@@ -3,6 +3,7 @@ package com.mrcaracal.fragment.share
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -141,14 +142,17 @@ class SelectLocationMapFragment : Fragment() {
         val location = LatLng(
             latitude.toDouble(), longitude.toDouble()
         )
-        mMap.clear()
-        mMap.addMarker(MarkerOptions().position(location).title(getString(R.string.my_locaiton)))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
-        mMap.setOnMapClickListener { latlng ->
-            locationUserClicked(latLng = latlng)
-            Log.i(TAG, "findLocation: " + latlng.latitude.toString())
-            Log.i(TAG, "findLocation: " + latlng.longitude.toString())
+        with(mMap) {
+            clear()
+            addMarker(MarkerOptions().position(location).title(getString(R.string.my_locaiton)))
+            moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
+            setOnMapClickListener { latlng ->
+                locationUserClicked(latLng = latlng)
+                Log.i(TAG, "findLocation: " + latlng.latitude.toString())
+                Log.i(TAG, "findLocation: " + latlng.longitude.toString())
+            }
         }
+
     }
 
     private fun locationUserClicked(latLng: LatLng) {
@@ -197,11 +201,13 @@ class SelectLocationMapFragment : Fragment() {
     }
 
     private fun processSet(latitude: Float, longitude: Float, address: String, postCode: String?, clickStatus: Boolean) {
-        SET.putFloat(ConstantsMap.LATITUDE, latitude)
-        SET.putFloat(ConstantsMap.LONGITUDE, longitude)
-        SET.putString(ConstantsMap.ADDRESS, address)
-        SET.putString(ConstantsMap.POST_CODE, postCode)
-        SET.commit()
+        with(SET) {
+            putFloat(ConstantsMap.LATITUDE, latitude)
+            putFloat(ConstantsMap.LONGITUDE, longitude)
+            putString(ConstantsMap.ADDRESS, address)
+            putString(ConstantsMap.POST_CODE, postCode)
+            commit()
+        }
 
         val latitudeLocationData = latitude.toString()
         val longitudeLocationData = longitude.toString()

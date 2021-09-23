@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.mrcaracal.modul.UserAccountStore
 
 class ContactViewModel : ViewModel() {
-
     var contactState: MutableLiveData<ContactViewState> = MutableLiveData<ContactViewState>()
 
     fun sendMessage(subject: String, message: String) {

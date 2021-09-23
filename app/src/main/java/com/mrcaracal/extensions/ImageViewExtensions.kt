@@ -3,9 +3,8 @@ package com.mrcaracal.extensions
 import android.net.Uri
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
-import java.net.URL
 
-fun ImageView.loadUrl(url: String){
+fun ImageView.loadUrl(url: String) {
     Picasso.get()
         .load(url)
         .centerCrop()
@@ -13,7 +12,7 @@ fun ImageView.loadUrl(url: String){
         .into(this)
 }
 
-fun ImageView.loadUrl(urlInt: Int){
+fun ImageView.loadUrl(urlInt: Int) {
     Picasso.get()
         .load(urlInt)
         .centerCrop()
@@ -21,7 +20,7 @@ fun ImageView.loadUrl(urlInt: Int){
         .into(this)
 }
 
-fun ImageView.loadUrl(urlUri: Uri){
+fun ImageView.loadUrl(urlUri: Uri) {
     Picasso.get()
         .load(urlUri)
         .centerCrop()

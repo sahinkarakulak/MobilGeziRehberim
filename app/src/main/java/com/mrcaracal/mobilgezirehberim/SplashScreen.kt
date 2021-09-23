@@ -22,11 +22,6 @@ class SplashScreen : AppCompatActivity() {
         animation = AnimationUtils.loadAnimation(applicationContext, R.anim.anim1)
         txt_giris_yazisi.startAnimation(animation)
 
-        /*Handler().postDelayed({
-            val intent = Intent(this@SplashScreen, Login::class.java)
-            startActivity(intent)
-        }, 3000)*/
-
         Handler(Looper.myLooper() ?: return).postDelayed({
             val intent = Intent(this@SplashScreen, Login::class.java)
             startActivity(intent)

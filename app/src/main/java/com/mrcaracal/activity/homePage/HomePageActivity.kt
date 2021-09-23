@@ -45,8 +45,8 @@ class HomePageActivity : AppCompatActivity() {
     private fun observeHomePageActivityState() {
         viewModel.homePageActivityState.observe(this) { homePageActivityViewState ->
             when (homePageActivityViewState) {
-
-                else -> {}
+                else -> {
+                }
             }
         }
     }

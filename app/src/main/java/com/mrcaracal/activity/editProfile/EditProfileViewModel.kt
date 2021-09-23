@@ -15,12 +15,11 @@ import com.mrcaracal.utils.ConstantsFirebase
 import java.util.*
 
 class EditProfileViewModel : ViewModel() {
-
     var editProfileViewState: MutableLiveData<EditProfileViewState> =
         MutableLiveData<EditProfileViewState>()
-
     private var firebaseUser: FirebaseUser = FirebaseAuth.getInstance().currentUser!!
-    private var storageReference: StorageReference = FirebaseStorage.getInstance().getReference(ConstantsFirebase.STORAGE_NAME)
+    private var storageReference: StorageReference =
+        FirebaseStorage.getInstance().getReference(ConstantsFirebase.STORAGE_NAME)
     private lateinit var documentReference: DocumentReference
     lateinit var mImageUri: Uri
 

@@ -154,7 +154,10 @@ class MyAccountViewModel : ViewModel() {
     }
 
     fun showTagsOnPost(postModel: PostModel, tabControl: String): String {
-        return FirebaseSimilarActions.showPostTagsForAccount(postModel = postModel, tabControl = tabControl)
+        return FirebaseSimilarActions.showPostTagsForAccount(
+            postModel = postModel,
+            tabControl = tabControl
+        )
     }
 
 }

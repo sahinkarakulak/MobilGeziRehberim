@@ -10,7 +10,6 @@ import com.mrcaracal.mobilgezirehberim.databinding.ActivityAccountCreateBinding
 import com.mrcaracal.mobilgezirehberim.login.Login
 
 class AccountCreateActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityAccountCreateBinding
     private lateinit var viewModel: AccountCreateViewModel
 

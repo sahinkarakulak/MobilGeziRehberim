@@ -10,7 +10,6 @@ import com.mrcaracal.mobilgezirehberim.databinding.ActivityParolaSifirlamaBindin
 import com.mrcaracal.mobilgezirehberim.login.Login
 
 class ResetPassActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityParolaSifirlamaBinding
     private lateinit var viewModel: ResetPassViewModel
 

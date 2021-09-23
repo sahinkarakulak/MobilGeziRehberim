@@ -8,7 +8,6 @@ import com.mrcaracal.modul.UserInfo
 import com.mrcaracal.utils.ConstantsFirebase
 
 class AccountCreateViewModel : ViewModel() {
-
     private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     var accountCreateState: MutableLiveData<AccountCreateViewState> =

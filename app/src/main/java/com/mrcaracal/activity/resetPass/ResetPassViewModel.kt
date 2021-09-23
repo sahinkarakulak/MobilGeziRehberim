@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class ResetPassViewModel : ViewModel() {
-
     var resetPassState: MutableLiveData<ResetPassViewState> = MutableLiveData<ResetPassViewState>()
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 

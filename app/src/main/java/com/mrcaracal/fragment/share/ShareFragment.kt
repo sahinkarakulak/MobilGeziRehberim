@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,8 @@ import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.FragShareBinding
 import com.mrcaracal.utils.Constants
+
+private const val TAG = "ShareFragment"
 
 class ShareFragment : Fragment() {
     private lateinit var viewModel: ShareViewModel
@@ -54,6 +57,8 @@ class ShareFragment : Fragment() {
         initViewModel()
         initClickListeners()
         observeContactState()
+        getPostData()
+
         return view
     }
 
@@ -72,7 +77,8 @@ class ShareFragment : Fragment() {
 
         binding.selectLocation.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, SelectLocationMapFragment())
+                .add(R.id.frame_layout, SelectLocationMapFragment())
+                .addToBackStack("ShareFragmentBack")
                 .commit()
             viewModel.turnOnOrOffLocation(context = requireContext())
         }
@@ -150,8 +156,19 @@ class ShareFragment : Fragment() {
         }
     }
 
+    fun getPostData() {
+        latitude = GET.getFloat("enlem", 0f)
+        longitude = GET.getFloat("boylam", 0f)
+        addres = GET.getString("adres", "Türkiye Üsküdar")!!
+        postCode = GET.getString("postaKodu", "12000")!!
+        binding.edtLocation.setText("$latitude,$longitude")
+        binding.edtAddres.setText("" + addres)
+        viewModel.sendPostCode(postCode = postCode)
+    }
+
     override fun onResume() {
         super.onResume()
+        Log.i(TAG, "onResume: ÇALIŞTI")
         latitude = GET.getFloat("enlem", 0f)
         longitude = GET.getFloat("boylam", 0f)
         addres = GET.getString("adres", "Türkiye Üsküdar")!!

@@ -15,7 +15,6 @@ import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.utils.ConstantsMap
 
 class GoToLocationOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
-
     private lateinit var GET: SharedPreferences
     private lateinit var SET: SharedPreferences.Editor
     private lateinit var mMap: GoogleMap
@@ -36,7 +35,6 @@ class GoToLocationOnMapActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         val latitude = GET.getFloat(ConstantsMap.GO_TO_LOCATION_LATITUDE, 0f).toDouble()
         val longitude = GET.getFloat(ConstantsMap.GO_TO_LOCATION_LONGITUDE, 0f).toDouble()
-
         val postLocation = LatLng(latitude, longitude)
         mMap.addMarker(MarkerOptions().position(postLocation).title(ConstantsMap.POST_LOCATION))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(postLocation, 16f))

@@ -12,7 +12,6 @@ import com.mrcaracal.adapter.PostAdapter.PostHolder
 import com.mrcaracal.extensions.loadUrl
 import com.mrcaracal.fragment.model.PostModel
 import com.mrcaracal.mobilgezirehberim.R
-import com.squareup.picasso.Picasso
 
 class PostAdapter(
     val recyclerViewClickInterface: RecyclerViewClickInterface,
@@ -26,23 +25,14 @@ class PostAdapter(
     }
 
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
-
         holder.row_placeName.text = postModelList[position].placeName
         holder.row_comment.text = postModelList[position].comment
         holder.row_picturePath.loadUrl(postModelList[position].pictureLink)
-
-        /*Picasso.get()
-            .load(postModelList[position].pictureLink)
-            .centerCrop()
-            .fit()
-            .into(holder.row_picturePath)*/
-
         holder.ll_otherOperations.setOnClickListener {
             recyclerViewClickInterface.onOtherOperationsClick(
                 postModelList[position]
             )
         }
-
         holder.row_picturePath.setOnLongClickListener {
             recyclerViewClickInterface.onLongItemClick(postModelList[position])
             false
@@ -58,6 +48,5 @@ class PostAdapter(
         var row_placeName: TextView = itemView.findViewById(R.id.row_placeName)
         var row_comment: TextView = itemView.findViewById(R.id.row_comment)
         var ll_otherOperations: LinearLayout = itemView.findViewById(R.id.ll_otherOperations)
-
     }
 }

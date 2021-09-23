@@ -327,9 +327,11 @@ class SearchFragment : Fragment(), RecyclerViewClickInterface {
             if (adverb == 1) latitude = locationXY.toDouble()
             if (adverb == 2) longitude = locationXY.toDouble()
         }
-        SET.putFloat(ConstantsMap.GO_TO_LOCATION_LATITUDE, latitude.toFloat())
-        SET.putFloat(ConstantsMap.GO_TO_LOCATION_LONGITUDE, longitude.toFloat())
-        SET.commit()
+        with(SET) {
+            putFloat(ConstantsMap.GO_TO_LOCATION_LATITUDE, latitude.toFloat())
+            putFloat(ConstantsMap.GO_TO_LOCATION_LONGITUDE, longitude.toFloat())
+            commit()
+        }
         startActivity(Intent(activity, GoToLocationOnMapActivity::class.java))
     }
 

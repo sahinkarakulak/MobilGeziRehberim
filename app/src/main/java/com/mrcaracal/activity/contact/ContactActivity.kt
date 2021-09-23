@@ -9,7 +9,6 @@ import com.mrcaracal.mobilgezirehberim.databinding.ActivityContactBinding
 import com.mrcaracal.utils.IntentProcessor
 
 class ContactActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityContactBinding
     private lateinit var viewModel: ContactViewModel
 

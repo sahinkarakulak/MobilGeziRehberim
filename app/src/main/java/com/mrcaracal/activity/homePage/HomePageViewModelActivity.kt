@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class HomePageViewModelActivity : ViewModel() {
-
     var homePageActivityState: MutableLiveData<HomePageActivityViewState> =
         MutableLiveData<HomePageActivityViewState>()
     var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()

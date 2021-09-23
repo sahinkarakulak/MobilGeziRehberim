@@ -11,13 +11,11 @@ import com.mrcaracal.extensions.loadUrl
 import com.mrcaracal.extensions.toast
 import com.mrcaracal.mobilgezirehberim.R
 import com.mrcaracal.mobilgezirehberim.databinding.ActivityEditProfileBinding
-import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import java.util.*
 
 class EditProfileActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityEditProfileBinding
     private lateinit var viewModel: EditProfileViewModel
 
